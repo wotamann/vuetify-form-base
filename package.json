@@ -1,0 +1,34 @@
+{
+  "name": "vuetify-form-base",
+  "version": "0.1.1",
+  "description": "Form-Generator Vue 2.0 Component using Vuetify, responsive Design, Grid",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run unit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wotamann/vuetify-form-base.git"
+  },
+  "keywords": [
+    "vue",
+    "vue 2.0",
+    "vuetify",
+    "formular",
+    "generator",
+    "json",
+    "schema",
+    "responsive",
+    "reactive",
+    "select",
+    "multiselect",
+    "grid",
+    "controls"
+  ],
+  "author": "woko@aon.at",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wotamann/vuetify-form-base/issues"
+  },
+  "homepage": "https://github.com/wotamann/vuetify-form-base#readme"
+}
