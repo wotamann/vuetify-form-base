@@ -1,14 +1,14 @@
 <template>
-  <v-layout 
-    :id = "ref" 
-    class="wrap" 
-    v-resize.quiet= "onResize" 
-    v-touch= "{ left: () => onSwipe('left'), right: () => onSwipe('right'), up: () => onSwipe('up'), down: () => onSwipe('down') }"
-  > 
+  <v-layout :id = "ref" class="wrap" v-resize.quiet= "onResize" >
 
     <template v-for="(obj, index) in flatCombinedArraySorted" >
 
-      <v-flex v-if= "!obj.schema.hidden" :class= "getClassName(obj)" :key= "index" >
+      <v-flex
+        v-if= "!obj.schema.hidden"
+        :class= "getClassName(obj)"
+        v-touch= "{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"
+        :key= "index"
+      >
 
         <!-- slot on top of item  -> <div slot="top-slot-[key]> -->
         <slot :name= "getTypeTopSlot(obj)"></slot>
@@ -107,7 +107,7 @@
 
 <script>
 // import & declarations
-import { set, get, isPlainObject, isFunction, orderBy } from 'lodash'
+import { get, isPlainObject, isFunction, orderBy } from 'lodash'
 
 const typeToComponent = {
   // implemented in Vuetify
@@ -290,10 +290,8 @@ export default {
       value = value === '' ? null : value
 
       // update deep nested prop(key) with value
-      // set(this.storeStateData, obj.key, value)
       this.setObjectByPath(this.storeStateData, obj.key, value)
 
-      // console.log('SET VALUE:', value, obj, this.storeStateData, this.storeStateSchema )
       this.emitValue('input', {
         on: 'input',
         id: this.ref,
@@ -320,12 +318,12 @@ export default {
     onFocus (event, obj) {
       this.emitValue('focus', { on: 'focus', id: this.ref, key: obj.key, value: obj.value, obj, event, data: this.storeStateData, schema: this.storeStateSchema })
     },
-    onSwipe (pos) {
-      this.emitValue('swipe', { on: 'swipe', id: this.ref, params: { pos}, data: this.storeStateData, schema: this.storeStateSchema })
+    onSwipe (pos, obj) {
+      this.emitValue('swipe', { on: 'swipe', id: this.ref, key: obj.key, value: obj.value, obj, params: { pos }, data: this.storeStateData, schema: this.storeStateSchema })
     },
     onResize () {
       this.emitValue('resize', { on: 'resize', id: this.ref, params: { x: window.innerWidth, y: window.innerHeight }, data: this.storeStateData, schema: this.storeStateSchema })
-    },    
+    },
     // Event Base
     emitValue (emit, val) {
       this.$emit(this.getEventName(emit), val)
@@ -336,11 +334,11 @@ export default {
     },
 
     // PREPARE ARRAYS DATA & SCHEMA
-    setObjectByPath(object, path, value) {
-      // resolves chained keys (like 'user.adress.street') on an object and set the value 
-      let pathArray=path.split(pathDelimiter)
+    setObjectByPath (object, path, value) {
+      // resolves chained keys (like 'user.adress.street') on an object and set the value
+      let pathArray = path.split(pathDelimiter)
       pathArray.forEach((p, ix) => {
-        if(ix === pathArray.length -1 ) this.$set(object,p, value)
+        if (ix === pathArray.length - 1) this.$set(object, p, value)
         object = object[p]
       })
     },
@@ -355,11 +353,9 @@ export default {
       let schema = {}
 
       Object.keys(dat).forEach(i => {
-     
-        if ( !Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object' || (Array.isArray(dat[i]) && Array.isArray(sch[i]))  ) {
-
+        if ( (!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object') || (Array.isArray(dat[i]) && Array.isArray(sch[i])) ) {
         // if ( dat[i] && typeof dat[i] === 'object') {
-        // if (!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object') {
+          // if (!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object') {
           let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[i], sch[i])
           Object.keys(flatData).forEach(ii => {
             data[i + pathDelimiter + ii] = flatData[ii]

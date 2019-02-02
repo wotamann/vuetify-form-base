@@ -1,16 +1,23 @@
 <style>
-.text-area {padding:1rem; width: 50%; height: 32rem; font-size: 0.8rem}
+.text-area {height: 32rem; font-size: 0.8rem}
 </style>
 
 <template>
   <v-container fluid >
-
+    <h4>Try editing Value or Schema (valid JSON necessary) and see updated nested Object</h4>
     <v-form-base id="form-base-nested" :value= "myValue" :schema= "mySchema" @update:form-base-nested= "update"/>
 
     <v-divider></v-divider>
-
-    <textarea class="text-area" v-text= "'myValue: ' + JSON.stringify(myValue, undefined, 6)"></textarea>
-    <textarea class="text-area" v-text= "'mySchema: ' + JSON.stringify(mySchema, undefined, 6)"></textarea>
+    <v-layout wrap>
+      <v-flex xs6>
+        <h4 >Value</h4>  
+        <v-textarea :class="stateV" class="text-area" auto-grow v-model= "txtValue"></v-textarea>
+      </v-flex>
+      <v-flex xs6>
+      <h4>Schema</h4>  
+      <v-textarea :class="stateS" class="text-area" auto-grow v-model= "txtSchema"></v-textarea>
+      </v-flex>
+    </v-layout>
 
   </v-container>
 </template>
@@ -24,14 +31,17 @@ export default {
   components: { VFormBase },
   data () {
     return {
+      stateV:'white',
+      stateS:'white',
+
       myValue: {
-        name: 'Base',
+        base: true,
         controls: {
-          selection: {
-            select: 'Tesla',
-            selectM: ['Jobs']
+          object: {
+            switchA: true,
+            switchB: false
           },
-          boolControls: {
+          arrays: {
             switch: [
               true,
               false
@@ -52,18 +62,18 @@ export default {
         }
       },
       mySchema: {
-        name: { type: 'text', label: 'Name', flex: 12 },
+        base: { type: 'checkbox', label: 'Base' },
         controls: {
           // nested object
-          selection: {
-            select: { type: 'select', label: 'Select', items, flex: 6 },
-            selectM: { type: 'select', label: 'SelectM', items, multiple: true, flex: 6 }
+          object: {
+            switchA: { type: 'switch', label: 'Obj1' },
+            switchB: { type: 'switch', label: 'Obj2' }
           },
           // deep nested object with arrays
-          boolControls: {
+          arrays: {
             switch: [
-              { type: 'switch', label: '1', hidden: false },
-              { type: 'switch', label: '2' }
+              { type: 'switch', label: 'Arr1',},
+              { type: 'switch', label: 'Arr2' }
             ],
             checkbox: [
               // nesteds array of objects
@@ -77,7 +87,32 @@ export default {
       }
     }
   },
-
+  computed:{
+    txtValue:{
+      get(){ return JSON.stringify(this.myValue, undefined, 6) },
+      set(v){ 
+        try {
+          this.myValue = JSON.parse(v)
+          this.stateV= 'white'           
+        } catch (error) {
+          this.stateV= 'orange lighten-4'           
+          console.warn('myValue contains invalid JSON - ');                    
+        }
+      }
+    },
+    txtSchema:{
+      get(){return JSON.stringify(this.mySchema, undefined, 6)},
+      set(v){ 
+        try {
+          this.mySchema = JSON.parse(v)           
+          this.stateS= 'white'           
+        } catch (error) {
+          this.stateS= 'orange lighten-4'           
+          console.warn('mySchema contains invalid JSON');                    
+        }
+      }
+    }
+  },
   methods: {
     update ({ on, id, key, value, obj, event, params, data, schema }) {
       console.log('Update [ on, key, value, params]', on, key, value, params)

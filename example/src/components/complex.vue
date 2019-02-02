@@ -17,7 +17,7 @@
 
     <v-btn small @click="validate">Validate</v-btn>
     <v-btn small @click="resetValidation">Reset Validate</v-btn>
-    <v-btn small @click="toggle">Hide/Show Checkbox 'C-A'</v-btn>
+    <v-btn small @click="toggle">Hide/Show Checkbox 'C-1'</v-btn>
     <p>
       Value: {{myValue.checkbox[2].checkbox1[0]}} | Schema: {{mySchema.checkbox[2].checkbox1[0]}}
     </p>
@@ -81,12 +81,12 @@ export default {
         switch: true,
         radio: 'A',
         slider: 33,
-        content: 'Content'
+        content: 'Lorem ipsum dolor sit amet... '
       },
 
       mySchema: {
-        name: { type: 'text', label: 'Name', flex: 12, toCtrl: toUpper, fromCtrl: toUpper, hint: 'Converts to UpperCase' },
-        password: { type: 'password', label: 'Password', hint: 'Between 6-12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: 12 },
+        name: { type: 'text', label: 'Name', flex: 6, toCtrl: toUpper, fromCtrl: toUpper, hint: 'Converts to UpperCase' },
+        password: { type: 'password', label: 'Password', hint: 'Between 6-12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: 6 },
         email: { type: 'email', label: 'Email', rules: [rules.validEmail, rules.requiredEmail], flex: 12 },
         selection: {
           select: { type: 'select', label: 'Select', items, flex: 3 },
@@ -95,12 +95,12 @@ export default {
         combobox: { type: 'combobox', label: 'Combobox', items, flex: 3 },
         autocomplete: { type: 'autocomplete', label: 'AutoComplete', items, flex: 3 },
         checkbox: [
-          { type: 'checkbox', label: 'A' },
-          { type: 'checkbox', label: 'B' },
-          { checkbox1: [ { type: 'checkbox', color: 'red', label: 'C-A', hidden: false }, { type: 'checkbox', label: 'C-B' } ] }
+          { type: 'checkbox', label: 'A',},
+          { type: 'checkbox', label: 'B', },
+          { checkbox1: [ { type: 'checkbox', color: 'red', label: 'C-1', hidden: false }, { type: 'checkbox', label: 'C-2' } ] }
         ],
-        switch: { type: 'switch', label: 'Switch', color: 'green', hidden: false },
-        radio: { type: 'radio', label: 'Radio', options, color: 'red', row: true, hidden: false },
+        switch: { type: 'switch', label: 'Switch', hidden: false },
+        radio: { type: 'radio', label: 'Radio', options, row: true, hidden: false },
         slider: { type: 'slider', label: 'Slider', rules: [ v => v > 50 ? 'Error >50 ' : false ] },
         content: { prependIcon: 'print', type: 'textarea', rules: [ required('Content required') ], label: 'Content', hint: 'autogrowing...', autoGrow: true, backgroundColor: 'blue lighten-5', flex: 12 }
       }
@@ -110,11 +110,11 @@ export default {
     layout () {
       // hide/show controls on resizing
       if (this.$vuetify.breakpoint.mdAndUp) {
-        return [ false,false ]
+        return [ false, false ]
       } else if (this.$vuetify.breakpoint.smAndUp) {
         return [ true, false ]
       } else {
-        return [ true,true ]
+        return [ true, true ]
       }
     }
   },
@@ -126,16 +126,16 @@ export default {
     resetValidation () {
       this.$refs.form1.resetValidation()
     },
-    hide(){      
+    hide () {
       [ this.mySchema.switch.hidden, this.mySchema.radio.hidden ] = this.layout
-    },    
+    },
     toggle () {
       this.mySchema.checkbox[2].checkbox1[0].hidden = !this.mySchema.checkbox[2].checkbox1[0].hidden
       console.log('this.mySchema.checkbox[2].checkbox1[0].hidden', this.mySchema.checkbox[2].checkbox1[0].hidden)
     },
     update ({ on, id, key, value, obj, event, params, data, schema }) {
       console.log('Update [ on, key, value, params]', on, key, value, params)
-    
+
       // toggle visibility of password
       if (on === 'click' && key === 'password' && (params && params.pos) === 'append') { // check 'click' is from from appendIcon
         obj.schema.type === 'password' ? obj.schema.appendIcon = 'lock' : obj.schema.appendIcon = 'visibility'

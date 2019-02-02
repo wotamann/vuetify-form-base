@@ -20,19 +20,19 @@ import VFormBase from '@/components/vFormBase'
 export default {
   components: { VFormBase },
   data () {
-    return {      
+    return {
       myValue: {
         name: 'Base',
         password: '123456',
         email: 'base@mail.com',
-        checkbox: [true,false],
+        checkbox: [true, false],
         select: 'Jobs'
       },
       mySchema: {
         name: { type: 'text', label: 'Name' },
         password: { type: 'password', label: 'Password' },
         email: { type: 'email', label: 'Email' },
-        checkbox: [{ type: 'checkbox', label: 'A' },{ type: 'checkbox', label: 'B' }],
+        checkbox: [{ type: 'checkbox', label: 'A' }, { type: 'checkbox', label: 'B' }],
         select: { type: 'select', label: 'Select', items: ['Tesla', 'Jobs', 'Taleb'] }
       }
     }

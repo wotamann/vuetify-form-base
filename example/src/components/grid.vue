@@ -38,8 +38,8 @@ export default {
       }
     }
   },
-  computed: {          
-    mySchema(){ 
+  computed: {
+    mySchema () {
       return {
         name: { type: 'text', label: 'Name', flex: { sm: 4 }, order: { xs: 7, sm: 1 } },
         password: { type: 'password', label: 'Password', offset: { xs: 0, sm: 1 }, flex: 3, order: { xs: 6, sm: 2 } },
@@ -53,9 +53,9 @@ export default {
       }
     },
 
-  layout () {
+    layout () {
       // change Grid-Layout from Row to Column on resize and change Radio-Orientation
-      this.row = this.$vuetify.breakpoint.mdAndUp 
+      this.row = this.$vuetify.breakpoint.mdAndUp
       return this.row ? 'row' : 'column'
     }
   },

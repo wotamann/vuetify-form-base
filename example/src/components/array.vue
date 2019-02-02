@@ -20,16 +20,16 @@ const items = ['Tesla', 'Jobs', 'Taleb']
 export default {
   components: { VFormBase },
   data () {
-    return {      
+    return {
       myValue: {
-        checkboxObject: { a:{ c: true }, b:{ d:false} },
-        checkbox: [true,false, [true,false]],
-        select: ['Jobs','Tesla', true]
+        checkboxObject: { a: { c: true }, b: { d: false } },
+        checkbox: [true, false, [true, false]],
+        select: ['Jobs', 'Tesla', true]
       },
       mySchema: {
-        checkboxObject: { a:{ c: {type: 'checkbox', label: 'Ao' } }, b: { d: { type: 'checkbox', label: 'Bo' } } },
-        checkbox: [{ type: 'checkbox', label: 'A' },{ type: 'checkbox', label: 'B' }, [{ type: 'checkbox', label: 'C' },{ type: 'checkbox', label: 'D' }]],
-        select: { type: 'select', multiple:true, items: ['Tesla', 'Jobs', 'Taleb'] }
+        checkboxObject: { a: { c: { type: 'checkbox', label: 'Ao' } }, b: { d: { type: 'checkbox', label: 'Bo' } } },
+        checkbox: [{ type: 'checkbox', label: 'A' }, { type: 'checkbox', label: 'B' }, [{ type: 'checkbox', label: 'C' }, { type: 'checkbox', label: 'D' }]],
+        select: { type: 'select', multiple: true, items: ['Tesla', 'Jobs', 'Taleb'] }
       }
       // myValue: {
       //   name: 'Base',

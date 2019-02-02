@@ -235,24 +235,23 @@ Forms can be **linked** together using the same Value-Object. Changes in one For
 
 ## Schema
 
-
 	<form-base :schema="schema" ... />
 
-Schema is an Object, which defines and controls the behavior of your form. Each Key (Prop) in your Schema-Object must reflect a Key in Data-Object. A minimalistic Definition of a text input could look like this:
+Schema is an JS-Object, which defines and controls the behavior of your Form. Each Key Prop) in your Schema-Object must reflect a Key from your Data-Object. A minimalistic Definition of a text input could look like this:
 
     schema:{
       name: { type:'text'}  
     }
 
-This is a more complex Schema:
+The next shows a more complex Schema:
   
-    // partials fn
+    // Partials Functions for Rules
     const minLen = l => v => (v && v.length >= l) || `min. ${l} Characters`
     const maxLen = l => v => (v && v.length <= l) || `max. ${l} Characters`
     const required = msg => v => !!v || msg
     const validEmail: msg => v => /.+@.+\..+/.test(v) || msg
   
-    // destructuring value !!!
+	// Destruct Value and return a Value! 
     const toUpper = ( {value} ) => value && value.toUpperCase() 
     
     export default {
@@ -346,12 +345,12 @@ This is a more complex Schema:
 
 We can use the v-on directive to listen to vuetify-form-base events **'focus', 'input', 'click', 'resize', 'swipe', 'update'** and run some Code when they’re triggered.
     
-With Default ID and listen all events with 'update':
+This Example use the Default ID and listen all events with 'update':
 
     <!-- HTML -->
     <v-form-base :value= "myValue" :schema= "mySchema" @update= "updateCode" />
     
-With Custom ID and listen all events in separate methods:
+This has a Custom ID and listen all events in separate methods. Your v-on Directive must append the Custom ID:
 
     <!-- HTML -->
     <v-form-base 
@@ -367,19 +366,18 @@ With Custom ID and listen all events in separate methods:
 
 **The Event-Signature:**
 
-    { on, id, key, value, obj, event, clicked, size, data, schema }
+    { on, id, key, value, obj, event, params, size, data, schema }
 
-    on = Trigger Name   // focus | input | click | resize | swipe or update to listen all 
-    id = Formbase-ID
-    key = key of triggering Element
-    value = value of triggering Element
-    obj: triggering Element { key, value, schema } 
-    data: Data-Object
-    schema: Schema-Object
-    size: { x, y }    // x:window.innerWidth & y:window.innerHeight 
-    event: the native trigger-event if available 
-    clicked: { icon, pos }   // pos [clear | append | prepend | appendOuter | prependInner] if available
-
+    on - Trigger Name   // focus | input | click | resize | swipe or update to listen all 
+    id - Formbase-ID
+    key - key of triggering Element
+    value - value of triggering Element
+    obj - triggering Element { key, value, schema } 
+    params - params object if available { x, y, pos, icon }    
+    event - the native trigger-event if available 
+    data - Data-Object
+    schema - Schema-Object
+    
 ---
 **Use 'Update' Event to control Visibility of Password Element**
 
@@ -387,17 +385,17 @@ With Custom ID and listen all events in separate methods:
     <v-form-base :value="myValue" :schema="mySchema" @update="update">
 
     <!-- JS -->
-    update ({ on, id, key, value, obj, event, clicked, size, data, schema }) {
+    update ({ on, id, key, value, obj, event, params, size, data, schema }) {
       
-      console.log('[ on, key, value, clicked, size]', on, key, value,  clicked, size )
+      console.log('[ on, key, value, params]', on, key, value,  params )
     
       // is 'click' and comes from appendIcon on key 'password'
-      if (on == 'click' && key == 'password' && (clicked && clicked.pos) == 'append') { 
+      if (on == 'click' && key == 'password' && (params && params.pos) == 'append') { 
         
         // toggle icon
-        obj.schema.type === 'password' 
-          ? obj.schema.appendIcon = 'lock' 
-          : obj.schema.appendIcon = 'visibility'
+        obj.schema.appendIcon = obj.schema.type === 'password' 
+          ? 'lock' 
+          : 'visibility'
 
         // toggle visibility 
         obj.schema.type = obj.schema.type === 'password' 
@@ -408,6 +406,8 @@ With Custom ID and listen all events in separate methods:
 ---
 ## Slots
 
+Use Slots to pass Header and Footer into a Control. If necessary replace Controls by Slots. Any slot could be a v-form-base component itself.   
+ 
     <v-form-base :value="myValue" :schema="mySchema" @update="update">
 
       <h4 slot="slot-top-key-name">Top Slot on Key Name</h4>
@@ -425,7 +425,7 @@ With Custom ID and listen all events in separate methods:
 ---
 ## Form Validation  
 
-If you need Form Validation you have to wrap **v-form-base** with **[v-form](https://next.vuetifyjs.com/en/components/forms#api)** and get a reference of v-form
+If you need Form Validation you have to wrap **v-form-base** with **[v-form](https://next.vuetifyjs.com/en/components/forms#api)** and take the reference of v-form for working on.
     
     <!-- HTML -->    
     <v-form ref="form" v-model= "formValid" lazy-validation>
@@ -476,7 +476,7 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 
 ### General - Classname
 
-    #form-base  {...}                     // style container 
+    #form-base  {...}              
 
 ### Type - Classnames
 
@@ -516,7 +516,8 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 	  
     #form-base .item input:valid { background-color: #afa; }
     #form-base .type-email input:invalid { background-color: #faa; }
-    #form-base .key-name input:focus { background-color: #ffd; }          
+    #form-base .key-name input:focus { background-color: #ffd; }   
+
 ### CSS - Example
     <!-- JS -->
     myValue: {
@@ -568,7 +569,7 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 * Edit plain or deep nested objects including Arrays, without the Need to flatten it
 * Get a Full reactive Result
 * Listen on 'Resize', 'Focus', 'Input', 'Click', 'Swipe' and 'Update' Events
-* Pass Header, Footer or Replace Slots into Controls   
+* Use Slots to pass Header and Footer into a Control. Or replace a Control by Slot   
 * Configurable CSS Style 
 
 
