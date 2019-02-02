@@ -89,7 +89,7 @@ export default {
         ],
         switch: { type: 'switch', label: 'Switch', hidden: false },
         radio: { type: 'radio', label: 'Radio', options, row: true, hidden: false },
-        content: { prependinnerIcon: 'print', type: 'textarea', rules: [ required('Content required') ], label: 'Content', hint: 'autogrowing...', autoGrow: true, backgroundColor: 'blue lighten-5', flex: 12 }
+        content: { prependInnerIcon: 'print', type: 'textarea', rules: [ required('Content required') ], label: 'Content', hint: 'autogrowing...', autoGrow: true, backgroundColor: 'blue lighten-5', flex: 12 }
       }
     }
   },
