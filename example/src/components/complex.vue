@@ -71,7 +71,7 @@ export default {
         radio: 'A',
         content: 'Lorem ipsum dolor sit amet... '
       },
-
+ 
       mySchema: {
         name: { type: 'text', label: 'Name', toCtrl: toUpper, fromCtrl: toUpper, hint: 'Converts to UpperCase', flex: { xs:6, md:4 }},
         password: { type: 'password', label: 'Password', hint: 'Between 6-12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: { xs:6, md:4 } },
@@ -89,7 +89,7 @@ export default {
         ],
         switch: { type: 'switch', label: 'Switch', hidden: false },
         radio: { type: 'radio', label: 'Radio', options, row: true, hidden: false },
-        content: { prependInnerIcon: 'print', type: 'textarea', rules: [ required('Content required') ], label: 'Content', hint: 'autogrowing...', autoGrow: true, backgroundColor: 'blue lighten-5', flex: 12 }
+        content: { prependInnerIcon: 'print', type: 'textarea', rules: [ required('Content required') ], label: 'Content', hint: 'Auto-Growing...', autoGrow: true, backgroundColor: 'blue lighten-5', flex: 12 }
       }
     }
   },
