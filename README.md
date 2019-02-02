@@ -8,6 +8,19 @@ Then give **Vuetify-Form-Base** a Try. This Schema-based Form Generator is a [Vu
 **Vuetify-Form-Base** uses the well known [Component Framework Vuetify](https://vuetifyjs.com/) to style and layout your Form. Vuetify Controls have a clear, minimalistic design, and support responsive Design.
 
 ---
+## Demo
+
+[Example on Github](https://wotamann.github.io/)
+
+or
+
+Download Project, change current directory to **../vuetify-form-base/example**  and then run
+
+`npm install`
+
+`npm run serve`
+
+---
 ## Intro
 
 **vuetify-form-base** is a [Vue Component](https://vuejs.org/v2/guide/components.html) and can easily integrated into any Vue Project.   
@@ -38,17 +51,6 @@ Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** 
 Select from **Vuetify UI Input & Controls** like **Textfield, Password, Email, Textarea, Checkbox, Radio, Switches, Sliders, Combobox, Autocomplete, Select, Combobox, Date- or Timepicker** and some other fields. 
 
 [More Informations to Vuetify Textfields find here](https://vuetifyjs.com/en/components/text-fields/). 
-
----
-## Demo
-
-[Example on Github](https://wotamann.github.io/)
-
-or
-
-Download Project, change to directory **../vuetify-form-base/example**  and execute 
-
-`npm run serve`
 
 ---
 ## Installation
