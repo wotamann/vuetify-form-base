@@ -24,7 +24,7 @@ Based on an existing Value-Object **vuetify-form-base** generates a full editabl
 Layout and Functionality are defined in a Schema-Object, which has the same Property structure as the Value-Object. Your Data-Object keeps full reactive and any Input or Change in your Form triggers an Event too. If you have a deep nested Value-Object or an Array -Structure you can direct work on it. There is no need to flatten or modify your Data-Presentation.
 
 
-![Form Example](./images/formbase01.png)
+![Form Example](./images/formbase01.PNG)
 
 Changing any Field in the Form gives you a **reactive Result** in your Value-Object. 
 Furthermore you can **synchronize** two or more Forms by using same Value-Object. 
@@ -100,7 +100,7 @@ In order for your application to work properly, you must wrap it in a [v-app](ht
 
 and you will get a full editable Form based on your schema and filled with your Value-Object. 
 
-![Basic Form](./images/formbase2.png)
+![Basic Form](./images/formbase2.PNG)
 
 >INFORMATION: 
 >
@@ -553,7 +553,7 @@ Customize your **vuetify-form-base** component using CSS-Classnames
       #form-base .key-controls-slider { background-color: #fec }
     </style>
 
-![Slots in Blue](./images/css.png)
+![Slots in Blue](./images/css.PNG)
 
 ---
 ## Features
