@@ -1,26 +1,18 @@
+<style>
+  #form-base { border: 1px solid #59a0cf; background-color: #fafdff; padding:1rem }
+  #form-base .key-selection  { border: 1px dashed blueviolet }
+</style>
+
+
 <template>
   <v-container fluid >
 
     <v-form ref="form1" v-model= "formValid" lazy-validation>
-
-      <v-form-base
-        id="form-base-complex"
-        :class= "layout"
-        :value= "myValue"
-        :schema= "mySchema"
-        @update:form-base-complex= "update"
-      >
-       <!-- <h4 slot="slot-item-key-checkbox-0">Slot replaces first Checkbox</h4> -->
-      </v-form-base>
-
+      <v-form-base id="form-base-complex" :value= "myValue" :schema= "mySchema" @update:form-base-complex= "update" />
     </v-form>
 
     <v-btn small @click="validate">Validate</v-btn>
     <v-btn small @click="resetValidation">Reset Validate</v-btn>
-    <v-btn small @click="toggle">Hide/Show Checkbox 'C-1'</v-btn>
-    <p>
-      Value: {{myValue.checkbox[2].checkbox1[0]}} | Schema: {{mySchema.checkbox[2].checkbox1[0]}}
-    </p>
     <v-divider></v-divider>
 
     <h4>See your reactive  Data in 'myValue' </h4>
@@ -42,13 +34,10 @@ const options = ['A', 'B']
 
 /* Helper Functions */
 const toUpper = ({ value }) => value && value.toUpperCase() // destructuring value !!!
-// const generateArray = (len, v) => Array.from(Array(len), () => (v))
 
 /* Partial Functions */
 const minLen = l => v => (v && v.length >= l) || `min. ${l} Characters`
 const maxLen = l => v => (v && v.length <= l) || `max. ${l} Characters`
-// const minVal = l => v => v >= l || `min. ${l}`
-// const maxVal = l => v => v <= l || `max. ${l}`
 const required = msg => v => !!v || msg
 const rules = {
   requiredEmail: required('E-mail is required'),
@@ -69,10 +58,10 @@ export default {
         email: 'base@mail.com',
         selection: {
           select: 'Tesla',
-          selectMultiple: ['Jobs']
+          selectMultiple: ['Jobs'],
+          combobox: null,
+          autocomplete: null,
         },
-        combobox: null,
-        autocomplete: null,
         checkbox: [
           true,
           false,
@@ -80,41 +69,27 @@ export default {
         ],
         switch: true,
         radio: 'A',
-        slider: 33,
         content: 'Lorem ipsum dolor sit amet... '
       },
 
       mySchema: {
-        name: { type: 'text', label: 'Name', flex: 6, toCtrl: toUpper, fromCtrl: toUpper, hint: 'Converts to UpperCase' },
-        password: { type: 'password', label: 'Password', hint: 'Between 6-12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: 6 },
-        email: { type: 'email', label: 'Email', rules: [rules.validEmail, rules.requiredEmail], flex: 12 },
+        name: { type: 'text', label: 'Name', toCtrl: toUpper, fromCtrl: toUpper, hint: 'Converts to UpperCase', flex: { xs:6, md:4 }},
+        password: { type: 'password', label: 'Password', hint: 'Between 6-12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: { xs:6, md:4 } },
+        email: { type: 'email', label: 'Email', rules: [rules.validEmail, rules.requiredEmail], flex: { xs:12, md:4 } },
         selection: {
-          select: { type: 'select', label: 'Select', items, flex: 3 },
-          selectMultiple: { type: 'select', label: 'Select Multi', items, multiple: true, flex: 3 }
+          select: { type: 'select', label: 'Select', items, flex: { xs:6, md:3 } },
+          selectMultiple: { type: 'select', label: 'Select Multi', items, multiple: true, flex: { xs:6, md:3 } },
+          combobox: { type: 'combobox', label: 'Combobox', items, flex: { xs:6, md:3 } },
+          autocomplete: { type: 'autocomplete', label: 'AutoComplete', items, flex: { xs:6, md:3 } },
         },
-        combobox: { type: 'combobox', label: 'Combobox', items, flex: 3 },
-        autocomplete: { type: 'autocomplete', label: 'AutoComplete', items, flex: 3 },
         checkbox: [
-          { type: 'checkbox', label: 'A',},
-          { type: 'checkbox', label: 'B', },
+          { type: 'checkbox', label: 'A' },
+          { type: 'checkbox', label: 'B' },
           { checkbox1: [ { type: 'checkbox', color: 'red', label: 'C-1', hidden: false }, { type: 'checkbox', label: 'C-2' } ] }
         ],
         switch: { type: 'switch', label: 'Switch', hidden: false },
         radio: { type: 'radio', label: 'Radio', options, row: true, hidden: false },
-        slider: { type: 'slider', label: 'Slider', rules: [ v => v > 50 ? 'Error >50 ' : false ] },
-        content: { prependIcon: 'print', type: 'textarea', rules: [ required('Content required') ], label: 'Content', hint: 'autogrowing...', autoGrow: true, backgroundColor: 'blue lighten-5', flex: 12 }
-      }
-    }
-  },
-  computed: {
-    layout () {
-      // hide/show controls on resizing
-      if (this.$vuetify.breakpoint.mdAndUp) {
-        return [ false, false ]
-      } else if (this.$vuetify.breakpoint.smAndUp) {
-        return [ true, false ]
-      } else {
-        return [ true, true ]
+        content: { prependinnerIcon: 'print', type: 'textarea', rules: [ required('Content required') ], label: 'Content', hint: 'autogrowing...', autoGrow: true, backgroundColor: 'blue lighten-5', flex: 12 }
       }
     }
   },
@@ -125,9 +100,6 @@ export default {
 
     resetValidation () {
       this.$refs.form1.resetValidation()
-    },
-    hide () {
-      [ this.mySchema.switch.hidden, this.mySchema.radio.hidden ] = this.layout
     },
     toggle () {
       this.mySchema.checkbox[2].checkbox1[0].hidden = !this.mySchema.checkbox[2].checkbox1[0].hidden

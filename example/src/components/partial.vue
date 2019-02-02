@@ -1,15 +1,14 @@
 <style>
+  #form-base { border: 1px solid #8aa; }
   #form-base-partial { width:50%; background-color: #eff; border: 1px solid #8aa; }
 </style>
 
 <template>
   <v-container fluid >
 
+    <h4>Complete Form based on 'myValue'</h4>
     <v-form-base :value= "myValue" :schema= "mySchema" @update= "update"/>
-
-    <br/>
-    <h3>Partial Form of 'Radios' linked to 'myValue'</h3>
-
+    <h4>Partial Form base on 'myValue.radios' synchronized with 'myValue'</h4>
     <v-form-base id= "form-base-partial" :value= "myValue.radios" :schema= "mySchema.radios" @update:form-base-partial= "updatepartial"/>
     <br/>
     <br/>
@@ -36,20 +35,20 @@ export default {
       myValue: {
         checkbox: true,
         switch: true,
-        radios:{
+        radios: {
           radioA: 'A',
           radioB: 'B'
-        },      
+        },
         slider: 33
       },
       mySchema: {
-        checkbox: { type: 'checkbox', label: 'Red', color: 'red'  },
-        switch: { type: 'switch', label: 'Switch1', color: 'blue'  },
-        radios:{
-          radioA: { type: 'radio', label: 'RadioA', options, color: 'green', row: true  },
+        checkbox: { type: 'checkbox', label: 'Red', color: 'red' },
+        switch: { type: 'switch', label: 'Switch1', color: 'blue' },
+        radios: {
+          radioA: { type: 'radio', label: 'RadioA', options, color: 'green', row: true },
           radioB: { type: 'radio', label: 'RadioB', options, color: 'indigo' }
         },
-        slider: { type: 'slider', label:'Slide',color: 'orange' }
+        slider: { type: 'slider', label: 'Slide', color: 'orange' }
       }
     }
   },

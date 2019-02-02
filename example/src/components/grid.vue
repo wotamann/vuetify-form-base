@@ -24,7 +24,6 @@ export default {
   components: { VFormBase },
   data () {
     return {
-      row: true,
       myValue: {
         name: 'Base',
         password: '123456',
@@ -52,11 +51,12 @@ export default {
         }
       }
     },
-
+    // change Grid-Layout from Row to Column on resize and change Radio-Orientation
+    row () {
+      return this.$vuetify.breakpoint.mdAndUp
+    },
     layout () {
-      // change Grid-Layout from Row to Column on resize and change Radio-Orientation
-      this.row = this.$vuetify.breakpoint.mdAndUp
-      return this.row ? 'row' : 'column'
+      return this.$vuetify.breakpoint.mdAndUp ? 'row' : 'column'
     }
   },
   methods: {

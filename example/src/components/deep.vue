@@ -10,11 +10,11 @@
     <v-divider></v-divider>
     <v-layout wrap>
       <v-flex xs6>
-        <h4 >Value</h4>  
+        <h4 >Value</h4>
         <v-textarea :class="stateV" class="text-area" auto-grow v-model= "txtValue"></v-textarea>
       </v-flex>
       <v-flex xs6>
-      <h4>Schema</h4>  
+      <h4>Schema</h4>
       <v-textarea :class="stateS" class="text-area" auto-grow v-model= "txtSchema"></v-textarea>
       </v-flex>
     </v-layout>
@@ -25,14 +25,12 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 
-const items = ['Tesla', 'Jobs', 'Taleb']
-
 export default {
   components: { VFormBase },
   data () {
     return {
-      stateV:'white',
-      stateS:'white',
+      stateV: 'white',
+      stateS: 'white',
 
       myValue: {
         base: true,
@@ -72,7 +70,7 @@ export default {
           // deep nested object with arrays
           arrays: {
             switch: [
-              { type: 'switch', label: 'Arr1',},
+              { type: 'switch', label: 'Arr1' },
               { type: 'switch', label: 'Arr2' }
             ],
             checkbox: [
@@ -87,28 +85,28 @@ export default {
       }
     }
   },
-  computed:{
-    txtValue:{
-      get(){ return JSON.stringify(this.myValue, undefined, 6) },
-      set(v){ 
+  computed: {
+    txtValue: {
+      get () { return JSON.stringify(this.myValue, undefined, 6) },
+      set (v) {
         try {
           this.myValue = JSON.parse(v)
-          this.stateV= 'white'           
+          this.stateV = 'white'
         } catch (error) {
-          this.stateV= 'orange lighten-4'           
-          console.warn('myValue contains invalid JSON - ');                    
+          this.stateV = 'orange lighten-4'
+          console.warn('myValue contains invalid JSON - ')
         }
       }
     },
-    txtSchema:{
-      get(){return JSON.stringify(this.mySchema, undefined, 6)},
-      set(v){ 
+    txtSchema: {
+      get () { return JSON.stringify(this.mySchema, undefined, 6) },
+      set (v) {
         try {
-          this.mySchema = JSON.parse(v)           
-          this.stateS= 'white'           
+          this.mySchema = JSON.parse(v)
+          this.stateS = 'white'
         } catch (error) {
-          this.stateS= 'orange lighten-4'           
-          console.warn('mySchema contains invalid JSON');                    
+          this.stateS = 'orange lighten-4'
+          console.warn('mySchema contains invalid JSON')
         }
       }
     }

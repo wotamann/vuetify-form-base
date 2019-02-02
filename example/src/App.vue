@@ -5,11 +5,11 @@
 
 <template>
   <v-app class="pa-2">
-      <v-select class="fixed" :items="['Simple Form','Responsive Form', 'CSS & Slots', 'Deep Object', 'Partial & Linked', 'Complex Form']" v-model="view"></v-select>
+      <v-select class="fixed" :items="['Simple Form','Responsive Grid', 'CSS & Slots', 'Deep Object', 'Partial & Linked', 'Complex Form']" v-model="view"></v-select>
 
     <div class="pad">
       <simple v-if="view === 'Simple Form'"></simple>
-      <grid v-if="view === 'Responsive Form'"></grid>
+      <grid v-if="view === 'Responsive Grid'"></grid>
       <css v-if="view === 'CSS & Slots'"></css>
       <deep v-if="view === 'Deep Object'"></deep>
       <partial v-if="view === 'Partial & Linked'"></partial>

@@ -353,7 +353,7 @@ export default {
       let schema = {}
 
       Object.keys(dat).forEach(i => {
-        if ( (!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object') || (Array.isArray(dat[i]) && Array.isArray(sch[i])) ) {
+        if ((!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object') || (Array.isArray(dat[i]) && Array.isArray(sch[i]))) {
         // if ( dat[i] && typeof dat[i] === 'object') {
           // if (!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object') {
           let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[i], sch[i])
@@ -386,6 +386,8 @@ export default {
     flattenAndCombineToArray (data, schema) {
       // flatten nested structure of both objects 'data' & 'schema' ...
       let flattenedObjects = this.flattenObjects(data, schema)
+      console.log('flattenedObjects',flattenedObjects);
+      
       // ... and combine them to an array
       return this.combineObjectsToArray(flattenedObjects)
     }

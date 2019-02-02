@@ -16,7 +16,7 @@
 
 <script>
 import VFormBase from '@/components/vFormBase'
-const items = ['Tesla', 'Jobs', 'Taleb']
+
 export default {
   components: { VFormBase },
   data () {
