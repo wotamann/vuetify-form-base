@@ -5,16 +5,16 @@
 
 <template>
   <v-app class="pa-2">
-      <v-select class="fixed" :items="['Array','Simple Form','Responsive Grid', 'CSS & Slots', 'Deep Object', 'Partial & Linked', 'Complex Form']" v-model="view"></v-select>
+      <v-select class="fixed" :items="['Simple Form','Responsive Grid', 'CSS & Slots', 'Deep nested Object', 'Values with Arrays', 'Partial & Linked', 'Complex Form']" v-model="view"></v-select>
 
     <div class="pad">
       <simple v-if="view === 'Simple Form'"></simple>
       <grid v-if="view === 'Responsive Grid'"></grid>
       <css v-if="view === 'CSS & Slots'"></css>
-      <deep v-if="view === 'Deep Object'"></deep>
+      <deep v-if="view === 'Deep nested Object'"></deep>
       <partial v-if="view === 'Partial & Linked'"></partial>
        <complex v-if="view === 'Complex Form'"></complex>
-       <array v-if="view === 'Array'"></array>
+       <array v-if="view === 'Values with Arrays'"></array>
     </div>
   </v-app>
 </template>
@@ -34,8 +34,8 @@ export default {
   },
   data () {
     return {
-      view: 'Array'
       // view: 'Simple Form'
+      view: 'Values with Arrays'
     }
   }
 }

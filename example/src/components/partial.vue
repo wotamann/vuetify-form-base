@@ -1,35 +1,30 @@
-<style>
-  #form-base { border: 1px solid #8aa; }
-  #form-base-partial { width:50%; background-color: #eff; border: 1px solid #8aa; }
+<style scoped>
+  #form-base { border: 1px solid rgb(143, 219, 219); }
+  #form-base-partial { width:50%; background-color: rgb(227, 245, 245); border: 1px solid rgb(143, 219, 219); }
 </style>
 
 <template>
   <v-container fluid >
 
-    <h4>Complete Form based on 'myValue'</h4>
+    <h4>Complete Formbase from 'myValue'</h4>
     <v-form-base :value= "myValue" :schema= "mySchema" @update= "update"/>
-    <h4>Partial Form base on 'myValue.radios' synchronized with 'myValue'</h4>
+
+    <h4>Partial Formbase from 'myValue.radios' synchronized with 'myValue'</h4>
     <v-form-base id= "form-base-partial" :value= "myValue.radios" :schema= "mySchema.radios" @update:form-base-partial= "updatepartial"/>
-    <br/>
-    <br/>
-    <h4>See your reactive  Data in 'myValue' </h4>
-    <p>{{myValue}}</p>
 
-    <h4>See your Definition in 'mySchema' </h4>
-    <p>{{mySchema}}</p>
-
-    <h4>See logged 'update' events at console </h4>
+    <infoline :value= "myValue" :schema= "mySchema"></infoline>
 
   </v-container>
 </template>
 
 <script>
 import VFormBase from '@/components/vFormBase'
+import Infoline from '@/components/infoline'
 
 const options = ['A', 'B']
 
 export default {
-  components: { VFormBase },
+  components: { VFormBase, Infoline },
   data () {
     return {
       myValue: {

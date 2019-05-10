@@ -1,58 +1,55 @@
 <template>
   <v-container fluid >
 
-    <v-form-base  :value= "myValue" :schema= "mySchema" @update= "update">
-    
-      <!-- <template slot="slot-list-key-listing" slot-scope="{item}">
-        <v-form-base id="form-base-partial" :value= "item" :schema= "partschema.test" @update:form-base-partial= "update"/>
-      </template> -->
+    <!-- better integrated solution -->
+    <h4>Display Values containing Arrays - integrated Solution</h4>
+    <v-form-base id="integrated" :value= "myValue" :schema= "mySchema" @update:integrated= "update" />
 
-    </v-form-base>
+    <!-- solution SLOT  -->
+    <!-- <h4>Slot based Solution</h4>
+    <v-form-base :value= "slotValue" :schema= "slotSchema" @update= "update" >
+      <template slot="slot-array-key-test" slot-scope="{item}">
+        <v-form-base id="form-base-partial" :value= "item" :schema= "slotSchema.testschema" @update:form-base-partial= "update"/>
+      </template>
+    </v-form-base> -->
 
-    <h4>See your reactive  Data in 'myValue' </h4>
-    <p>{{myValue}}</p>
-
-    <h4>See your Definition in 'mySchema' </h4>
-    <p>{{mySchema}}</p>
-
-    <h4>See logged 'update' events at console </h4>
+    <infoline :value= "myValue" :schema= "mySchema"></infoline>
 
   </v-container>
 </template>
 
 <script>
 import VFormBase from '@/components/vFormBase'
+import Infoline from '@/components/infoline'
 
 export default {
-  name:'arrays',
-  components: { VFormBase },
+  name: 'arrays',
+  components: { VFormBase, Infoline },
   data () {
     return {
-      partschema:{
-        test:{
-          checkbox: { type: 'checkbox', label: 'A', color: 'red', },
-          name: { type:'text'}
-        } 
-      },
+      // INTEGRATED VERSION
       myValue: {
-        name: 'Base',
-        password: '123456',
-        // listing: [test, test, test, test, test]         
-        // listing: [[true, '111'], [false, true ], [false, false], [true, true],]         
-        listing: [{name: 'Base1', checkbox: false}, {name: 'Base2', checkbox: true}, {name: 'Base3', checkbox: false}]         
+        arrayOne: [{ checkbox: true, name: 'Dog' }, { checkbox: false, name: 'Lion' }, { checkbox: true, name: 'Tiger' } ]
       },
       mySchema: {
-        name: { type: 'text', label: 'Name', flex: 4, appendIcon: 'more_vert' },
-        password: { type: 'password', label: 'Password', flex: 4 },
-         
-        listing: {type: 'list' , schema:{ checkbox: { type: 'checkbox', label: 'A', color: 'red', flex:4 }, name: { type:'text', flex:4} }, }        
+        arrayOne: { type: 'array', flex: 12, schema: { name: { type: 'text', flex: 8 }, checkbox: { type: 'checkbox', label: 'Name', color: 'green', flex: 4 } } }
       }
+
+      // // SLOT Version
+      // slotValue: {
+      //   test: [{ checkbox: true, name: 'Dog' }, { checkbox: false, name: 'Lion' }, { checkbox: true, name: 'Tiger' } ]
+      // },
+      // slotSchema: {
+      //   testschema: { checkbox: { flex: 4, type: 'checkbox', label: 'Cats: ', color: 'blue' }, name: { flex: 8, type: 'text' } },
+      //   test: { type: 'array', flex: 12 }
+      // },
+      
     }
   },
   methods: {
-    update ({ on, id, key, value, obj, event, params, data, schema }) {
-      console.log('Update [ on, key, value, params, data, schema]', on, key, value, params, data, schema)
-    }   
+    update ({ on, parentId, id, key, value, obj, event, params, data, schema }) {
+      console.log('Update [ on, parentId, id, key, value, params, data, schema]', on, parentId, id, key, value, params, data, schema)
+    }
   }
 }
 </script>

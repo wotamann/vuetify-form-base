@@ -1,8 +1,6 @@
 <template>
   <v-layout :id = "ref" class="wrap" v-resize.quiet= "onResize" >
-
     <template v-for="(obj, index) in flatCombinedArraySorted" >
-
       <v-flex
         v-if= "!obj.schema.hidden"
         :class= "getClassName(obj)"
@@ -47,12 +45,13 @@
             <v-date-picker :value= "setValue(obj)" @focus = "onFocus($event, obj)" @input= "onInput($event, obj)"></v-date-picker>
           </v-menu>
 
+          <!-- radio -->
           <v-radio-group
             v-else-if= "obj.schema.type === 'radio'"
             v-bind = "obj.schema"
             :value= "setValue(obj)"
             @change= "onInput($event, obj)"
-          >
+            >
             <v-radio
               v-for="(o,ix) in obj.schema.options"
               v-bind = "obj.schema"
@@ -62,32 +61,41 @@
             ></v-radio>
           </v-radio-group>
 
-          <template v-else-if= "obj.schema.type === 'list'">
-            <v-form-base 
-              v-for="(item, ix) in setValue(obj)"  
-              :id="'form-base-partial-' + ix" 
-              :value= "item" 
-              :schema= "obj.schema.schema" 
-              @update:form-base-partial= "onInput($event, obj)"
-            >
-            </v-form-base>                   
-          </template> 
-
-          <!-- <template v-else-if= "obj.schema.type === 'list'">
-            <div              
-              v-bind = "obj.schema"
-              :value= "setValue(obj)"            
-              v-for="(item, ix) in setValue(obj)" 
-              :key="ix"     
-            > 
-              <slot :name= "getKeyListSlot(obj)" v-bind:item= "item" >
-                <v-form-base id="form-base-partial" :value= "item" :schema= "obj.schema.item" @update:form-base-partial= "onInput($event, obj.value)"/>                   
-                <v-form-base id="form-base-partial" :value= "item" :schema= "obj.schema.item" @input= "onInput($event, obj)" />                   
+          <!-- array -->
+          <template v-else-if= "obj.schema.type === 'array'" >
+            <div v-bind = "obj.schema" :value= "setValue(obj)" v-for="(item, ix) in setValue(obj)" :key="ix" >
+              <slot :name= "getKeyArraySlot(obj)" v-bind:item= "item" >
+                <v-form-base
+                  v-bind = "obj.schema"
+                  :id="`${id}-${obj.key}-${ix}`"
+                  :value= "item"
+                  :schema= "obj.schema.schema"
+                />
               </slot>
-              <v-form-base id="form-base-partial" :value= "item" :schema= "obj.schema.test" @update:form-base-partial= "update" @input= "onInput($event, obj)"/>     
             </div>
-          </template> -->
+          </template>
 
+          <template v-else-if= "obj.schema.type === 'list'">
+            <v-toolbar v-if="obj.schema.label" v-bind = "obj.schema" dark >
+              <v-toolbar-title>{{obj.schema.label}}</v-toolbar-title>
+            </v-toolbar>
+            <v-list
+              v-bind = "obj.schema"
+              :value= "setValue(obj)"
+            >
+              <v-list-tile
+                class="tile"
+                v-for="(item, ix) in obj.schema.items" :key="ix"
+                @click= "onInput(item, obj)"
+              >
+                <v-list-tile-content>
+                  <v-list-tile-title v-text="item" ></v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
+          </template>
+
+          <!-- checkbox switch -->
           <div
             v-else-if= "obj.schema.type === 'switch' || obj.schema.type === 'checkbox'"
             :is= "mapTypeToComponent(obj.schema.type)"
@@ -100,6 +108,7 @@
             @change= "onInput($event, obj)"
           ></div>
 
+          <!-- all other -->
           <div
             v-else
             :is= "mapTypeToComponent(obj.schema.type)"
@@ -114,9 +123,8 @@
             @input= "onInput($event, obj)"
           ></div>
 
-                {{obj}}
-      </slot>
-      </slot>
+        </slot>
+        </slot>
 
         <!-- slot at bottom of item  -> <div slot="slot-bottom-key-[deep-nested-key]> -->
         <slot :name= "getTypeBottomSlot(obj)"></slot>
@@ -128,7 +136,6 @@
       <v-spacer v-if= "obj.schema.spacer" :key= "`s-${index}`"></v-spacer>
 
     </template>
-
   </v-layout>
 </template>
 
@@ -141,6 +148,7 @@ const typeToComponent = {
   text: 'v-text-field',
   password: 'v-text-field',
   email: 'v-text-field',
+
   // native Input Types - https://www.wufoo.com/html5/
   tel: 'v-text-field',
   url: 'v-text-field',
@@ -162,7 +170,7 @@ const itemClassAppendix = 'item'
 const typeClassAppendix = 'type'
 const keyClassAppendix = 'key'
 
-const listSlotAppendix = 'slot-list'
+const arraySlotAppendix = 'slot-array'
 const topSlotAppendix = 'slot-top'
 const itemSlotAppendix = 'slot-item'
 const bottomSlotAppendix = 'slot-bottom'
@@ -173,16 +181,16 @@ const appendOuter = 'append-outer'
 const prepend = 'prepend'
 const prependInner = 'prepend-inner'
 //
-//import VFormBase from '@/components/vFormBase'
+// import VFormBase from '@/components/vFormBase'
 
 export default {
+
   name: 'v-form-base',
- 
-  //components: { VFormBase },
- 
+
   props: {
     id: {
-      type: String
+      type: String,
+      default: defaultID
     },
     value: {
       type: [Object, Array],
@@ -200,13 +208,12 @@ export default {
       clear,
       append,
       appendOuter,
-      prepend,
-      prependInner
+      prepend
     }
   },
 
   computed: {
-    ref () { return this.id || defaultID },
+    ref () { return this.id },
     flatCombinedArraySorted () {
       return orderBy(this.flatCombinedArray, ['schema.sort'], [orderDirection])
     },
@@ -228,9 +235,9 @@ export default {
     },
 
     // KEY SLOTS
-    getKeyListSlot (obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-list-key-adress-city'
-      return this.getKeyClassNameWithAppendix(obj, listSlotAppendix + '-key')
+    getKeyArraySlot (obj) {
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-ARRAY-key-adress-city'
+      return this.getKeyClassNameWithAppendix(obj, arraySlotAppendix + '-key')
     },
     getKeyItemSlot (obj) {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-adress-city'
@@ -244,8 +251,8 @@ export default {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-bottom-key-adress-city'
       return this.getKeyClassNameWithAppendix(obj, bottomSlotAppendix + '-key')
     },
-
-    // KEY SLOTS
+    //
+    // TYPE SLOTS
     getTypeItemSlot (obj) {
       // get Type specific slot name  -> 'slot-item-type-radio'
       return this.getTypeClassNameWithAppendix(obj, itemSlotAppendix + '-type')
@@ -258,7 +265,7 @@ export default {
       // get Type specific slot name  -> 'slot-bottom-type-radio'
       return this.getTypeClassNameWithAppendix(obj, bottomSlotAppendix + '-type')
     },
-
+    //
     // CLASS Names
     getKeyClassNameWithAppendix (obj, appendix) {
       // get KEY specific name by app-/prepending 'appendix-' and replacing '.' with '-' in nested key path  -> 'top-slot-adress-city'
@@ -300,7 +307,7 @@ export default {
       // console.log(`getItemClassName `,`${itemClassAppendix} ${this.getTypeClassName(obj)} ${this.getKeyClassName(obj)} ${this.getGridClassName(obj)}`)
       return `${itemClassAppendix} ${this.getTypeClassName(obj)} ${this.getKeyClassName(obj)} ${this.getGridClassName(obj)}`
     },
-
+    //
     // Map Values coming FROM Control or going TO Control
     toCtrl (params) {
       // manipulate value going to control, toCtrl-function must return a (modified) value
@@ -319,11 +326,7 @@ export default {
       return this.toCtrl({ value: obj.value, obj, data: this.storeStateData, schema: this.storeStateSchema })
     },
     // Get Value from Input & Events
-    onInput (value, obj, ix) {
-      
-      console.log('INPUT o listIndex', this, this.fromCtrl);
-      console.log('INPUT 1 listIndex', value, obj, ix);
-      
+    onInput (value, obj) {
       // Value after change in Control
       value = this.fromCtrl({ value, obj, data: this.storeStateData, schema: this.storeStateSchema })
 
@@ -333,31 +336,19 @@ export default {
       // update deep nested prop(key) with value
       this.setObjectByPath(this.storeStateData, obj.key, value)
 
-      console.log('INPUT 2 listIndex', {
+      this.emitValue('input', {
         on: 'input',
         id: this.ref,
+        parentId: this.$parent.id,
         key: obj.key,
         value,
         obj,
         data: this.storeStateData,
-        schema: this.storeStateSchema,
-        listIndex:ix
-      });
-     
-     this.emitValue('input', {
-        on: 'input',
-        id: this.ref,
-        key: obj.key,
-        value,
-        obj,
-        data: this.storeStateData,
-        schema: this.storeStateSchema,
-        listIndex:ix
+        schema: this.storeStateSchema
       })
-    },    
+    },
     onClick (event, obj, pos) {
-      this.emitValue('click', {
-        on: 'click',
+      this.emitValue('click', { on: 'click',
         id: this.ref,
         params: { text: event.srcElement && event.srcElement.innerText, pos },
         key: obj.key,
@@ -365,8 +356,7 @@ export default {
         obj,
         event,
         data: this.storeStateData,
-        schema: this.storeStateSchema
-      })
+        schema: this.storeStateSchema })
     },
     onFocus (event, obj) {
       this.emitValue('focus', { on: 'focus', id: this.ref, key: obj.key, value: obj.value, obj, event, data: this.storeStateData, schema: this.storeStateSchema })
@@ -379,11 +369,19 @@ export default {
     },
     // Event Base
     emitValue (emit, val) {
-      this.$emit(this.getEventName(emit), val)
-      this.$emit(this.getEventName('update'), val)
+      if (this.$parent.id) {
+        this.$parent.$emit(this.getEventParentName(emit), val)
+        this.$parent.$emit(this.getEventParentName('update'), val)
+      } else {
+        this.$emit(this.getEventName(emit), val)
+        this.$emit(this.getEventName('update'), val)
+      }
     },
     getEventName (eventName) {
       return this.ref !== defaultID ? `${eventName}:${this.ref}` : eventName
+    },
+    getEventParentName (eventName) {
+      return this.$parent.id !== defaultID ? `${eventName}:${this.$parent.id}` : eventName
     },
 
     // PREPARE ARRAYS DATA & SCHEMA

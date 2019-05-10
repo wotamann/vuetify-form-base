@@ -1,4 +1,4 @@
-<style>
+<style scoped>
   #form-base { border: 1px solid #59a0cf; background-color: #fafdff; padding:1rem }
   #form-base .key-selection  { border: 1px dashed blueviolet }
 </style>
@@ -12,21 +12,15 @@
 
     <v-btn small @click="validate">Validate</v-btn>
     <v-btn small @click="resetValidation">Reset Validate</v-btn>
-    <v-divider></v-divider>
 
-    <h4>See your reactive  Data in 'myValue' </h4>
-    <p>{{myValue}}</p>
-
-    <h4>See your Definition in 'mySchema' </h4>
-    <p>{{mySchema}}</p>
-
-    <h4>See logged 'update' events at console </h4>
+    <infoline :value= "myValue" :schema= "mySchema"></infoline>
 
   </v-container>
 </template>
 
 <script>
 import VFormBase from '@/components/vFormBase'
+import Infoline from '@/components/infoline'
 
 const items = ['Tesla', 'Jobs', 'Taleb']
 const options = ['A', 'B']
@@ -46,7 +40,7 @@ const rules = {
 }
 
 export default {
-  components: { VFormBase },
+  components: { VFormBase, Infoline },
   data () {
     return {
       formValid: true,

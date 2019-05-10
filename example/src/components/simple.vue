@@ -1,51 +1,45 @@
-
-<style>
-  .v-list.list-individual { background-color:cornsilk!important; min-height: auto!important; }
-</style>
 <template>
   <v-container fluid >
 
+    <h4>Simple Responsive Form </h4>
+
     <v-form-base  :value= "myValue" :schema= "mySchema" @update= "update"/>
 
-    <h4>See your reactive  Data in 'myValue' </h4>
-    <p>{{myValue}}</p>
-
-    <h4>See your Definition in 'mySchema' </h4>
-    <p>{{mySchema}}</p>
-
-    <h4>See logged 'update' events at console </h4>
+    <infoline :value= "myValue" :schema= "mySchema"></infoline>
 
   </v-container>
 </template>
 
 <script>
 import VFormBase from '@/components/vFormBase'
+import Infoline from '@/components/infoline'
 
 export default {
-  components: { VFormBase },
+  name:'simple',
+  components: { VFormBase, Infoline },
   data () {
-    return {      
+    return {
       myValue: {
         name: 'Base',
         password: '123456',
         email: 'base@mail.com',
-        checkbox: [true, false],
         select: 'Jobs',
-        // listing: 'Tesla' 
+        listing: 'Tesla',
+        checkbox: [true, false]
       },
       mySchema: {
-        name: { type: 'text', label: 'Name' },
-        password: { type: 'password', label: 'Password' },
-        email: { type: 'email', label: 'Email' },
+        name: { type: 'text', label: 'Name', flex: { xs: 12, sm: 6, md: 4 } },
+        password: { type: 'password', label: 'Password', flex: { xs: 12, sm: 6, md: 4 } },
+        email: { type: 'email', label: 'Email', flex: { xs: 12, sm: 6, md: 4 } },
         checkbox: [{ type: 'checkbox', label: 'A' }, { type: 'checkbox', label: 'B' }],
-        select: { type: 'select', label: 'Select', color:'blue', box:true,  items: ['Tesla', 'Jobs', 'Taleb'] },
-        // listing: { type: 'list', label: '', color:'teal', dense:false, class:'list-individual',  items: ['Tesla', 'Jobs', 'Taleb'] }
+        select: { type: 'select', label: 'Select', color: 'blue', box: true, items: ['Tesla', 'Jobs', 'Taleb'], flex: 6 },
+        listing: { type: 'list', label: 'List', color: 'grey', dense: true, items: ['Tesla', 'Jobs', 'Taleb'], flex: 6 }
       }
     }
   },
   methods: {
     update ({ on, id, key, value, obj, event, params, data, schema }) {
-      console.log('Update [ on, key, value, params]', on, key, value, params)
+      console.log('Update [ on, id, key, value, params]', on, id, key, value, params)
     }
   }
 }

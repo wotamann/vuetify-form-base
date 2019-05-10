@@ -3,58 +3,54 @@
   h4 { background-color: #eef; color: #44d; padding: 0.5rem}
   /* CSS Component --- Container */
   #form-base-css { border: 1px solid #c2b82b; background-color: #f7f7ea; padding:2rem }
+  #form-base-css .key-controls-checkbox { background-color: #ecf0b6 }
   @media only screen and (max-width: 800px) {
     #form-base-css { border: 1px solid rgb(74, 179, 14); background-color: #dff7d5; padding:1rem }
+    #form-base-css .key-controls-checkbox { background-color: #bae9af }
   }
   @media only screen and (max-width: 560px) {
-    #form-base-css { border: 1px solid rgb(18, 93, 179); background-color: #c2e0f8; padding:0rem }
+    #form-base-css { border: 1px solid rgb(18, 93, 179); background-color: #e4ecf1; padding:0rem }
+    #form-base-css .key-controls-checkbox { background-color: #f3e9cc }
   }
 
   /* CSS Item --- set all items  */
-  #form-base-css .item { border-left: 1px dashed #2b9bdb; border-top: 1px dashed rgb(43, 155, 219); padding:1rem }
+  #form-base-css .item { border: 1px dashed #888e91; padding:1rem }
 
   /* CSS Type --- set all items with type */
   #form-base-css .type-switch { border-bottom: 3px solid #e22d23}
-  #form-base-css .type-checkbox { background-color: #fdd }
-
-  /* CSS Keys --- select key in object 'myValue.password' */
-  #form-base-css .key-password input:focus { background-color: rgb(248, 225, 245) }
-  #form-base-css .key-controls-slider { background-color: #f3e9cc }
+  
+  /* CSS Keys --- select key in object 'myValue.email on focus' */
+  #form-base-css .key-email input:focus { background-color: rgb(248, 234, 225) }
 
 </style>
 
 <template>
   <v-container fluid >
-
+    <h4>Resize and Play around with predefined CSS-Classes styling your Form  </h4>
     <v-form-base id= "form-base-css" :value= "myValue" :schema= "mySchema" @update:form-base-css= "update">
-
+      <!-- KEY -->
       <h4 slot="slot-top-key-password">Top Slot Key Password</h4> -->
-      <h4 slot="slot-top-type-radio">Top Slot Type Radio</h4>
       <h4 slot="slot-bottom-key-name">Bottom Slot Key Name</h4>
-
       <h4 slot="slot-item-key-password">Slot replaces Key Password</h4>
+      <!-- TYPE -->
+      <h4 slot="slot-top-type-radio">Top Slot Type Radio</h4>
+      <!-- <h4 slot="slot-bottom-type-radio">Top Bottom Type Radio</h4> -->
       <!-- <h4 slot="slot-item-type-radio">Slot replaces all Radio Types</h4> -->
-
     </v-form-base>
 
-    <h4>See your reactive  Data in 'myValue' </h4>
-    <p>{{myValue}}</p>
-
-    <h4>See your Definition in 'mySchema' </h4>
-    <p>{{mySchema}}</p>
-
-    <h4>See logged 'update' events at console </h4>
+    <infoline :value= "myValue" :schema= "mySchema"></infoline>
 
   </v-container>
 </template>
 
 <script>
 import VFormBase from '@/components/vFormBase'
+import Infoline from '@/components/infoline'
 
 const options = ['A', 'B']
 
 export default {
-  components: { VFormBase },
+  components: { VFormBase, Infoline },
   data () {
     return {
       myValue: {
@@ -70,11 +66,11 @@ export default {
         }
       },
       mySchema: {
-        name: { type: 'text', label: 'Name', flex: 4, appendIcon: 'more_vert' },
-        password: { type: 'password', label: 'Password', flex: 4 },
-        email: { type: 'email', label: 'Email', spacer: true, flex: 4 },
+        name: { type: 'text', label: 'Name', flex: 3, appendIcon: 'more_vert' },
+        password: { type: 'password', label: 'Password', flex: 3, spacer: true },
+        email: { type: 'email', label: 'Email', flex: 3 },
         controls: {
-          checkbox: { type: 'checkbox', label: 'Red', color: 'red', flex: 4 },
+          checkbox: { type: 'checkbox', label: 'Red', color: 'red', flex: 12 },
           switch: { type: 'switch', label: 'Switch', color: 'blue', flex: 4 },
           slider: { type: 'slider', label: 'Slider', color: 'orange', flex: 4 },
           radioA: { type: 'radio', label: 'RadioA', options, color: 'indigo', flex: 6 },
@@ -85,7 +81,7 @@ export default {
   },
   methods: {
     update ({ on, id, key, value, obj, event, params, data, schema }) {
-      console.log('Update [ on, key, value, params]', on, key, value, params)
+      console.log('Update [ on, id, key, value, params]', on, id, key, value, params)
     }
   }
 }

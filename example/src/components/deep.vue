@@ -19,14 +19,17 @@
       </v-flex>
     </v-layout>
 
+    <!-- <infoline :value= "myValue" :schema= "mySchema"></infoline> -->
+
   </v-container>
 </template>
 
 <script>
 import VFormBase from '@/components/vFormBase'
+import Infoline from '@/components/infoline'
 
 export default {
-  components: { VFormBase },
+  components: { VFormBase, Infoline },
   data () {
     return {
       stateV: 'white',
@@ -34,12 +37,7 @@ export default {
 
       myValue: {
         base: true,
-        controls: {
-          object: {
-            switchA: true,
-            switchB: false
-          },
-          arrays: {
+        controls: {          
             switch: [
               true,
               false
@@ -55,20 +53,13 @@ export default {
                 true,
                 false
               ] }
-            ]
-          }
+            ]          
         }
       },
       mySchema: {
         base: { type: 'checkbox', label: 'Base' },
-        controls: {
-          // nested object
-          object: {
-            switchA: { type: 'switch', label: 'Obj1' },
-            switchB: { type: 'switch', label: 'Obj2' }
-          },
+        controls: {          
           // deep nested object with arrays
-          arrays: {
             switch: [
               { type: 'switch', label: 'Arr1' },
               { type: 'switch', label: 'Arr2' }
@@ -80,7 +71,6 @@ export default {
               [{ type: 'checkbox', label: 'C-A', color: 'teal' }, { type: 'checkbox', label: 'C-B', color: 'teal' }],
               { checkboxArray: [{ type: 'checkbox', label: 'D-A', color: 'red' }, { type: 'checkbox', label: 'D-B', color: 'red' }] }
             ]
-          }
         }
       }
     }
