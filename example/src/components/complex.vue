@@ -3,7 +3,6 @@
   #form-base .key-selection  { border: 1px dashed blueviolet }
 </style>
 
-
 <template>
   <v-container fluid >
 
@@ -60,7 +59,7 @@ export default {
           select: 'Tesla',
           selectMultiple: ['Jobs'],
           combobox: null,
-          autocomplete: null,
+          autocomplete: null
         },
         checkbox: [
           true,
@@ -71,16 +70,16 @@ export default {
         radio: 'A',
         content: 'Lorem ipsum dolor sit amet... '
       },
- 
+
       mySchema: {
-        name: { type: 'text', label: 'Name', toCtrl: toUpper, fromCtrl: toUpper, hint: 'Converts to UpperCase', flex: { xs:6, md:4 }},
-        password: { type: 'password', label: 'Password', hint: 'Between 6-12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: { xs:6, md:4 } },
-        email: { type: 'email', label: 'Email', rules: [rules.validEmail, rules.requiredEmail], flex: { xs:12, md:4 } },
+        name: { type: 'text', label: 'Name', toCtrl: toUpper, fromCtrl: toUpper, hint: 'Converts to UpperCase', flex: { xs: 6, md: 4 } },
+        password: { type: 'password', label: 'Password', hint: 'Between 6-12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: { xs: 6, md: 4 } },
+        email: { type: 'email', label: 'Email', rules: [rules.validEmail, rules.requiredEmail], flex: { xs: 12, md: 4 } },
         selection: {
-          select: { type: 'select', label: 'Select', items, flex: { xs:6, md:3 } },
-          selectMultiple: { type: 'select', label: 'Select Multi', items, multiple: true, flex: { xs:6, md:3 } },
-          combobox: { type: 'combobox', label: 'Combobox', items, flex: { xs:6, md:3 } },
-          autocomplete: { type: 'autocomplete', label: 'AutoComplete', items, flex: { xs:6, md:3 } },
+          select: { type: 'select', label: 'Select', items, flex: { xs: 6, md: 3 } },
+          selectMultiple: { type: 'select', label: 'Select Multi', items, multiple: true, flex: { xs: 6, md: 3 } },
+          combobox: { type: 'combobox', label: 'Combobox', items, flex: { xs: 6, md: 3 } },
+          autocomplete: { type: 'autocomplete', label: 'AutoComplete', items, flex: { xs: 6, md: 3 } }
         },
         checkbox: [
           { type: 'checkbox', label: 'A' },

@@ -1,6 +1,30 @@
 
 # Vuetify-Form-Base
 
+Imagine you get the following data in JSON format and have to edit it now. 
+
+    {
+      prename: 'Will',
+      name: 'Smith',
+      retired: false
+      adresses: [
+        { 
+          street:'Time Square',
+          city: 'New York',
+          country: 'US' 
+        },
+        { 
+          street:'Champs Elysee',
+          city: 'Paris',
+          country: 'FR' 
+        }
+      ]
+    }
+
+Normally you have to flatten the data structure and then map it to an appropriate form. Then you have to define the form in HTML and animate it with your data. 
+
+With Formbase you create a JSON Object with the same structure which describes your form.
+
 You have to create a lot of different Forms? You have to manipulate or edit Data presented in JS-Objects? 
 
 Then give **Vuetify-Form-Base** a Try. This Schema-based Form Generator is a [Vue.js 2.0 Component](https://vuejs.org/) and can simplify your Job by automatically creating full editable Forms. Edit this Forms and get reactive Results.

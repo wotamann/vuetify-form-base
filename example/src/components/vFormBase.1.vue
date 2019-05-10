@@ -14,7 +14,7 @@
         <slot :name= "getTypeTopSlot(obj)"></slot>
         <slot :name= "getKeyTopSlot(obj)"></slot>
 
-          <!-- slot replaces complete item of defined type -> <div slot="item-slot-[type]>-->
+          <!-- slot replaces complete item of defined type -> <div slot="item-slot-[key]>-->
           <slot :name= "getTypeItemSlot(obj)">
           <!-- slot replaces complete item of defined key -> <div slot="item-slot-[key]>-->
           <slot :name= "getKeyItemSlot(obj)">
@@ -63,30 +63,25 @@
           </v-radio-group>
 
           <template v-else-if= "obj.schema.type === 'list'">
-            <v-form-base 
-              v-for="(item, ix) in setValue(obj)"  
-              :id="'form-base-partial-' + ix" 
-              :value= "item" 
-              :schema= "obj.schema.schema" 
-              @update:form-base-partial= "onInput($event, obj)"
-            >
-            </v-form-base>                   
-          </template> 
-
-          <!-- <template v-else-if= "obj.schema.type === 'list'">
-            <div              
+            <v-toolbar v-if="obj.schema.label" v-bind = "obj.schema" dark >
+              <v-toolbar-title>{{obj.schema.label}}</v-toolbar-title>
+            </v-toolbar>
+            <v-list              
               v-bind = "obj.schema"
               :value= "setValue(obj)"            
-              v-for="(item, ix) in setValue(obj)" 
-              :key="ix"     
-            > 
-              <slot :name= "getKeyListSlot(obj)" v-bind:item= "item" >
-                <v-form-base id="form-base-partial" :value= "item" :schema= "obj.schema.item" @update:form-base-partial= "onInput($event, obj.value)"/>                   
-                <v-form-base id="form-base-partial" :value= "item" :schema= "obj.schema.item" @input= "onInput($event, obj)" />                   
-              </slot>
-              <v-form-base id="form-base-partial" :value= "item" :schema= "obj.schema.test" @update:form-base-partial= "update" @input= "onInput($event, obj)"/>     
-            </div>
-          </template> -->
+            >
+              <v-list-tile 
+                v-for="(item, ix) in obj.schema.items" :key="ix" 
+                @click= "onInput(item, obj)" 
+              >          
+                <v-list-tile-content>
+                  <v-list-tile-title v-text="item"></v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
+          </template>
+
+
 
           <div
             v-else-if= "obj.schema.type === 'switch' || obj.schema.type === 'checkbox'"
@@ -114,7 +109,6 @@
             @input= "onInput($event, obj)"
           ></div>
 
-                {{obj}}
       </slot>
       </slot>
 
@@ -162,7 +156,6 @@ const itemClassAppendix = 'item'
 const typeClassAppendix = 'type'
 const keyClassAppendix = 'key'
 
-const listSlotAppendix = 'slot-list'
 const topSlotAppendix = 'slot-top'
 const itemSlotAppendix = 'slot-item'
 const bottomSlotAppendix = 'slot-bottom'
@@ -173,13 +166,9 @@ const appendOuter = 'append-outer'
 const prepend = 'prepend'
 const prependInner = 'prepend-inner'
 //
-//import VFormBase from '@/components/vFormBase'
-
 export default {
-  name: 'v-form-base',
- 
-  //components: { VFormBase },
- 
+  name: 'vue-form-base',
+
   props: {
     id: {
       type: String
@@ -228,10 +217,6 @@ export default {
     },
 
     // KEY SLOTS
-    getKeyListSlot (obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-list-key-adress-city'
-      return this.getKeyClassNameWithAppendix(obj, listSlotAppendix + '-key')
-    },
     getKeyItemSlot (obj) {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-adress-city'
       return this.getKeyClassNameWithAppendix(obj, itemSlotAppendix + '-key')
@@ -319,11 +304,7 @@ export default {
       return this.toCtrl({ value: obj.value, obj, data: this.storeStateData, schema: this.storeStateSchema })
     },
     // Get Value from Input & Events
-    onInput (value, obj, ix) {
-      
-      console.log('INPUT o listIndex', this, this.fromCtrl);
-      console.log('INPUT 1 listIndex', value, obj, ix);
-      
+    onInput (value, obj) {
       // Value after change in Control
       value = this.fromCtrl({ value, obj, data: this.storeStateData, schema: this.storeStateSchema })
 
@@ -333,26 +314,14 @@ export default {
       // update deep nested prop(key) with value
       this.setObjectByPath(this.storeStateData, obj.key, value)
 
-      console.log('INPUT 2 listIndex', {
+      this.emitValue('input', {
         on: 'input',
         id: this.ref,
         key: obj.key,
         value,
         obj,
         data: this.storeStateData,
-        schema: this.storeStateSchema,
-        listIndex:ix
-      });
-     
-     this.emitValue('input', {
-        on: 'input',
-        id: this.ref,
-        key: obj.key,
-        value,
-        obj,
-        data: this.storeStateData,
-        schema: this.storeStateSchema,
-        listIndex:ix
+        schema: this.storeStateSchema
       })
     },    
     onClick (event, obj, pos) {
