@@ -1,15 +1,20 @@
+<style>
+  .key-listing .active  { background-color: rgb(194, 194, 194)}
+  .key-listing .active *  { color: rgb(248, 248, 247)}
+</style>
+
 <template>
   <v-container fluid >
 
-    <!-- better integrated solution -->
+    <!-- Integrated Solution (recommended) -->
     <h4>Display Values containing Arrays - integrated Solution</h4>
     <v-form-base id="integrated" :value= "myValue" :schema= "mySchema" @update:integrated= "update" />
 
-    <!-- solution SLOT  -->
+    <!-- Slot Solution  -->
     <!-- <h4>Slot based Solution</h4>
-    <v-form-base :value= "slotValue" :schema= "slotSchema" @update= "update" >
-      <template slot="slot-array-key-test" slot-scope="{item}">
-        <v-form-base id="form-base-partial" :value= "item" :schema= "slotSchema.testschema" @update:form-base-partial= "update"/>
+    <v-form-base :value= "myValue" :schema= "mySchema" @update= "update" >
+      <template slot="slot-array-key-arrayOne" slot-scope="{item}">
+        <v-form-base id="slot-based" :value= "item" :schema= "mySchema.arrayOne.schema" @update:slot-based= "update"/>
       </template>
     </v-form-base> -->
 
@@ -27,23 +32,18 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      // INTEGRATED VERSION
       myValue: {
-        arrayOne: [{ checkbox: true, name: 'Dog' }, { checkbox: false, name: 'Lion' }, { checkbox: true, name: 'Tiger' } ]
+        select: 'Jobs',
+        selectM: ['Harari'],        
+        listing: 'Taleb',
+        arrayOne: [{ checkbox: true, name: 'Jobs' }, { checkbox: false, name: 'Taleb' }, { checkbox: true, name: 'Harari' } ]        
       },
       mySchema: {
-        arrayOne: { type: 'array', flex: 12, schema: { name: { type: 'text', flex: 8 }, checkbox: { type: 'checkbox', label: 'Name', color: 'green', flex: 4 } } }
+        select: { type: 'select',  label: 'Select', color: 'blue', box: true, items: [ 'Jobs', 'Taleb', 'Harari'], flex: 6 },
+        selectM: { type: 'select', multiple:true, label: 'Select', color: 'blue', box: true, items: [ 'Jobs', 'Taleb', 'Harari'], flex: 6 },        
+        listing: { type: 'list', label: false, color: 'blue', ripple: true, items: [ 'Jobs', 'Taleb', 'Harari'], flex: 6 },        
+        arrayOne: { type: 'array', flex: 6, schema: { name: { type: 'text', label:'Name', placeholder:'Author',flex: 9 }, checkbox: { type: 'checkbox', label: 'Book', color: 'green', flex: 3 } } }
       }
-
-      // // SLOT Version
-      // slotValue: {
-      //   test: [{ checkbox: true, name: 'Dog' }, { checkbox: false, name: 'Lion' }, { checkbox: true, name: 'Tiger' } ]
-      // },
-      // slotSchema: {
-      //   testschema: { checkbox: { flex: 4, type: 'checkbox', label: 'Cats: ', color: 'blue' }, name: { flex: 8, type: 'text' } },
-      //   test: { type: 'array', flex: 12 }
-      // },
-      
     }
   },
   methods: {

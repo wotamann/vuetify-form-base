@@ -5,7 +5,7 @@
 
 <template>
   <v-container fluid >
-
+    <h4>Validate Form</h4>
     <v-form ref="form1" v-model= "formValid" lazy-validation>
       <v-form-base id="form-base-complex" :value= "myValue" :schema= "mySchema" @update:form-base-complex= "update" />
     </v-form>
@@ -99,7 +99,7 @@ export default {
       console.log('this.mySchema.checkbox[2].checkbox1[0].hidden', this.mySchema.checkbox[2].checkbox1[0].hidden)
     },
     update ({ on, id, key, value, obj, event, params, data, schema }) {
-      console.log('Update [ on, key, value, params]', on, key, value, params)
+      console.log('Update [ on, id, key, value, params]', on, id, key, value, params)
 
       // toggle visibility of password
       if (on === 'click' && key === 'password' && (params && params.pos) === 'append') { // check 'click' is from from appendIcon

@@ -1,25 +1,9 @@
-<style>
-.text-area {height: 32rem; font-size: 0.8rem}
-</style>
-
 <template>
   <v-container fluid >
-    <h4>Try editing Value or Schema (valid JSON necessary) and see updated nested Object</h4>
+    <h4>Deep nested Object</h4>
     <v-form-base id="form-base-nested" :value= "myValue" :schema= "mySchema" @update:form-base-nested= "update"/>
 
-    <v-divider></v-divider>
-    <v-layout wrap>
-      <v-flex xs6>
-        <h4 >Value</h4>
-        <v-textarea :class="stateV" class="text-area" auto-grow v-model= "txtValue"></v-textarea>
-      </v-flex>
-      <v-flex xs6>
-      <h4>Schema</h4>
-      <v-textarea :class="stateS" class="text-area" auto-grow v-model= "txtSchema"></v-textarea>
-      </v-flex>
-    </v-layout>
-
-    <!-- <infoline :value= "myValue" :schema= "mySchema"></infoline> -->
+    <infoline :value= "myValue" :schema= "mySchema"></infoline>
 
   </v-container>
 </template>
@@ -31,53 +15,50 @@ import Infoline from '@/components/infoline'
 export default {
   components: { VFormBase, Infoline },
   data () {
-    return {
-      stateV: 'white',
-      stateS: 'white',
-
+    return {    
       myValue: {
         base: true,
-        controls: {          
-            switch: [
+        controls: {
+          switch: [
+            true,
+            false
+          ],
+          checkbox: [
+            false,
+            true,
+            [
               true,
               false
             ],
-            checkbox: [
-              false,
+            { checkboxArray: [
               true,
-              [
-                true,
-                false
-              ],
-              { checkboxArray: [
-                true,
-                false
-              ] }
-            ]          
+              false
+            ] }
+          ]
         }
       },
       mySchema: {
         base: { type: 'checkbox', label: 'Base' },
-        controls: {          
+        controls: {
           // deep nested object with arrays
-            switch: [
-              { type: 'switch', label: 'Arr1' },
-              { type: 'switch', label: 'Arr2' }
-            ],
-            checkbox: [
-              // nesteds array of objects
-              { type: 'checkbox', label: 'A' },
-              { type: 'checkbox', label: 'B' },
-              [{ type: 'checkbox', label: 'C-A', color: 'teal' }, { type: 'checkbox', label: 'C-B', color: 'teal' }],
-              { checkboxArray: [{ type: 'checkbox', label: 'D-A', color: 'red' }, { type: 'checkbox', label: 'D-B', color: 'red' }] }
-            ]
+          switch: [
+            { type: 'switch', label: 'Arr1' },
+            { type: 'switch', label: 'Arr2' }
+          ],
+          checkbox: [
+            // nesteds array of objects
+            { type: 'checkbox', label: 'A' },
+            { type: 'checkbox', label: 'B' },
+            [{ type: 'checkbox', label: 'C-A', color: 'teal' }, { type: 'checkbox', label: 'C-B', color: 'teal' }],
+            { checkboxArray: [{ type: 'checkbox', label: 'D-A', color: 'red' }, { type: 'checkbox', label: 'D-B', color: 'red' }] }
+          ]
         }
       }
     }
   },
   computed: {
     txtValue: {
-      get () { return JSON.stringify(this.myValue, undefined, 6) },
+      get () { return JSON.stringify(this.myValue, undefined, 4) },
       set (v) {
         try {
           this.myValue = JSON.parse(v)
@@ -89,7 +70,7 @@ export default {
       }
     },
     txtSchema: {
-      get () { return JSON.stringify(this.mySchema, undefined, 6) },
+      get () { return JSON.stringify(this.mySchema, undefined, 4) },
       set (v) {
         try {
           this.mySchema = JSON.parse(v)
@@ -103,7 +84,7 @@ export default {
   },
   methods: {
     update ({ on, id, key, value, obj, event, params, data, schema }) {
-      console.log('Update [ on, key, value, params]', on, key, value, params)
+      console.log('Update [ on, id, key, value, params]', on, id, key, value, params)
     }
   }
 }

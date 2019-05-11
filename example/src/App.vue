@@ -5,16 +5,17 @@
 
 <template>
   <v-app class="pa-2">
-      <v-select class="fixed" :items="['Simple Form','Responsive Grid', 'CSS & Slots', 'Deep nested Object', 'Values with Arrays', 'Partial & Linked', 'Complex Form']" v-model="view"></v-select>
+
+    <v-select class="fixed" :items="items" v-model="view"></v-select>
 
     <div class="pad">
-      <simple v-if="view === 'Simple Form'"></simple>
-      <grid v-if="view === 'Responsive Grid'"></grid>
-      <css v-if="view === 'CSS & Slots'"></css>
-      <deep v-if="view === 'Deep nested Object'"></deep>
-      <partial v-if="view === 'Partial & Linked'"></partial>
-       <complex v-if="view === 'Complex Form'"></complex>
-       <array v-if="view === 'Values with Arrays'"></array>
+      <simple v-if="view === items[0]"></simple>
+      <grid v-if="view === items[1]"></grid>
+      <css v-if="view === items[2]"></css>
+      <deep v-if="view === items[3]"></deep>
+      <array v-if="view === items[4]"></array>
+      <partial v-if="view === items[5]"></partial>
+       <complex v-if="view === items[6]"></complex>
     </div>
   </v-app>
 </template>
@@ -28,14 +29,16 @@ import partial from '@/components/partial.vue'
 import complex from '@/components/complex.vue'
 import array from '@/components/array.vue'
 
+const items = ['Simple Form','Responsive Grid', 'CSS & Slots', 'Deep nested Object', 'Values with Arrays', 'Partial & Linked', 'Complex Form']
+
 export default {
   components: {
     simple, grid, css, deep, partial, complex, array
   },
   data () {
     return {
-      // view: 'Simple Form'
-      view: 'Values with Arrays'
+      items,
+      view: items[0]
     }
   }
 }
