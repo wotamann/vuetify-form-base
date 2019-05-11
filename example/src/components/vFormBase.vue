@@ -75,6 +75,7 @@
             </div>
           </template>
 
+          <!-- list -->
           <template v-else-if= "obj.schema.type === 'list'">
             <v-toolbar v-if="obj.schema.label" v-bind = "obj.schema" dark >
               <v-toolbar-title>{{obj.schema.label}}</v-toolbar-title>
@@ -216,8 +217,6 @@ export default {
       return orderBy(this.flatCombinedArray, ['schema.sort'], [orderDirection])
     },
     storeStateData () {
-      console.log('##### store', this.value, this.schema)
-      // if (typeof this.value[0] === 'string') this.value = [{ a:'#efwe'}, {a:'wefwef'} ]
       this.updateArrayFromState(this.value, this.schema)
       return this.value
     },
@@ -228,7 +227,6 @@ export default {
   },
 
   methods: {
-
     mapTypeToComponent (type) {
       // map ie. schema:{ type:'password', ... } to vuetify control v-text-field'
       return typeToComponent[type] ? typeToComponent[type] : `v-${type}`
@@ -304,7 +302,6 @@ export default {
       getClassName (obj) {
         // combines all into a single classname
         // class => ie. 'item type-checkbox key-adress-zip xs12 md6 offset-xs0'
-        // console.log(`getItemClassName `,`${itemClassAppendix} ${this.getTypeClassName(obj)} ${this.getKeyClassName(obj)} ${this.getGridClassName(obj)}`)
         return `${itemClassAppendix} ${this.getTypeClassName(obj)} ${this.getKeyClassName(obj)} ${this.getGridClassName(obj)}`
       },
     //
@@ -327,7 +324,6 @@ export default {
     },
     // Get Value from Input & Events
     onInput (value, obj) {
-      console.log('##',value);
       
       // Value after change in Control
       value = this.fromCtrl({ value, obj, data: this.storeStateData, schema: this.storeStateSchema })
@@ -352,6 +348,7 @@ export default {
     onClick (event, obj, pos) {
       this.emitValue('click', { on: 'click',
         id: this.ref,
+        parentId: this.$parent.id,
         params: { text: event.srcElement && event.srcElement.innerText, pos },
         key: obj.key,
         value: obj.value,
@@ -361,10 +358,10 @@ export default {
         schema: this.storeStateSchema })
     },
     onFocus (event, obj) {
-      this.emitValue('focus', { on: 'focus', id: this.ref, key: obj.key, value: obj.value, obj, event, data: this.storeStateData, schema: this.storeStateSchema })
+      this.emitValue('focus', { on: 'focus', id: this.ref, parentId: this.$parent.id, key: obj.key, value: obj.value, obj, event, data: this.storeStateData, schema: this.storeStateSchema })
     },
     onSwipe (pos, obj) {
-      this.emitValue('swipe', { on: 'swipe', id: this.ref, key: obj.key, value: obj.value, obj, params: { pos }, data: this.storeStateData, schema: this.storeStateSchema })
+      this.emitValue('swipe', { on: 'swipe', id: this.ref, parentId: this.$parent.id, key: obj.key, value: obj.value, obj, params: { pos }, data: this.storeStateData, schema: this.storeStateSchema })
     },
     onResize () {
       this.emitValue('resize', { on: 'resize', id: this.ref, params: { x: window.innerWidth, y: window.innerHeight }, data: this.storeStateData, schema: this.storeStateSchema })
@@ -406,11 +403,8 @@ export default {
       let schema = {}
 
       Object.keys(dat).forEach(i => {
-        console.log('##flattenObjects', i, dat);
         
         if ((!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object') || (Array.isArray(dat[i]) && Array.isArray(sch[i]))) {
-        // if ( dat[i] && typeof dat[i] === 'object') {
-          // if (!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object') {
           let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[i], sch[i])
           Object.keys(flatData).forEach(ii => {
             data[i + pathDelimiter + ii] = flatData[ii]
@@ -441,8 +435,7 @@ export default {
     flattenAndCombineToArray (data, schema) {
       // flatten nested structure of both objects 'data' & 'schema' ...
       let flattenedObjects = this.flattenObjects(data, schema)
-      // console.log('flattenedObjects', flattenedObjects)
-
+   
       // ... and combine them to an array
       return this.combineObjectsToArray(flattenedObjects)
     }
