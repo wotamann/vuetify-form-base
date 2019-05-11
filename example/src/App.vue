@@ -6,7 +6,7 @@
 <template>
   <v-app class="pa-2">
 
-    <v-select class="fixed" :items="items" v-model="view"></v-select>
+    <v-select class="fixed" hide-selected :items="items" v-model="view"></v-select>
 
     <div class="pad">
       <simple v-if="view === items[0]"></simple>
@@ -29,7 +29,7 @@ import partial from '@/components/partial.vue'
 import complex from '@/components/complex.vue'
 import array from '@/components/array.vue'
 
-const items = ['Simple Form','Responsive Grid', 'CSS & Slots', 'Deep nested Object', 'Values with Arrays', 'Partial & Linked', 'Complex Form']
+const items = ['Simple Form','Responsive Grid', 'CSS & Slots', 'Deep nested Object', 'Values with Arrays', 'Partial & Linked', 'Complete Form']
 
 export default {
   components: {

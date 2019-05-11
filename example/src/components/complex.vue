@@ -1,13 +1,21 @@
-<style scoped>
-  #form-base { border: 1px solid #59a0cf; background-color: #fafdff; padding:1rem }
-  #form-base .key-selection  { border: 1px dashed blueviolet }
+<style> 
+  /* scoped doesn't work in nested components */
+
+  #form-base-complete .key-subgroups-content { border: 1px solid #919191; background-color: #e9e9e9; padding: 1rem }
+  #form-base-complete .key-subgroups-tasks { border: 1px solid #4b8ad6; background-color: #e2eaf5; padding: 1rem}
+  
+  @media print {
+    html * { position: fixed; visibility: hidden; }
+    .key-subgroups-content textarea { visibility: visible; left: 0; top: 0; bottom: 0 }
+    .key-subgroups-content textarea * { visibility: visible; }
+  }
 </style>
 
 <template>
   <v-container fluid >
-    <h4>Validate Form</h4>
+    <h4>Complete Form with validation</h4>
     <v-form ref="form1" v-model= "formValid" lazy-validation>
-      <v-form-base id="form-base-complex" :value= "myValue" :schema= "mySchema" @update:form-base-complex= "update" />
+      <v-form-base id="form-base-complete" :value= "myValue" :schema= "mySchema" @update:form-base-complete= "update" />
     </v-form>
 
     <v-btn small @click="validate">Validate</v-btn>
@@ -21,24 +29,20 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
+const items = ['Tesla', 'Jobs', 'Taleb', 'Harari']
 
-const items = ['Tesla', 'Jobs', 'Taleb']
-const options = ['A', 'B']
-
-/* Helper Functions */
-const toUpper = ({ value }) => value && value.toUpperCase() // destructuring value !!!
-
-/* Partial Functions */
-const minLen = l => v => (v && v.length >= l) || `min. ${l} Characters`
-const maxLen = l => v => (v && v.length <= l) || `max. ${l} Characters`
-const required = msg => v => !!v || msg
-const rules = {
-  requiredEmail: required('E-mail is required'),
-  max12: maxLen(12),
-  min6: minLen(6),
-  validEmail: v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
-}
-
+/* Helper & Partial Functions */
+  const toUpper = ({ value }) => value && value.toUpperCase() 
+  const minLen = l => v => (v && v.length >= l) || `min. ${l} Characters`
+  const maxLen = l => v => (v && v.length <= l) || `max. ${l} Characters`
+  const required = msg => v => !!v || msg
+  const rules = {
+    requiredEmail: required('E-mail is required'),
+    max12: maxLen(12),
+    min6: minLen(6),
+    validEmail: v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+  }
+//
 export default {
   components: { VFormBase, Infoline },
   data () {
@@ -46,43 +50,33 @@ export default {
       formValid: true,
 
       myValue: {
-        name: 'Base',
-        password: '123456',
         email: 'base@mail.com',
-        selection: {
+        password: '123456',
+        subgroups: {
           select: 'Tesla',
-          selectMultiple: ['Jobs'],
+          multiple: ['Jobs'],
           combobox: null,
-          autocomplete: null
-        },
-        checkbox: [
-          true,
-          false,
-          { checkbox1: [true, false, true] }
-        ],
-        switch: true,
-        radio: 'A',
-        content: 'Lorem ipsum dolor sit amet... '
+          autocomplete: null,
+          tasks: [
+            { done:false, title: 'shopping'},
+            { done:true, title: 'coding'},
+            { done:false, title: 'walking'},
+          ],
+          content: `Design principles of Vuetify ...`
+        }
       },
 
       mySchema: {
-        name: { type: 'text', label: 'Name', toCtrl: toUpper, fromCtrl: toUpper, hint: 'Converts to UpperCase', flex: { xs: 6, md: 4 } },
-        password: { type: 'password', label: 'Password', hint: 'Between 6-12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: { xs: 6, md: 4 } },
-        email: { type: 'email', label: 'Email', rules: [rules.validEmail, rules.requiredEmail], flex: { xs: 12, md: 4 } },
-        selection: {
-          select: { type: 'select', label: 'Select', items, flex: { xs: 6, md: 3 } },
-          selectMultiple: { type: 'select', label: 'Select Multi', items, multiple: true, flex: { xs: 6, md: 3 } },
-          combobox: { type: 'combobox', label: 'Combobox', items, flex: { xs: 6, md: 3 } },
-          autocomplete: { type: 'autocomplete', label: 'AutoComplete', items, flex: { xs: 6, md: 3 } }
-        },
-        checkbox: [
-          { type: 'checkbox', label: 'A' },
-          { type: 'checkbox', label: 'B' },
-          { checkbox1: [ { type: 'checkbox', color: 'red', label: 'C-1', hidden: false }, { type: 'checkbox', label: 'C-2' } ] }
-        ],
-        switch: { type: 'switch', label: 'Switch', hidden: false },
-        radio: { type: 'radio', label: 'Radio', options, row: true, hidden: false },
-        content: { prependInnerIcon: 'print', type: 'textarea', rules: [ required('Content required') ], label: 'Content', hint: 'Auto-Growing...', autoGrow: true, backgroundColor: 'blue lighten-5', flex: 12 }
+        email: { type:'email', label:'Email', rules: [rules.validEmail, rules.requiredEmail], flex: {xs: 12, sm: 6} },
+        password: { type:'password', label:'Password', hint:'6 to 12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: {xs: 12, sm: 6} },
+        subgroups: {
+          select: { type: 'select', label: 'Select', items, flex: { xs: 12, sm:6,  md: 3 } },
+          multiple: { type: 'select', label: 'Multi-Select', items, multiple: true, flex: { xs: 12, sm:6,  md: 3 } },
+          combobox: { type: 'combobox', label: 'Combobox', items, flex: { xs: 12, sm:6, md: 3 } },
+          autocomplete: { type: 'autocomplete', label: 'AutoComplete', items, flex: { xs: 12, sm:6,  md: 3 } },
+          tasks: { type:'array', schema:{ done: { type: 'checkbox', label: 'Ok', flex:3 }, title: { type:'text', placeholder:'to do...', flex:8 } }, flex:{ xs:12, sm:6 }, },
+          content: {  type: 'textarea', label: 'Content', hint: 'Auto-Growing...', autoGrow: true, prependInnerIcon: 'print', rules: [ required('Content required') ], flex:{ xs:12, sm:6 }, }
+        }       
       }
     }
   },
@@ -100,6 +94,11 @@ export default {
     },
     update ({ on, id, key, value, obj, event, params, data, schema }) {
       console.log('Update [ on, id, key, value, params]', on, id, key, value, params)
+      
+      // print content
+      if (on === 'click' && key === 'subgroups.content' && (params && params.text) === 'print') {         
+        window.print()
+      }
 
       // toggle visibility of password
       if (on === 'click' && key === 'password' && (params && params.pos) === 'append') { // check 'click' is from from appendIcon
