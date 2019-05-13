@@ -1,29 +1,40 @@
 
 # Vuetify-Form-Base
 
-Imagine you get the following data in JSON format and have to edit it now. 
+Imagine you get the following data object in JSON format and have to edit it now. 
 
-    {
-      prename: 'Will',
-      name: 'Smith',
-      retired: false
-      adresses: [
+    Value: {
+      name: 'Jumo',
+      position: 'Coder',
+      tasks: [
         { 
-          street:'Time Square',
-          city: 'New York',
-          country: 'US' 
+          done: true,
+          title: 'make refactoring' 
         },
         { 
-          street:'Champs Elysee',
-          city: 'Paris',
-          country: 'FR' 
-        }
-      ]
+          done: false,
+          title: 'write documentation'  
+        },
+        { 
+          done: true,
+          title: 'remove logs'  
+        }        
+      ]        
     }
 
 Normally you have to flatten the data structure and then map it to an appropriate form. Then you have to define the form in HTML and animate it with your data. 
 
-With Formbase you create a JSON Object with the same structure which describes your form.
+With **Vuetify-Form-Base** create a Schema Object with the same structure as your Data.
+
+    Schema: {
+      name: {type:'text', label:'Name', flex:{ xs:12, sm:6 } },
+      position: {type:'text', label:'Position', flex:{ xs:12, sm:6 } },
+      tasks: { type: 'array', flex:12, schema: { done:{ type:'checkbox', label:'done', flex:3}, title:{ type:'text'}, flex:9 } },
+    }  
+
+and you will get a full reactive, editable Form:
+
+![Form](./images/array-schema.PNG)
 
 You have to create a lot of different Forms? You have to manipulate or edit Data presented in JS-Objects? 
 
@@ -34,7 +45,7 @@ Then give **Vuetify-Form-Base** a Try. This Schema-based Form Generator is a [Vu
 ---
 ## Demo
 
-[Example on Github](https://wotamann.github.io/)
+[Look for an Example on Github](https://wotamann.github.io/)
 
 or
 
@@ -72,7 +83,7 @@ And if necessary you can also build a **Form in Form** by using **Slots**.
 
 Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** for 'Resize', 'Focus', 'Input', 'Click' and 'Swipe'. Listening to 'Update' will catch all Events. 
 
-Select from **Vuetify UI Input & Controls** like **Textfield, Password, Email, Textarea, Checkbox, Radio, Switches, Sliders, Combobox, Autocomplete, Select, Combobox, Date- or Timepicker** and some other fields. 
+Select Types from **Vuetify UI Input & Controls** like **Textfield, Password, Email, Textarea, Checkbox, Radio, Switches, Sliders, Combobox, Autocomplete, Select, Combobox, Date- or Timepicker**. There are some other types like 'array' and 'list'. 
 
 [More Informations to Vuetify Textfields find here](https://vuetifyjs.com/en/components/text-fields/). 
 
@@ -372,25 +383,29 @@ We can use the v-on directive to listen to vuetify-form-base events **'focus', '
 This Example use the Default ID and listen all events with 'update':
 
     <!-- HTML -->
-    <v-form-base :value= "myValue" :schema= "mySchema" @update= "updateCode" />
+    <v-form-base :value= "myValue" :schema= "mySchema" @update= "update" />
     
 This has a Custom ID and listen all events in separate methods. Your v-on Directive must append the Custom ID:
 
     <!-- HTML -->
+    <v-form-base id = "form-base-simple" :value= "myValue" :schema= "mySchema" @update:form-base-simple= "update" />
     <v-form-base 
-      id = "form-base-complex"
+      id = "form-base-complete"
       :value= "myValue" 
       :schema= "mySchema"  
-      @resize:form-base-complex= "resizeCode"
-      @focus:form-base-complex= "focusCode"
-      @click:form-base-complex= "clickCode"
-      @swipe:form-base-complex= "swipeCode"
-      @input:form-base-complex= "inputCode"
+      @resize:form-base-complete= "resizeCode"
+      @focus:form-base-complete= "focusCode"
+      @click:form-base-complete= "clickCode"
+      @swipe:form-base-complete= "swipeCode"
+      @input:form-base-complete= "inputCode"
     />
 
 **The Event-Signature:**
 
-    { on, id, key, value, obj, event, params, size, data, schema }
+    update( { on, id, key, value, obj, event, params, size, data, schema } ){
+      // destructure the signature object 
+      // ... on, id, key, value, obj, event, params, size, data, schema 
+    }
 
     on - Trigger Name   // focus | input | click | resize | swipe or update to listen all 
     id - Formbase-ID
@@ -403,19 +418,22 @@ This has a Custom ID and listen all events in separate methods. Your v-on Direct
     schema - Schema-Object
     
 ---
-**Use 'Update' Event to control Visibility of Password Element**
+**Example: Use 'Update' Event to control Visibility of Password Element**
 
     <!-- HTML -->
     <v-form-base :value="myValue" :schema="mySchema" @update="update">
 
     <!-- JS -->
-    update ({ on, id, key, value, obj, event, params, size, data, schema }) {
-      
-      console.log('[ on, key, value, params]', on, key, value,  params )
+    // Schema
+    mySchema: {
+      password:{ type:'password', appendIcon:'visibility', .... }
+    }
     
-      // is 'click' and comes from appendIcon on key 'password'
-      if (on == 'click' && key == 'password' && (params && params.pos) == 'append') { 
-        
+    ...
+    
+    update ({ on, key, obj, params }) {
+      // test event is 'click' and comes from appendIcon on key 'password'
+      if (on == 'click' && key == 'password' && (params && params.pos) == 'append') {         
         // toggle icon
         obj.schema.appendIcon = obj.schema.type === 'password' 
           ? 'lock' 

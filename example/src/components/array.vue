@@ -33,16 +33,27 @@ export default {
   data () {
     return {
       myValue: {
-        select: 'Jobs',
-        selectM: ['Harari'],        
-        listing: 'Taleb',
-        arrayOne: [{ checkbox: true, name: 'Jobs' }, { checkbox: false, name: 'Taleb' }, { checkbox: true, name: 'Harari' } ]        
+        name: 'Jumo',
+        position: 'Coder',
+        tasks: [
+          { 
+            done: true,
+            title: 'make refactoring' 
+          },
+          { 
+            done: false,
+            title: 'write documentation'  
+          },
+          { 
+            done: true,
+            title: 'remove logs'  
+          }        
+        ]        
       },
       mySchema: {
-        select: { type: 'select',  label: 'Select', color: 'blue', box: true, items: [ 'Jobs', 'Taleb', 'Harari'], flex: 6 },
-        selectM: { type: 'select', multiple:true, label: 'Select', color: 'blue', box: true, items: [ 'Jobs', 'Taleb', 'Harari'], flex: 6 },        
-        listing: { type: 'list', label: false, color: 'blue', ripple: true, items: [ 'Jobs', 'Taleb', 'Harari'], flex: 6 },        
-        arrayOne: { type: 'array', flex: 6, schema: { name: { type: 'text', label:'Name', placeholder:'Author',flex: 9 }, checkbox: { type: 'checkbox', label: 'Book', color: 'green', flex: 3 } } }
+        name: {type:'text', label:'Name', flex:{ xs:12, sm:6 } },
+        position: {type:'text', label:'Position', flex:{ xs:12, sm:6 } },
+        tasks: { type: 'array', flex:12, schema: { done:{ type:'checkbox', label:'done', flex:3}, title:{ type:'text'}, flex:9 } },
       }
     }
   },
