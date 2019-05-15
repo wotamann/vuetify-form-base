@@ -2,7 +2,7 @@
   <v-layout :id = "ref" class="wrap" v-resize.quiet= "onResize" >
     <template v-for="(obj, index) in flatCombinedArraySorted" >
       <v-flex
-        v-if= "!obj.schema.hidden"
+        v-show= "!obj.schema.hidden"
         :class= "getClassName(obj)"
         v-touch= "{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"
         :key= "index"

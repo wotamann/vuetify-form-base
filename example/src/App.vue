@@ -6,7 +6,7 @@
 <template>
   <v-app class="pa-2">
 
-    <v-select class="fixed" hide-selected :items="items" v-model="view"></v-select>
+    <v-select class="fixed" :items="items" v-model="view"></v-select>
 
     <div class="pad">
       <simple v-if="view === items[0]"></simple>
@@ -15,7 +15,8 @@
       <deep v-if="view === items[3]"></deep>
       <array v-if="view === items[4]"></array>
       <partial v-if="view === items[5]"></partial>
-       <complex v-if="view === items[6]"></complex>
+      <conditional v-if="view === items[6]"></conditional>
+      <complex v-if="view === items[7]"></complex>
     </div>
   </v-app>
 </template>
@@ -28,12 +29,13 @@ import deep from '@/components/deep.vue'
 import partial from '@/components/partial.vue'
 import complex from '@/components/complex.vue'
 import array from '@/components/array.vue'
+import conditional from '@/components/conditional.vue'
 
-const items = ['Simple Form','Responsive Grid', 'CSS & Slots', 'Deep nested Object', 'Values with Arrays', 'Partial & Linked', 'Complete Form']
+const items = ['Simple Form','Responsive Grid', 'CSS & Slots', 'Deep nested Object', 'Values with Arrays', 'Partial & Linked', 'Conditional', 'Complete Form']
 
 export default {
   components: {
-    simple, grid, css, deep, partial, complex, array
+    simple, grid, css, deep, partial, complex, array, conditional
   },
   data () {
     return {
