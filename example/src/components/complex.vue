@@ -93,7 +93,7 @@ export default {
       console.log('this.mySchema.checkbox[2].checkbox1[0].hidden', this.mySchema.checkbox[2].checkbox1[0].hidden)
     },
     update ({ on, id, index, key, value, obj, event, params, data, schema, parent }) {
-      console.log( 'UPDATED: On', on, ' ID:', id, ' Obj:', obj, ' Key|Value|Params|Index:', key, value, params, index, ' Data|Schema:', data, schema, ' Parent:', parent)
+      console.log('UPDATED: On', on, ' ID:', id, ' Obj:', obj, ' Key|Value|Params|Index:', key, value, params, index, ' Data|Schema:', data, schema, ' Parent:', parent)
 
       // print content
       if (on === 'click' && key === 'subgroups.content' && (params && params.text) === 'print') {

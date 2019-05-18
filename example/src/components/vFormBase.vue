@@ -71,7 +71,7 @@
                   :schema= "sanitizeSchema(obj, idx)"
                 />
                  <!-- v-bind = "clonedSchema(obj)" -->
-                 
+
               </slot>
             </div>
           </template>
@@ -151,47 +151,47 @@
 
 <script>
 // import & declarations
-  import { get, isPlainObject, isFunction, isArray, orderBy, cloneDeep } from 'lodash'
+import { get, isPlainObject, isFunction, isArray, orderBy, cloneDeep } from 'lodash'
 
-  const typeToComponent = {
-    // implemented in Vuetify
-    text: 'v-text-field',
-    password: 'v-text-field',
-    email: 'v-text-field',
+const typeToComponent = {
+  // implemented in Vuetify
+  text: 'v-text-field',
+  password: 'v-text-field',
+  email: 'v-text-field',
 
-    // native Input Types - https://www.wufoo.com/html5/
-    tel: 'v-text-field',
-    url: 'v-text-field',
-    color: 'v-text-field',
-    search: 'v-text-field',
-    number: 'v-text-field',
-    file: 'v-text-field',
-    list: 'v-list',
-    range: 'v-slider'
-  }
+  // native Input Types - https://www.wufoo.com/html5/
+  tel: 'v-text-field',
+  url: 'v-text-field',
+  color: 'v-text-field',
+  search: 'v-text-field',
+  number: 'v-text-field',
+  file: 'v-text-field',
+  list: 'v-list',
+  range: 'v-slider'
+}
 
-  const orderDirection = 'ASC'
-  const pathDelimiter = '.'
-  const classKeyDelimiter = '-'
-  const defaultID = 'form-base'
+const orderDirection = 'ASC'
+const pathDelimiter = '.'
+const classKeyDelimiter = '-'
+const defaultID = 'form-base'
 
-  const itemClassAppendix = 'item'
-  const typeClassAppendix = 'type'
-  const keyClassAppendix = 'key'
+const itemClassAppendix = 'item'
+const typeClassAppendix = 'type'
+const keyClassAppendix = 'key'
 
-  const arraySlotAppendix = 'slot-array'
-  const topSlotAppendix = 'slot-top'
-  const itemSlotAppendix = 'slot-item'
-  const bottomSlotAppendix = 'slot-bottom'
+const arraySlotAppendix = 'slot-array'
+const topSlotAppendix = 'slot-top'
+const itemSlotAppendix = 'slot-item'
+const bottomSlotAppendix = 'slot-bottom'
 
-  const clear = 'clear'
-  const button = 'button'
-  const append = 'append'
-  const appendOuter = 'append-outer'
-  const prepend = 'prepend'
-  const prependInner = 'prepend-inner'
+const clear = 'clear'
+const button = 'button'
+const append = 'append'
+const appendOuter = 'append-outer'
+const prepend = 'prepend'
+const prependInner = 'prepend-inner'
 
-  let defaultSchemaSchema = null 
+let defaultSchemaSchema = null
 //
 
 export default {
@@ -241,28 +241,21 @@ export default {
   },
 
   methods: {
-    sanitizeSchema(obj, idx) {
-      
+    sanitizeSchema (obj, idx) {
       let clonedObj = cloneDeep(obj)
-      let clonedSchema = isArray( clonedObj.schema.schema ) ? clonedObj.schema.schema[idx] : clonedObj.schema.schema 
+      let clonedSchema = isArray(clonedObj.schema.schema) ? clonedObj.schema.schema[idx] : clonedObj.schema.schema
 
-      if ( isArray(obj.schema.schema) ){
-        
-        obj.schema.schema[idx] = obj.schema.schema[idx] ? obj.schema.schema[idx] : cloneDeep(defaultSchemaSchema)        
-
+      if (isArray(obj.schema.schema)) {
+        obj.schema.schema[idx] = obj.schema.schema[idx] ? obj.schema.schema[idx] : cloneDeep(defaultSchemaSchema)
       } else {
-        
         obj.schema.schema = []
         defaultSchemaSchema = clonedObj.schema.schema
-        obj.schema.schema[idx] = obj.schema.schema[idx] ? obj.schema.schema[idx] : cloneDeep(defaultSchemaSchema)        
-
+        obj.schema.schema[idx] = obj.schema.schema[idx] ? obj.schema.schema[idx] : cloneDeep(defaultSchemaSchema)
       }
-        // console.warn('defaultSchemaSchema', defaultSchemaSchema);
-        // console.warn('{...defaultSchemaSchema}', {...defaultSchemaSchema});
-        
-        return obj.schema.schema[idx]
-      
-        
+      // console.warn('defaultSchemaSchema', defaultSchemaSchema);
+      // console.warn('{...defaultSchemaSchema}', {...defaultSchemaSchema});
+
+      return obj.schema.schema[idx]
     },
 
     mapTypeToComponent (type) {
@@ -398,16 +391,17 @@ export default {
       })
     },
     onFocus (event, obj) {
-      this.emitValue('focus', { 
-        on: 'focus', id: this.ref, 
+      this.emitValue('focus', {
+        on: 'focus',
+        id: this.ref,
         index: this.ref.replace(/\D/g, ''),
-        parentId: this.$parent.id, 
-        key: obj.key, 
-        value: obj.value, 
-        obj, 
-        event, 
-        data: this.storeStateData, 
-        schema: this.storeStateSchema 
+        parentId: this.$parent.id,
+        key: obj.key,
+        value: obj.value,
+        obj,
+        event,
+        data: this.storeStateData,
+        schema: this.storeStateSchema
       })
     },
     onSwipe (pos, obj) {

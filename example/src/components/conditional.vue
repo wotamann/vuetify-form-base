@@ -52,28 +52,28 @@ export default {
         tasks: {
           type: 'array',
           hidden: this.hidden,
-          flex: { xs: 12, sm: 6 }, 
+          flex: { xs: 12, sm: 6 },
 
-          // OPTION A: Schema as Object: Is Template for all Items in Array (Schema-Objects are NOT independent )  
-          // schema: { 
+          // OPTION A: Schema as Object: Is Template for all Items in Array (Schema-Objects are NOT independent )
+          // schema: {
           //   done: { type: 'checkbox', label: 'Ok', disabled: false, color:'green', flex: 3 },
           //   title: { type: 'text', placeholder: 'to do...', disabled: false, flex: 8 }
           // },
 
           // OPTION B: Schema as Array: define independent Schema for each Item
-          template: { 
-            done: { type: 'checkbox', label: 'Ok', disabled: false, color:'brown', flex: 3 },
+          template: {
+            done: { type: 'checkbox', label: 'Ok', disabled: false, color: 'brown', flex: 3 },
             title: { type: 'text', placeholder: 'to do...', disabled: false, flex: 8 }
           },
           schema: [
-            { 
-              done: { type: 'checkbox', label: 'Ok', disabled: false, color:'green', flex: 3 },
+            {
+              done: { type: 'checkbox', label: 'Ok', disabled: false, color: 'green', flex: 3 },
               title: { type: 'text', placeholder: 'to do...', disabled: false, flex: 8 }
-            },{ 
-              done: { type: 'checkbox', label: 'No', disabled: false, color:'red', flex: 3 },
+            }, {
+              done: { type: 'checkbox', label: 'No', disabled: false, color: 'red', flex: 3 },
               title: { type: 'text', placeholder: 'to do...', disabled: false, flex: 8 }
-            },{ 
-              done: { type: 'checkbox', label: 'Ok', disabled: false, color:'blue', flex: 3 },
+            }, {
+              done: { type: 'checkbox', label: 'Ok', disabled: false, color: 'blue', flex: 3 },
               title: { type: 'text', placeholder: 'to do...', disabled: false, flex: 8 }
             }
           ]
@@ -86,7 +86,7 @@ export default {
   methods: {
     update (updated) {
       let { on, id, index, parentId, key, value, obj, event, params, data, schema, parent } = updated
-      
+
       this.log(updated)
 
       if (key === 'button') this.toggle()
@@ -95,12 +95,12 @@ export default {
 
       if (key === 'add') {
         // MODIFY Value & Schema Array
-        this.myValue.tasks.unshift({...task})
+        this.myValue.tasks.unshift({ ...task })
         let insert = cloneDeep(this.mySchema.tasks.template)
         this.mySchema.tasks.schema.unshift(insert)
       }
 
-      if (key === 'done' && value === true) {             
+      if (key === 'done' && value === true) {
         // MODIFY Value & Schema Array
         this.myValue.tasks.splice(index, 1)
         this.mySchema.tasks.schema.splice(index, 1)
@@ -112,7 +112,7 @@ export default {
     },
 
     log ({ on, id, index, parentId, key, value, obj, event, params, data, schema, parent } = {}) {
-      console.log( 'UPDATED: On', on, ' ID:', id, ' Obj:', obj, ' Key|Value|Params|Index:', key, value, params, index, ' Data|Schema:', data, schema, ' Parent:', parent)
+      console.log('UPDATED: On', on, ' ID:', id, ' Obj:', obj, ' Key|Value|Params|Index:', key, value, params, index, ' Data|Schema:', data, schema, ' Parent:', parent)
     }
   }
 }
