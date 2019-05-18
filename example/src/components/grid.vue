@@ -19,16 +19,16 @@ export default {
     return {
       myValue: {
         name: 'Grid',
-        radio: 'A'       
+        radio: 'A'
       }
     }
   },
   computed: {
-    // Schema is Computed 
+    // Schema is Computed
     mySchema () {
       return {
         name: { type: 'text', label: 'Name', flex: { xs: 8, sm: 6 }, order: { xs: 0, sm: 8 }, offset: { xs: 0, sm: 3 } },
-        radio: { type: 'radio', label: 'Radio', row: this.row, options: ['A', 'B', 'C'], flex: 6, order:4 },       
+        radio: { type: 'radio', label: 'Radio', row: this.row, options: ['A', 'B', 'C'], flex: 6, order: 4 }
       }
     },
 
@@ -36,9 +36,9 @@ export default {
     row () {
       return this.$vuetify.breakpoint.mdAndUp
     },
-    // change Class on resize 
+    // change Class on resize
     layout () {
-      return this.$vuetify.breakpoint.mdAndUp ? 'grey lighten-4' : 'white'
+      return this.$vuetify.breakpoint.mdAndUp ? 'grey lighten-4' : this.$vuetify.breakpoint.smAndUp ? 'blue lighten-5' : 'white'
     }
   },
   methods: {

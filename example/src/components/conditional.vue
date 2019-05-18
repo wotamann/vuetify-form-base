@@ -1,87 +1,118 @@
-<style> 
+<style>
   /* scoped doesn't work in nested components */
- #form-base-complete .key-subgroups-tasks { border: 1px solid #4b8ad6; background-color: #e2eaf5; padding: 1rem} 
+ #form-base-complete .key-subgroups-tasks { border: 1px solid #4b8ad6; background-color: #e2eaf5; padding: 1rem}
 </style>
 
 <template>
   <v-container fluid >
-  
-    <h4>Conditional on Value or Action</h4>
-  
-    <v-btn small @click="toggle">Toggle</v-btn>
+
+    <h4>Conditional Display</h4>
 
     <v-form-base id="form-base-complete" :value= "myValue" :schema= "mySchema" @update:form-base-complete= "update" />
-  
+
     <infoline :value= "myValue" :schema= "mySchema"></infoline>
 
   </v-container>
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
 
 const items = ['Tesla', 'Jobs', 'Taleb', 'Harari']
-const green = 'green lighten-4'
-const red = 'red lighten-4'
+const task = { done: true, title: 'New...' }
 
 export default {
   components: { VFormBase, Infoline },
+
   data () {
     return {
       hidden: true,
-      color: red,
+      color: 'blue lighten-4',
       myValue: {
+        button: null,
+        add: null,
         conditional: '',
-        subgroups: {
-          select: 'Tesla',
-          multiple: ['Jobs'],
-          combobox: null,
-          autocomplete: null,
-          tasks: [
-            { done:false, title: 'shopping'},
-            { done:true, title: 'coding'},
-            { done:false, title: 'walking'},
-          ],
-        }     
+        tasks: [
+          { done: true, title: 'shopping' },
+          { done: true, title: 'coding' },
+          { done: true, title: 'walking' }
+        ]
       }
     }
   },
-  computed:{
-    // computed schema
-    mySchema(){ return {
-        conditional: { type:'text', label:'Conditional on Value ', hint:`try typing 'show'`,backgroundColor:this.color, flex: 12 },
-        subgroups: { 
-          select: { color:this.color, type: 'select', hidden:this.hidden , label: 'Select', items, flex: { xs: 12, sm:6,  md: 3 } },
-          multiple: { type: 'select', label: 'Multi-Select', items, multiple: true, hidden: this.hidden, flex: { xs: 12, sm:6,  md: 3 } },
-          combobox: { type: 'combobox', label: 'Combobox', items, hidden: this.hidden, flex: { xs: 12, sm:6, md: 3 } },
-          autocomplete: { type: 'autocomplete', label: 'AutoComplete', items, hidden: this.hidden, flex: { xs: 12, sm:6,  md: 3 } },
-          tasks: { 
-            type:'array', 
-            hidden: this.hidden, 
-            flex:{ xs:12, sm:6 }, 
-            schema:{ 
-              done: { type: 'checkbox', label: 'Ok', flex:3 }, 
-              title: { type:'text', placeholder:'to do...', flex:8 } 
-            } 
-          }
-        }       
+
+  computed: {
+    mySchema () {
+      return {
+        button: { type: 'button', block: true, label: `Click or Type 'Show'`, dark: true, color: 'blue', iconLeft: 'edit', iconRight: 'toggle' },
+        add: { type: 'button', block: true, label: `Add ToDo`, dark: true, color: 'blue', iconRight: 'add' },
+        conditional: { type: 'text', label: 'Conditional on Value ', hint: `try typing 'show'`, backgroundColor: this.color, flex: 12 },
+        tasks: {
+          type: 'array',
+          hidden: this.hidden,
+          flex: { xs: 12, sm: 6 }, 
+
+          // OPTION A: Schema as Object: Is Template for all Items in Array (Schema-Objects are NOT independent )  
+          // schema: { 
+          //   done: { type: 'checkbox', label: 'Ok', disabled: false, color:'green', flex: 3 },
+          //   title: { type: 'text', placeholder: 'to do...', disabled: false, flex: 8 }
+          // },
+
+          // OPTION B: Schema as Array: define independent Schema for each Item
+          template: { 
+            done: { type: 'checkbox', label: 'Ok', disabled: false, color:'brown', flex: 3 },
+            title: { type: 'text', placeholder: 'to do...', disabled: false, flex: 8 }
+          },
+          schema: [
+            { 
+              done: { type: 'checkbox', label: 'Ok', disabled: false, color:'green', flex: 3 },
+              title: { type: 'text', placeholder: 'to do...', disabled: false, flex: 8 }
+            },{ 
+              done: { type: 'checkbox', label: 'No', disabled: false, color:'red', flex: 3 },
+              title: { type: 'text', placeholder: 'to do...', disabled: false, flex: 8 }
+            },{ 
+              done: { type: 'checkbox', label: 'Ok', disabled: false, color:'blue', flex: 3 },
+              title: { type: 'text', placeholder: 'to do...', disabled: false, flex: 8 }
+            }
+          ]
+
+        }
       }
-    }       
+    }
   },
 
   methods: {
-    toggle() {
-      this.hidden =!this.hidden
-      this.color =  this.color !== green ? green : red
+    update (updated) {
+      let { on, id, index, parentId, key, value, obj, event, params, data, schema, parent } = updated
+      
+      this.log(updated)
+
+      if (key === 'button') this.toggle()
+
+      if (key === 'conditional') this.hidden = value !== 'show'
+
+      if (key === 'add') {
+        // MODIFY Value & Schema Array
+        this.myValue.tasks.unshift({...task})
+        let insert = cloneDeep(this.mySchema.tasks.template)
+        this.mySchema.tasks.schema.unshift(insert)
+      }
+
+      if (key === 'done' && value === true) {             
+        // MODIFY Value & Schema Array
+        this.myValue.tasks.splice(index, 1)
+        this.mySchema.tasks.schema.splice(index, 1)
+      }
     },
 
-    update ({ on, id, key, value, obj, event, params, data, schema }) {
-      console.log('Update [ on, id, key, value, params]', on, id, key, value, params)    
-      if (key === 'conditional'){
-        this.hidden = value === 'show' ? false : true
-        this.color = value === 'show' ? green : red
-      }  
+    toggle () {
+      this.hidden = !this.hidden
+    },
+
+    log ({ on, id, index, parentId, key, value, obj, event, params, data, schema, parent } = {}) {
+      console.log( 'UPDATED: On', on, ' ID:', id, ' Obj:', obj, ' Key|Value|Params|Index:', key, value, params, index, ' Data|Schema:', data, schema, ' Parent:', parent)
     }
   }
 }

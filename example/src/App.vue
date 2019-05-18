@@ -31,7 +31,7 @@ import complex from '@/components/complex.vue'
 import array from '@/components/array.vue'
 import conditional from '@/components/conditional.vue'
 
-const items = ['Simple Form','Responsive Grid', 'CSS & Slots', 'Deep nested Object', 'Values with Arrays', 'Partial & Linked', 'Conditional', 'Complete Form']
+const items = ['Simple Form', 'Responsive Grid', 'CSS & Slots', 'Deep nested Object', 'Values with Arrays', 'Partial & Linked', 'Conditional Display', 'Complete Form']
 
 export default {
   components: {
@@ -40,7 +40,7 @@ export default {
   data () {
     return {
       items,
-      view: items[0]
+      view: items[6]
     }
   }
 }

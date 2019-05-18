@@ -15,7 +15,7 @@ import Infoline from '@/components/infoline'
 export default {
   components: { VFormBase, Infoline },
   data () {
-    return {    
+    return {
       myValue: {
         base: true,
         controls: {

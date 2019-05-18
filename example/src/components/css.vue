@@ -4,7 +4,7 @@
 
   /* CSS Component --- Container */
   #form-base-css { border: 1px solid #c2b82b; background-color: #f7f7ea; padding:2rem }
- 
+
   @media only screen and (max-width: 800px) {
     #form-base-css { border: 1px solid rgb(74, 179, 14); background-color: #e5f0e0; padding:1rem }
     #form-base-css .key-controls-checkbox { background-color: #bae9af }

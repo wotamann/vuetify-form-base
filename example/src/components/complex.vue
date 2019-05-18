@@ -1,9 +1,9 @@
-<style> 
+<style>
   /* scoped doesn't work in nested components */
 
   #form-base-complete .key-subgroups-content { border: 1px solid #919191; background-color: #e9e9e9; padding: 1rem }
   #form-base-complete .key-subgroups-tasks { border: 1px solid #4b8ad6; background-color: #e2eaf5; padding: 1rem}
-  
+
   @media print {
     html * { position: fixed; visibility: hidden; }
     .key-subgroups-content textarea { visibility: visible; left: 0; top: 0; bottom: 0 }
@@ -32,16 +32,16 @@ import Infoline from '@/components/infoline'
 const items = ['Tesla', 'Jobs', 'Taleb', 'Harari']
 
 /* Helper & Partial Functions */
-  const toUpper = ({ value }) => value && value.toUpperCase() 
-  const minLen = l => v => (v && v.length >= l) || `min. ${l} Characters`
-  const maxLen = l => v => (v && v.length <= l) || `max. ${l} Characters`
-  const required = msg => v => !!v || msg
-  const rules = {
-    requiredEmail: required('E-mail is required'),
-    max12: maxLen(12),
-    min6: minLen(6),
-    validEmail: v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
-  }
+const toUpper = ({ value }) => value && value.toUpperCase()
+const minLen = l => v => (v && v.length >= l) || `min. ${l} Characters`
+const maxLen = l => v => (v && v.length <= l) || `max. ${l} Characters`
+const required = msg => v => !!v || msg
+const rules = {
+  requiredEmail: required('E-mail is required'),
+  max12: maxLen(12),
+  min6: minLen(6),
+  validEmail: v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+}
 //
 export default {
   components: { VFormBase, Infoline },
@@ -58,25 +58,25 @@ export default {
           combobox: null,
           autocomplete: null,
           tasks: [
-            { done:false, title: 'shopping'},
-            { done:true, title: 'coding'},
-            { done:false, title: 'walking'},
+            { done: false, title: 'shopping' },
+            { done: true, title: 'coding' },
+            { done: false, title: 'walking' }
           ],
           content: `Design principles of Vuetify ...`
         }
       },
 
       mySchema: {
-        email: { type:'email', label:'Email', rules: [rules.validEmail, rules.requiredEmail], flex: {xs: 12, sm: 6} },
-        password: { type:'password', label:'Password', hint:'6 to 12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: {xs: 12, sm: 6} },
+        email: { type: 'email', label: 'Email', rules: [rules.validEmail, rules.requiredEmail], flex: { xs: 12, sm: 6 } },
+        password: { type: 'password', label: 'Password', hint: '6 to 12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: { xs: 12, sm: 6 } },
         subgroups: {
-          select: { type: 'select', label: 'Select', items, flex: { xs: 12, sm:6,  md: 3 } },
-          multiple: { type: 'select', label: 'Multi-Select', items, multiple: true, flex: { xs: 12, sm:6,  md: 3 } },
-          combobox: { type: 'combobox', label: 'Combobox', items, flex: { xs: 12, sm:6, md: 3 } },
-          autocomplete: { type: 'autocomplete', label: 'AutoComplete', items, flex: { xs: 12, sm:6,  md: 3 } },
-          tasks: { type:'array', schema:{ done: { type: 'checkbox', label: 'Ok', flex:3 }, title: { type:'text', placeholder:'to do...', flex:8 } }, flex:{ xs:12, sm:6 }, },
-          content: {  type: 'textarea', label: 'Content', hint: 'Auto-Growing...', autoGrow: true, prependInnerIcon: 'print', rules: [ required('Content required') ], flex:{ xs:12, sm:6 }, }
-        }       
+          select: { type: 'select', label: 'Select', items, flex: { xs: 12, sm: 6, md: 3 } },
+          multiple: { type: 'select', label: 'Multi-Select', items, multiple: true, flex: { xs: 12, sm: 6, md: 3 } },
+          combobox: { type: 'combobox', label: 'Combobox', items, flex: { xs: 12, sm: 6, md: 3 } },
+          autocomplete: { type: 'autocomplete', label: 'AutoComplete', items, flex: { xs: 12, sm: 6, md: 3 } },
+          tasks: { type: 'array', schema: { done: { type: 'checkbox', label: 'Ok', flex: 3 }, title: { type: 'text', placeholder: 'to do...', flex: 8 } }, flex: { xs: 12, sm: 6 } },
+          content: { type: 'textarea', label: 'Content', hint: 'Auto-Growing...', autoGrow: true, prependInnerIcon: 'print', rules: [ required('Content required') ], flex: { xs: 12, sm: 6 } }
+        }
       }
     }
   },
@@ -92,11 +92,11 @@ export default {
       this.mySchema.checkbox[2].checkbox1[0].hidden = !this.mySchema.checkbox[2].checkbox1[0].hidden
       console.log('this.mySchema.checkbox[2].checkbox1[0].hidden', this.mySchema.checkbox[2].checkbox1[0].hidden)
     },
-    update ({ on, id, key, value, obj, event, params, data, schema }) {
-      console.log('Update [ on, id, key, value, params]', on, id, key, value, params)
-      
+    update ({ on, id, index, key, value, obj, event, params, data, schema, parent }) {
+      console.log( 'UPDATED: On', on, ' ID:', id, ' Obj:', obj, ' Key|Value|Params|Index:', key, value, params, index, ' Data|Schema:', data, schema, ' Parent:', parent)
+
       // print content
-      if (on === 'click' && key === 'subgroups.content' && (params && params.text) === 'print') {         
+      if (on === 'click' && key === 'subgroups.content' && (params && params.text) === 'print') {
         window.print()
       }
 

@@ -1,5 +1,5 @@
 <style scoped>
-  pre { font-size: 0.9rem}
+  pre { font-size: 0.8rem}
 </style>
 
 <template>
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  export default {
-    props: ['value','schema'] 
-  }
+export default {
+  props: ['value', 'schema']
+}
 </script>
