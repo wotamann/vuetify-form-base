@@ -145,7 +145,7 @@ and you will get a full editable Form based on your schema and filled with your 
 >Properties in 'myValue' without corresponding Prop in 'mySchema', are ignored and keep untouched, but a initial warning will be logged to console
 
 ---
-## Example with nested Object
+## Example displaying nested Data-Object
  
 
 In Reality sometimes you will have deep nested objects or arrays, which should be edited. **vuetify-form-base** works for you and flatten internally this nested object and build a plain Form.   
@@ -191,9 +191,9 @@ In Reality sometimes you will have deep nested objects or arrays, which should b
 
 
 ---
-## Example displaying Arrays
+## Example editing Data-Arrays
  
-For editing arrays use the schema-type 'array'. Defining a 'schema' property as object or array  in your Schema Object. If 'schema' property is an OBJECT then this object is used as a template for generating an array. Alternative you can define a 'schema' property as ARRAY with individual items. 
+For editing arrays use the type 'array' and define an nested 'schema' property. 
 
     mySchema: {
       tasks: {
@@ -205,9 +205,9 @@ For editing arrays use the schema-type 'array'. Defining a 'schema' property as 
       }  
     }
 
-#### Type Array - schema object
+#### Type Array - Schema object
 
-    myValue: {
+    myValue: {      
       tasks: [
         {
           done: true,
@@ -228,54 +228,13 @@ For editing arrays use the schema-type 'array'. Defining a 'schema' property as 
         type: 'array',
         schema: { 
           done: { type: 'checkbox', label: 'Ok', flex: 3 }, 
-          title: { type: 'text' }, 
-          flex: 8 
+          title: { type: 'text', flex: 8 },            
         }
       }
     }
 
 
 ![Form Example](./images/array-template.png)
-
-#### Type Array - schema array
-
-    myValue: {        
-        tasks: [
-          {
-            done: true,
-            title: 'make refactoring'
-          },
-          {
-            done: true,
-            title: 'write documentation'
-          },
-          {
-            done: true,
-            title: 'remove logs'
-          }
-        ]
-      },
-      mySchema: {        
-        tasks: {
-          type: 'array',
-          schema: [
-            { 
-              done: { type: 'checkbox', label: 'Ok 1', color: 'brown', flex: 3 }, 
-              title: { type: 'text' }, 
-              flex: 8 
-            },
-            { 
-              done: { type: 'checkbox', label: 'Ok 2', color: 'green', flex: 3 }, title: { type: 'text' }, 
-              flex: 8 
-            },
-            { 
-              done: { type: 'checkbox', label: 'Ok 3', color: 'blue', flex: 3 }, title: { type: 'text' }, 
-              flex: 8 
-            }
-          ]
-        }
-
-![Form Example](./images/array.png)
 
 ---
 ## Computed Schema
