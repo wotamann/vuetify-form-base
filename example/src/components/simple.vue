@@ -1,11 +1,11 @@
 <template>
   <v-container fluid >
 
-    <h4>Simple Responsive Form </h4>
+    <h4>Simple Form </h4>
 
     <v-form-base  :value= "myValue" :schema= "mySchema" @update= "update"/>
 
-    <infoline :value= "myValue" :schema= "mySchema"></infoline>
+    <infoline editable="true" :value= "myValue" :schema= "mySchema" @blur= "blur" ></infoline>
 
   </v-container>
 </template>
@@ -13,6 +13,7 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
+import update from '@/lib'
 
 export default {
   name: 'simple',
@@ -32,8 +33,11 @@ export default {
     }
   },
   methods: {
-    update ({ on, id, key, value, obj, event, params, data, schema }) {
-      console.log('Update [ on, id, key, value, params]', on, id, key, value, params)
+    update,
+    blur(p){      
+      let {value, schema } = p 
+      this.myValue =value
+      this.mySchema =schema
     }
   }
 }

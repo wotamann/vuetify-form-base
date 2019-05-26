@@ -20,6 +20,7 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
+import update from '@/lib'
 
 const options = ['A', 'B']
 
@@ -48,12 +49,11 @@ export default {
     }
   },
   methods: {
-    update ({ on, id, key, value, obj, event, params, data, schema }) {
-      console.log('Update [ on, key, value, params]', on, key, value, params)
-    },
-    updatepartial ({ on, id, key, value, obj, event, params, data, schema }) {
-      console.log('Update - PARTIAL [ on, key, value, params]', on, key, value, params)
-    }
+    
+    update,
+
+    updatepartial:update
+    
   }
 }
 </script>

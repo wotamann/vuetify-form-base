@@ -1,14 +1,11 @@
-<style>
-  .key-listing .active  { background-color: rgb(194, 194, 194)}
-  .key-listing .active *  { color: rgb(248, 248, 247)}
-</style>
-
 <template>
   <v-container fluid >
 
-    <h4>Display Arrays - Leftside: Schema from Template Object  - Rightside: Schema based on Array</h4>
-    <v-form-base id="array-demo" :value= "myValue" :schema= "mySchema" @update:array-demo= "update" />
+    <h4>Edit Item in List(Data-Array)</h4>
 
+    <v-form-base id="array" :value= "myValue" :schema= "mySchema" @update:array= "update" />
+    <v-btn dark color="blue lighten-3"  @click= "add">ADD</v-btn>
+    
     <infoline :value= "myValue" :schema= "mySchema"></infoline>
 
   </v-container>
@@ -17,73 +14,45 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
+import update from '@/lib'
 
 export default {
-  name: 'arrays',
+  name: 'array',
   components: { VFormBase, Infoline },
   data () {
     return {
       myValue: {
-        tasksA: [
-          {
-            done: true,
-            title: 'make refactoring'
-          },
-          {
-            done: true,
-            title: 'write documentation'
-          },
-          {
-            done: true,
-            title: 'remove logs'
-          }
-        ],
-        tasksB: [
-          {
-            done: true,
-            title: 'make refactoring'
-          },
-          {
-            done: true,
-            title: 'write documentation'
-          },
-          {
-            done: true,
-            title: 'remove logs'
-          }
-        ]
+        tasks: [
+          { done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) },
+          { done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) },
+          { done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) }
+        ]       
       },
-      mySchema: {
-        tasksA: {
+      mySchema: {       
+        tasks: {
           type: 'array',
-          flex: 5,
-          // Template Object
-          schema: { done: { type: 'checkbox', label: 'Ok', flex: 3 }, title: { type: 'text' }, flex: 8 }
-        },
-        tasksB: {
-          type: 'array',
-          flex: 5,
-          offset: 1,
-          // Array with Schema-Objects
-          schema: [
-            { done: { type: 'checkbox', label: 'Ok 1', color: 'brown', flex: 3 }, title: { type: 'text' }, flex: 8 },
-            { done: { type: 'checkbox', label: 'Ok 2', color: 'green', flex: 3 }, title: { type: 'text' }, flex: 8 },
-            { done: { type: 'checkbox', label: 'Ok 3', color: 'blue', flex: 3 }, title: { type: 'text' }, flex: 8 }
-          ]
-        }
+          flex: 12,
+          schema: { done: { type: 'checkbox', label: 'Done', color:'red', flex: 4 }, title: { type: 'text' }, flex: 8 }
+        }        
       }
     }
   },
   methods: {
-    update ({ on, parentId, id, index, key, value, obj, event, params, data, schema }) {
-      console.log('UPDATED: On', on, ' ID:', id, ' Obj:', obj, ' Key|Value|Params|Index:', key, value, params, index, ' Data|Schema:', data, schema, ' Parent:', parent)
 
-      if (key === 'done') {
-        data.title = Math.random()
-        schema.title.disabled = !value
-        schema.done.label = index + ' Done'
-        schema.done.color = value ? 'green' : 'red'
+    add(){
+      this.myValue.tasks.unshift({ done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) })
+    },
+    
+    update (val) {
+
+      let { index, key, value } = update(val)
+
+      if (key === 'done' && value === true) {
+        setTimeout( ()=>{
+          this.myValue.tasks.splice(index, 1)
+        }, 333)
       }
+
     }
   }
 }

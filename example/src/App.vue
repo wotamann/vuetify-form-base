@@ -13,10 +13,13 @@
       <grid v-if="view === items[1]"></grid>
       <css v-if="view === items[2]"></css>
       <deep v-if="view === items[3]"></deep>
-      <array v-if="view === items[4]"></array>
-      <partial v-if="view === items[5]"></partial>
-      <conditional v-if="view === items[6]"></conditional>
-      <complex v-if="view === items[7]"></complex>
+      <treeview v-if="view === items[4]"></treeview>
+      <selection v-if="view === items[5]"></selection>
+      <list v-if="view === items[6]"></list>
+      <array v-if="view === items[7]"></array>
+      <partial v-if="view === items[8]"></partial>
+      <conditional v-if="view === items[9]"></conditional>
+      <complex v-if="view === items[10]"></complex>
     </div>
   </v-app>
 </template>
@@ -29,18 +32,22 @@ import deep from '@/components/deep.vue'
 import partial from '@/components/partial.vue'
 import complex from '@/components/complex.vue'
 import array from '@/components/array.vue'
+import selection from '@/components/selection.vue'
+import treeview from '@/components/treeview.vue'
 import conditional from '@/components/conditional.vue'
+import list from '@/components/list.vue'
 
-const items = ['Simple Form', 'Responsive Grid', 'CSS & Slots', 'Deep nested Object', 'Values with Arrays', 'Partial & Linked', 'Conditional Display', 'Complete Form']
+const items = ['Simple Form', 'Responsive Grid', 'CSS & Slots', 'Nested Data', 'Treeviews', 
+ 'Select Item(s) from Schema-Array',  'Select Item from Data-Array', 'Edit Item in List(Data-Array)', 'Partial & Linked', 'Conditional Form', 'Complete Form']
 
 export default {
   components: {
-    simple, grid, css, deep, partial, complex, array, conditional
+    simple, grid, css, deep, partial, complex, treeview, array, selection, conditional, list
   },
   data () {
     return {
       items,
-      view: items[6]
+      view: items[0]
     }
   }
 }

@@ -12,6 +12,7 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
+import update from '@/lib'
 
 export default {
   components: { VFormBase, Infoline },
@@ -27,8 +28,8 @@ export default {
     // Schema is Computed
     mySchema () {
       return {
-        name: { type: 'text', label: 'Name', flex: { xs: 8, sm: 6 }, order: { xs: 0, sm: 8 }, offset: { xs: 0, sm: 3 } },
-        radio: { type: 'radio', label: 'Radio', row: this.row, options: ['A', 'B', 'C'], flex: 6, order: 4 }
+        name: { type: 'text', label: 'Name', flex: { xs: 6, sm: 4 }, order: { xs: 0, sm: 8 }, offset: { xs: 0, sm: 2 } },
+        radio: { type: 'radio', label: '', row: !this.row, options: ['A', 'B', 'C'], flex: 6, order: 4 }
       }
     },
 
@@ -42,9 +43,7 @@ export default {
     }
   },
   methods: {
-    update ({ on, id, key, value, obj, event, params, data, schema }) {
-      console.log('Update [ on, key, value, params]', on, key, value, params)
-    }
+    update
   }
 }
 </script>

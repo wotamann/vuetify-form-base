@@ -18,8 +18,8 @@
       <v-form-base id="form-base-complete" :value= "myValue" :schema= "mySchema" @update:form-base-complete= "update" />
     </v-form>
 
-    <v-btn small @click="validate">Validate</v-btn>
-    <v-btn small @click="resetValidation">Reset Validate</v-btn>
+    <v-btn  dark color="blue lighten-3" @click="validate">Validate</v-btn>
+    <v-btn  dark color="blue lighten-3" @click="resetValidation">Reset Validate</v-btn>
 
     <infoline :value= "myValue" :schema= "mySchema"></infoline>
 

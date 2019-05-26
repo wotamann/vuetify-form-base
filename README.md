@@ -22,7 +22,7 @@ Imagine you get the following data object in JSON format and have to edit it now
       ]        
     }
 
-Normally you have to flatten the data structure and then map it to an appropriate form. Then you have to define the form in HTML and animate it with your data. 
+Normally you have to flatten the data structure and then map all to an appropriate form. Then you have to define a HTML-Form and animate it with your data. 
 
 With **Vuetify-Form-Base** create a Schema Object with the same structure as your Data.
 
@@ -41,6 +41,7 @@ You have to create a lot of different Forms? You have to manipulate or edit Data
 Then give **Vuetify-Form-Base** a Try. This Schema-based Form Generator is a [Vue.js 2.0 Component](https://vuejs.org/) and can simplify your Job by automatically creating full editable Forms. Edit this Forms and get reactive Results.
 
 **Vuetify-Form-Base** uses the well known [Component Framework Vuetify](https://vuetifyjs.com/) to style and layout your Form. Vuetify Controls have a clear, minimalistic design, and support responsive Design.
+
 
 ---
 ## Demo
@@ -188,6 +189,93 @@ In Reality sometimes you will have deep nested objects or arrays, which should b
 
 ![Form Example](./images/deep.png)
 
+
+---
+## Example displaying Arrays
+ 
+For editing arrays use the schema-type 'array'. Defining a 'schema' property as object or array  in your Schema Object. If 'schema' property is an OBJECT then this object is used as a template for generating an array. Alternative you can define a 'schema' property as ARRAY with individual items. 
+
+    mySchema: {
+      tasks: {
+        type: 'array',
+        schema: { 
+          done: { type: 'checkbox'  }, 
+          title: { type: 'text' }
+        }
+      }  
+    }
+
+#### Type Array - schema object
+
+    myValue: {
+      tasks: [
+        {
+          done: true,
+          title: 'make refactoring'
+        },
+        {
+          done: true,
+          title: 'write documentation'
+        },
+        {
+          done: true,
+          title: 'remove logs'
+        }
+      ]
+    },
+    mySchema: {
+      tasks: {
+        type: 'array',
+        schema: { 
+          done: { type: 'checkbox', label: 'Ok', flex: 3 }, 
+          title: { type: 'text' }, 
+          flex: 8 
+        }
+      }
+    }
+
+
+![Form Example](./images/array-template.png)
+
+#### Type Array - schema array
+
+    myValue: {        
+        tasks: [
+          {
+            done: true,
+            title: 'make refactoring'
+          },
+          {
+            done: true,
+            title: 'write documentation'
+          },
+          {
+            done: true,
+            title: 'remove logs'
+          }
+        ]
+      },
+      mySchema: {        
+        tasks: {
+          type: 'array',
+          schema: [
+            { 
+              done: { type: 'checkbox', label: 'Ok 1', color: 'brown', flex: 3 }, 
+              title: { type: 'text' }, 
+              flex: 8 
+            },
+            { 
+              done: { type: 'checkbox', label: 'Ok 2', color: 'green', flex: 3 }, title: { type: 'text' }, 
+              flex: 8 
+            },
+            { 
+              done: { type: 'checkbox', label: 'Ok 3', color: 'blue', flex: 3 }, title: { type: 'text' }, 
+              flex: 8 
+            }
+          ]
+        }
+
+![Form Example](./images/array.png)
 
 ---
 ## Computed Schema
@@ -465,7 +553,7 @@ Use Slots to pass Header and Footer into a Control. If necessary replace Control
 ![Slots in Blue](./images/slot.png)
 
 ---
-## Form Validation  
+## [Form Validation](https://wotamann.github.io/)
 
 If you need Form Validation you have to wrap **v-form-base** with **[v-form](https://next.vuetifyjs.com/en/components/forms#api)** and take the reference of v-form for working on.
     

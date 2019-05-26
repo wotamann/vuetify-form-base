@@ -68,13 +68,23 @@
                 <v-form-base
                   :id="`${id}-${obj.key}-${idx}`"
                   :value= "item"
-                  :schema= "sanitizeSchema(obj, idx)"
+                  :schema= "obj.schema.schema"
                 />
-                 <!-- v-bind = "clonedSchema(obj)" -->
-
+                <!-- :schema= "sanitizeSchema(obj, idx)" -->
               </slot>
             </div>
           </template>
+
+          <!-- treeview -->
+          <v-treeview
+            v-else-if= "obj.schema.type === 'treeview'"
+            :items = "setValue(obj)"
+            v-model= "obj.schema.model"
+            :open.sync = "obj.schema.open"
+            v-bind = "obj.schema"
+            @input= "onClick($event, obj, treeview)"
+            >
+          </v-treeview>
 
           <!-- list -->
           <template v-else-if= "obj.schema.type === 'list'">
@@ -83,13 +93,12 @@
             </v-toolbar>
             <v-list v-bind = "obj.schema">
               <v-list-tile
-                v-for="(item, ix) in obj.schema.items" :key="ix"
-                v-bind = "obj.schema"
-                :class= "setValue(obj) === item ? 'active' : 'inactive'"
-                @click= "onInput(item, obj)"
+                v-for="(item, ix) in setValue(obj)" :key="ix"
+                :class= "obj.schema.selected === ix ? 'active' : 'inactive'" 
+                @click= "obj.schema.selected = ix; onClick($event, obj, 'list', ix)"
               >
                 <v-list-tile-content>
-                  <v-list-tile-title v-text="item"></v-list-tile-title>
+                  <v-list-tile-title v-text="obj.schema.item ? item[obj.schema.item] : item"></v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
@@ -100,20 +109,16 @@
             v-else-if= "obj.schema.type === 'switch' || obj.schema.type === 'checkbox'"
             :is= "mapTypeToComponent(obj.schema.type)"
             v-bind = "obj.schema"
-            @click:append = "onClick($event, obj, append)"
-            @click:append-outer = "onClick($event, obj, appendOuter)"
-            @click:prepend = "onClick($event, obj, prepend )"
-            @click:prepend-inner = "onClick($event, obj, prependInner )"
             :input-value= "setValue(obj)"
             @change= "onInput($event, obj)"
-          ></div>
-
-            <!-- button || btn -->
+          ></div>   
+          <!-- button   -->
           <v-btn
             v-else-if= "obj.schema.type === 'button' || obj.schema.type === 'btn'"
             v-bind = "obj.schema"
             @click = "onClick($event, obj, button)"
-          ><v-icon left dark>{{obj.schema.iconLeft}}</v-icon>
+            >
+            <v-icon left dark>{{obj.schema.iconLeft}}</v-icon>
             {{setValue(obj)}}{{obj.schema.label}}
             <v-icon right dark>{{obj.schema.iconRight}}</v-icon>
           </v-btn>
@@ -166,7 +171,6 @@ const typeToComponent = {
   search: 'v-text-field',
   number: 'v-text-field',
   file: 'v-text-field',
-  list: 'v-list',
   range: 'v-slider'
 }
 
@@ -186,6 +190,7 @@ const bottomSlotAppendix = 'slot-bottom'
 
 const clear = 'clear'
 const button = 'button'
+const treeview = 'treeview'
 const append = 'append'
 const appendOuter = 'append-outer'
 const prepend = 'prepend'
@@ -218,6 +223,7 @@ export default {
       flatCombinedArray: [],
       clear,
       button,
+      treeview,
       append,
       appendOuter,
       prepend,
@@ -241,13 +247,15 @@ export default {
   },
 
   methods: {
+
     sanitizeSchema (obj, idx) {
       let clonedObj = cloneDeep(obj)
       let clonedSchema = isArray(clonedObj.schema.schema) ? clonedObj.schema.schema[idx] : clonedObj.schema.schema
 
       if (isArray(obj.schema.schema)) {
         obj.schema.schema[idx] = obj.schema.schema[idx] ? obj.schema.schema[idx] : cloneDeep(defaultSchemaSchema)
-      } else {
+      } 
+      else {
         obj.schema.schema = []
         defaultSchemaSchema = clonedObj.schema.schema
         obj.schema.schema[idx] = obj.schema.schema[idx] ? obj.schema.schema[idx] : cloneDeep(defaultSchemaSchema)
@@ -340,6 +348,7 @@ export default {
     toCtrl (params) {
       // manipulate value going to control, toCtrl-function must return a (modified) value
       // schema:{ name: { type:'text', toCtrl: ( {value} ) value && value.toUpperCase, ... }, ... }
+
       return isFunction(params.obj.schema.toCtrl) ? params.obj.schema.toCtrl(params) : params.value
     },
     fromCtrl (params) {
@@ -376,10 +385,10 @@ export default {
         schema: this.storeStateSchema
       })
     },
-    onClick (event, obj, pos) {
+    onClick (event, obj, pos, index ) {
       this.emitValue('click', { on: 'click',
         id: this.ref,
-        index: this.ref.replace(/\D/g, ''),
+        index: index !== undefined ? index : this.ref.replace(/\D/g, ''),
         parentId: this.$parent.id,
         params: { text: event.srcElement && event.srcElement.innerText, pos },
         key: obj.key,
@@ -418,6 +427,26 @@ export default {
       } else {
         this.$emit(this.getEventName(emit), val)
         this.$emit(this.getEventName('update'), val)
+      }
+    },
+    getEmitObject (on, obj, pos) {
+    // xxxxxxxxxxxxxtodo not in use <<<<<<<<<<<<<
+      return {
+        on,
+        id: this.ref,
+        key: obj.key,
+        value, // ?value input or obj.vlue
+        index: this.ref.replace(/\D/g, ''), // index of array item
+        obj,
+        params: {
+          pos,
+          text: event.srcElement && event.srcElement.innerText,
+          x: window.innerWidth,
+          y: window.innerHeight
+        },
+        data: this.storeStateData,
+        schema: this.storeStateSchema,
+        parent: this.$parent
       }
     },
     getEventName (eventName) {
@@ -477,13 +506,11 @@ export default {
     },
     flattenAndCombineToArray (data, schema) {
       // flatten nested structure of both objects 'data' & 'schema' ...
-      let flattenedObjects = this.flattenObjects(data, schema)
-
+      let flattenedObjects = this.flattenObjects(data, schema)      
       // ... and combine them to an array
       return this.combineObjectsToArray(flattenedObjects)
     }
   },
-
   created () {
     this.flatCombinedArray = this.flattenAndCombineToArray(this.storeStateData, this.storeStateSchema)
   }
