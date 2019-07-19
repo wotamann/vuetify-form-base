@@ -1,7 +1,7 @@
 {
   "name": "vuetify-form-base-example",
   "description": "Form Generator as Vue component based on Vuetify",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "author": "wotamann@github",
   "homepage": "https://github.com/wotamann/vuetify-form-base",
@@ -17,7 +17,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test": "echo \"No test specified\""
   },
   "dependencies": {
     "lodash": "^4.17.13",

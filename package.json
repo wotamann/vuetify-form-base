@@ -1,10 +1,10 @@
 {
   "name": "vuetify-form-base",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Form-Generator Vue 2.0 Component using Vuetify, responsive Design, Grid",
   "main": "index.js",
   "scripts": {
-    "test": "npm run unit"
+    "test": "echo \"No test specified\""
   },
   "repository": {
     "type": "git",

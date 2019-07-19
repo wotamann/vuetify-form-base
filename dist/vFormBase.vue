@@ -2,13 +2,13 @@
   <v-layout :id = "ref" class="wrap" v-resize.quiet= "onResize" >
     <template v-for="(obj, index) in flatCombinedArraySorted" >
       <v-flex
-        v-if= "!obj.schema.hidden"
+        v-show= "!obj.schema.hidden"
         :class= "getClassName(obj)"
         v-touch= "{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"
         :key= "index"
       >
 
-        <!-- slot on top of item  -> <div slot="top-slot-[key]> -->
+        <!-- slot on top of item  -> <v-btn slot="top-slot-[key]> -->
         <slot :name= "getTypeTopSlot(obj)"></slot>
         <slot :name= "getKeyTopSlot(obj)"></slot>
 
@@ -63,17 +63,28 @@
 
           <!-- array -->
           <template v-else-if= "obj.schema.type === 'array'" >
-            <div v-bind = "obj.schema" :value= "setValue(obj)" v-for="(item, ix) in setValue(obj)" :key="ix" >
+            <div v-bind = "obj.schema" :value= "setValue(obj)" v-for="(item, idx) in setValue(obj)" :key="idx" >
               <slot :name= "getKeyArraySlot(obj)" v-bind:item= "item" >
                 <v-form-base
-                  v-bind = "obj.schema"
-                  :id="`${id}-${obj.key}-${ix}`"
+                  :id="`${id}-${obj.key}-${idx}`"
                   :value= "item"
                   :schema= "obj.schema.schema"
                 />
+                <!-- :schema= "sanitizeSchema(obj, idx)" -->
               </slot>
             </div>
           </template>
+
+          <!-- treeview -->
+          <v-treeview
+            v-else-if= "obj.schema.type === 'treeview'"
+            :items = "setValue(obj)"
+            v-model= "obj.schema.model"
+            :open.sync = "obj.schema.open"
+            v-bind = "obj.schema"
+            @input= "onClick($event, obj, treeview)"
+            >
+          </v-treeview>
 
           <!-- list -->
           <template v-else-if= "obj.schema.type === 'list'">
@@ -82,30 +93,35 @@
             </v-toolbar>
             <v-list v-bind = "obj.schema">
               <v-list-tile
-                v-for="(item, ix) in obj.schema.items" :key="ix"
-                v-bind = "obj.schema"
-                :class= "setValue(obj) === item ? 'active' : 'inactive'"
-                @click= "onInput(item, obj)"
+                v-for="(item, ix) in setValue(obj)" :key="ix"
+                :class= "obj.schema.selected === ix ? 'active' : 'inactive'"
+                @click= "obj.schema.selected = ix; onClick($event, obj, 'list', ix)"
               >
                 <v-list-tile-content>
-                  <v-list-tile-title v-text="item"></v-list-tile-title>
+                  <v-list-tile-title v-text="obj.schema.item ? item[obj.schema.item] : item"></v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
           </template>
 
-          <!-- checkbox switch -->
+          <!-- checkbox || switch -->
           <div
             v-else-if= "obj.schema.type === 'switch' || obj.schema.type === 'checkbox'"
             :is= "mapTypeToComponent(obj.schema.type)"
             v-bind = "obj.schema"
-            @click:append = "onClick($event, obj, append)"
-            @click:append-outer = "onClick($event, obj, appendOuter)"
-            @click:prepend = "onClick($event, obj, prepend )"
-            @click:prepend-inner = "onClick($event, obj, prependInner )"
             :input-value= "setValue(obj)"
             @change= "onInput($event, obj)"
           ></div>
+          <!-- button   -->
+          <v-btn
+            v-else-if= "obj.schema.type === 'button' || obj.schema.type === 'btn'"
+            v-bind = "obj.schema"
+            @click = "onClick($event, obj, button)"
+            >
+            <v-icon left dark>{{obj.schema.iconLeft}}</v-icon>
+            {{setValue(obj)}}{{obj.schema.label}}
+            <v-icon right dark>{{obj.schema.iconRight}}</v-icon>
+          </v-btn>
 
           <!-- all other -->
           <div
@@ -125,7 +141,7 @@
         </slot>
         </slot>
 
-        <!-- slot at bottom of item  -> <div slot="slot-bottom-key-[deep-nested-key]> -->
+        <!-- slot at bottom of item  -> <div slot="slot-bottom-key-[deep-nested-key-name]> -->
         <slot :name= "getTypeBottomSlot(obj)"></slot>
         <slot :name= "getKeyBottomSlot(obj)"></slot>
 
@@ -140,45 +156,47 @@
 
 <script>
 // import & declarations
-  import { get, isPlainObject, isFunction, orderBy } from 'lodash'
+import { get, isPlainObject, isFunction, isArray, orderBy, cloneDeep } from 'lodash'
 
-  const typeToComponent = {
-    // implemented in Vuetify
-    text: 'v-text-field',
-    password: 'v-text-field',
-    email: 'v-text-field',
+const typeToComponent = {
+  // implemented in Vuetify
+  text: 'v-text-field',
+  password: 'v-text-field',
+  email: 'v-text-field',
 
-    // native Input Types - https://www.wufoo.com/html5/
-    tel: 'v-text-field',
-    url: 'v-text-field',
-    color: 'v-text-field',
-    search: 'v-text-field',
-    number: 'v-text-field',
-    file: 'v-text-field',
-    list: 'v-list',
+  // native Input Types - https://www.wufoo.com/html5/
+  tel: 'v-text-field',
+  url: 'v-text-field',
+  color: 'v-text-field',
+  search: 'v-text-field',
+  number: 'v-text-field',
+  file: 'v-text-field',
+  range: 'v-slider'
+}
 
-    range: 'v-slider'
-  }
+const orderDirection = 'ASC'
+const pathDelimiter = '.'
+const classKeyDelimiter = '-'
+const defaultID = 'form-base'
 
-  const orderDirection = 'ASC'
-  const pathDelimiter = '.'
-  const classKeyDelimiter = '-'
-  const defaultID = 'form-base'
+const itemClassAppendix = 'item'
+const typeClassAppendix = 'type'
+const keyClassAppendix = 'key'
 
-  const itemClassAppendix = 'item'
-  const typeClassAppendix = 'type'
-  const keyClassAppendix = 'key'
+const arraySlotAppendix = 'slot-array'
+const topSlotAppendix = 'slot-top'
+const itemSlotAppendix = 'slot-item'
+const bottomSlotAppendix = 'slot-bottom'
 
-  const arraySlotAppendix = 'slot-array'
-  const topSlotAppendix = 'slot-top'
-  const itemSlotAppendix = 'slot-item'
-  const bottomSlotAppendix = 'slot-bottom'
+const clear = 'clear'
+const button = 'button'
+const treeview = 'treeview'
+const append = 'append'
+const appendOuter = 'append-outer'
+const prepend = 'prepend'
+const prependInner = 'prepend-inner'
 
-  const clear = 'clear'
-  const append = 'append'
-  const appendOuter = 'append-outer'
-  const prepend = 'prepend'
-  const prependInner = 'prepend-inner'
+let defaultSchemaSchema = null
 //
 
 export default {
@@ -204,6 +222,8 @@ export default {
     return {
       flatCombinedArray: [],
       clear,
+      button,
+      treeview,
       append,
       appendOuter,
       prepend,
@@ -227,95 +247,115 @@ export default {
   },
 
   methods: {
+
+    // sanitizeSchema (obj, idx) {
+      //   // todo maybe unused
+      //   let clonedObj = cloneDeep(obj)
+      //   let clonedSchema = isArray(clonedObj.schema.schema) ? clonedObj.schema.schema[idx] : clonedObj.schema.schema
+
+      //   if (isArray(obj.schema.schema)) {
+      //     obj.schema.schema[idx] = obj.schema.schema[idx] ? obj.schema.schema[idx] : cloneDeep(defaultSchemaSchema)
+      //   } else {
+      //     obj.schema.schema = []
+      //     defaultSchemaSchema = clonedObj.schema.schema
+      //     obj.schema.schema[idx] = obj.schema.schema[idx] ? obj.schema.schema[idx] : cloneDeep(defaultSchemaSchema)
+      //   }
+      //   // console.warn('defaultSchemaSchema', defaultSchemaSchema);
+      //   // console.warn('{...defaultSchemaSchema}', {...defaultSchemaSchema});
+
+      //   return obj.schema.schema[idx]
+    // },
+
     mapTypeToComponent (type) {
       // map ie. schema:{ type:'password', ... } to vuetify control v-text-field'
       return typeToComponent[type] ? typeToComponent[type] : `v-${type}`
     },
 
     // KEY SLOTS
-      getKeyArraySlot (obj) {
-        // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-ARRAY-key-adress-city'
-        return this.getKeyClassNameWithAppendix(obj, arraySlotAppendix + '-key')
-      },
-      getKeyItemSlot (obj) {
-        // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-adress-city'
-        return this.getKeyClassNameWithAppendix(obj, itemSlotAppendix + '-key')
-      },
-      getKeyTopSlot (obj) {
-        // get Key specific name by replacing '.' with '-' and prepending 'slot-top'  -> 'slot-top-key-adress-city'
-        return this.getKeyClassNameWithAppendix(obj, topSlotAppendix + '-key')
-      },
-      getKeyBottomSlot (obj) {
-        // get Key specific name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-bottom-key-adress-city'
-        return this.getKeyClassNameWithAppendix(obj, bottomSlotAppendix + '-key')
-      },  
+    getKeyArraySlot (obj) {
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-ARRAY-key-adress-city'
+      return this.getKeyClassNameWithAppendix(obj, arraySlotAppendix + '-key')
+    },
+    getKeyItemSlot (obj) {
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-adress-city'
+      return this.getKeyClassNameWithAppendix(obj, itemSlotAppendix + '-key')
+    },
+    getKeyTopSlot (obj) {
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-top'  -> 'slot-top-key-adress-city'
+      return this.getKeyClassNameWithAppendix(obj, topSlotAppendix + '-key')
+    },
+    getKeyBottomSlot (obj) {
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-bottom-key-adress-city'
+      return this.getKeyClassNameWithAppendix(obj, bottomSlotAppendix + '-key')
+    },
     //
     // TYPE SLOTS
-      getTypeItemSlot (obj) {
-        // get Type specific slot name  -> 'slot-item-type-radio'
-        return this.getTypeClassNameWithAppendix(obj, itemSlotAppendix + '-type')
-      },
-      getTypeTopSlot (obj) {
-        // get Type specific slot name  -> 'slot-top-type-radio'
-        return this.getTypeClassNameWithAppendix(obj, topSlotAppendix + '-type')
-      },
-      getTypeBottomSlot (obj) {
-        // get Type specific slot name  -> 'slot-bottom-type-radio'
-        return this.getTypeClassNameWithAppendix(obj, bottomSlotAppendix + '-type')
-      },
+    getTypeItemSlot (obj) {
+      // get Type specific slot name  -> 'slot-item-type-radio'
+      return this.getTypeClassNameWithAppendix(obj, itemSlotAppendix + '-type')
+    },
+    getTypeTopSlot (obj) {
+      // get Type specific slot name  -> 'slot-top-type-radio'
+      return this.getTypeClassNameWithAppendix(obj, topSlotAppendix + '-type')
+    },
+    getTypeBottomSlot (obj) {
+      // get Type specific slot name  -> 'slot-bottom-type-radio'
+      return this.getTypeClassNameWithAppendix(obj, bottomSlotAppendix + '-type')
+    },
     //
     // CLASS Names
-      getKeyClassNameWithAppendix (obj, appendix) {
-        // get KEY specific name by app-/prepending 'appendix-' and replacing '.' with '-' in nested key path  -> 'top-slot-adress-city'
-        return `${appendix ? appendix + classKeyDelimiter : ''}${obj.key.replace(/\./g, '-')}`
-      },
-      getKeyClassName (obj) {
-        return this.getKeyClassNameWithAppendix(obj, keyClassAppendix)
-      },
-      getTypeClassNameWithAppendix (obj, appendix) {
-        // get TYPE specific class name by prepending '-type' -> 'type-checkbox'
-        return `${appendix + classKeyDelimiter}${obj.schema.type}`
-      },
-      getTypeClassName (obj) {
-        return this.getTypeClassNameWithAppendix(obj, typeClassAppendix)
-      },
-      getFlexGridClassName (obj) {
-        // get FLEX class from schema.flex ->  schema:{ flex:{ xs:12, md:4  } || flex: 4 } // flex: 4 -> is shorthand for -> flex:{ xs:4 }
-        const keysToGridClassName = (key) => Object.keys(key).map(k => k + key[k]).join(' ') //  { xs:12, md:6, lg:4  } => 'xs12 md6 lg4'
-        return obj.schema.flex ? isPlainObject(obj.schema.flex) ? keysToGridClassName(obj.schema.flex) : `xs${obj.schema.flex}` : ''
-      },
-      getOffsetGridClassName (obj) {
-        // get OFFSET-FLEX class from schema.offset ->  schema:{ offset:{ xs:12, md:4  } || offset: 4 } // offset: 4 -> is shorthand for -> offset:{ xs:4 }
-        const keysToOffsetClassName = (key) => Object.keys(key).map(k => `offset-${k}${key[k]}`).join(' ') //  { xs:12, md:6, lg:4  } => 'xs12 md6 lg4'
-        return obj.schema.offset ? isPlainObject(obj.schema.offset) ? keysToOffsetClassName(obj.schema.offset) : `offset-xs${obj.schema.offset}` : ''
-      },
-      getOrderGridClassName (obj) {
-        // get ORDER-FLEX class from schema.order ->  schema:{ order:{ xs:12, md:4  } || order: 4 } // order: 4 -> is shorthand for -> order:{ xs:4 }
-        const keysToOrderClassName = (key) => Object.keys(key).map(k => `order-${k}${key[k]}`).join(' ') //  { xs:12, md:6, lg:4  } => 'xs12 md6 lg4'
-        return obj.schema.order ? isPlainObject(obj.schema.order) ? keysToOrderClassName(obj.schema.order) : `order-xs${obj.schema.order}` : ''
-      },
-      getGridClassName (obj) {
-        // combine Flex, Offset, Order into a classname
-        return `${this.getFlexGridClassName(obj)} ${this.getOffsetGridClassName(obj)} ${this.getOrderGridClassName(obj)}`
-      },
+    getKeyClassNameWithAppendix (obj, appendix) {
+      // get KEY specific name by app-/prepending 'appendix-' and replacing '.' with '-' in nested key path  -> 'top-slot-adress-city'
+      return `${appendix ? appendix + classKeyDelimiter : ''}${obj.key.replace(/\./g, '-')}`
+    },
+    getKeyClassName (obj) {
+      return this.getKeyClassNameWithAppendix(obj, keyClassAppendix)
+    },
+    getTypeClassNameWithAppendix (obj, appendix) {
+      // get TYPE specific class name by prepending '-type' -> 'type-checkbox'
+      return `${appendix + classKeyDelimiter}${obj.schema.type}`
+    },
+    getTypeClassName (obj) {
+      return this.getTypeClassNameWithAppendix(obj, typeClassAppendix)
+    },
+    getFlexGridClassName (obj) {
+      // get FLEX class from schema.flex ->  schema:{ flex:{ xs:12, md:4  } || flex: 4 } // flex: 4 -> is shorthand for -> flex:{ xs:4 }
+      const keysToGridClassName = (key) => Object.keys(key).map(k => k + key[k]).join(' ') //  { xs:12, md:6, lg:4  } => 'xs12 md6 lg4'
+      return obj.schema.flex ? isPlainObject(obj.schema.flex) ? keysToGridClassName(obj.schema.flex) : `xs${obj.schema.flex}` : ''
+    },
+    getOffsetGridClassName (obj) {
+      // get OFFSET-FLEX class from schema.offset ->  schema:{ offset:{ xs:12, md:4  } || offset: 4 } // offset: 4 -> is shorthand for -> offset:{ xs:4 }
+      const keysToOffsetClassName = (key) => Object.keys(key).map(k => `offset-${k}${key[k]}`).join(' ') //  { xs:12, md:6, lg:4  } => 'xs12 md6 lg4'
+      return obj.schema.offset ? isPlainObject(obj.schema.offset) ? keysToOffsetClassName(obj.schema.offset) : `offset-xs${obj.schema.offset}` : ''
+    },
+    getOrderGridClassName (obj) {
+      // get ORDER-FLEX class from schema.order ->  schema:{ order:{ xs:12, md:4  } || order: 4 } // order: 4 -> is shorthand for -> order:{ xs:4 }
+      const keysToOrderClassName = (key) => Object.keys(key).map(k => `order-${k}${key[k]}`).join(' ') //  { xs:12, md:6, lg:4  } => 'xs12 md6 lg4'
+      return obj.schema.order ? isPlainObject(obj.schema.order) ? keysToOrderClassName(obj.schema.order) : `order-xs${obj.schema.order}` : ''
+    },
+    getGridClassName (obj) {
+      // combine Flex, Offset, Order into a classname
+      return `${this.getFlexGridClassName(obj)} ${this.getOffsetGridClassName(obj)} ${this.getOrderGridClassName(obj)}`
+    },
 
-      getClassName (obj) {
-        // combines all into a single classname
-        // class => ie. 'item type-checkbox key-adress-zip xs12 md6 offset-xs0'
-        return `${itemClassAppendix} ${this.getTypeClassName(obj)} ${this.getKeyClassName(obj)} ${this.getGridClassName(obj)}`
-      },
+    getClassName (obj) {
+      // combines all into a single classname
+      // class => ie. 'item type-checkbox key-adress-zip xs12 md6 offset-xs0'
+      return `${itemClassAppendix} ${this.getTypeClassName(obj)} ${this.getKeyClassName(obj)} ${this.getGridClassName(obj)}`
+    },
     //
     // Map Values coming FROM Control or going TO Control
-      toCtrl (params) {
-        // manipulate value going to control, toCtrl-function must return a (modified) value
-        // schema:{ name: { type:'text', toCtrl: ( {value} ) value && value.toUpperCase, ... }, ... }
-        return isFunction(params.obj.schema.toCtrl) ? params.obj.schema.toCtrl(params) : params.value
-      },
-      fromCtrl (params) {
-        // manipulate updated value from control, fromCtrl-function must return a (modified) value
-        // schema:{ name: { type:'text', fromCtrl: ( {value} ) value && value.toUpperCase, ... }, ... }
-        return isFunction(params.obj.schema.fromCtrl) ? params.obj.schema.fromCtrl(params) : params.value
-      },
+    toCtrl (params) {
+      // manipulate value going to control, toCtrl-function must return a (modified) value
+      // schema:{ name: { type:'text', toCtrl: ( {value} ) value && value.toUpperCase, ... }, ... }
+
+      return isFunction(params.obj.schema.toCtrl) ? params.obj.schema.toCtrl(params) : params.value
+    },
+    fromCtrl (params) {
+      // manipulate updated value from control, fromCtrl-function must return a (modified) value
+      // schema:{ name: { type:'text', fromCtrl: ( {value} ) value && value.toUpperCase, ... }, ... }
+      return isFunction(params.obj.schema.fromCtrl) ? params.obj.schema.fromCtrl(params) : params.value
+    },
     //
     // Set Value
     setValue (obj) {
@@ -324,7 +364,6 @@ export default {
     },
     // Get Value from Input & Events
     onInput (value, obj) {
-      
       // Value after change in Control
       value = this.fromCtrl({ value, obj, data: this.storeStateData, schema: this.storeStateSchema })
 
@@ -337,6 +376,7 @@ export default {
       this.emitValue('input', {
         on: 'input',
         id: this.ref,
+        index: this.ref.replace(/\D/g, ''),
         parentId: this.$parent.id,
         key: obj.key,
         value,
@@ -345,9 +385,10 @@ export default {
         schema: this.storeStateSchema
       })
     },
-    onClick (event, obj, pos) {
+    onClick (event, obj, pos, index) {
       this.emitValue('click', { on: 'click',
         id: this.ref,
+        index: index !== undefined ? index : this.ref.replace(/\D/g, ''),
         parentId: this.$parent.id,
         params: { text: event.srcElement && event.srcElement.innerText, pos },
         key: obj.key,
@@ -355,13 +396,25 @@ export default {
         obj,
         event,
         data: this.storeStateData,
-        schema: this.storeStateSchema })
+        schema: this.storeStateSchema
+      })
     },
     onFocus (event, obj) {
-      this.emitValue('focus', { on: 'focus', id: this.ref, parentId: this.$parent.id, key: obj.key, value: obj.value, obj, event, data: this.storeStateData, schema: this.storeStateSchema })
+      this.emitValue('focus', {
+        on: 'focus',
+        id: this.ref,
+        index: this.ref.replace(/\D/g, ''),
+        parentId: this.$parent.id,
+        key: obj.key,
+        value: obj.value,
+        obj,
+        event,
+        data: this.storeStateData,
+        schema: this.storeStateSchema
+      })
     },
     onSwipe (pos, obj) {
-      this.emitValue('swipe', { on: 'swipe', id: this.ref, parentId: this.$parent.id, key: obj.key, value: obj.value, obj, params: { pos }, data: this.storeStateData, schema: this.storeStateSchema })
+      this.emitValue('swipe', { on: 'swipe', id: this.ref, key: obj.key, value: obj.value, obj, params: { pos }, data: this.storeStateData, schema: this.storeStateSchema })
     },
     onResize () {
       this.emitValue('resize', { on: 'resize', id: this.ref, params: { x: window.innerWidth, y: window.innerHeight }, data: this.storeStateData, schema: this.storeStateSchema })
@@ -369,13 +422,33 @@ export default {
     // Event Base
     emitValue (emit, val) {
       if (this.$parent.id) {
-        this.$parent.$emit(this.getEventParentName(emit), val)
-        this.$parent.$emit(this.getEventParentName('update'), val)
+        this.$parent.$emit(this.getEventParentName(emit), { ...val, parent: this.$parent })
+        this.$parent.$emit(this.getEventParentName('update'), { ...val, parent: this.$parent })
       } else {
         this.$emit(this.getEventName(emit), val)
         this.$emit(this.getEventName('update'), val)
       }
     },
+    // getEmitObject (on, obj, pos) {
+      //   // xxxxxxxxxxxxxtodo not in use <<<<<<<<<<<<<
+      //   return {
+      //     on,
+      //     id: this.ref,
+      //     key: obj.key,
+      //     // value, // ?value input or obj.vlue
+      //     index: this.ref.replace(/\D/g, ''), // index of array item
+      //     obj,
+      //     params: {
+      //       pos,
+      //       text: event.srcElement && event.srcElement.innerText,
+      //       x: window.innerWidth,
+      //       y: window.innerHeight
+      //     },
+      //     data: this.storeStateData,
+      //     schema: this.storeStateSchema,
+      //     parent: this.$parent
+      //   }
+    // },
     getEventName (eventName) {
       return this.ref !== defaultID ? `${eventName}:${this.ref}` : eventName
     },
@@ -403,7 +476,6 @@ export default {
       let schema = {}
 
       Object.keys(dat).forEach(i => {
-        
         if ((!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object') || (Array.isArray(dat[i]) && Array.isArray(sch[i]))) {
           let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[i], sch[i])
           Object.keys(flatData).forEach(ii => {
@@ -435,12 +507,10 @@ export default {
     flattenAndCombineToArray (data, schema) {
       // flatten nested structure of both objects 'data' & 'schema' ...
       let flattenedObjects = this.flattenObjects(data, schema)
-   
       // ... and combine them to an array
       return this.combineObjectsToArray(flattenedObjects)
     }
   },
-
   created () {
     this.flatCombinedArray = this.flattenAndCombineToArray(this.storeStateData, this.storeStateSchema)
   }
