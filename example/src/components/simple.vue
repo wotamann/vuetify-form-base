@@ -34,10 +34,10 @@ export default {
   },
   methods: {
     update,
-    blur(p){      
-      let {value, schema } = p 
-      this.myValue =value
-      this.mySchema =schema
+    blur (p) {
+      let { value, schema } = p
+      this.myValue = value
+      this.mySchema = schema
     }
   }
 }

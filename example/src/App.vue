@@ -4,7 +4,7 @@
 </style>
 
 <template>
-  <v-app class="pa-2">
+  <v-app class="pa-2" light>
 
     <v-select class="fixed" :items="items" v-model="view"></v-select>
 
@@ -37,8 +37,8 @@ import treeview from '@/components/treeview.vue'
 import conditional from '@/components/conditional.vue'
 import list from '@/components/list.vue'
 
-const items = ['Simple Form', 'Responsive Grid', 'CSS & Slots', 'Nested Data', 'Treeviews', 
- 'Select Item(s) from Schema-Array',  'Select Item from Data-Array', 'Edit Item in List(Data-Array)', 'Partial & Linked', 'Conditional Form', 'Complete Form']
+const items = ['Simple Form', 'Responsive Grid', 'CSS & Slots', 'Nested Data', 'Treeviews',
+  'Select Item(s) from Schema-Array', 'Select Item from Data-Array', 'Edit Item in List(Data-Array)', 'Partial & Linked', 'Conditional Form', 'Complete Form']
 
 export default {
   components: {

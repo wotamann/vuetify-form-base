@@ -32,10 +32,10 @@ import Infoline from '@/components/infoline'
 const items = ['Tesla', 'Jobs', 'Taleb', 'Harari']
 
 /* Helper & Partial Functions */
-const toUpper = ({ value }) => value && value.toUpperCase()
 const minLen = l => v => (v && v.length >= l) || `min. ${l} Characters`
 const maxLen = l => v => (v && v.length <= l) || `max. ${l} Characters`
 const required = msg => v => !!v || msg
+// const toUpper = ({ value }) => value && value.toUpperCase()
 const rules = {
   requiredEmail: required('E-mail is required'),
   max12: maxLen(12),

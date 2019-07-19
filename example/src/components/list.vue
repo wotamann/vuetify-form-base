@@ -28,7 +28,7 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {        
+      myValue: {
         listing: [
           { done: true, title: 'finish refactoring' },
           { done: false, title: 'write documentation' },
@@ -40,9 +40,9 @@ export default {
           'Harari'
         ]
       },
-      mySchema: {              
-        listing: { type: 'list', item: 'title', color:'blue', flex: 6, selected:null  },
-        listingStr: { type: 'list', selected:null,  color:'green', flex: 6 },
+      mySchema: {
+        listing: { type: 'list', item: 'title', color: 'blue', flex: 6, selected: null },
+        listingStr: { type: 'list', selected: null, color: 'green', flex: 6 }
       }
     }
   },

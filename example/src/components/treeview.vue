@@ -32,21 +32,27 @@ export default {
             name: 'Philosoph :',
             children: [
               { id: 2, name: 'Yuval Harari' },
-              { id: 3, name: 'Nicholas Taleb', children: [ { id: 4, name: 'Black Swan' }, { id: 5, name: 'Skin in the Game' }] } ]
+              { id: 3,
+                name: 'Nicholas Taleb',
+                children: [
+                  { id: 4, name: 'Black Swan' },
+                  { id: 5, name: 'Skin in the Game' }
+                ] }
+            ]
           },
           {
             id: 6,
             name: 'Visionaire :',
-            children: [              
-              { id: 7, name: 'Yuval Harari' }, 
+            children: [
+              { id: 7, name: 'Yuval Harari' },
               { id: 8, name: 'Steve Jobs' },
-              { 
-                id: 9, 
-                name: 'Elon Musk', 
+              {
+                id: 9,
+                name: 'Elon Musk',
                 children: [
                   { id: 10, name: 'Tesla' }
                 ]
-              },
+              }
             ]
           }
         ]

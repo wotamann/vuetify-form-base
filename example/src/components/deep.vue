@@ -1,6 +1,6 @@
 <template>
   <v-container fluid >
-    
+
     <h4>Deep nested Object</h4>
 
     <v-form-base id="form-base-nested" :value= "myValue" :schema= "mySchema" @update:form-base-nested= "update"/>
@@ -59,15 +59,15 @@ export default {
       }
     }
   },
-  
+
   methods: {
 
     update,
-    
-    blur(p){      
-      let {value, schema } = p 
-      this.myValue =value
-      this.mySchema =schema
+
+    blur (p) {
+      let { value, schema } = p
+      this.myValue = value
+      this.mySchema = schema
     }
 
   }

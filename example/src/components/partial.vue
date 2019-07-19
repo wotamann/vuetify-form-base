@@ -49,11 +49,11 @@ export default {
     }
   },
   methods: {
-    
+
     update,
 
-    updatepartial:update
-    
+    updatepartial: update
+
   }
 }
 </script>

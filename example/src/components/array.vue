@@ -5,7 +5,7 @@
 
     <v-form-base id="array" :value= "myValue" :schema= "mySchema" @update:array= "update" />
     <v-btn dark color="blue lighten-3"  @click= "add">ADD</v-btn>
-    
+
     <infoline :value= "myValue" :schema= "mySchema"></infoline>
 
   </v-container>
@@ -26,33 +26,29 @@ export default {
           { done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) },
           { done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) },
           { done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) }
-        ]       
+        ]
       },
-      mySchema: {       
+      mySchema: {
         tasks: {
           type: 'array',
           flex: 12,
-          schema: { done: { type: 'checkbox', label: 'Done', color:'red', flex: 4 }, title: { type: 'text' }, flex: 8 }
-        }        
+          schema: { done: { type: 'checkbox', label: 'Done', color: 'red', flex: 4 }, title: { type: 'text' }, flex: 8 }
+        }
       }
     }
   },
   methods: {
 
-    add(){
+    add () {
       this.myValue.tasks.unshift({ done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) })
     },
-    
-    update (val) {
 
+    update (val) {
       let { index, key, value } = update(val)
 
       if (key === 'done' && value === true) {
-        setTimeout( ()=>{
-          this.myValue.tasks.splice(index, 1)
-        }, 333)
+        setTimeout(() => this.myValue.tasks.splice(index, 1), 333)
       }
-
     }
   }
 }

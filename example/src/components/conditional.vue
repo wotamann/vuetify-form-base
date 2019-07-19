@@ -2,9 +2,9 @@
   <v-container fluid >
 
     <h4>Display conditional Controls on Form</h4>
-   
+
     <v-form-base id="form-base-complete" :value= "myValue" :schema= "mySchema" @update:form-base-complete= "update" />
-    
+
     <v-btn dark  color="blue lighten-3"  @click= "toggle">Click or Type 'Show'</v-btn>
     <v-btn dark  color="blue lighten-3"  @click= "add">Add Item</v-btn>
 
@@ -19,13 +19,13 @@ import Infoline from '@/components/infoline'
 import update from '@/lib'
 
 export default {
-  name:'conditional',
+  name: 'conditional',
   components: { VFormBase, Infoline },
 
   data () {
     return {
       hidden: true,
-     
+
       myValue: {
         button: null,
         conditional: '',
@@ -48,36 +48,32 @@ export default {
           hidden: this.hidden,
           flex: 12,
           schema: {
-              done: { type: 'checkbox', label: 'Done', color: 'green', flex: 3 },
-              title: { type: 'text', placeholder: '...', color: 'green', flex: 8 }
-            }
+            done: { type: 'checkbox', label: 'Done', color: 'green', flex: 3 },
+            title: { type: 'text', placeholder: '...', color: 'green', flex: 8 }
+          }
         }
       }
     }
   },
 
   methods: {
-    add(){
+    add () {
       this.myValue.tasks.unshift({ done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) })
     },
-    toggle(){
+    toggle () {
       this.hidden = !this.hidden
     },
 
     update (val) {
-      
       update(val)
 
       let { index, key, value } = val
-     
+
       if (key === 'conditional') this.hidden = value !== 'show'
 
       if (key === 'done' && value === true) {
-        setTimeout( ()=>{
-          this.myValue.tasks.splice(index, 1)
-        }, 333)
+        setTimeout(() => this.myValue.tasks.splice(index, 1), 333)
       }
-
     }
   }
 }

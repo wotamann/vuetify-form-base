@@ -94,7 +94,7 @@
             <v-list v-bind = "obj.schema">
               <v-list-tile
                 v-for="(item, ix) in setValue(obj)" :key="ix"
-                :class= "obj.schema.selected === ix ? 'active' : 'inactive'" 
+                :class= "obj.schema.selected === ix ? 'active' : 'inactive'"
                 @click= "obj.schema.selected = ix; onClick($event, obj, 'list', ix)"
               >
                 <v-list-tile-content>
@@ -111,7 +111,7 @@
             v-bind = "obj.schema"
             :input-value= "setValue(obj)"
             @change= "onInput($event, obj)"
-          ></div>   
+          ></div>
           <!-- button   -->
           <v-btn
             v-else-if= "obj.schema.type === 'button' || obj.schema.type === 'btn'"
@@ -248,23 +248,23 @@ export default {
 
   methods: {
 
-    sanitizeSchema (obj, idx) {
-      let clonedObj = cloneDeep(obj)
-      let clonedSchema = isArray(clonedObj.schema.schema) ? clonedObj.schema.schema[idx] : clonedObj.schema.schema
+    // sanitizeSchema (obj, idx) {
+      //   // todo maybe unused
+      //   let clonedObj = cloneDeep(obj)
+      //   let clonedSchema = isArray(clonedObj.schema.schema) ? clonedObj.schema.schema[idx] : clonedObj.schema.schema
 
-      if (isArray(obj.schema.schema)) {
-        obj.schema.schema[idx] = obj.schema.schema[idx] ? obj.schema.schema[idx] : cloneDeep(defaultSchemaSchema)
-      } 
-      else {
-        obj.schema.schema = []
-        defaultSchemaSchema = clonedObj.schema.schema
-        obj.schema.schema[idx] = obj.schema.schema[idx] ? obj.schema.schema[idx] : cloneDeep(defaultSchemaSchema)
-      }
-      // console.warn('defaultSchemaSchema', defaultSchemaSchema);
-      // console.warn('{...defaultSchemaSchema}', {...defaultSchemaSchema});
+      //   if (isArray(obj.schema.schema)) {
+      //     obj.schema.schema[idx] = obj.schema.schema[idx] ? obj.schema.schema[idx] : cloneDeep(defaultSchemaSchema)
+      //   } else {
+      //     obj.schema.schema = []
+      //     defaultSchemaSchema = clonedObj.schema.schema
+      //     obj.schema.schema[idx] = obj.schema.schema[idx] ? obj.schema.schema[idx] : cloneDeep(defaultSchemaSchema)
+      //   }
+      //   // console.warn('defaultSchemaSchema', defaultSchemaSchema);
+      //   // console.warn('{...defaultSchemaSchema}', {...defaultSchemaSchema});
 
-      return obj.schema.schema[idx]
-    },
+      //   return obj.schema.schema[idx]
+    // },
 
     mapTypeToComponent (type) {
       // map ie. schema:{ type:'password', ... } to vuetify control v-text-field'
@@ -385,7 +385,7 @@ export default {
         schema: this.storeStateSchema
       })
     },
-    onClick (event, obj, pos, index ) {
+    onClick (event, obj, pos, index) {
       this.emitValue('click', { on: 'click',
         id: this.ref,
         index: index !== undefined ? index : this.ref.replace(/\D/g, ''),
@@ -429,26 +429,26 @@ export default {
         this.$emit(this.getEventName('update'), val)
       }
     },
-    getEmitObject (on, obj, pos) {
-    // xxxxxxxxxxxxxtodo not in use <<<<<<<<<<<<<
-      return {
-        on,
-        id: this.ref,
-        key: obj.key,
-        value, // ?value input or obj.vlue
-        index: this.ref.replace(/\D/g, ''), // index of array item
-        obj,
-        params: {
-          pos,
-          text: event.srcElement && event.srcElement.innerText,
-          x: window.innerWidth,
-          y: window.innerHeight
-        },
-        data: this.storeStateData,
-        schema: this.storeStateSchema,
-        parent: this.$parent
-      }
-    },
+    // getEmitObject (on, obj, pos) {
+      //   // xxxxxxxxxxxxxtodo not in use <<<<<<<<<<<<<
+      //   return {
+      //     on,
+      //     id: this.ref,
+      //     key: obj.key,
+      //     // value, // ?value input or obj.vlue
+      //     index: this.ref.replace(/\D/g, ''), // index of array item
+      //     obj,
+      //     params: {
+      //       pos,
+      //       text: event.srcElement && event.srcElement.innerText,
+      //       x: window.innerWidth,
+      //       y: window.innerHeight
+      //     },
+      //     data: this.storeStateData,
+      //     schema: this.storeStateSchema,
+      //     parent: this.$parent
+      //   }
+    // },
     getEventName (eventName) {
       return this.ref !== defaultID ? `${eventName}:${this.ref}` : eventName
     },
@@ -506,7 +506,7 @@ export default {
     },
     flattenAndCombineToArray (data, schema) {
       // flatten nested structure of both objects 'data' & 'schema' ...
-      let flattenedObjects = this.flattenObjects(data, schema)      
+      let flattenedObjects = this.flattenObjects(data, schema)
       // ... and combine them to an array
       return this.combineObjectsToArray(flattenedObjects)
     }
