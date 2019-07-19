@@ -18,7 +18,7 @@ Vue.use(Vuetify)
           warning: '#FFB300',
           info: '#6ccef9',
           success: '#4cbf50'
-        }      
+        }
       }
     },
     options: {

@@ -1,7 +1,7 @@
 <template>
   <v-container fluid >
 
-    <h4>Edit Item in List(Data-Array)</h4>
+    <h4>Edit Item(s) in Data-Array</h4>
 
     <v-form-base id="array" :value= "myValue" :schema= "mySchema" @update:array= "update" />
     <v-btn dark color="blue lighten-3"  @click= "add">ADD</v-btn>

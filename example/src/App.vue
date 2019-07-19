@@ -38,7 +38,7 @@ import conditional from '@/components/conditional.vue'
 import list from '@/components/list.vue'
 
 const items = ['Simple Form', 'Responsive Grid', 'CSS & Slots', 'Nested Data', 'Treeviews',
-  'Select Item(s) from Schema-Array', 'Select Item from Data-Array', 'Edit Item in List(Data-Array)', 'Partial & Linked', 'Conditional Form', 'Complete Form']
+  'Select Item(s) from Schema-Array', 'Select Item from Data-Array(List)', 'Edit Item(s) in Data-Array', 'Partial & Linked', 'Conditional Form', 'Complete Form']
 
 export default {
   components: {

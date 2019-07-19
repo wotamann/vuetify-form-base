@@ -156,10 +156,10 @@
 
 <script>
 // import & declarations
-import { get, isPlainObject, isFunction, isArray, orderBy, cloneDeep } from 'lodash'
+import { get, isPlainObject, isFunction, orderBy } from 'lodash'
 
 const typeToComponent = {
-  // implemented in Vuetify
+  // implemented in Vuetify 1.0
   text: 'v-text-field',
   password: 'v-text-field',
   email: 'v-text-field',
@@ -195,9 +195,6 @@ const append = 'append'
 const appendOuter = 'append-outer'
 const prepend = 'prepend'
 const prependInner = 'prepend-inner'
-
-let defaultSchemaSchema = null
-//
 
 export default {
 
@@ -247,24 +244,6 @@ export default {
   },
 
   methods: {
-
-    // sanitizeSchema (obj, idx) {
-      //   // todo maybe unused
-      //   let clonedObj = cloneDeep(obj)
-      //   let clonedSchema = isArray(clonedObj.schema.schema) ? clonedObj.schema.schema[idx] : clonedObj.schema.schema
-
-      //   if (isArray(obj.schema.schema)) {
-      //     obj.schema.schema[idx] = obj.schema.schema[idx] ? obj.schema.schema[idx] : cloneDeep(defaultSchemaSchema)
-      //   } else {
-      //     obj.schema.schema = []
-      //     defaultSchemaSchema = clonedObj.schema.schema
-      //     obj.schema.schema[idx] = obj.schema.schema[idx] ? obj.schema.schema[idx] : cloneDeep(defaultSchemaSchema)
-      //   }
-      //   // console.warn('defaultSchemaSchema', defaultSchemaSchema);
-      //   // console.warn('{...defaultSchemaSchema}', {...defaultSchemaSchema});
-
-      //   return obj.schema.schema[idx]
-    // },
 
     mapTypeToComponent (type) {
       // map ie. schema:{ type:'password', ... } to vuetify control v-text-field'
@@ -430,24 +409,24 @@ export default {
       }
     },
     // getEmitObject (on, obj, pos) {
-      //   // xxxxxxxxxxxxxtodo not in use <<<<<<<<<<<<<
-      //   return {
-      //     on,
-      //     id: this.ref,
-      //     key: obj.key,
-      //     // value, // ?value input or obj.vlue
-      //     index: this.ref.replace(/\D/g, ''), // index of array item
-      //     obj,
-      //     params: {
-      //       pos,
-      //       text: event.srcElement && event.srcElement.innerText,
-      //       x: window.innerWidth,
-      //       y: window.innerHeight
-      //     },
-      //     data: this.storeStateData,
-      //     schema: this.storeStateSchema,
-      //     parent: this.$parent
-      //   }
+    //   // xxxxxxxxxxxxxtodo not in use <<<<<<<<<<<<<
+    //   return {
+    //     on,
+    //     id: this.ref,
+    //     key: obj.key,
+    //     // value, // ?value input or obj.vlue
+    //     index: this.ref.replace(/\D/g, ''), // index of array item
+    //     obj,
+    //     params: {
+    //       pos,
+    //       text: event.srcElement && event.srcElement.innerText,
+    //       x: window.innerWidth,
+    //       y: window.innerHeight
+    //     },
+    //     data: this.storeStateData,
+    //     schema: this.storeStateSchema,
+    //     parent: this.$parent
+    //   }
     // },
     getEventName (eventName) {
       return this.ref !== defaultID ? `${eventName}:${this.ref}` : eventName

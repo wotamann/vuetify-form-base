@@ -10,7 +10,7 @@
 <template>
   <v-container fluid >
 
-    <h4>Select Item from List(Data-Array) with Result in 'schema.prop.selected'</h4>
+    <h4>Select Item from Data-Array(List) with Result in 'schema.prop.selected'</h4>
 
     <v-form-base id="list-demo" :value= "myValue" :schema= "mySchema" @update:list-demo= "update" />
 
