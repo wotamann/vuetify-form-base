@@ -119,7 +119,7 @@
             @click = "onClick($event, obj, button)"
             >
             <v-icon left dark>{{obj.schema.iconLeft}}</v-icon>
-	    <v-icon dark>{{obj.schema.iconCenter}}</v-icon>
+	          <v-icon dark>{{obj.schema.iconCenter}}</v-icon>
             {{setValue(obj)}}{{obj.schema.label}}
             <v-icon right dark>{{obj.schema.iconRight}}</v-icon>
           </v-btn>
