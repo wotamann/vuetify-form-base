@@ -252,19 +252,19 @@ export default {
 
     // KEY SLOTS
     getKeyArraySlot (obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-ARRAY-key-adress-city'
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-ARRAY-key-address-city'
       return this.getKeyClassNameWithAppendix(obj, arraySlotAppendix + '-key')
     },
     getKeyItemSlot (obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-adress-city'
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-address-city'
       return this.getKeyClassNameWithAppendix(obj, itemSlotAppendix + '-key')
     },
     getKeyTopSlot (obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-top'  -> 'slot-top-key-adress-city'
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-top'  -> 'slot-top-key-address-city'
       return this.getKeyClassNameWithAppendix(obj, topSlotAppendix + '-key')
     },
     getKeyBottomSlot (obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-bottom-key-adress-city'
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-bottom-key-address-city'
       return this.getKeyClassNameWithAppendix(obj, bottomSlotAppendix + '-key')
     },
     //
@@ -284,7 +284,7 @@ export default {
     //
     // CLASS Names
     getKeyClassNameWithAppendix (obj, appendix) {
-      // get KEY specific name by app-/prepending 'appendix-' and replacing '.' with '-' in nested key path  -> 'top-slot-adress-city'
+      // get KEY specific name by app-/prepending 'appendix-' and replacing '.' with '-' in nested key path  -> 'top-slot-address-city'
       return `${appendix ? appendix + classKeyDelimiter : ''}${obj.key.replace(/\./g, '-')}`
     },
     getKeyClassName (obj) {
@@ -319,7 +319,7 @@ export default {
 
     getClassName (obj) {
       // combines all into a single classname
-      // class => ie. 'item type-checkbox key-adress-zip xs12 md6 offset-xs0'
+      // class => ie. 'item type-checkbox key-address-zip xs12 md6 offset-xs0'
       return `${itemClassAppendix} ${this.getTypeClassName(obj)} ${this.getKeyClassName(obj)} ${this.getGridClassName(obj)}`
     },
     //
@@ -437,7 +437,7 @@ export default {
 
     // PREPARE ARRAYS DATA & SCHEMA
     setObjectByPath (object, path, value) {
-      // resolves chained keys (like 'user.adress.street') on an object and set the value
+      // resolves chained keys (like 'user.address.street') on an object and set the value
       let pathArray = path.split(pathDelimiter)
       pathArray.forEach((p, ix) => {
         if (ix === pathArray.length - 1) this.$set(object, p, value)
