@@ -1,0 +1,21 @@
+Version 0.1.4 - 21.08.2019
+
+Please Update to Vuetify > 2.0 
+
+NEW
+added FileInput     { type:'file', ... } 
+added Time Picker   { type:'time', ... }
+added Date Picker   { type:'date', ... }
+added Color Picker  { type:'color', ... }
+added Button Toggle (Group) { type:'btn-toggle', ... }
+
+NEW CSS class for PROPS 
+  value:{ num: { int: { one:1 } } }  ->  .prop-num  .prop-int  .prop-one   
+CSS class for KEY 
+  value:{ num: { int: { one:1 } } }  ->  .key-num-int-one  
+
+NEW Change Event will listen only to input & click 
+    Update Event will listen to input, click, focus, resize, swipe 
+
+UPDATE Example
+---
