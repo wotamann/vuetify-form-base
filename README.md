@@ -82,17 +82,17 @@ If you want a **Partial-Form** which displays only parts of your Data.Object, th
 
 And if necessary you can also build a **Form in Form** by using **Slots**.
 
-Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** for 'Resize', 'Focus', 'Input', 'Click' and 'Swipe'. Listening to 'Update' will catch all Events. 
+Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** for 'Resize', 'Focus', 'Input', 'Click' and 'Swipe'. Listening to 'Change' will catch all Value changing Events like 'Input' and 'Click'. Listening to 'Update' will catch all Events. 
 
-Select Types from **Vuetify UI Input & Controls** like **Textfield, Password, Email, Textarea, Checkbox, Radio, Switches, Sliders, Combobox, Autocomplete, Select, Combobox, Date- or Timepicker**. There are some other types like 'array' and 'list'. 
+Select Types from **Vuetify UI Input & Controls** like **Textfield(text), Password, Email, FileInput(file), Textarea, Checkbox, Radio, Switch, Slider, Button (btn), grouped Button(btn-toggle), Combobox, Autocomplete, Select, Combobox, Treeview, Array, List, Colorpicker and Date- or Timepicker**. 
 
 [More Informations to Vuetify Textfields find here](https://vuetifyjs.com/en/components/text-fields/). 
 
 ---
 ## Installation
 
-For proper working you need a Vue.js Project with Vuetify installed. For more Details see [Vuetify Quickstart](https://dev.vuetifyjs.com/en-US/getting-started/quick-start).  
-
+For proper working you need a Vue.js Project with Vuetify 2.0 installed. For more Details see [Vuetify 2.0 Quickstart](https://dev.vuetifyjs.com/en-US/getting-started/quick-start).  
+After a successful installation of a VUE project with Vuetify 2.0  
 
     npm install vuetify-form-base --save
 
@@ -380,18 +380,20 @@ The next shows a more complex Schema:
     }
 
 
-**Available Properties in Schema**
+**Available Properties in Schema ( NEW: PICKERS and FILE-INPUT available )**
   
 [For further Props see Vuetify Controls API](https://vuetifyjs.com/en/components/text-fields#api)  
 
 	schema:{
       
-      type: string            // text, password, email, radio, switch, slider,
-                              // combobox, autocomplete, select, combobox, date, time,  ...    
+      type: string            // text, password, email, file, 
+                              // radio, switch, slider,
+                              // combobox, autocomplete, select,  
+                              // date, time, color    
 
       sort: N                 // use simple order to display items 
-      order: N or Object      // use Vuetify-Grid to order items responsive 
 
+      order: N or Object      // use Vuetify-Grid to order items responsive 
       flex: N or Object       // See Vuetify Grid
       offset: N or Object     // See Vuetify Grid
 
@@ -449,21 +451,22 @@ This has a Custom ID and listen all events in separate methods. Your v-on Direct
 
 **The Event-Signature:**
 
-    update( { on, id, key, value, obj, event, params, size, data, schema } ){
+    update( { on, id, key, value, obj, event, params, index, data, schema, parentId, parent } ){
       // destructure the signature object 
-      // ... on, id, key, value, obj, event, params, size, data, schema 
     }
 
-    on - Trigger Name   // focus | input | click | resize | swipe or update to listen all 
-    id - Formbase-ID
-    key - key of triggering Element
-    value - value of triggering Element
-    obj - triggering Element { key, value, schema } 
-    params - params object if available { x, y, pos, icon }    
-    event - the native trigger-event if available 
-    data - Data-Object
-    schema - Schema-Object
-    
+    on -        Trigger Name  // focus|input|click|resize|swipe or update listens all 
+    id -        Formbase-ID
+    key -       key of triggering Element
+    value -     value of triggering Element
+    obj -       triggering Element { key, value, schema } 
+    event -     the native trigger-event if available 
+    params -    params object if available { x, y, pos, icon }    
+    index -     index of array  
+    data -      Data-Object
+    schema -    Schema-Object
+    parentId -  Formbase-Id - if available 
+    parent -    Formbase-Object - if available 
 ---
 **Example: Use 'Update' Event to control Visibility of Password Element**
 
@@ -653,24 +656,35 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 
 * Vue-Component
 * integrates UI framework Vuetify with responsive Layout and Support of Grid
-* Use a lot of Vuetify Control & Input types inclusive available API-Props
+* Use a lot of Vuetify Control & Input types inclusive most of available API-Props
 * Get full configurable Forms based on Schema Definition
-* Edit plain or deep nested objects including Arrays, without the Need to flatten it
-* Get a Full reactive Result
+* Edit plain or deep nested objects including Arrays, without the need to flatten it
+* Get a full, reactive Result
 * Listen on 'Resize', 'Focus', 'Input', 'Click', 'Swipe' and 'Update' Events
 * Use Slots to pass Header and Footer into a Control. Or replace a Control by Slot   
 * Configurable CSS Style 
 
 
 ---
-## Dependencies
+## Whats New
 
+#### Version 0.1.4
+
+- File Input added (type:'file')
+- Pickers for Color, Date and Time added/adapted (type:'color|date|time')   
+
+#### Version 0.1.3
+
+- type 'list' and 'array' added
+
+---
+## Dependencies
 
 Vue >= 2.4
 
-Vuetify >= 1.4
+Vuetify >= 2.0
 
-Lodash > 4.0
+Lodash > 4.15
 
 ---
 ## Similar Projects

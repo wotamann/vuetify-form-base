@@ -1,6 +1,6 @@
 <style scoped>
-  #form-base { border: 1px solid rgb(143, 219, 219); }
-  #form-base-partial { width:50%; background-color: rgb(227, 245, 245); border: 1px solid rgb(143, 219, 219); }
+  #form-base { border: 1px solid #C5CAE9  }
+  #form-base-partial { width:50%; background-color: #c5cae956; border: 1px solid #C5CAE9; }
 </style>
 
 <template>
@@ -39,7 +39,7 @@ export default {
       },
       mySchema: {
         checkbox: { type: 'checkbox', label: 'Red', color: 'red' },
-        switch: { type: 'switch', label: 'Switch1', color: 'blue' },
+        switch: { type: 'switch', label: 'Blue', color: 'blue' },
         radios: {
           radioA: { type: 'radio', label: 'RadioA', options, color: 'green', row: true },
           radioB: { type: 'radio', label: 'RadioB', options, color: 'indigo' }

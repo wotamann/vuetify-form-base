@@ -1,6 +1,6 @@
 <style>
-  .fixed {position: fixed; top:0; left:0; right:0; padding:1rem; margin:0; background-color: #efefef; z-index: 1000 }
-  .pad {padding-top: 68px}
+  .fixed {position: fixed; top:0; left:0; right:0; padding:0.75rem; margin:0; background-color: #efefef; z-index: 1000 }
+  .pad {padding-top: 72px}
 </style>
 
 <template>
@@ -17,9 +17,10 @@
       <selection v-if="view === items[5]"></selection>
       <list v-if="view === items[6]"></list>
       <array v-if="view === items[7]"></array>
-      <partial v-if="view === items[8]"></partial>
-      <conditional v-if="view === items[9]"></conditional>
-      <complex v-if="view === items[10]"></complex>
+      <pickers v-if="view === items[8]"></pickers>
+      <partial v-if="view === items[9]"></partial>
+      <conditional v-if="view === items[10]"></conditional>
+      <complex v-if="view === items[11]"></complex>
     </div>
   </v-app>
 </template>
@@ -36,13 +37,14 @@ import selection from '@/components/selection.vue'
 import treeview from '@/components/treeview.vue'
 import conditional from '@/components/conditional.vue'
 import list from '@/components/list.vue'
+import pickers from '@/components/pickers.vue'
 
-const items = ['Simple Form', 'Responsive Grid', 'CSS & Slots', 'Nested Data', 'Treeviews',
-  'Select Item(s) from Schema-Array', 'Select Item from Data-Array(List)', 'Edit Item(s) in Data-Array', 'Partial & Linked', 'Conditional Form', 'Complete Form']
+const items = ['Simple Form', 'Use Responsive Grid', 'CSS, Slots & Buttons', 'Deep nested Data with Arrays & CSS', 'Treeviews',
+  'Select Item(s) from Schema-Array', 'Select Item from Data-Array(List)', 'Edit Item(s) in Data-Array', 'Pickers', 'Partial & Linked', 'Conditional Form', 'Complete Form']
 
 export default {
   components: {
-    simple, grid, css, deep, partial, complex, treeview, array, selection, conditional, list
+    simple, grid, css, deep, partial, complex, treeview, array, selection, conditional, list, pickers
   },
   data () {
     return {

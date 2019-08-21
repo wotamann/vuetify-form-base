@@ -1,10 +1,8 @@
 <style>
-  #list-demo .key-listing { border: 1px solid rgb(172, 172, 172)}
-  #list-demo .key-listing .v-list__tile{ border-bottom: 1px dotted rgb(202, 202, 202)}
-  .key-listing .active  { background-color: rgb(143, 203, 238)}
-  .key-listing .active *  { color: rgb(255, 255, 255)}
-  .key-listingStr .active  { background-color: rgb(135, 230, 122)}
-  .key-listingStr .active *  { color: rgb(255, 255, 255)}
+  .key-listObject .active  {background-color: rgb(218, 221, 238)}
+  .key-listObject .active *  {color: #3d3a3a}
+  .key-listString .active  {background-color: #C5CAE9}
+  .key-listString .active *  {color: #ffffff}
 </style>
 
 <template>
@@ -12,7 +10,7 @@
 
     <h4>Select Item from Data-Array(List) with Result in 'schema.prop.selected'</h4>
 
-    <v-form-base id="list-demo" :value= "myValue" :schema= "mySchema" @update:list-demo= "update" />
+    <v-form-base id="form-base-list" :value= "myValue" :schema= "mySchema" @update:form-base-list= "update" />
 
     <infoline :value= "myValue" :schema= "mySchema"></infoline>
 
@@ -29,20 +27,20 @@ export default {
   data () {
     return {
       myValue: {
-        listing: [
-          { done: true, title: 'finish refactoring' },
-          { done: false, title: 'write documentation' },
-          { done: true, title: 'remove logs' }
+        listObject: [
+          { line: 1, name: 'Jobs' },
+          { line: 2, name: 'Taleb' },
+          { line: 3, name: 'Harari' }
         ],
-        listingStr: [
+        listString: [
           'Jobs',
           'Taleb',
           'Harari'
         ]
       },
       mySchema: {
-        listing: { type: 'list', item: 'title', color: 'blue', flex: 6, selected: null },
-        listingStr: { type: 'list', selected: null, color: 'green', flex: 6 }
+        listObject: { type: 'list', item: 'name', selected: 2, color: '#C5CAE9', flex: 5 },
+        listString: { type: 'list', label: 'Label', selected: null, offset: 1, flex: 5 }
       }
     }
   },

@@ -4,7 +4,7 @@
     <h4>Resize Window to change Layout, Offset and Order of Components</h4>
     <v-form-base :class="layout"  :value= "myValue" :schema= "mySchema" @update= "update"/>
 
-    <infoline :value= "myValue" :schema= "mySchema"></infoline>
+    <infoline :value= "myValue" :schema= "mySchema" ></infoline>
 
   </v-container>
 </template>
@@ -25,21 +25,21 @@ export default {
     }
   },
   computed: {
-    // Schema is Computed
+    // Dynamic Schema must be Computed
     mySchema () {
       return {
-        name: { type: 'text', label: 'Name', flex: { xs: 6, sm: 4 }, order: { xs: 0, sm: 8 }, offset: { xs: 0, sm: 2 } },
-        radio: { type: 'radio', label: '', row: !this.row, options: ['A', 'B', 'C'], flex: 6, order: 4 }
+        name: { type: 'text', label: 'Name', flex: { xs: 12, sm: 6 }, order: { xs: 0, sm: 8 }, offset: { xs: 0, sm: 3, md: 0 } },
+        radio: { type: 'radio', label: '', row: !this.row, options: ['A', 'B', 'C', 'D'], flex: 8, order: 4 }
       }
     },
 
-    // change Layout from Row to Column on resize and change Radio-Orientation
+    // Change Layout from Row to Column on resize and change Radio-Orientation
     row () {
       return this.$vuetify.breakpoint.mdAndUp
     },
-    // change Class on resize
+    // Change Class on resize
     layout () {
-      return this.$vuetify.breakpoint.mdAndUp ? 'grey lighten-4' : this.$vuetify.breakpoint.smAndUp ? 'blue lighten-5' : 'white'
+      return this.$vuetify.breakpoint.mdAndUp ? 'grey lighten-3' : this.$vuetify.breakpoint.smAndUp ? 'blue lighten-4' : 'white'
     }
   },
   methods: {

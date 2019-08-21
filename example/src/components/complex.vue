@@ -29,6 +29,8 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
+import updateLog from '@/lib'
+
 const items = ['Tesla', 'Jobs', 'Taleb', 'Harari']
 
 /* Helper & Partial Functions */
@@ -55,13 +57,15 @@ export default {
         subgroups: {
           select: 'Tesla',
           multiple: ['Jobs'],
-          combobox: null,
-          autocomplete: null,
+          // combobox: null,
+          // autocomplete: null,
           tasks: [
             { done: false, title: 'shopping' },
             { done: true, title: 'coding' },
-            { done: false, title: 'walking' }
+            { done: false, title: 'walking' },
+            { done: false, title: 'sleeping' }
           ],
+          datePicker: '2019-8-1',
           content: `Design principles of Vuetify ...`
         }
       },
@@ -70,12 +74,13 @@ export default {
         email: { type: 'email', label: 'Email', rules: [rules.validEmail, rules.requiredEmail], flex: { xs: 12, sm: 6 } },
         password: { type: 'password', label: 'Password', hint: '6 to 12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: { xs: 12, sm: 6 } },
         subgroups: {
-          select: { type: 'select', label: 'Select', items, flex: { xs: 12, sm: 6, md: 3 } },
-          multiple: { type: 'select', label: 'Multi-Select', items, multiple: true, flex: { xs: 12, sm: 6, md: 3 } },
-          combobox: { type: 'combobox', label: 'Combobox', items, flex: { xs: 12, sm: 6, md: 3 } },
-          autocomplete: { type: 'autocomplete', label: 'AutoComplete', items, flex: { xs: 12, sm: 6, md: 3 } },
-          tasks: { type: 'array', schema: { done: { type: 'checkbox', label: 'Ok', flex: 3 }, title: { type: 'text', placeholder: 'to do...', flex: 8 } }, flex: { xs: 12, sm: 6 } },
-          content: { type: 'textarea', label: 'Content', hint: 'Auto-Growing...', autoGrow: true, prependInnerIcon: 'print', rules: [ required('Content required') ], flex: { xs: 12, sm: 6 } }
+          select: { type: 'select', label: 'Select', items, flex: { xs: 12, sm: 6 } },
+          multiple: { type: 'select', label: 'Multi-Select', items, multiple: true, flex: { xs: 12, sm: 6 } },
+          // combobox: { type: 'combobox', label: 'Combobox', items, flex: { xs: 12, sm: 6, md: 3 } },
+          // autocomplete: { type: 'autocomplete', label: 'AutoComplete', items, flex: { xs: 12, sm: 6, md: 3 } },
+          tasks: { type: 'array', schema: { done: { type: 'checkbox', label: 'Ok', flex: 3 }, title: { type: 'text', placeholder: 'to do...', flex: 8 } }, flex: { xs: 12, sm: 4 } },
+          datePicker: { type: 'date', color: 'green', flex: { xs: 12, sm: 5 } },
+          content: { type: 'textarea', label: 'Content', hint: 'Auto-Growing...', autoGrow: true, prependInnerIcon: 'print', rules: [ required('Content required') ], flex: { xs: 12, sm: 3 } }
         }
       }
     }
@@ -92,14 +97,14 @@ export default {
       this.mySchema.checkbox[2].checkbox1[0].hidden = !this.mySchema.checkbox[2].checkbox1[0].hidden
       console.log('this.mySchema.checkbox[2].checkbox1[0].hidden', this.mySchema.checkbox[2].checkbox1[0].hidden)
     },
-    update ({ on, id, index, key, value, obj, event, params, data, schema, parent }) {
-      console.log('UPDATED: On', on, ' ID:', id, ' Obj:', obj, ' Key|Value|Params|Index:', key, value, params, index, ' Data|Schema:', data, schema, ' Parent:', parent)
+    update (val) {
+      updateLog(val)
 
+      let { on, key, obj, params } = val
       // print content
       if (on === 'click' && key === 'subgroups.content' && (params && params.text) === 'print') {
         window.print()
       }
-
       // toggle visibility of password
       if (on === 'click' && key === 'password' && (params && params.pos) === 'append') { // check 'click' is from from appendIcon
         obj.schema.type === 'password' ? obj.schema.appendIcon = 'lock' : obj.schema.appendIcon = 'visibility'
