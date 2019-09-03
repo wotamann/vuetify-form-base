@@ -14,7 +14,7 @@
         <h4>Schema-Definition (JSON)</h4>
         <pre :contenteditable="editable" :class= "schemaClass" @blur= "blur($event, true)" v-text= "JSON.stringify(schema, undefined, 3)"></pre>
       </v-flex>
-      <h4>See logged 'Update' Events at Console </h4>
+      <h4>See logged 'Update' Events at Console</h4>
        </v-layout>
 </template>
 

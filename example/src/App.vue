@@ -9,8 +9,9 @@
     <v-select class="fixed" :items="items" v-model="view"></v-select>
 
     <div class="pad">
+
       <simple v-if="view === items[0]"></simple>
-      <grid v-if="view === items[1]"></grid>
+      <async v-if="view === items[1]"></async>
       <css v-if="view === items[2]"></css>
       <deep v-if="view === items[3]"></deep>
       <treeview v-if="view === items[4]"></treeview>
@@ -21,11 +22,13 @@
       <partial v-if="view === items[9]"></partial>
       <conditional v-if="view === items[10]"></conditional>
       <complex v-if="view === items[11]"></complex>
+      <grid v-if="view === items[12]"></grid>
     </div>
   </v-app>
 </template>
 
 <script>
+import async from '@/components/asyncLoad.vue'
 import simple from '@/components/simple.vue'
 import grid from '@/components/grid.vue'
 import css from '@/components/css.vue'
@@ -39,12 +42,12 @@ import conditional from '@/components/conditional.vue'
 import list from '@/components/list.vue'
 import pickers from '@/components/pickers.vue'
 
-const items = ['Simple Form', 'Use Responsive Grid', 'CSS, Slots & Buttons', 'Deep nested Data with Arrays & CSS', 'Treeviews',
-  'Select Item(s) from Schema-Array', 'Select Item from Data-Array(List)', 'Edit Item(s) in Data-Array', 'Pickers', 'Partial & Linked', 'Conditional Form', 'Complete Form']
+const items = ['Simple Form', 'Lazy Loading Component for Async-Data', 'CSS, Slots & Buttons', 'Deep nested Data with Arrays & CSS', 'Treeviews',
+  'Select Item(s) from Schema-Array', 'Select Item from Data-Array(List)', 'Edit Item(s) in Data-Array', 'Pickers', 'Partial & Linked', 'Conditional Form', 'Complete Form','Use Responsive Grid']
 
 export default {
   components: {
-    simple, grid, css, deep, partial, complex, treeview, array, selection, conditional, list, pickers
+    simple, async, grid, css, deep, partial, complex, treeview, array, selection, conditional, list, pickers
   },
   data () {
     return {
