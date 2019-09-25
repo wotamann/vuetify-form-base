@@ -117,7 +117,7 @@
             v-else-if= "obj.schema.type === 'btn'"
             v-bind = "obj.schema"
             @click = "onClick($event, obj, button)"
-            >
+          >
             <v-icon v-if="obj.schema.iconLeft" left :dark="obj.schema.dark">{{obj.schema.iconLeft}}</v-icon>
             {{setValue(obj)}}
             <v-icon v-if="obj.schema.iconCenter" :dark="obj.schema.dark">{{obj.schema.iconCenter}}</v-icon>
@@ -125,7 +125,22 @@
             <v-icon v-if="obj.schema.iconRight" right :dark="obj.schema.dark">{{obj.schema.iconRight}}</v-icon>
           </v-btn>
 
-          <!-- all other Types ->  see typeToComponent -->
+          <!-- if masked use this v-text-field section - https://vuejs-tips.github.io/vue-the-mask/  -->
+          <v-text-field
+            v-else-if= "obj.schema.mask"
+            v-bind = "obj.schema"
+            v-mask = "obj.schema.mask"
+            :value= "setValue(obj)"
+            @focus = "onFocus($event, obj)"
+            @click:append = "onClick($event, obj, append)"
+            @click:append-outer = "onClick($event, obj, appendOuter)"
+            @click:clear = "onClick($event, obj, clear )"
+            @click:prepend = "onClick($event, obj, prepend )"
+            @click:prepend-inner = "onClick($event, obj, prependInner )"
+            @input= "onInput($event, obj)"
+          ></v-text-field>
+
+          <!-- all other Types -> see typeToComponent -->
           <div
             v-else
             :is= "mapTypeToComponent(obj.schema.type)"
@@ -153,35 +168,37 @@
       <v-spacer v-if= "obj.schema.spacer" :key= "`s-${index}`"></v-spacer>
 
     </template>
+
   </v-layout>
 </template>
 
 <script>
 // import & declarations
 import { get, isPlainObject, isFunction, isString, orderBy } from 'lodash'
+import { mask } from 'vue-the-mask'
 
 const typeToComponent = {
-  // map schema.type to vuetify-control (vuetify 2.0)
-  text: 'v-text-field',
+
   // use native HTML5 Input Types - https://www.wufoo.com/html5/
+  text: 'v-text-field',
   password: 'v-text-field',
   email: 'v-text-field',
   tel: 'v-text-field',
   url: 'v-text-field',
   search: 'v-text-field',
   number: 'v-text-field',
+
+  // map schema.type to vuetify-control (vuetify 2.0)
   range: 'v-slider',
-  // map to vuetify control
   file: 'v-file-input',
   switch: 'v-switch',
   checkbox: 'v-checkbox',
   color: 'v-color-picker',
   date: 'v-date-picker',
   time: 'v-time-picker',
-  textarea: 'v-textarea',
-
+  textarea: 'v-textarea'
 }
-
+// Declaration
 const orderDirection = 'ASC'
 const pathDelimiter = '.'
 const classKeyDelimiter = '-'
@@ -204,10 +221,13 @@ const append = 'append'
 const appendOuter = 'append-outer'
 const prepend = 'prepend'
 const prependInner = 'prepend-inner'
-
+//
 export default {
 
   name: 'v-form-base',
+
+  // Info Mask https://vuejs-tips.github.io/vue-the-mask/
+  directives: { mask },
 
   props: {
     id: {
