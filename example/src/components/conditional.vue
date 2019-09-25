@@ -24,6 +24,7 @@ export default {
 
   data () {
     return {
+      cole: 'green',
       hidden: true,
 
       myValue: {
@@ -47,8 +48,8 @@ export default {
           hidden: this.hidden,
           flex: 12,
           schema: {
-            done: { type: 'checkbox', label: 'Done', color: 'green', flex: 3 },
-            title: { type: 'text', placeholder: '...', color: 'green', flex: 8 }
+            done: { type: 'checkbox', label: 'Done', color: 'red', flex: 3 },
+            title: { type: 'text', placeholder: '...', flex: 8 }
           }
         }
       }
