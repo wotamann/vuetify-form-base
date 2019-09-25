@@ -1,8 +1,7 @@
 <template>
   <v-container fluid >
 
-    <h4>Simple Form </h4>
-
+    <h4>Simple Form </h4>    
     <v-form>
       <v-form-base :value= "myValue" :schema= "mySchema" @change= "change"/>
     </v-form>
@@ -23,13 +22,14 @@ export default {
   data () {
     return {
       myValue: {
-        name: 'Base',
+        creditcard: '12345678',
         password: '123456',
         file: [], // contains a single or an array of File objects
         checkbox: true
       },
       mySchema: {
-        name: { type: 'text', label: 'Name', flex: 4 },
+        // Info Mask https://vuejs-tips.github.io/vue-the-mask/
+        creditcard: { type: 'text', hint:'Masked Input for CC',label: '####-####-####-####', mask:'####-####-####-####', flex: 4 },
         password: { type: 'password', label: 'Password', clearable: true, flex: 3 },
         file: { type: 'file', label: 'Image-Files', accept: 'image/*', multiple: true, flex: 4 },
         checkbox: { type: 'checkbox', label: 'Ok', flex: 1 }
@@ -37,7 +37,7 @@ export default {
     }
   },
   methods: {
-    change
+    change   
   }
 }
 </script>
