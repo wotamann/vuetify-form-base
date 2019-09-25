@@ -168,7 +168,7 @@
       <v-spacer v-if= "obj.schema.spacer" :key= "`s-${index}`"></v-spacer>
 
     </template>
-   
+
   </v-layout>
 </template>
 
@@ -177,8 +177,8 @@
 import { get, isPlainObject, isFunction, isString, orderBy } from 'lodash'
 import { mask } from 'vue-the-mask'
 
-const typeToComponent = {  
-  
+const typeToComponent = {
+
   // use native HTML5 Input Types - https://www.wufoo.com/html5/
   text: 'v-text-field',
   password: 'v-text-field',
@@ -196,39 +196,39 @@ const typeToComponent = {
   color: 'v-color-picker',
   date: 'v-date-picker',
   time: 'v-time-picker',
-  textarea: 'v-textarea' 
+  textarea: 'v-textarea'
 }
 // Declaration
-  const orderDirection = 'ASC'
-  const pathDelimiter = '.'
-  const classKeyDelimiter = '-'
-  const defaultID = 'form-base'
+const orderDirection = 'ASC'
+const pathDelimiter = '.'
+const classKeyDelimiter = '-'
+const defaultID = 'form-base'
 
-  const itemClassAppendix = 'item'
-  const typeClassAppendix = 'type'
-  const keyClassAppendix = 'key'
-  const propertyClassAppendix = 'prop'
+const itemClassAppendix = 'item'
+const typeClassAppendix = 'type'
+const keyClassAppendix = 'key'
+const propertyClassAppendix = 'prop'
 
-  const arraySlotAppendix = 'slot-array'
-  const topSlotAppendix = 'slot-top'
-  const itemSlotAppendix = 'slot-item'
-  const bottomSlotAppendix = 'slot-bottom'
+const arraySlotAppendix = 'slot-array'
+const topSlotAppendix = 'slot-top'
+const itemSlotAppendix = 'slot-item'
+const bottomSlotAppendix = 'slot-bottom'
 
-  const clear = 'clear'
-  const button = 'button'
-  const treeview = 'treeview'
-  const append = 'append'
-  const appendOuter = 'append-outer'
-  const prepend = 'prepend'
-  const prependInner = 'prepend-inner'
+const clear = 'clear'
+const button = 'button'
+const treeview = 'treeview'
+const append = 'append'
+const appendOuter = 'append-outer'
+const prepend = 'prepend'
+const prependInner = 'prepend-inner'
 //
 export default {
 
   name: 'v-form-base',
-  
-  // Info Mask https://vuejs-tips.github.io/vue-the-mask/        
-  directives: { mask }, 
-  
+
+  // Info Mask https://vuejs-tips.github.io/vue-the-mask/
+  directives: { mask },
+
   props: {
     id: {
       type: String,
@@ -273,7 +273,7 @@ export default {
   },
 
   methods: {
-  
+
     mapTypeToComponent (type) {
       // map ie. schema:{ type:'password', ... } to vuetify control v-text-field'
       return typeToComponent[type] ? typeToComponent[type] : `v-${type}`
