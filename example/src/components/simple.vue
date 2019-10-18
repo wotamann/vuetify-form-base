@@ -3,7 +3,7 @@
 
     <h4>Simple Form </h4>
     <v-form>
-      <v-form-base :value= "myValue" :schema= "mySchema" @change= "change"/>
+      <v-form-base :value= "myValue" :schema= "mySchema" @blur= "change" @input= "change"/>
     </v-form>
 
     <infoline :value= "myValue" :schema= "mySchema" ></infoline>

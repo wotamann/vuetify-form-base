@@ -427,23 +427,35 @@ The next shows a more complex Schema:
 
 ## Events
 
-We can use the v-on directive to listen to vuetify-form-base events **'focus', 'input', 'click', 'resize', 'swipe', 'update'** and run some Code when they’re triggered.
+We can use the v-on directive to listen to vuetify-form-base events **'focus', 'input', 'blur', 'click', 'resize', 'swipe', 'update'** and run some Code when they’re triggered.
     
 This Example use the Default ID and listen all events with 'update':
 
     <!-- HTML -->
     <v-form-base :value= "myValue" :schema= "mySchema" @update= "update" />
     
-This has a Custom ID and listen all events in separate methods. Your v-on Directive must append the Custom ID:
+The next Code has the Custom ID **'form-base-simple'**. In this case your v-on Directive must append the Custom ID like **@update:form-base-simple:**
 
     <!-- HTML -->
-    <v-form-base id = "form-base-simple" :value= "myValue" :schema= "mySchema" @update:form-base-simple= "update" />
+    <v-form-base 
+      id = "form-base-simple" 
+      :value= "myValue" 
+      :schema= "mySchema" 
+      @update:form-base-simple= "update" 
+    />
+
+You can also listen to an specific event. Your v-on Directive must append the Custom ID:
+
+    <!-- HTML -->
+    <v-form-base :value= "myValue" :schema= "mySchema" @blur= "blurCode" />
+   
     <v-form-base 
       id = "form-base-complete"
       :value= "myValue" 
       :schema= "mySchema"  
       @resize:form-base-complete= "resizeCode"
       @focus:form-base-complete= "focusCode"
+      @blur:form-base-complete= "blurCode"
       @click:form-base-complete= "clickCode"
       @swipe:form-base-complete= "swipeCode"
       @input:form-base-complete= "inputCode"
@@ -455,7 +467,7 @@ This has a Custom ID and listen all events in separate methods. Your v-on Direct
       // destructure the signature object 
     }
 
-    on -        Trigger Name  // focus|input|click|resize|swipe or update listens all 
+    on -        Trigger Name  // focus|input|blur|click|resize|swipe|update 
     id -        Formbase-ID
     key -       key of triggering Element
     value -     value of triggering Element
@@ -660,7 +672,7 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 * Get full configurable Forms based on Schema Definition
 * Edit plain or deep nested objects including Arrays, without the need to flatten it
 * Get a full, reactive Result
-* Listen on 'Resize', 'Focus', 'Input', 'Click', 'Swipe' and 'Update' Events
+* Listen on 'Resize', 'Focus', 'Input', 'Blur', 'Click', 'Swipe' and 'Update' Events
 * Use Slots to pass Header and Footer into a Control. Or replace a Control by Slot   
 * Configurable CSS Style 
 
@@ -668,6 +680,8 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 ---
 ## Whats New
 
+#### Version 0.1.5
+- Event 'blur' available  
 #### Version 0.1.4
 
 - File Input added (type:'file')
@@ -675,16 +689,18 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 
 #### Version 0.1.3
 
-- type 'list' and 'array' added
+- control type 'list' and 'array' added
 
 ---
 ## Dependencies
 
-Vue >= 2.4
+vue >= 2.4
 
-Vuetify >= 2.0
+vuetify >= 2.0
 
-Lodash > 4.15
+lodash > 4.15
+
+vue-the-mask
 
 ---
 ## Similar Projects

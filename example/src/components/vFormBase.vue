@@ -90,6 +90,7 @@
             :value= "setValue(obj)"
             v-bind = "obj.schema"
             @focus = "onFocus($event, obj)"
+            @blur = "onBlur($event, obj)"            
             @change= "onInput($event, obj)"
           ></v-file-input>
 
@@ -132,6 +133,7 @@
             v-mask = "obj.schema.mask"
             :value= "setValue(obj)"
             @focus = "onFocus($event, obj)"
+            @blur = "onBlur($event, obj)"
             @click:append = "onClick($event, obj, append)"
             @click:append-outer = "onClick($event, obj, appendOuter)"
             @click:clear = "onClick($event, obj, clear )"
@@ -147,6 +149,7 @@
             v-bind = "obj.schema"
             :value= "setValue(obj)"
             @focus = "onFocus($event, obj)"
+            @blur = "onBlur($event, obj)"
             @click:append = "onClick($event, obj, append)"
             @click:append-outer = "onClick($event, obj, appendOuter)"
             @click:clear = "onClick($event, obj, clear )"
@@ -422,6 +425,20 @@ export default {
     onFocus (event, obj) {
       this.emitValue('focus', {
         on: 'focus',
+        id: this.ref,
+        index: this.ref.replace(/\D/g, ''),
+        parentId: this.$parent.id,
+        key: obj.key,
+        value: obj.value,
+        obj,
+        event,
+        data: this.storeStateData,
+        schema: this.storeStateSchema
+      })
+    },
+    onBlur (event, obj) {
+     this.emitValue('blur', {
+        on: 'blur',
         id: this.ref,
         index: this.ref.replace(/\D/g, ''),
         parentId: this.$parent.id,
