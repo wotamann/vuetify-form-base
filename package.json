@@ -1,14 +1,14 @@
 {
-  "name": "vuetify-form-base",
+  "name": "dco-vuetify-form",
   "version": "0.1.4",
-  "description": "Form-Generator is Vue-Component using Vuetify 2.0, responsive Design, Grid",
+  "description": "Forked from vuetify-form-base, added support for v-datepicker as calender",
   "main": "index.js",
   "scripts": {
     "test": "echo \"No test specified\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wotamann/vuetify-form-base.git"
+    "url": "git+https://github.com/denilkv/vuetify-form-base.git"
   },
   "keywords": [
     "vue",
@@ -23,12 +23,14 @@
     "select",
     "multiselect",
     "grid",
-    "controls"
+    "controls",
+    "datepicker",
+    "calender"
   ],
-  "author": "woko@aon.at",
+  "author": "denil.varkey@",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wotamann/vuetify-form-base/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/wotamann/vuetify-form-base#readme"
+  "homepage": ""
 }
