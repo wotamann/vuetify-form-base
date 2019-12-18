@@ -107,19 +107,23 @@
           >        
             <template v-slot:activator="{ on }">
               <v-text-field
-                v-model="obj.value"
+                v-model="date"
                :label="obj.schema.label"
                 persistent-hint
                 v-on="on"
+                :hint="obj.schema.hint"
+                :color="obj.schema.color"
+                :placeholder="obj.schema.placeholder"
                 id="required"
                 :rules="obj.schema.rules"
               ></v-text-field>
             </template>
             <v-date-picker
-                  :required="true"
-               v-model="obj.value"
+              :required="true"
+               v-model="date"
                @input="menu = false"
                :max="new Date().toISOString().substr(0, 10)"
+               @blur="obj.value=date"
                @focus = "onFocus($event, obj)"
                @change= "onInput($event, obj)"
             ></v-date-picker>
