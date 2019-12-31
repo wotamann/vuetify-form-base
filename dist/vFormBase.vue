@@ -174,6 +174,7 @@
             @click:prepend = "onClick($event, obj, prepend )"
             @click:prepend-inner = "onClick($event, obj, prependInner )"
             @input= "onInput($event, obj)"
+			@blur= "onBlur($event,obj)"
           ></v-text-field>
 
           <!-- all other Types -> see typeToComponent -->
