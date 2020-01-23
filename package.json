@@ -1,6 +1,6 @@
 {
   "name": "dco-vuetify-form",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Forked from vuetify-form-base, added support for v-datepicker as calender",
   "main": "index.js",
   "scripts": {
