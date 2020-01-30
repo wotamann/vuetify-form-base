@@ -1,175 +1,187 @@
 <template>
   <v-layout :id = "ref" class="wrap" v-resize.quiet= "onResize" >
+
     <template v-for="(obj, index) in flatCombinedArraySorted" >
-      <v-flex
-        v-show= "!obj.schema.hidden"
-        :class= "getClassName(obj)"
-        v-touch= "{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"
-        :key= "index"
-      >
+      <v-tooltip bottom :disabled="!obj.schema.tooltip" :key= "index">
+        <template v-slot:activator="{ on }">
 
-        <!-- slot on top of item  -> <v-btn slot="top-slot-[key]> -->
-        <slot :name= "getTypeTopSlot(obj)"></slot>
-        <slot :name= "getKeyTopSlot(obj)"></slot>
-
-          <!-- slot replaces complete item of defined type -> <div slot="item-slot-[type]>-->
-          <slot :name= "getTypeItemSlot(obj)">
-          <!-- slot replaces complete item of defined key -> <div slot="item-slot-[key]>-->
-          <slot :name= "getKeyItemSlot(obj)">
-
-          <!-- radio -->
-          <v-radio-group
-            v-if= "obj.schema.type === 'radio'"
-            v-bind = "obj.schema"
-            :value= "setValue(obj)"
-            @change= "onInput($event, obj)"
-            >
-            <v-radio
-              v-for="(o,ix) in obj.schema.options"
-              v-bind = "obj.schema"
-              :key="ix"
-              :label="sanitizeOptions(o).label"
-              :value="sanitizeOptions(o).value"
-            ></v-radio>
-          </v-radio-group>
-
-          <!-- array -->
-          <template v-else-if= "obj.schema.type === 'array'" >
-            <div v-bind = "obj.schema" :value= "setValue(obj)" v-for="(item, idx) in setValue(obj)" :key="idx" >
-              <slot :name= "getKeyArraySlot(obj)" v-bind:item= "item" >
-                <v-form-base
-                  :id="`${id}-${obj.key}-${idx}`"
-                  :value= "item"
-                  :schema= "obj.schema.schema"
-                />
-              </slot>
-            </div>
-          </template>
-
-          <!-- treeview -->
-          <v-treeview
-            v-else-if= "obj.schema.type === 'treeview'"
-            :items = "setValue(obj)"
-            v-model= "obj.schema.model"
-            :open.sync = "obj.schema.open"
-            v-bind = "obj.schema"
-            @input= "onClick($event, obj, treeview)"
-            >
-          </v-treeview>
-
-          <!-- list -->
-          <template v-else-if= "obj.schema.type === 'list'">
-            <v-toolbar v-if="obj.schema.label" v-bind = "obj.schema" dark >
-              <v-toolbar-title>{{obj.schema.label}}</v-toolbar-title>
-            </v-toolbar>
-            <v-list v-bind = "obj.schema">
-              <v-list-item
-                v-for="(item, ix) in setValue(obj)" :key="ix"
-                :class= "obj.schema.selected === ix ? 'active' : 'inactive'"
-                @click= "obj.schema.selected = ix; onClick($event, obj, 'list', ix)"
-              >
-                <v-list-item-content>
-                  <v-list-item-title v-text="obj.schema.item ? item[obj.schema.item] : item"></v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </template>
-
-          <!-- checkbox || switch -->
-          <div
-            v-else-if= "obj.schema.type === 'switch' || obj.schema.type === 'checkbox'"
-            :is= "mapTypeToComponent(obj.schema.type)"
-            :input-value= "setValue(obj)"
-            v-bind = "obj.schema"
-            @change= "onInput($event, obj)"
-          ></div>
-
-          <!-- file -->
-          <v-file-input
-            v-else-if= "obj.schema.type === 'file' "
-            :value= "setValue(obj)"
-            v-bind = "obj.schema"
-            @focus = "onFocus($event, obj)"
-            @blur = "onBlur($event, obj)"            
-            @change= "onInput($event, obj)"
-          ></v-file-input>
-
-          <!-- btn-toggle -->
-          <v-btn-toggle
-            v-else-if= "obj.schema.type === 'btn-toggle'"
-            v-bind = "obj.schema"
-            color = ""
-            :value= "setValue(obj)"
-            @change= "onInput($event, obj)"
-            >
-            <v-btn
-              v-for="(b,ix) in obj.schema.options"
-              v-bind = "obj.schema"
-              :key="ix"
-              :value="sanitizeOptions(b).value"
-            >
-              <v-icon :dark="obj.schema.dark">{{sanitizeOptions(b).icon}}</v-icon>
-              {{sanitizeOptions(b).label}}
-            </v-btn>
-          </v-btn-toggle>
-
-          <!-- btn   -->
-          <v-btn
-            v-else-if= "obj.schema.type === 'btn'"
-            v-bind = "obj.schema"
-            @click = "onClick($event, obj, button)"
+          <v-flex
+            v-on= "on"
+            @mouseenter="onMouse($event, obj, index)"
+            @mouseleave="onMouse($event, obj, index )"
+            v-show= "!obj.schema.hidden"
+            v-touch= "{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"
+            :class= "getClassName(obj)"
+            :key= "index"
           >
-            <v-icon v-if="obj.schema.iconLeft" left :dark="obj.schema.dark">{{obj.schema.iconLeft}}</v-icon>
-            {{setValue(obj)}}
-            <v-icon v-if="obj.schema.iconCenter" :dark="obj.schema.dark">{{obj.schema.iconCenter}}</v-icon>
-            {{obj.schema.label}}
-            <v-icon v-if="obj.schema.iconRight" right :dark="obj.schema.dark">{{obj.schema.iconRight}}</v-icon>
-          </v-btn>
+            <!-- slot on top of item  -> <v-btn slot="top-slot-[key]> -->
+            <slot :name= "getTypeTopSlot(obj)"></slot>
+            <slot :name= "getKeyTopSlot(obj)"></slot>
 
-          <!-- if masked use this v-text-field section - https://vuejs-tips.github.io/vue-the-mask/  -->
-          <v-text-field
-            v-else-if= "obj.schema.mask"
-            v-bind = "obj.schema"
-            v-mask = "obj.schema.mask"
-            :value= "setValue(obj)"
-            @focus = "onFocus($event, obj)"
-            @blur = "onBlur($event, obj)"
-            @click:append = "onClick($event, obj, append)"
-            @click:append-outer = "onClick($event, obj, appendOuter)"
-            @click:clear = "onClick($event, obj, clear )"
-            @click:prepend = "onClick($event, obj, prepend )"
-            @click:prepend-inner = "onClick($event, obj, prependInner )"
-            @input= "onInput($event, obj)"
-          ></v-text-field>
+            <!-- slot replaces complete item of defined type -> <div slot="item-slot-[type]>-->
+            <slot :name= "getTypeItemSlot(obj)">
+            <!-- slot replaces complete item of defined key -> <div slot="item-slot-[key]>-->
+            <slot :name= "getKeyItemSlot(obj)">
 
-          <!-- all other Types -> see typeToComponent -->
-          <div
-            v-else
-            :is= "mapTypeToComponent(obj.schema.type)"
-            v-bind = "obj.schema"
-            :value= "setValue(obj)"
-            @focus = "onFocus($event, obj)"
-            @blur = "onBlur($event, obj)"
-            @click:append = "onClick($event, obj, append)"
-            @click:append-outer = "onClick($event, obj, appendOuter)"
-            @click:clear = "onClick($event, obj, clear )"
-            @click:prepend = "onClick($event, obj, prepend )"
-            @click:prepend-inner = "onClick($event, obj, prependInner )"
-            @input= "onInput($event, obj)"
-          ></div>
+              <!-- radio -->
+              <v-radio-group
+                v-if= "obj.schema.type === 'radio'"
+                v-bind = "obj.schema"
+                :value= "setValue(obj)"
+                @change= "onInput($event, obj)"
+                >
+                <v-radio
+                  v-for="(o,ix) in obj.schema.options"
+                  v-bind = "obj.schema"
+                  :key="ix"
+                  :label="sanitizeOptions(o).label"
+                  :value="sanitizeOptions(o).value"
+                ></v-radio>
+              </v-radio-group>
 
+              <!-- array -->
+              <template v-else-if= "obj.schema.type === 'array'" >
+                <div v-bind = "obj.schema" :value= "setValue(obj)" v-for="(item, idx) in setValue(obj)" :key="idx" >
+                  <slot :name= "getKeyArraySlot(obj)" v-bind:item= "item" >
+                    <v-form-base
+                      :id="`${id}-${obj.key}-${idx}`"
+                      :value= "item"
+                      :schema= "obj.schema.schema"
+                    />
+                  </slot>
+                </div>
+              </template>
+
+              <!-- treeview -->
+              <v-treeview
+                v-else-if= "obj.schema.type === 'treeview'"
+                :items = "setValue(obj)"
+                v-model= "obj.schema.model"
+                :open.sync = "obj.schema.open"
+                v-bind = "obj.schema"
+                @input= "onClick($event, obj, treeview)"
+                >
+              </v-treeview>
+
+              <!-- list -->
+              <template v-else-if= "obj.schema.type === 'list'">
+                <v-toolbar v-if="obj.schema.label" v-bind = "obj.schema" dark >
+                  <v-toolbar-title>{{obj.schema.label}}</v-toolbar-title>
+                </v-toolbar>
+                <v-list v-bind = "obj.schema">
+                  <v-list-item
+                    v-for="(item, ix) in setValue(obj)" :key="ix"
+                    :class= "obj.schema.selected === ix ? 'active' : 'inactive'"
+                    @click= "obj.schema.selected = ix; onClick($event, obj, 'list', ix)"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title v-text="obj.schema.item ? item[obj.schema.item] : item"></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </template>
+
+              <!-- checkbox || switch -->
+              <div
+                v-else-if= "obj.schema.type === 'switch' || obj.schema.type === 'checkbox'"
+                :is= "mapTypeToComponent(obj.schema.type)"
+                :input-value= "setValue(obj)"
+                v-bind = "obj.schema"
+                @change= "onInput($event, obj)"
+              ></div>
+
+              <!-- file -->
+              <v-file-input
+                v-else-if= "obj.schema.type === 'file' "
+                :value= "setValue(obj)"
+                v-bind = "obj.schema"
+                @focus = "onFocus($event, obj)"
+                @blur = "onBlur($event, obj)"
+                @change= "onInput($event, obj)"
+              ></v-file-input>
+
+              <!-- btn-toggle -->
+              <v-btn-toggle
+                v-else-if= "obj.schema.type === 'btn-toggle'"
+                v-bind = "obj.schema"
+                color = ""
+                :value= "setValue(obj)"
+                @change= "onInput($event, obj)"
+                >
+                <v-btn
+                  v-for="(b,ix) in obj.schema.options"
+                  v-bind = "obj.schema"
+                  :key="ix"
+                  :value="sanitizeOptions(b).value"
+                >
+                  <v-icon :dark="obj.schema.dark">{{sanitizeOptions(b).icon}}</v-icon>
+                  {{sanitizeOptions(b).label}}
+                </v-btn>
+              </v-btn-toggle>
+
+              <!-- btn   -->
+              <v-btn
+                v-else-if= "obj.schema.type === 'btn'"
+                v-bind = "obj.schema"
+                @click = "onClick($event, obj, button)"
+              >
+                <v-icon v-if="obj.schema.iconLeft" left :dark="obj.schema.dark">{{obj.schema.iconLeft}}</v-icon>
+                {{setValue(obj)}}
+                <v-icon v-if="obj.schema.iconCenter" :dark="obj.schema.dark">{{obj.schema.iconCenter}}</v-icon>
+                {{obj.schema.label}}
+                <v-icon v-if="obj.schema.iconRight" right :dark="obj.schema.dark">{{obj.schema.iconRight}}</v-icon>
+              </v-btn>
+
+              <!-- if masked use this v-text-field section - https://vuejs-tips.github.io/vue-the-mask/  -->
+              <v-text-field
+                v-else-if= "obj.schema.mask"
+                v-bind = "obj.schema"
+                v-mask = "obj.schema.mask"
+                :value= "setValue(obj)"
+                @focus = "onFocus($event, obj)"
+                @blur = "onBlur($event, obj)"
+                @click:append = "onClick($event, obj, append)"
+                @click:append-outer = "onClick($event, obj, appendOuter)"
+                @click:clear = "onClick($event, obj, clear )"
+                @click:prepend = "onClick($event, obj, prepend )"
+                @click:prepend-inner = "onClick($event, obj, prependInner )"
+                @input= "onInput($event, obj)"
+              ></v-text-field>
+
+              <!-- all other Types -> see typeToComponent -->
+              <div
+                v-else
+                :is= "mapTypeToComponent(obj.schema.type)"
+                v-bind = "obj.schema"
+                :value= "setValue(obj)"
+                @focus = "onFocus($event, obj)"
+                @blur = "onBlur($event, obj)"
+                @click:append = "onClick($event, obj, append)"
+                @click:append-outer = "onClick($event, obj, appendOuter)"
+                @click:clear = "onClick($event, obj, clear )"
+                @click:prepend = "onClick($event, obj, prepend )"
+                @click:prepend-inner = "onClick($event, obj, prependInner )"
+                @input= "onInput($event, obj)"
+              ></div>
+
+            </slot>
+            </slot>
+
+            <!-- slot at bottom of item  -> <div slot="slot-bottom-key-[deep-nested-key-name]> -->
+            <slot :name= "getTypeBottomSlot(obj)"></slot>
+            <slot :name= "getKeyBottomSlot(obj)"></slot>
+
+          </v-flex>
+
+          <!-- push next item to the right and fill space between items -->
+          <v-spacer v-if= "obj.schema.spacer" :key= "`s-${index}`"></v-spacer>
+
+        </template>
+        <!-- slot for tooltip - inspect css.vue how to use it -->
+        <slot name= "slot-tooltip" :obj="obj">
+          <span>{{obj.schema.tooltip}}</span>
         </slot>
-        </slot>
-
-        <!-- slot at bottom of item  -> <div slot="slot-bottom-key-[deep-nested-key-name]> -->
-        <slot :name= "getTypeBottomSlot(obj)"></slot>
-        <slot :name= "getKeyBottomSlot(obj)"></slot>
-
-      </v-flex>
-
-      <!-- push next item to the right and fill space between items -->
-      <v-spacer v-if= "obj.schema.spacer" :key= "`s-${index}`"></v-spacer>
-
+      </v-tooltip>
     </template>
 
   </v-layout>
@@ -190,6 +202,7 @@ const typeToComponent = {
   url: 'v-text-field',
   search: 'v-text-field',
   number: 'v-text-field',
+  // date: 'v-text-field',
 
   // map schema.type to vuetify-control (vuetify 2.0)
   range: 'v-slider',
@@ -246,7 +259,6 @@ export default {
       required: true
     }
   },
-
   data () {
     return {
       flatCombinedArray: [],
@@ -276,7 +288,6 @@ export default {
   },
 
   methods: {
-
     mapTypeToComponent (type) {
       // map ie. schema:{ type:'password', ... } to vuetify control v-text-field'
       return typeToComponent[type] ? typeToComponent[type] : `v-${type}`
@@ -437,8 +448,22 @@ export default {
       })
     },
     onBlur (event, obj) {
-     this.emitValue('blur', {
+      this.emitValue('blur', {
         on: 'blur',
+        id: this.ref,
+        index: this.ref.replace(/\D/g, ''),
+        parentId: this.$parent.id,
+        key: obj.key,
+        value: obj.value,
+        obj,
+        event,
+        data: this.storeStateData,
+        schema: this.storeStateSchema
+      })
+    },
+    onMouse (event, obj, index) {
+      this.emitValue('mouse', {
+        on: event.type,
         id: this.ref,
         index: this.ref.replace(/\D/g, ''),
         parentId: this.$parent.id,

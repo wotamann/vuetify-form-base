@@ -17,5 +17,6 @@ CSS class for KEY
 NEW Change Event will listen only to input & click 
     Update Event will listen to input, click, focus, resize, swipe 
 
-UPDATE Example
----
+NEW
+added Mouseenter, -over, -leave event 
+added Tooltip Support  ( schema:{ ..., tooltip: 'myTooltip' } )

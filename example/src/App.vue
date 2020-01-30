@@ -42,7 +42,7 @@ import conditional from '@/components/conditional.vue'
 import list from '@/components/list.vue'
 import pickers from '@/components/pickers.vue'
 
-const items = ['Simple Form', 'Lazy Loading Component for Async-Data', 'CSS, Slots & Buttons', 'Deep nested Data with Arrays & CSS', 'Treeviews',
+const items = ['Simple Form', 'Lazy Loading Component for Async-Data', 'CSS, Slots, Tooltips & Buttons', 'Deep nested Data with Arrays & CSS', 'Treeviews',
   'Select Item(s) from Schema-Array', 'Select Item from Data-Array(List)', 'Edit Item(s) in Data-Array', 'Pickers', 'Partial & Linked', 'Conditional Form', 'Complete Form', 'Use Responsive Grid']
 
 export default {

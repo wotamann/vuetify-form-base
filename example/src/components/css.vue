@@ -1,5 +1,5 @@
 <style>
-  /* INFO-SCOPED: don't use '<style scoped>' because scoped CSS is inside a child-component not accessable */
+  /* INFO-SCOPED: Don't use '<style scoped>' because scoped CSS is inside a child-component not accessable */
   h4 { background-color: #eef; color: #44d; padding: 0.2rem}
 
   /* CSS Component --- Container */
@@ -22,25 +22,36 @@
 
   /* CSS Keys --- set item with key on focus' */
   #form-base-css .key-email input:focus { background-color: #85a2e0 }
-
 </style>
 
 <template>
-  <v-container fluid >
-    <h4>Play around with predefined CSS-Classes, Slots and Buttons  </h4>
+  <v-container id= "css-demo" fluid >
+    <h4>Play around with predefined CSS-Classes, Slots, Tooltips and Buttons</h4>
 
     <v-form-base id= "form-base-css" :value= "myValue" :schema= "mySchema" @change:form-base-css= "change">
-      <!-- KEY -->
+
+      <!-- KEY SLOTS -->
       <h4 slot="slot-top-key-name">Top Slot Key Name</h4>
       <h4 slot="slot-item-key-password">Slot replaces Key Password</h4>
       <h4 slot="slot-bottom-key-email">Bottom Slot Key Email</h4>
-      <!-- TYPE -->
+
+      <!-- TYPE SLOTS -->
       <h4 slot="slot-top-type-btn-toggle">Top Slot Type Btn-Toggle</h4>
       <h4 slot="slot-bottom-type-btn">Bottom Slot Type Btn</h4>
       <h4 slot="slot-top-type-radio">Top Slot Type Radio</h4>
       <!-- <h4 slot="slot-bottom-type-radio">Top Bottom Type Radio</h4> -->
       <!-- <h4 slot="slot-bottom-type-radio">Top Bottom Type Radio</h4> -->
       <!-- <h4 slot="slot-item-type-radio">Slot replaces all Radio Types</h4> -->
+
+      <!-- TOOLTIP SLOTS -->
+      <div slot="slot-tooltip" slot-scope="slotProps">
+        {{ slotProps.obj.schema.tooltip }} has value '{{ slotProps.obj.value }}'
+      </div>
+      <!-- TOOLTIP SLOT - new Syntax VUE 2.6.0 -->
+      <!-- <template v-slot:slot-tooltip="slotProps">
+         {{ slotProps.obj.schema.tooltip }} with Value: {{ slotProps.obj.value }}
+      </template> -->
+
     </v-form-base>
 
     <infoline :value= "myValue" :schema= "mySchema"></infoline>
@@ -77,13 +88,13 @@ export default {
         }
       },
       mySchema: {
-        name: { type: 'text', label: 'Name', flex: 4, appendIcon: 'more_vert' },
-        password: { type: 'password', label: 'Password', flex: 4, spacer: true },
-        email: { type: 'email', label: 'Email', flex: 4 },
+        name: { type: 'text', label: 'Name', flex: 4, appendIcon: 'more_vert', tooltip: 'Name' },
+        password: { type: 'password', label: 'Password', flex: 4, spacer: true, tooltip: 'Password' },
+        email: { type: 'email', label: 'Email', flex: 4, tooltip: 'Email' },
         controls: {
-          checkbox: { type: 'checkbox', label: 'Red', color: 'red', flex: 4 },
-          switch: { type: 'switch', label: 'Blue', color: 'blue', flex: 4 },
-          slider: { type: 'slider', label: 'Green', color: 'green', flex: 4 },
+          checkbox: { type: 'checkbox', label: 'Red', color: 'red', flex: 4, tooltip: 'Checkbox' },
+          switch: { type: 'switch', label: 'Blue', color: 'blue', flex: 4, tooltip: 'Switch' },
+          slider: { type: 'slider', label: 'Green', color: 'green', flex: 4, tooltip: 'Slider' },
 
           btnToggle1: { type: 'btn-toggle', options, 'x-small': true, flex: 6 },
           btnToggle2: { type: 'btn-toggle', options: objectOptions, rounded: true, multiple: true, dark: true, color: 'blue', flex: 6 },

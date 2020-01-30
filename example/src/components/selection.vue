@@ -3,7 +3,7 @@
   <v-container fluid >
     <h4>Select Item(s) from Schema-Array</h4>
 
-    <v-form-base id="form-base-selection" :value= "myValue" :schema= "mySchema" @change:form-base-selection= "update" />
+    <v-form-base id="form-base-selection" :value= "myValue" :schema= "mySchema" @change:form-base-selection= "update"/>>
 
     <infoline :value= "myValue" :schema= "mySchema"></infoline>
 

@@ -105,11 +105,11 @@ In order for your application to work properly, you must wrap it in a [v-app](ht
         <v-content>
           <v-container fluid>
             <v-form>
-              <v-form-base :value="myValue" :schema="mySchema" />          
-            </v-form>                  
-          </v-container>      
+              <v-form-base :value="myValue" :schema="mySchema" />
+            </v-form>
+          </v-container>   
         </v-content>
-      </v-app>>      
+      </v-app>
     </template>
 
 	import VFormBase from 'vuetify-form-base';  
@@ -400,7 +400,8 @@ The next shows a more complex Schema:
       label string,           // label of item    
       placeholder: string,    // placeholder 
       hint: string,           // additional Info  
- 
+      tooltip: string | bool  // show tooltip - use Slots for individual text
+
       color: string
       backgroundColor:string
       css: string,            // inject classnames - schema:{ name:{ css:'small'}, ...  }
@@ -425,9 +426,10 @@ The next shows a more complex Schema:
       fromCtrl: function,     // ( {value, obj, data, schema} ) => value
     }
 
+
 ## Events
 
-We can use the v-on directive to listen to vuetify-form-base events **'focus', 'input', 'blur', 'click', 'resize', 'swipe', 'update'** and run some Code when they’re triggered.
+We can use the v-on directive to listen to vuetify-form-base events **'focus', 'input', 'blur', 'click', 'mouse', 'resize', 'swipe', 'update'** and run some Code when they’re triggered.
     
 This Example use the Default ID and listen all events with 'update':
 
@@ -457,6 +459,7 @@ You can also listen to an specific event. Your v-on Directive must append the Cu
       @focus:form-base-complete= "focusCode"
       @blur:form-base-complete= "blurCode"
       @click:form-base-complete= "clickCode"
+      @mouse:form-base-complete= "mouseCode"
       @swipe:form-base-complete= "swipeCode"
       @input:form-base-complete= "inputCode"
     />
@@ -521,7 +524,12 @@ Use Slots to pass Header and Footer into a Control. If necessary replace Control
       
       <h4 slot="slot-bottom-key-name">Bottom Slot Key Name</h4>
       <h4 slot="slot-bottom-type-radio">Bottom Slot on Types Radio</h4>
-
+      
+      // Tooltip see CSS Example 
+      <div slot="slot-tooltip" slot-scope="slotProps">
+        {{ slotProps.obj.schema.tooltip }} has value '{{ slotProps.obj.value }}
+      </div>
+    
     </v-form-base>
 
 ![Slots in Blue](./images/slot.png)
@@ -670,18 +678,22 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 * integrates UI framework Vuetify with responsive Layout and Support of Grid
 * Use a lot of Vuetify Control & Input types inclusive most of available API-Props
 * Get full configurable Forms based on Schema Definition
-* Edit plain or deep nested objects including Arrays, without the need to flatten it
+* Edit plain or deep nested objects including Arrays, without the need to flatten your data
 * Get a full, reactive Result
 * Listen on 'Resize', 'Focus', 'Input', 'Blur', 'Click', 'Swipe' and 'Update' Events
-* Use Slots to pass Header and Footer into a Control. Or replace a Control by Slot   
+* Use Slots to pass Header and Footer into a Control or replace a Control by a Slot.  Use  Slots to individualize your Tooltip   
 * Configurable CSS Style 
 
 
 ---
 ## Whats New
 
+#### Version 0.1.6
+- tooltip added
+
 #### Version 0.1.5
 - Event 'blur' available  
+
 #### Version 0.1.4
 
 - File Input added (type:'file')
@@ -694,7 +706,7 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 ---
 ## Dependencies
 
-vue >= 2.4
+vue >= 2.6
 
 vuetify >= 2.0
 
