@@ -1,11 +1,17 @@
 <template>
-  <v-container fluid >
-
+  <v-container fluid>
     <h4>Resize Window to change Layout, Offset and Order of Components</h4>
-    <v-form-base :class="layout"  :value= "myValue" :schema= "mySchema" @update= "update"/>
+    <v-form-base
+      :class="layout"
+      :value="myValue"
+      :schema="mySchema"
+      @update="update"
+    />
 
-    <infoline :value= "myValue" :schema= "mySchema" ></infoline>
-
+    <infoline
+      :value="myValue"
+      :schema="mySchema"
+    />
   </v-container>
 </template>
 

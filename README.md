@@ -455,18 +455,34 @@ You can also listen to an specific event. Your v-on Directive must append the Cu
       id = "form-base-complete"
       :value= "myValue" 
       :schema= "mySchema"  
-      @resize:form-base-complete= "resizeCode"
+      @click:form-base-complete= "clickCode"
+      @input:form-base-complete= "inputCode"
+      @change:form-base-complete= "changeCode"
+      @watch:form-base-complete= "watchCode"
       @focus:form-base-complete= "focusCode"
       @blur:form-base-complete= "blurCode"
-      @click:form-base-complete= "clickCode"
       @mouse:form-base-complete= "mouseCode"
       @swipe:form-base-complete= "swipeCode"
-      @input:form-base-complete= "inputCode"
+      @resize:form-base-complete= "resizeCode"
+      @update:form-base-complete= "updateCode"     
     />
+
+  Listen to one or more of following events
+        
+        @input= "change"
+        @click= "change"
+        @change="change" // input & click
+        @watch= "change" // focus & input & click &  blur
+        @focus= "change"
+        @blur=  "change"
+        @mouse= "change" // mouseenter & mouseleave
+        @resize="change"
+        @swipe= "change"
+        @update="change" // catch all events
 
 **The Event-Signature:**
 
-    update( { on, id, key, value, obj, event, params, index, data, schema, parentId, parent } ){
+    change( {  on, id, key, value, params, obj, data, schema, parent, index, event } ){
       // destructure the signature object 
     }
 
@@ -476,11 +492,10 @@ You can also listen to an specific event. Your v-on Directive must append the Cu
     value -     value of triggering Element
     obj -       triggering Element { key, value, schema } 
     event -     the native trigger-event if available 
-    params -    params object if available { x, y, pos, icon }    
-    index -     index of array  
+    params -    params object if available { text, x, y, tag, model, open, index }    
+    index -     index of array of schemas  
     data -      Data-Object
     schema -    Schema-Object
-    parentId -  Formbase-Id - if available 
     parent -    Formbase-Object - if available 
 ---
 **Example: Use 'Update' Event to control Visibility of Password Element**
@@ -525,7 +540,7 @@ Use Slots to pass Header and Footer into a Control. If necessary replace Control
       <h4 slot="slot-bottom-key-name">Bottom Slot Key Name</h4>
       <h4 slot="slot-bottom-type-radio">Bottom Slot on Types Radio</h4>
       
-      // Tooltip see CSS Example 
+      // Tooltip see css.vue in Example 
       <div slot="slot-tooltip" slot-scope="slotProps">
         {{ slotProps.obj.schema.tooltip }} has value '{{ slotProps.obj.value }}
       </div>
@@ -686,7 +701,13 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 
 
 ---
-## Whats New
+
+#### Version 0.1.8
+- Revision of example, 
+- bug fixed with tooltip in array   
+
+#### Version 0.1.8
+- tooltip added
 
 #### Version 0.1.6
 - tooltip added

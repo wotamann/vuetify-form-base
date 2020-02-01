@@ -4,16 +4,26 @@
 </style>
 
 <template>
-  <v-container fluid >
-
+  <v-container fluid>
     <h4>Complete Formbase from 'myValue'</h4>
-    <v-form-base :value= "myValue" :schema= "mySchema" @update= "update"/>
+    <v-form-base
+      :value="myValue"
+      :schema="mySchema"
+      @update="update"
+    />
 
     <h4>Partial Formbase from 'myValue.radios' synchronized with 'myValue'</h4>
-    <v-form-base id= "form-base-partial" :value= "myValue.radios" :schema= "mySchema.radios" @update:form-base-partial= "updatepartial"/>
+    <v-form-base
+      id="form-base-partial"
+      :value="myValue.radios"
+      :schema="mySchema.radios"
+      @update:form-base-partial="updatepartial"
+    />
 
-    <infoline :value= "myValue" :schema= "mySchema"></infoline>
-
+    <infoline
+      :value="myValue"
+      :schema="mySchema"
+    />
   </v-container>
 </template>
 

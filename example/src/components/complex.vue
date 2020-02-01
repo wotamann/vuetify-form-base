@@ -12,17 +12,40 @@
 </style>
 
 <template>
-  <v-container fluid >
+  <v-container fluid>
     <h4>Complete Form with validation</h4>
-    <v-form ref="form1" v-model= "formValid" lazy-validation>
-      <v-form-base id="form-base-complete" :value= "myValue" :schema= "mySchema" @update:form-base-complete= "update" />
+    <v-form
+      ref="form1"
+      v-model="formValid"
+      lazy-validation
+    >
+      <v-form-base
+        id="form-base-complete"
+        :value="myValue"
+        :schema="mySchema"
+        @update:form-base-complete="update"
+      />
     </v-form>
 
-    <v-btn  dark color="blue lighten-3" @click="validate">Validate</v-btn>
-    <v-btn  dark color="blue lighten-3" @click="resetValidation">Reset Validate</v-btn>
+    <v-btn
+      dark
+      color="blue lighten-3"
+      @click="validate"
+    >
+      Validate
+    </v-btn>
+    <v-btn
+      dark
+      color="blue lighten-3"
+      @click="resetValidation"
+    >
+      Reset Validate
+    </v-btn>
 
-    <infoline :value= "myValue" :schema= "mySchema"></infoline>
-
+    <infoline
+      :value="myValue"
+      :schema="mySchema"
+    />
   </v-container>
 </template>
 

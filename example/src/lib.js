@@ -1,14 +1,16 @@
 export default (val) => {
-  let { on, id, index, key, value, obj, params, data, schema, parentId, parent, event } = val
+  let { on, id, key, value, params, obj, data, schema, parent, index, event } = val
 
-  console.log('-----------------------------------')
-  console.log('Formbase-ID:', id, ' has been updated on', on, index ? `Index:${index}` : '')
-  console.log('Key|Value:', key, '|', value, params ? `Params:${JSON.stringify(params)}` : '')
-  if (params) console.log('Params:', params)
-  console.log('Object:', obj)
+  console.log(`-- v-form-base ---------------------------------------`)
+  console.log(`Formbase-ID:${id} has been updated from '${on}'`)
+  console.log(`Key:${key}`)
+  console.log(`Value:`, value)
+  if (params) console.log(`Params:`, params)
   console.log('Data:', data)
   console.log('Schema:', schema)
-  if (parent) console.log('Parent:', parentId, parent)
+  console.log('Object:', obj)
+  if (parent) console.log(`Parent ID:${parent.id} | Parent:`, parent)
+  if (index == true) console.log(`Index of Array:>${index}<`)
   if (event) console.log('Event:', event)
 
   return val

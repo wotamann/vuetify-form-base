@@ -1,13 +1,26 @@
 <template>
-  <v-container fluid >
+  <v-container fluid>
+    <h4>Add, Remove and Edit Items in nested Data-Array</h4>
 
-    <h4>Edit Item(s) in Data-Array</h4>
+    <v-form-base
+      id="array"
+      :value="myValue"
+      :schema="mySchema"
+      @change:array="change"
+    />
 
-    <v-form-base id="form-base-array" :value= "myValue" :schema= "mySchema" @update:form-base-array= "update" />
-    <v-btn dark color="blue lighten-3"  @click= "add">ADD</v-btn>
+    <v-btn
+      dark
+      color="blue"
+      @click="add"
+    >
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
 
-    <infoline :value= "myValue" :schema= "mySchema"></infoline>
-
+    <infoline
+      :value="myValue"
+      :schema="mySchema"
+    />
   </v-container>
 </template>
 
@@ -17,22 +30,60 @@ import Infoline from '@/components/infoline'
 import update from '@/lib'
 
 export default {
-  name: 'array',
+  name: 'Array',
   components: { VFormBase, Infoline },
   data () {
     return {
       myValue: {
         tasks: [
-          { done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) },
-          { done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) },
-          { done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) }
+          {
+            add: '',
+            nr: 1,
+            task: 'coding',
+            done: [
+              { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
+              { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) }
+            ]
+          },
+          {
+            add: '',
+            nr: 2,
+            task: 'Work out',
+            done: [
+              { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
+              { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
+              { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) }
+            ]
+          }
         ]
       },
       mySchema: {
         tasks: {
           type: 'array',
           flex: 12,
-          schema: { done: { type: 'checkbox', label: 'Done', color: 'red', flex: 4 }, title: { type: 'text' }, flex: 8 }
+          schema: {
+            add: { type: 'btn', 'small': true, iconCenter: 'add', dark: true, color: 'red', flex: 1 },
+            nr: {
+              type: 'text',
+              disabled: true,
+              color: 'blue',
+              flex: 1
+            },
+            task: {
+              type: 'text',
+              color: 'blue',
+              flex: 10
+            },
+            done: {
+              type: 'array',
+              schema: {
+                done: {
+                  type: 'checkbox', label: 'Done', color: 'red', offset: 1, flex: 2 },
+                title: { type: 'text', color: 'red' },
+                flex: 7
+              }
+            }
+          }
         }
       }
     }
@@ -40,14 +91,28 @@ export default {
   methods: {
 
     add () {
-      this.myValue.tasks.unshift({ done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) })
+      this.myValue.tasks.push({
+        add: '',
+        nr: this.myValue.tasks.length + 1,
+        task: 'item ' + (this.myValue.tasks.length + 1) + ' added',
+        done: [
+          { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) }
+        ]
+      })
     },
 
-    update (val) {
-      let { index, key, value } = update(val)
+    change (val) {
+      let { on, id, index, key, value } = update(val)
 
+      // add task
+      if (key === 'add') {
+        setTimeout(() => this.myValue.tasks[index[0]].done.push({
+          done: false, title: 'Ticket added ' + Math.floor(Math.random() * 1000)
+        }), 250)
+      }
+      // remove task
       if (key === 'done' && value === true) {
-        setTimeout(() => this.myValue.tasks.splice(index, 1), 333)
+        setTimeout(() => this.myValue.tasks[index[0]].done.splice(index[1], 1), 250)
       }
     }
   }

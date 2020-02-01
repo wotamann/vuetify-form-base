@@ -1,16 +1,31 @@
-<style>
-  .v-tooltip__content { background-color: #1972c5; }
-</style>
 <template>
-  <v-container fluid >
-
-    <h4>Simple Form </h4>
+  <v-container fluid>
+    <h4>Different Textfields and Fileselector with Tooltips</h4>
     <v-form>
-      <v-form-base :value= "myValue" :schema= "mySchema" @blur= "change" @input= "change"/>
+      <v-form-base
+        :value="myValue"
+        :schema="mySchema"
+        @change="change"
+      />
+      <!--
+        Listen to one or more of following events
+        @click= "change"
+        @input= "change"
+        @change="change" // input & click
+        @watch= "change" // focus & input & click &  blur
+        @focus= "change"
+        @blur=  "change"
+        @mouse= "change" // mouseenter & mouseleave
+        @resize="change"
+        @swipe= "change"
+        @update="change" // catch all events
+      -->
     </v-form>
 
-    <infoline :value= "myValue" :schema= "mySchema" ></infoline>
-
+    <infoline
+      :value="myValue"
+      :schema="mySchema"
+    />
   </v-container>
 </template>
 
@@ -20,22 +35,22 @@ import Infoline from '@/components/infoline'
 import change from '@/lib'
 
 export default {
-  name: 'simple',
+  name: 'Textfields',
   components: { VFormBase, Infoline },
   data () {
     return {
       myValue: {
+        name: 'Base',
         creditcard: '12345678',
-        password: '123456',
-        file: [], // contains a single or an array of File objects
-        checkbox: true
+        password: 'abcdefgh',
+        file: [] // array of File objects
       },
       mySchema: {
+        name: { type: 'text', tooltip: 'Name', flex: 3 },
         // Info Mask https://vuejs-tips.github.io/vue-the-mask/
-        creditcard: { type: 'text', hint: 'Masked Input for CC', label: '####-####-####-####', mask: '####-####-####-####', flex: 4, tooltip: 'Creditcard' },
-        password: { type: 'password', label: 'Password', clearable: true, flex: 3, tooltip: 'Password' },
-        file: { type: 'file', label: 'Image-Files', accept: 'image/*', multiple: true, flex: 4, tooltip: 'File Selection' },
-        checkbox: { type: 'checkbox', label: 'Ok', flex: 1 }
+        creditcard: { type: 'text', hint: '####-####-####-####', label: 'Creditcard', mask: '####-####-####-####', tooltip: { color: 'red', label: 'Creditcard', top: true }, prependIcon: 'place', flex: 3 },
+        password: { type: 'password', label: 'Password', counter: 10, clearable: true, tooltip: { label: 'Password', color: 'blue', bottom: true }, flex: 3 },
+        file: { type: 'file', label: 'Image-Files', accept: 'image/*', multiple: true, tooltip: { color: 'green', label: 'File Selection', left: true }, flex: 3 }
       }
     }
   },

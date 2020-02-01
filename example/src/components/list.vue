@@ -1,28 +1,28 @@
-<style>
-  .key-listObject .active  {background-color: rgb(218, 221, 238)}
-  .key-listObject .active *  {color: #3d3a3a}
-  .key-listString .active  {background-color: #C5CAE9}
-  .key-listString .active *  {color: #ffffff}
-</style>
-
 <template>
-  <v-container fluid >
+  <v-container fluid>
+    <h4>Select Item from List (Array in Value) with Result in 'schema.prop.selected'</h4>
 
-    <h4>Select Item from Data-Array(List) with Result in 'schema.prop.selected'</h4>
+    <v-form-base
+      id="form-base-list"
+      :value="myValue"
+      :schema="mySchema"
+      @change:form-base-list="change"
+    />
 
-    <v-form-base id="form-base-list" :value= "myValue" :schema= "mySchema" @update:form-base-list= "update" />
-
-    <infoline :value= "myValue" :schema= "mySchema"></infoline>
-
+    <infoline
+      :value="myValue"
+      :schema="mySchema"
+    />
   </v-container>
 </template>
 
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import update from '@/lib'
+import change from '@/lib'
 
 export default {
+  name: 'Lists',
   components: { VFormBase, Infoline },
   data () {
     return {
@@ -39,13 +39,29 @@ export default {
         ]
       },
       mySchema: {
-        listObject: { type: 'list', item: 'name', selected: 2, color: '#C5CAE9', flex: 5 },
-        listString: { type: 'list', label: 'Label', selected: null, offset: 1, flex: 5 }
+        listObject: {
+          type: 'list',
+          label: 'List Single',
+          icon: 'mdi-wifi',
+          item: 'name', // display name from object in array
+          model: 2,
+          color: 'blue',
+          flex: 5
+        },
+        listString: {
+          type: 'list',
+          label: 'List Multiple',
+          multiple: true,
+          model: [1, 2],
+          color: 'red',
+          offset: 1,
+          flex: 5
+        }
       }
     }
   },
   methods: {
-    update
+    change
   }
 }
 </script>

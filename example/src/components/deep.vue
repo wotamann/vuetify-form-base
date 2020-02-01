@@ -2,29 +2,35 @@
   /* INFO-SCOPED: don't use '<style scoped>' because scoped CSS is inside a child-component not accessable */
 
   /* CSS Props --- style property from myValue object */
-  #form-base-nested .prop-controls  { border: dotted 2px #838383 }
-  #form-base-nested .prop-switch  { border: dashed 2px #17419c }
-  #form-base-nested .prop-checkbox  { border: dashed 2px #cf0d27 }
-  #form-base-nested .prop-checkboxArray  { border: dashed 2px #0f9130 }
+  #form-base-nested .prop-controls  { background-color: #e1f5f8;  border: solid 2px #06a0bb }
+  #form-base-nested .prop-switch  { margin:2px; border: solid 2px #cf0520 }
+  #form-base-nested .prop-checkbox  {  margin:4px; border: solid 2px #1a54d1 }
+  #form-base-nested .prop-checkboxArray  {  margin:6px; border: solid 2px #0c972f }
 
 </style>
 
 <template>
-  <v-container fluid >
+  <v-container fluid>
+    <h4>Deep nested Data including Arrays and Objects</h4>
 
-    <h4>Deep nested Object with Arrays & CSS</h4>
+    <v-form-base
+      id="form-base-nested"
+      :value="myValue"
+      :schema="mySchema"
+      @change:form-base-nested="change"
+    />
 
-    <v-form-base id="form-base-nested" :value= "myValue" :schema= "mySchema" @update:form-base-nested= "update"/>
-
-    <infoline editable="false" :value= "myValue" :schema= "mySchema" @blur= "blur" ></infoline>
-
+    <infoline
+      :value="myValue"
+      :schema="mySchema"
+    />
   </v-container>
 </template>
 
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import update from '@/lib'
+import change from '@/lib'
 
 export default {
   components: { VFormBase, Infoline },
@@ -45,8 +51,8 @@ export default {
               false
             ],
             { checkboxArray: [
-              true,
-              false
+              'checked',
+              null
             ] }
           ]
         }
@@ -54,17 +60,24 @@ export default {
       mySchema: {
         controls: {
           base: { type: 'checkbox', label: 'Base' },
-          // deep nested object with arrays
+          // array
           switch: [
             { type: 'switch', label: 'SW1' },
             { type: 'switch', label: 'SW2' }
           ],
           checkbox: [
-            // nesteds array of objects
             { type: 'checkbox', label: 'A' },
             { type: 'checkbox', label: 'B' },
-            [{ type: 'checkbox', label: 'C-A', color: 'teal' }, { type: 'checkbox', label: 'C-B', color: 'teal' }],
-            { checkboxArray: [{ type: 'checkbox', label: 'D-A', color: 'red' }, { type: 'checkbox', label: 'D-B', color: 'red' }] }
+            // nested array
+            [
+              { type: 'checkbox', label: 'C-A', color: 'teal' },
+              { type: 'checkbox', label: 'C-B', color: 'teal' }
+            ],
+            { checkboxArray: [
+              { type: 'checkbox', label: 'D-A', value: 'checked', color: 'red' },
+              { type: 'checkbox', label: 'D-B', value: 'checked', color: 'red' }
+            ]
+            }
           ]
         }
       }
@@ -72,15 +85,7 @@ export default {
   },
 
   methods: {
-
-    update,
-
-    blur (p) {
-      let { value, schema } = p
-      this.myValue = value
-      this.mySchema = schema
-    }
-
+    change
   }
 }
 </script>
