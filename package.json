@@ -1,6 +1,6 @@
 {
   "name": "vuetify-form-base",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Form-Generator is Vue-Component using Vuetify 2.0, responsive Design, Grid",
   "main": "index.js",
   "scripts": {
