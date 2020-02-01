@@ -10,14 +10,14 @@
         :disabled="!obj.schema.tooltip"
         v-bind="typeof obj.schema.tooltip === 'string' ? { bottom:true, label:'obj.schema.tooltip'} : obj.schema.tooltip"
       >
-        <!-- @mouseenter= "onEvent($event, obj)"
-            @mouseleave= "onEvent($event, obj )" -->
         <template v-slot:activator="{ on }">
           <v-flex
             v-show="!obj.schema.hidden"
             :key="index"
             v-touch="{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"
             :class="getClassName(obj)"
+            @mouseenter= "onEvent($event, obj)"
+            @mouseleave= "onEvent($event, obj )"
             v-on="on"
           >
             <!-- slot on top of type  -> <div slot="slot-bottom-type-[propertyName]> -->
@@ -343,7 +343,6 @@ export default {
       }
       return p
     },
-    // berechnet Index
     index () {
       const m = this.ref && this.ref.match(/\d+/g)
       return m ? m.map(Number) : []
@@ -483,7 +482,7 @@ export default {
 
       // update deep nested prop(key) with value
       this.setObjectByPath(this.storeStateData, obj.key, value)
-
+      
       this.emitValue('input', {
         on: 'input',
         id: this.ref,
@@ -496,81 +495,7 @@ export default {
         schema: this.storeStateSchema
       })
     },
-    // onClick (event, obj, pos, selected) {
-    //   this.emitValue('click', {
-    //     on: event.type,
-    //     id: this.ref,
-    //     index: this.index,
-    //     params: { text: event.srcElement && event.srcElement.innerText, pos, selected },
-    //     key: obj.key,
-    //     value: obj.value,
-    //     obj,
-    //     event,
-    //     data: this.storeStateData,
-    //     schema: this.storeStateSchema
-    //   })
-    // },
-    // onFocus (event, obj) {
-    //   this.emitValue('focus', {
-    //     on: event.type,
-    //     id: this.ref,
-    //     index: this.index, //index: this.ref.replace(/\D/g, ''),
-    //     key: obj.key,
-    //     value: obj.value,
-    //     obj,
-    //     event,
-    //     data: this.storeStateData,
-    //     schema: this.storeStateSchema
-    //   })
-    // },
-    // onBlur (event, obj) {
-    //   this.emitValue('blur', {
-    //     on: event.type,
-    //     id: this.ref,
-    //     index: this.index, // this.ref.replace(/\D/g, '-'),
-    //     key: obj.key,
-    //     value: obj.value,
-    //     obj,
-    //     event,
-    //     data: this.storeStateData,
-    //     schema: this.storeStateSchema
-    //   })
-    // },
-    // onMouse (event, obj) {
-    //   return
-    //     this.emitValue('mouse', {
-    //       on: event.type,
-    //       id: this.ref,
-    //       index: this.index, //index: this.ref.replace(/\D/g, ''),
-    //       key: obj.key,
-    //       value: obj.value,
-    //       obj,
-    //       event,
-    //       data: this.storeStateData,
-    //       schema: this.storeStateSchema
-    //     })
-    // },
-    // onTreeview (obj, action) {
-
-    //   const selected = obj.schema.model
-    //   const open = obj.schema.open
-    //   const tree = { action, selected, open }
-    //   console.log('EV', action , selected,open)
-
-    //   this.emitValue(treeview, {
-    //     on: treeview,
-    //     id: this.ref,
-    //     index: this.index,
-    //     params: { treeview:tree, array: this.index },
-    //     key: obj.key,
-    //     value: obj.value,
-    //     obj,
-    //     data: this.storeStateData,
-    //     schema: this.storeStateSchema,
-    //     parent:this.parent,
-    //   })
-    // },
-
+   
     onEvent (event, obj, tag) {
       delay(() => {
         const text = event && event.srcElement && event.srcElement.innerText
@@ -603,37 +528,14 @@ export default {
     },
     //
     // Event Base
-    emitValue (emit, val) {
-      // const parent = this.parent
-      // console.log('emitValue:',emit, val);
-      // console.log(this.id, '-emitValue',emit, this.getEventParentName(emit), val);
-      // console.log(this.parent, '-emitValue',emit, this.getEventParentName(emit), val);
-      // console.log(this.id, 'parent', parent.id, ' PARENT?:', this.id.startsWith(parent.id  + '-'), '-emitValue',emit, this.getEventName(emit), this.getEventParentName(emit), val);
-      // console.log( this.getEventName(emit), this.getEventParentName(emit));
-
-      // if ( this.id.startsWith(parent.id + '-' )) {
-      // console.log(parent.id, '-emitValue',emit, this.getEventParentName(emit), val);
-      // // if ( parent.id === 'array') {
-      //   parent.$emit(this.getEventParentName(emit), { ...val, parent })
-      //   if ('inputclick'.indexOf(emit) > -1) parent.$emit(this.getEventParentName('change'), { ...val, parent, parentId:this.parent.id })
-      //   parent.$emit(this.getEventParentName('update'), { ...val, parent, parentId:this.parent.id })
-      // } else {
+    emitValue (emit, val) {     
       this.parent.$emit(this.getEventName(emit), val) // listen to specific event
       if (mouse.indexOf(emit) > -1) this.parent.$emit(this.getEventName('mouse'), val) // listen only to input
       if (change.indexOf(emit) > -1) this.parent.$emit(this.getEventName('change'), val) // listen only to input|click|
       if (watch.indexOf(emit) > -1) this.parent.$emit(this.getEventName('watch'), val) // listen only to changes
       this.parent.$emit(this.getEventName('update'), val) // all listen to events
-      // }
     },
     getEventName (eventName) {
-      // console.log('***', defaultID,this.parent.id, this.parent.id !== defaultID ? `${eventName}:${this.parent.id}` : eventName);
-      // console.log('---', defaultID,this.parent.id, this.ref !== defaultID ? `${eventName}:${this.ref}` : eventName);
-
-      // const baseName = this.ref !== defaultID ? `${eventName}:${this.ref}` : eventName
-      // return this.ref !== defaultID ? `${eventName}:${this.ref}` : eventName
-      return this.parent.id !== defaultID ? `${eventName}:${this.parent.id}` : eventName
-    },
-    getEventParentName (eventName) {
       return this.parent.id !== defaultID ? `${eventName}:${this.parent.id}` : eventName
     },
     //
