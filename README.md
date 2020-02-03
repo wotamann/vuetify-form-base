@@ -84,9 +84,31 @@ And if necessary you can also build a **Form in Form** by using **Slots**.
 
 Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** for 'Resize', 'Focus', 'Input', 'Click' and 'Swipe'. Listening to 'Change' will catch all Value changing Events like 'Input' and 'Click'. Listening to 'Update' will catch all Events. 
 
-Select Types from **Vuetify UI Input & Controls** like **Textfield(text), Password, Email, FileInput(file), Textarea, Checkbox, Radio, Switch, Slider, Button (btn), grouped Button(btn-toggle), Combobox, Autocomplete, Select, Combobox, Treeview, Array, List, Colorpicker and Date- or Timepicker**. 
+### Supported Controls from **Vuetify UI Input & Controls**  
+----
 
+#### Textfield schema: { ctrl: {type:'text', ...} 
 [More Informations to Vuetify Textfields find here](https://vuetifyjs.com/en/components/text-fields/). 
+#### Password schema: { ctrl: {type:'password', ...} 
+#### Email schema: { ctrl: {type:'email', ...}  
+#### FileInput schema: { ctrl: {type:'file', ...} 
+#### Textarea schema: { ctrl: {type:'textarea', ...}
+#### Checkbox schema: { ctrl: {type:'checkbox', ...}, ... }
+#### Radio schema: { ctrl: {type:'radio', ...}, ... }
+#### Switch schema: { ctrl: {type:'switch', ...}, ... }
+#### Slider schema: { ctrl: {type:'slider', ...}, ... }
+#### Icon schema: { ctrl: {type:'icon', ...}, ... }
+#### Button schema: { ctrl: {type:'btn', ...}, ... }
+#### Grouped Button: schema: { ctrl: {type:'btn-toggle', ...}, ... }
+#### Select schema: { ctrl: {type:'select', ...}, ... }
+#### Combobox schema: { ctrl: {type:'combobox', ...}, ... }
+#### Autocomplete: schema: { ctrl: {type:'autocomplete', ...}, ... }
+#### Treeview schema: { ctrl: {type:'treeview', ...}, ... }
+#### Array schema: { ctrl: {type:'array', ...}, ... }
+#### List schema: { ctrl: {type:'list', ...}, ... }
+#### Colorpicker: schema: { ctrl: {type:'colorpicker', ...}, ... }
+#### Datepicker: schema: { ctrl: {type:'datepicker', ...}, ... }
+#### Timepicker: schema: { ctrl: {type:'timepicker', ...}, ... }
 
 ---
 ## Installation
@@ -701,6 +723,8 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 
 
 ---
+#### Version 0.1.9
+- added support for v-icon | { type:'icon'}   
 
 #### Version 0.1.8
 - Revision of example, 

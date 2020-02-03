@@ -132,6 +132,14 @@
                   @change="onInput($event, obj)"
                 />
 
+                <!-- icon -->
+                <v-icon
+                  v-else-if="obj.schema.type === 'icon'"                    
+                  v-bind="obj.schema"
+                  @click="onEvent($event, obj)"
+                >
+                  {{ setValue(obj) }}
+                </v-icon>
                 <!-- btn-toggle -->
                 <v-btn-toggle
                   v-else-if="obj.schema.type === 'btn-toggle'"
