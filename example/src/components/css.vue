@@ -98,6 +98,7 @@ export default {
           checkbox: true,
           switch: true,
           slider: 33,
+          icon:'print',
           btnToggle1: 'B',
           btnToggle2: [1, 2],
           btn1: 'A', // or use schema.label
@@ -114,11 +115,12 @@ export default {
           checkbox: { type: 'checkbox', label: 'Red', color: 'red', flex: 4, tooltip: 'Checkbox' },
           switch: { type: 'switch', label: 'Blue', color: 'blue', flex: 4, tooltip: 'Switch' },
           slider: { type: 'slider', label: 'Green', color: 'green', flex: 3, tooltip: 'Slider' },
-
-          btnToggle1: { type: 'btn-toggle', options, 'small': true, colorflex: 6 },
+          
+          icon:{ type:'icon', large:true, color:'green', tooltip: 'Icon', flex: 1,},
+          btnToggle1: { type: 'btn-toggle', options, 'small': true, tooltip: 'Button', flex: 5 },
           btnToggle2: { type: 'btn-toggle', options: objectOptions, multiple: true, color: 'blue', flex: 5 },
 
-          btn1: { type: 'btn', iconRight: 'print', 'x-large': true, flex: 3 },
+          btn1: { type: 'btn', iconRight: 'print', 'x-large': true, tooltip: 'Button', flex: 3 },
           btn2: { type: 'btn', label: 'B', iconLeft: 'print', iconCenter: 'add', iconRight: 'mdi-format-italic', dark: true, color: 'blue', flex: 3 },
 
           radio1: { type: 'radio', label: 'Radio 1', options, flex: 3 },
