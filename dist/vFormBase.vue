@@ -120,7 +120,7 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="obj.value"
+                  v-model="date"
                   v-on="on"
                   v-mask="obj.schema.mask"
                   v-bind="obj.schema"
@@ -133,7 +133,7 @@
                 v-model="datePic"
                 @input="menu = false"
                 @focus="onFocus($event, obj)"
-                @change="onInput($event, obj)"
+                @change="onInput($event, obj); checkDateFormat(obj)"
                 :required="true"
                 :max="new Date().toISOString().substr(0, 10)"
               ></v-date-picker>
@@ -228,6 +228,7 @@
 // import & declarations
 import { get, isPlainObject, isFunction, isString, orderBy } from "lodash";
 import { mask } from "vue-the-mask";
+import moment from "moment";
 
 const typeToComponent = {
   // use native HTML5 Input Types - https://www.wufoo.com/html5/
@@ -328,6 +329,12 @@ export default {
   },
 
   methods: {
+    checkDateFormat(enteredDateObj) {
+      const { value, schema } = enteredDateObj;
+      const { format } = schema;
+      
+      this.date = moment(value, 'YYYY-MM-DD').format(format);
+    },
     setDate(enteredDate) {
       const date = new Date(enteredDate);
 
