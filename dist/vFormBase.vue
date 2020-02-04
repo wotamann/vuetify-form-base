@@ -693,6 +693,13 @@ export default {
       this.storeStateData,
       this.storeStateSchema
     );
+  },
+  updated() {
+    const calendarKey = Object.keys(this.schema).filter(key => (this.schema[key]['type'] === "calendar"));
+
+    if (this.value[calendarKey[0]]) {
+      this.date = moment(this.value[calendarKey[0]], 'YYYY-MM-DD').format('DD-MM-YYYY');
+    }  
   }
 };
 </script>
