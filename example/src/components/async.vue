@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Lazy Loading of Component</h4>
+    <h4>Lazy Loading of Component handling async Value or Schema</h4>
 
     <v-form v-if="showFormbase">
       <v-form-base
@@ -13,6 +13,7 @@
     <infoline
       :value="myValue"
       :schema="mySchema"
+      :path="$options._componentTag"
     />
   </v-container>
 </template>
@@ -43,11 +44,11 @@ export default {
       password: 'abcdefgh',
       checkbox: true
     })
-    this.mySchema = {
+    this.mySchema = await this.delay({
       name: { type: 'text', label: 'Name', flex: 5 },
       password: { type: 'password', label: 'Password', clearable: true, flex: 5 },
       checkbox: { type: 'checkbox', label: 'Okay' }
-    }
+    })
 
     // 3) LAZY LOADING 'VFormbase' after making visible
     this.showFormbase = true

@@ -1,7 +1,6 @@
 <template>
   <v-container fluid>
     <h4>Pickers </h4>
-
     <v-form>
       <v-form-base
         id="form-base-pickers"
@@ -10,10 +9,10 @@
         @update:form-base-pickers="update"
       />
     </v-form>
-
     <infoline
       :value="myValue"
       :schema="mySchema"
+      :path="$options._componentTag"
     />
   </v-container>
 </template>

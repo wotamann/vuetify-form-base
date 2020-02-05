@@ -1,6 +1,6 @@
 <style scoped>
-  #form-base { border: 1px solid #C5CAE9  }
-  #form-base-partial { width:50%; background-color: #c5cae956; border: 1px solid #C5CAE9; }
+  #form-base { background-color: #fdcfcf56;; border: 1px solid #f71a1a56  }
+  #form-base-partial { width:50%; background-color: #d9ebfc; border: 1px solid #0f88f8; }
 </style>
 
 <template>
@@ -11,7 +11,6 @@
       :schema="mySchema"
       @update="update"
     />
-
     <h4>Partial Formbase from 'myValue.radios' synchronized with 'myValue'</h4>
     <v-form-base
       id="form-base-partial"
@@ -19,10 +18,10 @@
       :schema="mySchema.radios"
       @update:form-base-partial="updatepartial"
     />
-
     <infoline
       :value="myValue"
       :schema="mySchema"
+      :path="$options._componentTag"
     />
   </v-container>
 </template>
@@ -51,10 +50,10 @@ export default {
         checkbox: { type: 'checkbox', label: 'Red', color: 'red' },
         switch: { type: 'switch', label: 'Blue', color: 'blue' },
         radios: {
-          radioA: { type: 'radio', label: 'RadioA', options, color: 'green', row: true },
-          radioB: { type: 'radio', label: 'RadioB', options, color: 'indigo' }
+          radioA: { type: 'radio', label: 'RadioA', options, row: true },
+          radioB: { type: 'radio', label: 'RadioB', options }
         },
-        slider: { type: 'slider', label: 'Slide', color: 'orange' }
+        slider: { type: 'slider', label: 'Slide' }
       }
     }
   },

@@ -339,7 +339,6 @@ export default {
       prependInner
     }
   },
-
   computed: {
     ref () {
       return this.id
@@ -450,7 +449,6 @@ export default {
       // combine Flex, Offset, Order into a classname
       return `${this.getFlexGridClassName(obj)} ${this.getOffsetGridClassName(obj)} ${this.getOrderGridClassName(obj)}`
     },
-
     getClassName (obj) {
       // combines all into a single classname
       // class => ie. 'item type-checkbox key-address-zip prop-adress prop-zip xs12 md6 offset-xs0'
@@ -502,8 +500,7 @@ export default {
         data: this.storeStateData,
         schema: this.storeStateSchema
       })
-    },
-   
+    }, 
     onEvent (event, obj, tag) {
       delay(() => {
         const text = event && event.srcElement && event.srcElement.innerText
@@ -527,7 +524,6 @@ export default {
         onEventDelay
       })
     },
-
     onSwipe (tag, obj) {
       this.emitValue('swipe', { on: 'swipe', id: this.ref, key: obj.key, value: obj.value, obj, params: { tag }, data: this.storeStateData, schema: this.storeStateSchema })
     },
@@ -537,11 +533,11 @@ export default {
     //
     // Event Base
     emitValue (emit, val) {     
-      this.parent.$emit(this.getEventName(emit), val) // listen to specific event
+      this.parent.$emit(this.getEventName(emit), val) // listen to specific event only
       if (mouse.indexOf(emit) > -1) this.parent.$emit(this.getEventName('mouse'), val) // listen only to input
       if (change.indexOf(emit) > -1) this.parent.$emit(this.getEventName('change'), val) // listen only to input|click|
-      if (watch.indexOf(emit) > -1) this.parent.$emit(this.getEventName('watch'), val) // listen only to changes
-      this.parent.$emit(this.getEventName('update'), val) // all listen to events
+      if (watch.indexOf(emit) > -1) this.parent.$emit(this.getEventName('watch'), val) // listen to focus|input|click|blur 
+      this.parent.$emit(this.getEventName('update'), val) // listen to all events
     },
     getEventName (eventName) {
       return this.parent.id !== defaultID ? `${eventName}:${this.parent.id}` : eventName
@@ -565,8 +561,8 @@ export default {
     flattenObjects (dat, sch) {
       let data = {}
       let schema = {}
-
-      Object.keys(dat).forEach(i => {
+      // Organize Formular using Schema not Data 
+      Object.keys(sch).forEach(i => {
         if ((!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object') || (Array.isArray(dat[i]) && Array.isArray(sch[i]))) {
           let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[i], sch[i])
           Object.keys(flatData).forEach(ii => {

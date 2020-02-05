@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Add, Remove and Edit Items in nested Data-Array</h4>
+    <h4>Add, Remove and Edit Items in nested Data-Array (see code array.vue)</h4>
 
     <v-form-base
       id="array"
@@ -20,6 +20,7 @@
     <infoline
       :value="myValue"
       :schema="mySchema"
+      :path="$options._componentTag"
     />
   </v-container>
 </template>

@@ -1,28 +1,26 @@
 <style>
   /* INFO-SCOPED: don't use '<style scoped>' because scoped CSS is inside a child-component not accessable */
 
-  /* CSS Props --- style property from myValue object */
+  /* CSS for property from myValue object */
   #form-base-nested .prop-controls  { background-color: #e1f5f8;  border: solid 2px #06a0bb }
-  #form-base-nested .prop-switch  { margin:2px; border: solid 2px #cf0520 }
-  #form-base-nested .prop-checkbox  {  margin:4px; border: solid 2px #1a54d1 }
-  #form-base-nested .prop-checkboxArray  {  margin:6px; border: solid 2px #0c972f }
-
+  #form-base-nested .prop-switch  { margin:3px; border: solid 2px #cf0520 }
+  #form-base-nested .prop-checkbox  {  margin:6px; border: solid 2px #1a54d1 }
+  #form-base-nested .prop-checkboxArray  {  margin:9px; border: solid 2px #0c972f }
 </style>
 
 <template>
   <v-container fluid>
-    <h4>Deep nested Data including Arrays and Objects</h4>
-
+    <h4>Deep nested Data including Arrays and Objects mapped to Form</h4>
     <v-form-base
       id="form-base-nested"
       :value="myValue"
       :schema="mySchema"
       @change:form-base-nested="change"
     />
-
     <infoline
       :value="myValue"
       :schema="mySchema"
+      :path="$options._componentTag"
     />
   </v-container>
 </template>
@@ -83,7 +81,6 @@ export default {
       }
     }
   },
-
   methods: {
     change
   }

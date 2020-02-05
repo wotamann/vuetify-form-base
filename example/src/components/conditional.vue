@@ -1,14 +1,12 @@
 <template>
   <v-container fluid>
     <h4>Display conditional Controls on Form</h4>
-
     <v-form-base
       id="form-base-conditional"
       :value="myValue"
       :schema="mySchema"
       @update:form-base-conditional="update"
     />
-
     <v-btn
       dark
       color="blue lighten-3"
@@ -23,10 +21,10 @@
     >
       Add Item
     </v-btn>
-
     <infoline
       :value="myValue"
       :schema="mySchema"
+      :path="$options._componentTag"
     />
   </v-container>
 </template>
@@ -34,7 +32,7 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import update from '@/lib'
+import change from '@/lib'
 
 export default {
   name: 'Conditional',
@@ -54,7 +52,6 @@ export default {
 
     }
   },
-
   computed: {
     mySchema () {
       return {
@@ -71,7 +68,6 @@ export default {
       }
     }
   },
-
   methods: {
     add () {
       this.myValue.tasks.unshift({ done: false, title: 'Ticket added ' + Math.floor(Math.random() * 1000) })
@@ -81,7 +77,7 @@ export default {
     },
 
     update (val) {
-      update(val)
+      change(val)
 
       let { index, key, value } = val
 

@@ -535,7 +535,7 @@ You can also listen to an specific event. Your v-on Directive must append the Cu
     
     update ({ on, key, obj, params }) {
       // test event is 'click' and comes from appendIcon on key 'password'
-      if (on == 'click' && key == 'password' && (params && params.pos) == 'append') {         
+      if (on == 'click' && key == 'password' && (params && params.tag) == 'append') {         
         // toggle icon
         obj.schema.appendIcon = obj.schema.type === 'password' 
           ? 'lock' 

@@ -36,14 +36,14 @@
 </template>
 
 <script>
-import async from '@/components/asyncLoad.vue'
+import async from '@/components/async.vue'
 import simple from '@/components/simple.vue'
 import grid from '@/components/grid.vue'
 import css from '@/components/css.vue'
 import deep from '@/components/deep.vue'
 import partial from '@/components/partial.vue'
 import complex from '@/components/complex.vue'
-import arraysimple from '@/components/arraySimple.vue'
+import arraysimple from '@/components/arraysimple.vue'
 import array from '@/components/array.vue'
 import selection from '@/components/selection.vue'
 import treeview from '@/components/treeview.vue'

@@ -1,17 +1,16 @@
 <template>
   <v-container fluid>
-    <h4>Select Item from List (Array in Value) with Result in 'schema.prop.selected'</h4>
-
+    <h4>Select Item from List (Array in Value) with Result '.model' in Schema and Event </h4>
     <v-form-base
       id="form-base-list"
       :value="myValue"
       :schema="mySchema"
       @change:form-base-list="change"
     />
-
     <infoline
       :value="myValue"
       :schema="mySchema"
+      :path="$options._componentTag"
     />
   </v-container>
 </template>

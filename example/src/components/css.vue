@@ -2,9 +2,11 @@
   /* INFO-SCOPED: Don't use '<style scoped>' because scoped CSS is inside a child-component not accessable */
 
   /* CSS Component --- Container */
-  #form-base-css { background-color: #f1f1f1; }
-
-  @media only screen and (max-width: 800px) {
+  #form-base-css { background-color: #fff; }
+  @media only screen and (max-width: 960px) {
+    #form-base-css { background-color: #d4fdc7; }
+  }
+  @media only screen and (max-width: 720px) {
     #form-base-css { background-color: #cfebf8; }
   }
   @media only screen and (max-width: 560px) {
@@ -12,7 +14,7 @@
   }
 
   /* CSS Item --- set all items  */
-  #form-base-css .item { border: 1px dashed #1965b1; padding:0.5rem; margin:0.4px }
+  #form-base-css .item { border: 1px dashed #1965b1; padding:0.5rem; margin:1px }
 
   /* CSS Type --- set all items of type ... */
   #form-base-css .type-checkbox { background-color: #f0d3d1}
@@ -24,11 +26,8 @@
 </style>
 
 <template>
-  <v-container
-    fluid
-  >
-    <h4>Play around and resize with predefined CSS-Classes, Slots, Buttons and individual Tooltips</h4>
-
+  <v-container fluid>
+    <h4>Play around and resize with predefined CSS, Buttonsm, Icons, Slots and individual Tooltips</h4>
     <v-form-base
       id="form-base-css"
       :value="myValue"
@@ -45,7 +44,6 @@
       <h4 slot="slot-bottom-key-email">
         Slot at Bottom of Key Email
       </h4>
-
       <!-- TYPE SLOTS -->
       <h4 slot="slot-top-type-btn-toggle">
         Slot at Top of Type Btn-Toggle
@@ -56,8 +54,6 @@
       <h4 slot="slot-top-type-radio">
         Slot at Top of Type Radio
       </h4>
-      <!-- <h4 slot="slot-bottom-type-radio">Top Bottom Type Radio</h4> -->
-
       <!-- TOOLTIP SLOTS -->
       <div
         slot="slot-tooltip"
@@ -70,10 +66,10 @@
          {{ slotProps.obj.schema.tooltip }} with Value: {{ slotProps.obj.value }}
       </template> -->
     </v-form-base>
-
     <infoline
       :value="myValue"
       :schema="mySchema"
+      :path="$options._componentTag"
     />
   </v-container>
 </template>
@@ -98,7 +94,7 @@ export default {
           checkbox: true,
           switch: true,
           slider: 33,
-          icon:'print',
+          icon: 'print',
           btnToggle1: 'B',
           btnToggle2: [1, 2],
           btn1: 'A', // or use schema.label
@@ -115,15 +111,15 @@ export default {
           checkbox: { type: 'checkbox', label: 'Red', color: 'red', flex: 4, tooltip: 'Checkbox' },
           switch: { type: 'switch', label: 'Blue', color: 'blue', flex: 4, tooltip: 'Switch' },
           slider: { type: 'slider', label: 'Green', color: 'green', flex: 3, tooltip: 'Slider' },
-          
-          icon:{ type:'icon', large:true, color:'green', tooltip: 'Icon', flex: 1,},
+
+          icon: { type: 'icon', large: true, color: 'green', tooltip: 'Icon', flex: 1 },
           btnToggle1: { type: 'btn-toggle', options, 'small': true, tooltip: 'Button', flex: 5 },
           btnToggle2: { type: 'btn-toggle', options: objectOptions, multiple: true, color: 'blue', flex: 5 },
 
           btn1: { type: 'btn', iconRight: 'print', 'x-large': true, tooltip: 'Button', flex: 3 },
           btn2: { type: 'btn', label: 'B', iconLeft: 'print', iconCenter: 'add', iconRight: 'mdi-format-italic', dark: true, color: 'blue', flex: 3 },
 
-          radio1: { type: 'radio', label: 'Radio 1', options, flex: 3 },
+          radio1: { type: 'radio', label: 'Radio 1', options, spacer: true, flex: 3 },
           radio2: { type: 'radio', label: 'Radio 2', options: objectOptions, color: 'green', row: true }
         }
       }

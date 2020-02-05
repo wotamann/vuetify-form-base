@@ -1,22 +1,16 @@
-<style>
-  .key-listing .active  { background-color: #aed2f5}
-  .key-listing .active *  { color: rgb(248, 248, 247)}
-</style>
-
 <template>
   <v-container fluid>
-    <h4>Expand/Select Treeview with Result in 'schema.[prop].open' and 'schema.[prop].model'</h4>
-
+    <h4>Expand/Select Treeview get Result '.open' and '.model' in Schema or in Event</h4>
     <v-form-base
       id="treeview-demo"
       :value="myValue"
       :schema="mySchema"
       @change:treeview-demo="change"
     />
-
     <infoline
       :value="myValue"
       :schema="mySchema"
+      :path="$options._componentTag"
     />
   </v-container>
 </template>
@@ -95,10 +89,7 @@ export default {
     }
   },
   methods: {
-    change,
-    change1 () {
-
-    }
+    change
   }
 }
 </script>

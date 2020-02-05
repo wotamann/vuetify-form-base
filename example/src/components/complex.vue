@@ -1,9 +1,7 @@
 <style>
   /* scoped doesn't work in nested components */
-
   #form-base-complete .key-subgroups-content { border: 1px solid #919191; background-color: #e9e9e9; padding: 1rem }
   #form-base-complete .key-subgroups-tasks { border: 1px solid #4b8ad6; background-color: #e2eaf5; padding: 1rem}
-
   @media print {
     html * { position: fixed; visibility: hidden; }
     .key-subgroups-content textarea { visibility: visible; left: 0; top: 0; bottom: 0 }
@@ -23,7 +21,7 @@
         id="form-base-complete"
         :value="myValue"
         :schema="mySchema"
-        @update:form-base-complete="update"
+        @change:form-base-complete="change"
       />
     </v-form>
 
@@ -45,6 +43,7 @@
     <infoline
       :value="myValue"
       :schema="mySchema"
+      :path="$options._componentTag"
     />
   </v-container>
 </template>
@@ -52,7 +51,7 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import updateLog from '@/lib'
+import change from '@/lib'
 
 const items = ['Tesla', 'Jobs', 'Taleb', 'Harari']
 
@@ -67,23 +66,19 @@ const rules = {
   min6: minLen(6),
   validEmail: v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
 }
-//
+
 export default {
   components: { VFormBase, Infoline },
   data () {
     return {
       formValid: true,
-
       myValue: {
         email: 'base@mail.com',
         password: '123456',
         subgroups: {
           select: 'Tesla',
           multiple: ['Jobs'],
-          // combobox: null,
-          // autocomplete: null,
           tasks: [
-            { done: false, title: 'shopping' },
             { done: true, title: 'coding' },
             { done: false, title: 'walking' },
             { done: false, title: 'sleeping' }
@@ -92,15 +87,12 @@ export default {
           content: `Design principles of Vuetify ...`
         }
       },
-
       mySchema: {
         email: { type: 'email', label: 'Email', rules: [rules.validEmail, rules.requiredEmail], flex: { xs: 12, sm: 6 } },
         password: { type: 'password', label: 'Password', hint: '6 to 12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: { xs: 12, sm: 6 } },
         subgroups: {
           select: { type: 'select', label: 'Select', items, flex: { xs: 12, sm: 6 } },
           multiple: { type: 'select', label: 'Multi-Select', items, multiple: true, flex: { xs: 12, sm: 6 } },
-          // combobox: { type: 'combobox', label: 'Combobox', items, flex: { xs: 12, sm: 6, md: 3 } },
-          // autocomplete: { type: 'autocomplete', label: 'AutoComplete', items, flex: { xs: 12, sm: 6, md: 3 } },
           tasks: { type: 'array', schema: { done: { type: 'checkbox', label: 'Ok', flex: 3 }, title: { type: 'text', placeholder: 'to do...', flex: 8 } }, flex: { xs: 12, sm: 4 } },
           datePicker: { type: 'date', color: 'green', flex: { xs: 12, sm: 5 } },
           content: { type: 'textarea', label: 'Content', hint: 'Auto-Growing...', autoGrow: true, prependInnerIcon: 'print', rules: [ required('Content required') ], flex: { xs: 12, sm: 3 } }
@@ -120,8 +112,8 @@ export default {
       this.mySchema.checkbox[2].checkbox1[0].hidden = !this.mySchema.checkbox[2].checkbox1[0].hidden
       console.log('this.mySchema.checkbox[2].checkbox1[0].hidden', this.mySchema.checkbox[2].checkbox1[0].hidden)
     },
-    update (val) {
-      updateLog(val)
+    change (val) {
+      change(val)
 
       let { on, key, obj, params } = val
       // print content
@@ -129,7 +121,8 @@ export default {
         window.print()
       }
       // toggle visibility of password
-      if (on === 'click' && key === 'password' && (params && params.pos) === 'append') { // check 'click' is from from appendIcon
+      if (on === 'click' && key === 'password' && (params && params.tag) === 'append') {
+        // check 'click' is from from appendIcon
         obj.schema.type === 'password' ? obj.schema.appendIcon = 'lock' : obj.schema.appendIcon = 'visibility'
         obj.schema.type = obj.schema.type === 'password' ? 'text' : 'password'
       }

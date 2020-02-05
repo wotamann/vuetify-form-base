@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Different Textfields and Fileselector with Tooltips</h4>
+    <h4>Textfields, Password and Fileselector with Mask and Tooltips</h4>
     <v-form>
       <v-form-base
         :value="myValue"
@@ -8,7 +8,7 @@
         @change="change"
       />
       <!--
-        Listen to one or more of following events
+        You can compose listener to one or more of following events
         @click= "change"
         @input= "change"
         @change="change" // input & click
@@ -17,14 +17,21 @@
         @blur=  "change"
         @mouse= "change" // mouseenter & mouseleave
         @resize="change"
-        @swipe= "change"
+        @swipe= "change" // touch events
         @update="change" // catch all events
+
+        // Modify listener with ID
+        <v-form-base
+          id="form-base-list"
+          @change:form-base-list="change"
+        />
+
       -->
     </v-form>
-
     <infoline
       :value="myValue"
       :schema="mySchema"
+      :path="$options._componentTag"
     />
   </v-container>
 </template>
@@ -33,6 +40,11 @@
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
 import change from '@/lib'
+
+// More Info to Mask https://vuejs-tips.github.io/vue-the-mask/
+const mask = '####-####-####-####'
+// Accept only Images Files
+const accept = 'image/*'
 
 export default {
   name: 'Textfields',
@@ -46,11 +58,11 @@ export default {
         file: [] // array of File objects
       },
       mySchema: {
-        name: { type: 'text', tooltip: 'Name', flex: 3 },
-        // Info Mask https://vuejs-tips.github.io/vue-the-mask/
-        creditcard: { type: 'text', hint: '####-####-####-####', label: 'Creditcard', mask: '####-####-####-####', tooltip: { color: 'red', label: 'Creditcard', top: true }, prependIcon: 'place', flex: 3 },
+        // SCHEMA Order defines Formular ORDER
+        name: { type: 'text', flex: 3 },
         password: { type: 'password', label: 'Password', counter: 10, clearable: true, tooltip: { label: 'Password', color: 'blue', bottom: true }, flex: 3 },
-        file: { type: 'file', label: 'Image-Files', accept: 'image/*', multiple: true, tooltip: { color: 'green', label: 'File Selection', left: true }, flex: 3 }
+        creditcard: { type: 'text', label: 'Creditcard', prependInnerIcon: 'credit_card', hint: mask, mask, tooltip: 'Creditcard', flex: 3 },
+        file: { type: 'file', label: 'Files', accept, multiple: true, tooltip: { color: 'green', label: 'File Selection', top: true }, flex: 3 }
       }
     }
   },
