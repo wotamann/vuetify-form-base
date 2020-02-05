@@ -43,7 +43,7 @@ import css from '@/components/css.vue'
 import deep from '@/components/deep.vue'
 import partial from '@/components/partial.vue'
 import complex from '@/components/complex.vue'
-import arraysimple from '@/components/arraysimple.vue'
+import arrayease from '@/components/arrayease.vue'
 import array from '@/components/array.vue'
 import selection from '@/components/selection.vue'
 import treeview from '@/components/treeview.vue'
@@ -56,7 +56,7 @@ const items = ['Textfields', 'Lazy Loading of Component', 'CSS, Slots, Tooltips 
 
 export default {
   components: {
-    simple, async, grid, css, deep, partial, complex, treeview, arraysimple, array, selection, conditional, list, pickers
+    simple, async, grid, css, deep, partial, complex, treeview, arrayease, array, selection, conditional, list, pickers
   },
   data () {
     return {
