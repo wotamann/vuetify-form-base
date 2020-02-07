@@ -22,7 +22,7 @@ Imagine you get the following data object in JSON format and have to edit it now
       ]        
     }
 
-Normally you have to flatten the data structure and then map all to an appropriate form. Then you have to define a HTML-Form and animate it with your data. 
+Normally you have to flatten the data structure and map all to an appropriate format. Then you have to define a HTML-Form and animate it with your data. 
 
 With **Vuetify-Form-Base** create a Schema Object with the same structure as your Data.
 
