@@ -16,8 +16,8 @@
             :key="index"
             v-touch="{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"
             :class="getClassName(obj)"
-            @mouseenter= "onEvent($event, obj)"
-            @mouseleave= "onEvent($event, obj )"
+            @mouseenter="onEvent($event, obj)"
+            @mouseleave="onEvent($event, obj )"
             v-on="on"
           >
             <!-- slot on top of type  -> <div slot="slot-bottom-type-[propertyName]> -->
@@ -134,7 +134,7 @@
 
                 <!-- icon -->
                 <v-icon
-                  v-else-if="obj.schema.type === 'icon'"                    
+                  v-else-if="obj.schema.type === 'icon'"
                   v-bind="obj.schema"
                   @click="onEvent($event, obj)"
                 >
@@ -488,7 +488,7 @@ export default {
 
       // update deep nested prop(key) with value
       this.setObjectByPath(this.storeStateData, obj.key, value)
-      
+
       this.emitValue('input', {
         on: 'input',
         id: this.ref,
@@ -500,7 +500,7 @@ export default {
         data: this.storeStateData,
         schema: this.storeStateSchema
       })
-    }, 
+    },
     onEvent (event, obj, tag) {
       delay(() => {
         const text = event && event.srcElement && event.srcElement.innerText
@@ -532,11 +532,11 @@ export default {
     },
     //
     // Event Base
-    emitValue (emit, val) {     
+    emitValue (emit, val) {
       this.parent.$emit(this.getEventName(emit), val) // listen to specific event only
       if (mouse.indexOf(emit) > -1) this.parent.$emit(this.getEventName('mouse'), val) // listen only to input
       if (change.indexOf(emit) > -1) this.parent.$emit(this.getEventName('change'), val) // listen only to input|click|
-      if (watch.indexOf(emit) > -1) this.parent.$emit(this.getEventName('watch'), val) // listen to focus|input|click|blur 
+      if (watch.indexOf(emit) > -1) this.parent.$emit(this.getEventName('watch'), val) // listen to focus|input|click|blur
       this.parent.$emit(this.getEventName('update'), val) // listen to all events
     },
     getEventName (eventName) {
@@ -563,6 +563,10 @@ export default {
       let schema = {}
       // Organize Formular using Schema not Data 
       Object.keys(sch).forEach(i => {
+
+        // check if schema is typeof string ->  shorthand { type:'stringvalue' } otherwise take original value
+        sch[i] = isString(sch[i]) ? { type: sch[i] } : sch[i]
+       
         if ((!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object') || (Array.isArray(dat[i]) && Array.isArray(sch[i]))) {
           let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[i], sch[i])
           Object.keys(flatData).forEach(ii => {
@@ -578,13 +582,9 @@ export default {
     },
     combineObjectsToArray ({ data, schema }) {
       let arr = []
-      Object.keys(data).forEach(key => {
-        if (!schema[key]) {
-          console.warn(`Property '${key}' in Data has no correspondingly Schema Property is not editable and keeps untouched!`)
-          return
-        }
+      Object.keys(data).forEach(key => {        
         if (!isPlainObject(schema[key])) {
-          console.warn(`Prop '${key}' must have a correspondingly Property in Schema with at least ${key}:{ type:'text'} as value.  Prop '${key}' is not editable and keeps untouched!`)
+          console.warn( `From Schema:`,schema,` the Prop '${key}' must be a string with value of type { type:[stringvalue] } or a plainobject with at least { type:'text'} definition.  Schema Prop '${key}' will be ignored!`)
           return
         }
         arr.push({ key, value: data[key], schema: schema[key] })
