@@ -561,8 +561,12 @@ export default {
     flattenObjects (dat, sch) {
       let data = {}
       let schema = {}
-      // Organize Formular using Schema not Data
+      // Organize Formular using Schema not Data 
       Object.keys(sch).forEach(i => {
+
+        // check if schema is typeof string ->  shorthand { type:'stringvalue' } otherwise take original value
+        sch[i] = isString(sch[i]) ? { type: sch[i] } : sch[i]
+       
         if ((!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object') || (Array.isArray(dat[i]) && Array.isArray(sch[i]))) {
           let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[i], sch[i])
           Object.keys(flatData).forEach(ii => {
@@ -578,13 +582,9 @@ export default {
     },
     combineObjectsToArray ({ data, schema }) {
       let arr = []
-      Object.keys(data).forEach(key => {
-        if (!schema[key]) {
-          console.warn(`Property '${key}' in Data has no correspondingly Schema Property is not editable and keeps untouched!`)
-          return
-        }
+      Object.keys(data).forEach(key => {        
         if (!isPlainObject(schema[key])) {
-          console.warn(`Prop '${key}' must have a correspondingly Property in Schema with at least ${key}:{ type:'text'} as value.  Prop '${key}' is not editable and keeps untouched!`)
+          console.warn( `From Schema:`,schema,` the Prop '${key}' must be a string with value of type { type:[stringvalue] } or a plainobject with at least { type:'text'} definition.  Schema Prop '${key}' will be ignored!`)
           return
         }
         arr.push({ key, value: data[key], schema: schema[key] })

@@ -24,7 +24,7 @@
       <treeview v-if="view === items[4]" />
       <selection v-if="view === items[5]" />
       <list v-if="view === items[6]" />
-      <arraysimple v-if="view === items[7]" />
+      <arrayease v-if="view === items[7]" />
       <array v-if="view === items[8]" />
       <pickers v-if="view === items[9]" />
       <partial v-if="view === items[10]" />

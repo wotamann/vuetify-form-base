@@ -80,8 +80,7 @@ export default {
               schema: {
                 done: {
                   type: 'checkbox', label: 'Done', color: 'red', offset: 1, flex: 2 },
-                title: { type: 'text', color: 'red' },
-                flex: 7
+                  title: { type: 'text', color: 'red' },
               }
             }
           }

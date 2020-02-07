@@ -23,7 +23,7 @@ import Infoline from '@/components/infoline'
 import change from '@/lib'
 
 export default {
-  name: 'ArraySimple',
+  name: 'arrayease',
   components: { VFormBase, Infoline },
   data () {
     return {
@@ -42,8 +42,7 @@ export default {
           flex: 12,
           schema: {
             done: { type: 'checkbox', label: 'Done', color: 'blue', flex: 2 },
-            title: { type: 'text', color: 'blue' },
-            flex: 12
+            title: { type: 'text', color: 'blue' }          
           }
         }
       }
