@@ -82,7 +82,7 @@ If you want a **Partial-Form** which displays only parts of your Data.Object, th
 
 And if necessary you can also build a **Form in Form** by using **Slots**.
 
-Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** for 'Resize', 'Focus', 'Input', 'Click' and 'Swipe'. Listening to 'Change' will catch all Value changing Events like 'Input' and 'Click'. Listening to 'Update' will catch all Events. 
+Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** for 'Resize', 'Focus', 'Input', 'Blur', 'Click', 'Mouse' and 'Swipe'. Listening to 'Change' will catch all Value changing Events like 'Input' and 'Click'. 'Watch' will listen to 'Focus', 'Input', 'Blur' and 'Click'. Listening to 'Update' will catch all Events. 
 
 ### Supported Controls from **Vuetify UI Input & Controls**  
 ----
