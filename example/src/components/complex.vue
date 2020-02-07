@@ -1,6 +1,6 @@
 <style>
   /* scoped doesn't work in nested components */
-  #form-base-complete .key-subgroups-content { border: 1px solid #919191; background-color: #e9e9e9; padding: 1rem }
+  #form-base-complete .key-subgroups-content { border: 1px solid #c20000; background-color: #ffe9e9; padding: 1rem }
   #form-base-complete .key-subgroups-tasks { border: 1px solid #4b8ad6; background-color: #e2eaf5; padding: 1rem}
   @media print {
     html * { position: fixed; visibility: hidden; }
@@ -11,7 +11,7 @@
 
 <template>
   <v-container fluid>
-    <h4>Complete Form with validation</h4>
+    <h4>Complex Form with Rules and Validation</h4>
     <v-form
       ref="form1"
       v-model="formValid"
@@ -27,14 +27,15 @@
 
     <v-btn
       dark
-      color="blue lighten-3"
+      color="red lighten-3"
       @click="validate"
     >
       Validate
     </v-btn>
+
     <v-btn
       dark
-      color="blue lighten-3"
+      color="green lighten-3"
       @click="resetValidation"
     >
       Reset Validate
@@ -59,7 +60,6 @@ const items = ['Tesla', 'Jobs', 'Taleb', 'Harari']
 const minLen = l => v => (v && v.length >= l) || `min. ${l} Characters`
 const maxLen = l => v => (v && v.length <= l) || `max. ${l} Characters`
 const required = msg => v => !!v || msg
-// const toUpper = ({ value }) => value && value.toUpperCase()
 const rules = {
   requiredEmail: required('E-mail is required'),
   max12: maxLen(12),
@@ -74,14 +74,14 @@ export default {
       formValid: true,
       myValue: {
         email: 'base@mail.com',
-        password: '123456',
+        password: 'abcdefgh',
         subgroups: {
           select: 'Tesla',
-          multiple: ['Jobs'],
+          multiple: ['Jobs', 'Taleb'],
           tasks: [
-            { done: true, title: 'coding' },
-            { done: false, title: 'walking' },
-            { done: false, title: 'sleeping' }
+             this.getTicket(),
+             this.getTicket(),
+             this.getTicket(),
           ],
           datePicker: '2019-8-1',
           content: `Design principles of Vuetify ...`
@@ -92,15 +92,18 @@ export default {
         password: { type: 'password', label: 'Password', hint: '6 to 12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: { xs: 12, sm: 6 } },
         subgroups: {
           select: { type: 'select', label: 'Select', items, flex: { xs: 12, sm: 6 } },
-          multiple: { type: 'select', label: 'Multi-Select', items, multiple: true, flex: { xs: 12, sm: 6 } },
+          multiple: { type: 'select', label: 'Multi-Select', clearable:true,  items, multiple: true, flex: { xs: 12, sm: 6 } },
           tasks: { type: 'array', schema: { done: { type: 'checkbox', label: 'Ok', flex: 3 }, title: { type: 'text', placeholder: 'to do...', flex: 8 } }, flex: { xs: 12, sm: 4 } },
-          datePicker: { type: 'date', color: 'green', flex: { xs: 12, sm: 5 } },
-          content: { type: 'textarea', label: 'Content', hint: 'Auto-Growing...', autoGrow: true, prependInnerIcon: 'print', rules: [ required('Content required') ], flex: { xs: 12, sm: 3 } }
+          content: { type: 'textarea', label: 'Content', hint: 'Auto-Growing...', autoGrow: true, prependInnerIcon: 'print', rules: [ required('Content required') ], flex: { xs: 12, sm: 4 } },
+          datePicker: { type: 'date', color: 'green', flex: { xs: 12, sm: 4 } },
         }
       }
     }
   },
   methods: {
+
+    getTicket(){ return { done: false, title: 'Ticket added ' + Math.floor(Math.random() * 1000) } },
+
     validate () {
       this.$refs.form1.validate()
     },
@@ -116,13 +119,14 @@ export default {
       change(val)
 
       let { on, key, obj, params } = val
-      // print content
+      
+      // print button on  content
       if (on === 'click' && key === 'subgroups.content' && (params && params.text) === 'print') {
         window.print()
       }
+      
       // toggle visibility of password
-      if (on === 'click' && key === 'password' && (params && params.tag) === 'append') {
-        // check 'click' is from from appendIcon
+      if (on === 'click' && key === 'password' && (params && params.tag) === 'append') { // check 'click' is from from appendIcon
         obj.schema.type === 'password' ? obj.schema.appendIcon = 'lock' : obj.schema.appendIcon = 'visibility'
         obj.schema.type = obj.schema.type === 'password' ? 'text' : 'password'
       }

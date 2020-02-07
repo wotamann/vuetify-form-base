@@ -5,7 +5,7 @@
       id="form-base-conditional"
       :value="myValue"
       :schema="mySchema"
-      @update:form-base-conditional="update"
+      @change:form-base-conditional="change"
     />
     <v-btn
       dark
@@ -44,9 +44,9 @@ export default {
       myValue: {
         conditional: '',
         tasks: [
-          { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
-          { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
-          { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) }
+          this.getTicket(),
+          this.getTicket(),
+          this.getTicket(),
         ]
       }
 
@@ -69,23 +69,27 @@ export default {
     }
   },
   methods: {
+    
+    getTicket(){ return { done: false, title: 'Ticket added ' + Math.floor(Math.random() * 1000) } },
+
     add () {
-      this.myValue.tasks.unshift({ done: false, title: 'Ticket added ' + Math.floor(Math.random() * 1000) })
+      this.myValue.tasks.unshift(this.getTicket())
     },
     toggle () {
       this.hidden = !this.hidden
     },
 
-    update (val) {
+    change (val) {
+
       change(val)
 
       let { index, key, value } = val
 
       if (key === 'conditional') this.hidden = value !== 'show'
-
+      // add  
       if (key === 'done' && value === true) {
         setTimeout(() => this.myValue.tasks.splice(index, 1), 333)
-      }
+      }      
     }
   }
 }

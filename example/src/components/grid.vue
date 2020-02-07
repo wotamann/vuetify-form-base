@@ -5,7 +5,7 @@
       :class="layout"
       :value="myValue"
       :schema="mySchema"
-      @update="change"
+      @change="change"
     />
     <infoline
       :value="myValue"

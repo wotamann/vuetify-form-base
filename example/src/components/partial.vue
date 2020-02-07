@@ -9,14 +9,14 @@
     <v-form-base
       :value="myValue"
       :schema="mySchema"
-      @update="update"
+      @change="change"
     />
     <h4>Partial Formbase from 'myValue.radios' synchronized with 'myValue'</h4>
     <v-form-base
       id="form-base-partial"
       :value="myValue.radios"
       :schema="mySchema.radios"
-      @update:form-base-partial="updatepartial"
+      @change:form-base-partial="changepartial"
     />
     <infoline
       :value="myValue"
@@ -29,7 +29,7 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import update from '@/lib'
+import change from '@/lib'
 
 const options = ['A', 'B']
 
@@ -59,9 +59,9 @@ export default {
   },
   methods: {
 
-    update,
+    change,
 
-    updatepartial: update
+    changepartial: change
 
   }
 }

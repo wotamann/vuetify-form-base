@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Edit Data by using a Schema for Items in Data Array</h4>
+    <h4>Edit Data by using a Schema for Items in Value-Array</h4>
 
     <v-form-base
       id="array-simple"

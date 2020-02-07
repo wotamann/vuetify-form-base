@@ -27,7 +27,7 @@
 
 <template>
   <v-container fluid>
-    <h4>Play around and resize with predefined CSS, Buttonsm, Icons, Slots and individual Tooltips</h4>
+    <h4>Play around and resize with predefined CSS, Buttons, Icons, Slots and individual Tooltips</h4>
     <v-form-base
       id="form-base-css"
       :value="myValue"
@@ -61,7 +61,7 @@
       >
         {{ slotProps.obj.schema.tooltip }} has value '{{ slotProps.obj.value }}'
       </div>
-      <!-- New Syntax VUE 2.6.0 - TOOLTIP SLOT - -->
+      <!-- TOOLTIP SLOT -  New Syntax VUE 2.6.0 -->
       <!-- <template v-slot:slot-tooltip="slotProps">
          {{ slotProps.obj.schema.tooltip }} with Value: {{ slotProps.obj.value }}
       </template> -->
@@ -94,9 +94,9 @@ export default {
           checkbox: true,
           switch: true,
           slider: 33,
+          btnToggleSingle: 'B',
+          btnToggleMulti: [1, 2],
           icon: 'print',
-          btnToggle1: 'B',
-          btnToggle2: [1, 2],
           btn1: 'A', // or use schema.label
           btn2: 'B', // or use schema.label
           radio1: 'A',
@@ -112,10 +112,10 @@ export default {
           switch: { type: 'switch', label: 'Blue', color: 'blue', flex: 4, tooltip: 'Switch' },
           slider: { type: 'slider', label: 'Green', color: 'green', flex: 3, tooltip: 'Slider' },
 
-          icon: { type: 'icon', large: true, color: 'green', tooltip: 'Icon', flex: 1 },
-          btnToggle1: { type: 'btn-toggle', options, 'small': true, tooltip: 'Button', flex: 5 },
-          btnToggle2: { type: 'btn-toggle', options: objectOptions, multiple: true, color: 'blue', flex: 5 },
+          btnToggleSingle: { type: 'btn-toggle', options, color:'red', tooltip: 'Button', flex: 5 },
+          btnToggleMulti: { type: 'btn-toggle', options: objectOptions, multiple: true, color: 'blue', tooltip: 'MultiButton', flex: 5 },
 
+          icon: { type: 'icon', large: true, color: 'green', tooltip: 'Icon', flex: 1 },
           btn1: { type: 'btn', iconRight: 'print', 'x-large': true, tooltip: 'Button', flex: 3 },
           btn2: { type: 'btn', label: 'B', iconLeft: 'print', iconCenter: 'add', iconRight: 'mdi-format-italic', dark: true, color: 'blue', flex: 3 },
 

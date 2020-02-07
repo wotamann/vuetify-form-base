@@ -25,7 +25,7 @@ import change from '@/lib'
 export default {
   name: 'AsyncLoad',
   components: {
-    // 1) LAZY LOADING 'VFormBase' COMPONENT HERE
+    // STEP 1) LAZY LOADING 'VFormBase' COMPONENT HERE
     'VFormBase': () => import('@/components/vFormBase'),
     Infoline
   },
@@ -38,19 +38,21 @@ export default {
   },
 
   async mounted () {
-    // 2) ASYNC LOADING VALUE & SCHEMA
+    // STEP 2) ASYNC LOADING VALUE & SCHEMA
     this.myValue = await this.delay({
       name: 'Base',
       password: 'abcdefgh',
       checkbox: true
     })
     this.mySchema = await this.delay({
-      name: { type: 'text', label: 'Name', flex: 5 },
-      password: { type: 'password', label: 'Password', clearable: true, flex: 5 },
-      checkbox: { type: 'checkbox', label: 'Okay' }
+      // Shorthand Definition
+      // prop: text => shorthand for prop: { type: 'text' }
+      name: 'text',
+      password: 'password',
+      checkbox: 'checkbox'
     })
 
-    // 3) LAZY LOADING 'VFormbase' after making visible
+    // STEP 3) LAZY LOADING 'VFormbase' after making visible
     this.showFormbase = true
   },
 

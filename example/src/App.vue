@@ -12,32 +12,23 @@
       <v-select
         v-model="view"
         :items="items"
+        item-text="text"
+        item-value="value"
         color="blue"
       />
     </v-app-bar>
 
     <v-content>
-      <simple v-if="view === items[0]" />
-      <async v-if="view === items[1]" />
-      <css v-if="view === items[2]" />
-      <deep v-if="view === items[3]" />
-      <treeview v-if="view === items[4]" />
-      <selection v-if="view === items[5]" />
-      <list v-if="view === items[6]" />
-      <arrayease v-if="view === items[7]" />
-      <array v-if="view === items[8]" />
-      <pickers v-if="view === items[9]" />
-      <partial v-if="view === items[10]" />
-      <conditional v-if="view === items[11]" />
-      <complex v-if="view === items[12]" />
-      <grid v-if="view === items[13]" />
+      <div :is="view">          
+      </div>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import async from '@/components/async.vue'
 import simple from '@/components/simple.vue'
+import basic from '@/components/basic.vue'
+import async from '@/components/async.vue'
 import grid from '@/components/grid.vue'
 import css from '@/components/css.vue'
 import deep from '@/components/deep.vue'
@@ -51,18 +42,33 @@ import conditional from '@/components/conditional.vue'
 import list from '@/components/list.vue'
 import pickers from '@/components/pickers.vue'
 
-const items = ['Textfields', 'Lazy Loading of Component', 'CSS, Slots, Tooltips & Buttons', 'Deep nested Data including Object & Arrays', 'Treeviews',
-  'Selection, Combobox, Autocomplete', 'List from Value Array', 'Edit Data-Array', 'Add, Remove, Edit Items in nested Data-Array', 'Pickers', 'Partial & Linked', 'Conditional Form', 'Complete Form', 'Use Responsive Grid']
+const items = [
+    { value: 'simple', text: 'Textfields' }, 
+    { value: 'basic', text: 'Textfields with redundant Value & Schema'}, 
+    { value: 'async', text: 'Lazy Loading of Component'}, 
+    { value: 'css', text: 'CSS, Slots, Tooltips & Buttons'}, 
+    { value: 'deep', text: 'Deep nested Data including Object & Arrays'}, 
+    { value: 'selection', text: 'Selection, Combobox, Autocomplete from Schema-Array'}, 
+    { value: 'list', text: 'List from Value-Array'}, 
+    { value: 'treeview', text: 'Treeviews from Value-Array'}, 
+    { value: 'arrayease', text: 'Edit Value-Array'}, 
+    { value: 'array', text: 'Add, Remove and Edit Items in nested Value-Array'}, 
+    { value: 'pickers', text: 'Date, Time, Color Pickers'},
+    { value: 'grid', text: 'Responsive Grid using Flex, Order and Offset'}, 
+    { value: 'partial', text: 'Partial & Linked'}, 
+    { value: 'conditional', text: 'Conditional Form'}, 
+    { value: 'complex', text: 'Complex Form with Validation'}, 
+]
 
 export default {
   components: {
-    simple, async, grid, css, deep, partial, complex, treeview, arrayease, array, selection, conditional, list, pickers
+    simple, basic, async, grid, css, deep, partial, complex, treeview, arrayease, array, selection, conditional, list, pickers
   },
   data () {
     return {
       items,
-      view: items[0]
+      view: items[0].value
     }
-  }
+  },  
 }
 </script>

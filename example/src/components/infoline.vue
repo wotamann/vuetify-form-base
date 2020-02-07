@@ -14,13 +14,12 @@
       <pre
         v-text="JSON.stringify(schema, undefined, 3)"
       />
-      -{{ path }}-
     </v-flex>
     <h4>
       See Console for Events | <a
         target="_blank"
         :href="`${url}${path}.vue`"
-      >Inspect the Code at Example</a>
+      >Inspect the Code at {{path}}.vue in Directory Example</a>
     </h4>
   </v-layout>
 </template>

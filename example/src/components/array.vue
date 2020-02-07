@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Add, Remove and Edit Items in nested Data-Array (see code array.vue)</h4>
+    <h4>Add, Remove and Edit Items in nested Value-Array</h4>
 
     <v-form-base
       id="array"
@@ -42,8 +42,8 @@ export default {
             nr: 1,
             task: 'coding',
             done: [
-              { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
-              { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) }
+              this.getTicket(),
+              this.getTicket(),
             ]
           },
           {
@@ -51,9 +51,9 @@ export default {
             nr: 2,
             task: 'Work out',
             done: [
-              { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
-              { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
-              { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) }
+              this.getTicket(),
+              this.getTicket(),
+              this.getTicket(),
             ]
           }
         ]
@@ -90,13 +90,15 @@ export default {
   },
   methods: {
 
+    getTicket(){ return { done: false, title: 'Ticket added ' + Math.floor(Math.random() * 1000) } },
+
     add () {
       this.myValue.tasks.push({
         add: '',
         nr: this.myValue.tasks.length + 1,
         task: 'item ' + (this.myValue.tasks.length + 1) + ' added',
         done: [
-          { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) }
+          this.getTicket()
         ]
       })
     },
@@ -106,9 +108,7 @@ export default {
 
       // add task
       if (key === 'add') {
-        setTimeout(() => this.myValue.tasks[index[0]].done.push({
-          done: false, title: 'Ticket added ' + Math.floor(Math.random() * 1000)
-        }), 250)
+        setTimeout(() => this.myValue.tasks[index[0]].done.push( this.getTicket() ), 250)
       }
       // remove task
       if (key === 'done' && value === true) {

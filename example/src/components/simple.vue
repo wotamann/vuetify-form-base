@@ -25,7 +25,6 @@
           id="form-base-list"
           @change:form-base-list="change"
         />
-
       -->
     </v-form>
     <infoline
@@ -58,11 +57,32 @@ export default {
         file: [] // array of File objects
       },
       mySchema: {
-        // SCHEMA Order defines Formular ORDER
-        name: { type: 'text', flex: 3 },
-        password: { type: 'password', label: 'Password', counter: 10, clearable: true, tooltip: { label: 'Password', color: 'blue', bottom: true }, flex: 3 },
-        creditcard: { type: 'text', label: 'Creditcard', prependInnerIcon: 'credit_card', hint: mask, mask, tooltip: 'Creditcard', flex: 3 },
-        file: { type: 'file', label: 'Files', accept, multiple: true, tooltip: { color: 'green', label: 'File Selection', top: true }, flex: 3 }
+        // schema prop: string 'text' => shorthand for prop: { type: 'text' }        
+        name: 'text',         
+        // schema prop: object definition
+        password: { 
+          type: 'password', 
+          clearable: true, 
+          tooltip: 'Password', 
+          flex: 3 
+        },
+        creditcard: { 
+          type: 'text', 
+          label: 'Creditcard', 
+          prependInnerIcon: 'credit_card', 
+          hint: mask, 
+          mask, 
+          tooltip: 'Creditcard', 
+          flex: 3 
+        },
+        file: { 
+          type: 'file', 
+          label: 'Files', 
+          accept, 
+          multiple: true, 
+          tooltip: { color: 'green', label: 'File Selection', top: true }, 
+          flex: 3 
+        }
       }
     }
   },
