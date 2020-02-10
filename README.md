@@ -36,11 +36,11 @@ and you will get a full reactive, editable Form:
 
 ![Form](./images/array-schema.PNG)
 
-You have to create a lot of different Forms? You have to manipulate or edit Data presented in JS-Objects? 
+If you have to generate new forms based on different data or you have to edit Data presented in JOSN or as JS-Objects? 
 
-Then give **Vuetify-Form-Base** a Try. This Schema-based Form Generator is a [Vue.js 2.0 Component](https://vuejs.org/) and can simplify your Job by automatically creating full editable Forms. Edit this Forms and get reactive Results.
+Then you should take a closer look at **Vuetify-Form-Base** and try it. It can make your work much easier and save you time. This Schema based Form Generator works as [Vue.js 2.0 Component](https://vuejs.org/) and can simplify your jJob by automatically creating full editable Forms. Edit your created Forms and you will automatically receive reactive Results.
 
-**Vuetify-Form-Base** uses the well known [Component Framework Vuetify](https://vuetifyjs.com/) to style and layout your Form. Vuetify Controls have a clear, minimalistic design, and support responsive Design.
+**Vuetify-Form-Base** uses the well known and excellent [Component Framework Vuetify](https://vuetifyjs.com/) to style and layout your Form. Vuetify Controls have a clear, minimalistic design, and support responsive Design.
 
 
 ---
@@ -61,16 +61,16 @@ Download Project, change current directory to **../vuetify-form-base/example**  
 
 **vuetify-form-base** is a [Vue Component](https://vuejs.org/v2/guide/components.html) and can easily integrated into any Vue Project.   
 
-The Schema-Object has the **same structure** as the Value-Object. Create a Schema by cloning the Value-Object and replace the Values of the Data-Object by Definitions for your your Schema. The corresponding Schema-Object defines type, layout and functional behaviour of your Form. 
+The Schema-Object has the **same structure** as the Value-Object. Create a Schema by cloning the Value-Object and replace the Values of the Data-Object by Definitions for your your Schema. The corresponding Schema-Object defines type, layout and functional behaviour of the Controls in your Form. 
 
 
 ![Form Example](./images/dat-schema.PNG)
 
 
-The [Component Framework Vuetify](https://vuetifyjs.com/) styles your Form. The Controls have a clear design, but don't worry you can change your style in a lot of ways. For more details see section **Style with CSS**
+The [Component Framework Vuetify](https://vuetifyjs.com/) styles your Form. The Controls have a clear design, but don't worry if you need more you can change your style in a lot of ways. For more details see section **Style with CSS**
 
 Based on an existing Value-Object **vuetify-form-base** generates a full editable Form. 
-Layout and Functionality are defined in a Schema-Object, which has the same Property structure as the Value-Object. Your Data-Object keeps full reactive and any Input or Change in your Form triggers an Event too. If you have a deep nested Value-Object or an Array -Structure you can direct work on it. There is no need to flatten or modify your Data-Presentation.
+Layout and Functionality are defined in a Schema-Object, which has the same Property structure as the Value-Object. Your Data-Object keeps full reactive and any Input or Change in your Form triggers an Event too. If you have a deep nested Value-Object or an Array-Structure you can direct work on it. There is no need to flatten or modify your Data Presentation.
 
 
 ![Form Example](./images/formbase01.PNG)
@@ -87,28 +87,134 @@ Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** 
 ### Supported Controls from **Vuetify UI Input & Controls**  
 ----
 
-#### Textfield schema: { ctrl: {type:'text', ...} 
+#### Textfield - Text: 
+	schema: { ctrl: 'text', ... }
+	schema: { ctrl: { type:'text', ...}, ... }
+#### Textfield - Password: 
+	schema: { ctrl: 'password', ... }
+	schema: { ctrl: { type:'password', ...}, ... }
+#### Textfield - Email:  
+	schema: { ctrl: 'email', ... }
+	schema: { ctrl: { type:'email', ...}, ... }
+#### Textfield - Number:  
+	schema: { ctrl: 'number', ... }
+	schema: { ctrl: { type:'number', ...}, ... }
+
 [More Informations to Vuetify Textfields find here](https://vuetifyjs.com/en/components/text-fields/). 
-#### Password schema: { ctrl: {type:'password', ...} 
-#### Email schema: { ctrl: {type:'email', ...}  
-#### FileInput schema: { ctrl: {type:'file', ...} 
-#### Textarea schema: { ctrl: {type:'textarea', ...}
-#### Checkbox schema: { ctrl: {type:'checkbox', ...}, ... }
-#### Radio schema: { ctrl: {type:'radio', ...}, ... }
-#### Switch schema: { ctrl: {type:'switch', ...}, ... }
-#### Slider schema: { ctrl: {type:'slider', ...}, ... }
-#### Icon schema: { ctrl: {type:'icon', ...}, ... }
-#### Button schema: { ctrl: {type:'btn', ...}, ... }
-#### Grouped Button: schema: { ctrl: {type:'btn-toggle', ...}, ... }
-#### Select schema: { ctrl: {type:'select', ...}, ... }
-#### Combobox schema: { ctrl: {type:'combobox', ...}, ... }
-#### Autocomplete: schema: { ctrl: {type:'autocomplete', ...}, ... }
-#### Treeview schema: { ctrl: {type:'treeview', ...}, ... }
-#### Array schema: { ctrl: {type:'array', ...}, ... }
-#### List schema: { ctrl: {type:'list', ...}, ... }
-#### Colorpicker: schema: { ctrl: {type:'colorpicker', ...}, ... }
-#### Datepicker: schema: { ctrl: {type:'datepicker', ...}, ... }
-#### Timepicker: schema: { ctrl: {type:'timepicker', ...}, ... }
+
+
+#### File-Input: 
+	schema: { ctrl: 'file', ... }
+	schema: { ctrl: { type:'file', ...}, ... }
+
+[More Informations to Vuetify File-Input find here](https://vuetifyjs.com/en/components/file-inputs/). 
+
+#### Textarea:
+	schema: { ctrl: 'textarea', ... }
+	schema: { ctrl: { type:'textarea', ...}, ... }
+
+[More Informations to Vuetify Textarea find here](https://vuetifyjs.com/en/components/textarea/). 
+
+#### Select:
+	schema: { ctrl: 'select', ... }
+	schema: { ctrl: { type:'select', ...}, ... }
+
+[More Informations to Vuetify Select find here](https://vuetifyjs.com/en/components/select/). 
+
+#### Combobox:
+	schema: { ctrl: 'combobox', ... }
+	schema: { ctrl: { type:'combobox', ...}, ... }
+
+[More Informations to Vuetify Combobox find here](https://vuetifyjs.com/en/components/combobox/). 
+
+#### Autocomplete:
+	schema: { ctrl: 'autocomplete', ... }
+	schema: { ctrl: { type:'autocomplete', ...}, ... }
+
+[More Informations to Vuetify Autocomplete find here](https://vuetifyjs.com/en/components/autocomplete/). 
+
+
+
+#### Checkbox: 
+	schema: { ctrl: 'checkbox', ... }
+	schema: { ctrl: { type:'checkbox', ...}, ... }
+
+#### Radio: 
+	schema: { ctrl: { type:'radio', ...}, ... }
+
+#### Switch: 
+	schema: { ctrl: 'switch', ... }
+	schema: { ctrl: { type:'switch', ...}, ... }
+
+[More Informations to Vuetify Selection-Controls find here](https://vuetifyjs.com/en/components/selection-controls/). 
+
+
+#### Slider: 
+	schema: { ctrl: 'slider', ... }
+	schema: { ctrl: { type:'slider', ...}, ... }
+
+[More Informations to Vuetify Sliders find here](https://vuetifyjs.com/en/components/sliders/). 
+
+#### Icon: 
+	schema: { ctrl: 'icon', ... }
+	schema: { ctrl: { type:'icon', ...}, ... }
+
+[More Informations to Vuetify Icons find here](https://vuetifyjs.com/en/components/icons/). 
+
+#### Button: 
+	schema: { ctrl: 'btn', ... }
+	schema: { ctrl: { type:'btn', ...}, ... }
+
+[More Informations to Vuetify Buttons find here](https://vuetifyjs.com/en/components/buttons/). 
+
+#### Button Group: 
+	schema: { ctrl: 'btn-toggle', ... }
+	schema: { ctrl: { type:'btn-toggle', ...}, ... }
+
+[More Informations to Vuetify Button Groups find here](https://vuetifyjs.com/en/components/button-groups/). 
+
+#### Treeview: 
+	schema: { ctrl: 'treeview', ... }
+	schema: { ctrl: { type:'treeview', ...}, ... }
+
+[More Informations to Vuetify Treeview find here](https://vuetifyjs.com/en/components/treeview/). 
+
+#### Array: 
+	schema: { ctrl: { 
+		type:'array', 
+		schema: { 
+			ctrl: 'text' 
+			},
+			... 
+		}, 
+		... 
+	}
+---
+
+#### List: 
+	schema: { ctrl: 'list', ... }
+	schema: { ctrl: { type:'list', ...}, ... }
+
+[More Informations to Vuetify List-Item-Groups find here](https://vuetifyjs.com/en/components/list-item-groups/). 
+
+#### Colorpicker: 
+	schema: { ctrl: 'color', ... }
+	schema: { ctrl: { type:'color', ...}, ... }
+
+[More Informations to Vuetify Color-Pickers find here](https://vuetifyjs.com/en/components/color-pickers/). 
+
+#### Datepicker: 
+	schema: { ctrl: 'date', ... }
+	schema: { ctrl: { type:'date', ...}, ... }
+	date-pickers
+[More Informations to Vuetify Date-Pickers find here](https://vuetifyjs.com/en/components/date-pickers/). 
+	
+#### Timepicker: 
+	schema: { ctrl: 'time', ... }
+	schema: { ctrl: { type:'time', ...}, ... }
+
+[More Informations to Vuetify Time-Pickers find here](https://vuetifyjs.com/en/components/time-pickers/). 
+	
 
 ---
 ## Installation
