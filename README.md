@@ -29,13 +29,11 @@ With **Vuetify-Form-Base** create a Schema Object with the same structure as you
 	Schema: {
 		name: {
 			type:'text', 
-			label:'Name', 
-			flex:6 
+			label:'Name'
 		},
 		position: {
 			type:'text', 
-			label:'Position', 
-			flex:6 
+			label:'Position' 
 		},
 		tasks: { 
 			type: 'array',
@@ -97,7 +95,7 @@ And if necessary you can also build a **Form in Form** by using **Slots**.
 Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** for 'Resize', 'Focus', 'Input', 'Blur', 'Click', 'Mouse' and 'Swipe'. Listening to 'Change' will catch all Value changing Events like 'Input' and 'Click'. 'Watch' will listen to 'Focus', 'Input', 'Blur' and 'Click'. Listening to 'Update' will catch all Events. 
 
 ### Supported Controls from **Vuetify UI Input & Controls**  
-----
+---
 
 #### Textfield - Text: 
 	schema: { ctrl: 'text', ... }
@@ -114,6 +112,7 @@ Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** 
 
 [More Informations to Vuetify Textfields find here](https://vuetifyjs.com/en/components/text-fields/). 
 
+---
 
 #### File-Input: 
 	schema: { ctrl: 'file', ... }
@@ -127,25 +126,7 @@ Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** 
 
 [More Informations to Vuetify Textarea find here](https://vuetifyjs.com/en/components/textarea/). 
 
-#### Select:
-	schema: { ctrl: 'select', ... }
-	schema: { ctrl: { type:'select', ...}, ... }
-
-[More Informations to Vuetify Select find here](https://vuetifyjs.com/en/components/select/). 
-
-#### Combobox:
-	schema: { ctrl: 'combobox', ... }
-	schema: { ctrl: { type:'combobox', ...}, ... }
-
-[More Informations to Vuetify Combobox find here](https://vuetifyjs.com/en/components/combobox/). 
-
-#### Autocomplete:
-	schema: { ctrl: 'autocomplete', ... }
-	schema: { ctrl: { type:'autocomplete', ...}, ... }
-
-[More Informations to Vuetify Autocomplete find here](https://vuetifyjs.com/en/components/autocomplete/). 
-
-
+---
 
 #### Checkbox: 
 	schema: { ctrl: 'checkbox', ... }
@@ -160,6 +141,7 @@ Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** 
 
 [More Informations to Vuetify Selection-Controls find here](https://vuetifyjs.com/en/components/selection-controls/). 
 
+---
 
 #### Slider: 
 	schema: { ctrl: 'slider', ... }
@@ -185,6 +167,38 @@ Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** 
 
 [More Informations to Vuetify Button Groups find here](https://vuetifyjs.com/en/components/button-groups/). 
 
+---
+
+**Select Data from Array in Schema**
+
+#### Select:
+	schema: { ctrl: 'select', ... }
+	schema: { ctrl: { type:'select', ...}, ... }
+
+[More Informations to Vuetify Select find here](https://vuetifyjs.com/en/components/select/). 
+
+#### Combobox:
+	schema: { ctrl: 'combobox', ... }
+	schema: { ctrl: { type:'combobox', ...}, ... }
+
+[More Informations to Vuetify Combobox find here](https://vuetifyjs.com/en/components/combobox/). 
+
+#### Autocomplete:
+	schema: { ctrl: 'autocomplete', ... }
+	schema: { ctrl: { type:'autocomplete', ...}, ... }
+
+[More Informations to Vuetify Autocomplete find here](https://vuetifyjs.com/en/components/autocomplete/). 
+
+---
+
+**Select or Edit from your Data Array**
+
+#### List: Edit  
+	schema: { ctrl: 'list', ... }
+	schema: { ctrl: { type:'list', ...}, ... }
+
+[More Informations to Vuetify List-Item-Groups find here](https://vuetifyjs.com/en/components/list-item-groups/). 
+
 #### Treeview: 
 	schema: { ctrl: 'treeview', ... }
 	schema: { ctrl: { type:'treeview', ...}, ... }
@@ -201,13 +215,8 @@ Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** 
 		}, 
 		... 
 	}
+
 ---
-
-#### List: 
-	schema: { ctrl: 'list', ... }
-	schema: { ctrl: { type:'list', ...}, ... }
-
-[More Informations to Vuetify List-Item-Groups find here](https://vuetifyjs.com/en/components/list-item-groups/). 
 
 #### Colorpicker: 
 	schema: { ctrl: 'color', ... }
