@@ -3,46 +3,50 @@
 
 Imagine you get the following data as JS-Object and your Task is to design a Form to edit this data 
 
-    Value: {
-      name: 'Jumo',
-      position: 'Coder',
-      tasks: [
-        { 
-          done: true,
-          title: 'make refactoring' 
-        },
-        { 
-          done: false,
-          title: 'write documentation'  
-        },
-        { 
-          done: true,
-          title: 'remove logs'  
-        }        
-      ]        
-    }
+```javascript
+Value: {
+	name: 'Jumo',
+	position: 'Coder',
+	tasks: [
+		{ 
+		  done: true,
+		  title: 'make refactoring' 
+		},
+		{ 
+		  done: false,
+		  title: 'write documentation'  
+		},
+		{ 
+		  done: true,
+		  title: 'remove logs'  
+		}        
+	]        
+}
+```
 
 Normally you have to flatten the Data-Structure and map all to an appropriate Format. Then you have to define a HTML-Form and animate it with your Data. 
 
 With **Vuetify-Form-Base** create a Schema Object with the same structure as your Data.
 
-	Schema: {
-		name: {
-			type:'text', 
-			label:'Name'
-		},
-		position: {
-			type:'text', 
-			label:'Position' 
-		},
-		tasks: { 
-			type: 'array',
-			schema: { 
-				done:{ type:'checkbox', label:'done', flex:3}, 
-				title:{ type:'text', flex:9 }
-			} 
-		}
-	}  
+```javascript
+Schema: {
+	name: {
+		type:'text', 
+		label:'Name'
+	},
+	position: {
+		type:'text', 
+		label:'Position' 
+	},
+	tasks: { 
+		type: 'array',
+		schema: { 
+			done:{ type:'checkbox', label:'done', flex:3}, 
+			title:{ type:'text', flex:9 }
+		} 
+	}
+}  
+```
 
 and you will get a full reactive and editable Form:
 
@@ -169,7 +173,7 @@ Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** 
 
 ---
 
-**Select Data from Array in Schema**
+**_Select Data from Array in Schema_**
 
 #### Select:
 	schema: { ctrl: 'select', ... }
@@ -191,7 +195,7 @@ Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** 
 
 ---
 
-**Select or Edit from your Data Array**
+**_Select or Edit from your Data Array_**
 
 #### List: Edit  
 	schema: { ctrl: 'list', ... }
@@ -249,6 +253,7 @@ After a successful installation of a VUE project with Vuetify 2.0
 
 In order for your application to work properly, you must wrap it in a [v-app](https://next.vuetifyjs.com/en-US/framework/default-markup) component. This component is required and can exist anywhere inside the body, but must be the parent of ALL Vuetify components. **v-content** needs to be a direct descendant of **v-app**. 
 
+```HTML
     <template>
       <v-app>
         <v-content>
@@ -260,7 +265,8 @@ In order for your application to work properly, you must wrap it in a [v-app](ht
         </v-content>
       </v-app>
     </template>
-
+```
+```javascript
 	import VFormBase from 'vuetify-form-base';  
 
     export default {	
@@ -284,7 +290,7 @@ In order for your application to work properly, you must wrap it in a [v-app](ht
         }
       }
     }
-
+```
 and you will get a full editable Form based on your schema and filled with your Value-Object. 
 
 ![Basic Form](./images/formbase2.PNG)
@@ -299,6 +305,7 @@ and you will get a full editable Form based on your schema and filled with your 
 
 In Reality sometimes you will have deep nested objects or arrays, which should be edited. **vuetify-form-base** works for you and flatten internally this nested object and build a plain Form.   
 
+```javascript
       myValue: {
         name: 'Base',
         controls:{
@@ -334,7 +341,7 @@ In Reality sometimes you will have deep nested objects or arrays, which should b
           ],
         }
       }
-
+```
 
 ![Form Example](./images/deep.png)
 
@@ -344,6 +351,7 @@ In Reality sometimes you will have deep nested objects or arrays, which should b
  
 For editing arrays use the type 'array' and define an nested 'schema' property. 
 
+```javascript
     mySchema: {
       tasks: {
         type: 'array',
@@ -353,9 +361,11 @@ For editing arrays use the type 'array' and define an nested 'schema' property.
         }
       }  
     }
+```
 
 #### Type Array - Schema object
 
+```javascript
     myValue: {      
       tasks: [
         {
@@ -381,7 +391,7 @@ For editing arrays use the type 'array' and define an nested 'schema' property.
         }
       }
     }
-
+```
 
 ![Form Example](./images/array-template.png)
 
@@ -390,6 +400,7 @@ For editing arrays use the type 'array' and define an nested 'schema' property.
  
 IF you want Schema Properties to be changed dynamic, then you must make your Schema Object a computed property. This Example turns the Radio Layout from Column to Row on Resizing to medium Size or greater. 
 
+```javascript
     data () {
       return {
     
@@ -411,14 +422,17 @@ IF you want Schema Properties to be changed dynamic, then you must make your Sch
         return this.$vuetify.breakpoint.mdAndUp 
       }
     },
+```
 
 ## Vuetify Layout and Grid
 
 Integrate Vuetify Grid by using the Schema-Properties 'flex', 'offset' and 'order':
 
+```javascript
     mySchema: {
       name: { type: 'text', flex: 4, offset: 2, order: 1 },
     }
+```
 
     flex: 4     // shorthand for flex: { xs:4 }
     offset: 2   // shorthand for offset: { xs:2 }
@@ -441,10 +455,11 @@ order: { xs:1, sm:1, md:2, lg:2 }
 
 Forms can be **linked** together using the same Value-Object. Changes in one Form are synchronized and reflected in the other Form. 
 
+```HTML
 	<v-form-base :value="myValue" :schema="mySchema" />
 
 	<v-form-base id="form-sync" :value="myValue" :schema="mySchema" />
-
+```
  
 ## Vuetify Controls API-Props
 
@@ -476,6 +491,7 @@ Schema is an JS-Object, which defines and controls the behavior of your Form. Ea
 
 The next shows a more complex Schema:
   
+```javascript  
     // Partials Functions for Rules
     const minLen = l => v => (v && v.length >= l) || `min. ${l} Characters`
     const maxLen = l => v => (v && v.length <= l) || `max. ${l} Characters`
@@ -527,7 +543,7 @@ The next shows a more complex Schema:
         }
       }
     }
-
+```
 
 **Available Properties in Schema ( NEW: PICKERS and FILE-INPUT available )**
   
