@@ -598,11 +598,14 @@ We can use the v-on directive to listen to vuetify-form-base events **'focus', '
     
 This Example use the Default ID and listen all events with 'update':
 
+```HTML
     <!-- HTML -->
     <v-form-base :value= "myValue" :schema= "mySchema" @update= "update" />
-    
+```
+
 The next Code has the Custom ID **'form-base-simple'**. In this case your v-on Directive must append the Custom ID like **@update:form-base-simple:**
 
+```HTML
     <!-- HTML -->
     <v-form-base 
       id = "form-base-simple" 
@@ -610,9 +613,11 @@ The next Code has the Custom ID **'form-base-simple'**. In this case your v-on D
       :schema= "mySchema" 
       @update:form-base-simple= "update" 
     />
+```
 
 You can also listen to an specific event. Your v-on Directive must append the Custom ID:
 
+```HTML
     <!-- HTML -->
     <v-form-base :value= "myValue" :schema= "mySchema" @blur= "blurCode" />
    
@@ -632,6 +637,8 @@ You can also listen to an specific event. Your v-on Directive must append the Cu
       @update:form-base-complete= "updateCode"     
     />
 
+```
+  
   Listen to one or more of following events
         
         @input= "change"
@@ -647,9 +654,11 @@ You can also listen to an specific event. Your v-on Directive must append the Cu
 
 **The Event-Signature:**
 
+```javascript
     change( {  on, id, key, value, params, obj, data, schema, parent, index, event } ){
       // destructure the signature object 
     }
+```
 
     on -        Trigger Name  // focus|input|blur|click|resize|swipe|update 
     id -        Formbase-ID
@@ -665,9 +674,12 @@ You can also listen to an specific event. Your v-on Directive must append the Cu
 ---
 **Example: Use 'Update' Event to control Visibility of Password Element**
 
+```HTML
     <!-- HTML -->
     <v-form-base :value="myValue" :schema="mySchema" @update="update">
+```
 
+```javascript
     <!-- JS -->
     // Schema
     mySchema: {
@@ -690,11 +702,13 @@ You can also listen to an specific event. Your v-on Directive must append the Cu
           : 'password'
       }
     }
+```
 ---
 ## Slots
 
 Use Slots to pass Header and Footer into a Control. If necessary replace Controls by Slots. Any slot could be a v-form-base component itself.   
  
+ ```HTML
     <v-form-base :value="myValue" :schema="mySchema" @update="update">
 
       <h4 slot="slot-top-key-name">Top Slot on Key Name</h4>
@@ -711,6 +725,9 @@ Use Slots to pass Header and Footer into a Control. If necessary replace Control
       </div>
     
     </v-form-base>
+```
+
+[Try CSS & Slots in Example](https://wotamann.github.io/)
 
 ![Slots in Blue](./images/slot.png)
 
@@ -719,11 +736,13 @@ Use Slots to pass Header and Footer into a Control. If necessary replace Control
 
 If you need Form Validation you have to wrap **v-form-base** with **[v-form](https://next.vuetifyjs.com/en/components/forms#api)** and take the reference of v-form for working on.
     
+```HTML    
     <!-- HTML -->    
     <v-form ref="form" v-model= "formValid" lazy-validation>
       <v-form-base :value= "myValue" :schema= "mySchema" @update= "update"/>
     </v-form>
-
+```
+```javascript
     <!-- JS -->
     validate () {
       this.$refs.form.validate()
@@ -732,7 +751,7 @@ If you need Form Validation you have to wrap **v-form-base** with **[v-form](htt
     resetValidation () {
       this.$refs.form.resetValidation()
     },
-
+```
 ---
 
 ## Style with CSS 
@@ -749,21 +768,25 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 `#form-base` is the default ID of your component. If you need different CSS for two or more forms in the same parent component, then change default value by setting a different ID for each component and use this new ID. Using a 'custom-id' you have to modify the event-binding to @update:custom-id = "update" 
 
 
----
+```CSS
     <!-- Default ID CSS-Style -->   	
     #form-base {...} 
-
+```
+```HTML
     <!-- HTML-Template -->   
     <v-form-base @update= "update" />  
+```
 
-  ---
-    
+```CSS 
     <!-- Custom-ID CSS-Style -->   	
     #custom-id {...} 
+```
+```HTML
 
     <!-- HTML-Template -->   
     <v-form-base id="custom-id" @update:custom-id= "update" />  
-	
+```
+
 ---
 
 ### General - Classname
@@ -848,11 +871,12 @@ Customize your **vuetify-form-base** component using CSS-Classnames
       #form-base .key-controls-slider { background-color: #fec }
     </style>
 
+[Try CSS & Slots in Example](https://wotamann.github.io/)
+
 ![Slots in Blue](./images/css.PNG)
 
 ---
 ## Features
-
 
 * Vue-Component
 * integrates UI framework Vuetify with responsive Layout and Support of Grid
@@ -860,7 +884,7 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 * Get full configurable Forms based on Schema Definition
 * Edit plain or deep nested objects including Arrays, without the need to flatten your data
 * Get a full, reactive Result
-* Listen on 'Resize', 'Focus', 'Input', 'Blur', 'Click', 'Swipe' and 'Update' Events
+* Listen on 'Resize', 'Focus', 'Input', 'Blur', 'Click', 'Swipe', 'Mouse' and 'Update' Events
 * Use Slots to pass Header and Footer into a Control or replace a Control by a Slot.  Use  Slots to individualize your Tooltip   
 * Configurable CSS Style 
 
