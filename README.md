@@ -26,20 +26,33 @@ Normally you have to flatten the Data-Structure and map all to an appropriate Fo
 
 With **Vuetify-Form-Base** create a Schema Object with the same structure as your Data.
 
-    Schema: {
-      name: {type:'text', label:'Name', flex:6 },
-      position: {type:'text', label:'Position', flex:6 },
-      tasks: { type: 'array', schema: { done:{ type:'checkbox', label:'done', flex:3}, title:{ type:'text', flex:9 } } },
-    }  
+	Schema: {
+		name: {
+			type:'text', 
+			label:'Name', 
+			flex:6 
+		},
+		position: {
+			type:'text', 
+			label:'Position', 
+			flex:6 
+		},
+		tasks: { 
+			type: 'array',
+			schema: { 
+				done:{ type:'checkbox', label:'done', flex:3}, 
+				title:{ type:'text', flex:9 }
+			} 
+		}
+	}  
 
 and you will get a full reactive and editable Form:
 
 ![Form](./images/array-schema.PNG)
 
-If you have to generate new forms based on different data or you have to edit Data presented in JSON or as JS-Objects? 
-Then take a closer look at **Vuetify-Form-Base** and try it. It can make your work much easier and save you time. This Schema based Form Generator works as [Vue.js 2.0 Component](https://vuejs.org/) and can simplify your jJob by automatically creating full editable Forms. Edit your created Forms and you will automatically receive reactive Results.
+If you have to generate forms or you have to edit Data presented as JSON- or JS-Objects, then take a closer look at **Vuetify-Form-Base** and try it. It can make your work much easier and save you time. This Form Generator works as [Vue.js 2.0 Component](https://vuejs.org/) and can simplify your Job by automatically creating Forms, based on your Schema-Definition. Edit your created Forms and you will automatically receive reactive Results.
 
-**Vuetify-Form-Base** uses the well known and excellent [Component Framework Vuetify](https://vuetifyjs.com/) to style and layout your Form. Vuetify Controls have a clear, minimalistic design, and support responsive Design.
+**Vuetify-Form-Base** uses the well known and excellent [Component Framework Vuetify](https://vuetifyjs.com/) to style and layout your Form. Vuetify Controls have a clear, minimalistic design and support responsive Design.
 
 
 ---
