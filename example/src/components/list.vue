@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Select Item from List (Array in Value) with Result '.model' in Schema and Event </h4>
+    <h4>Add or Select Item from List (Array in Value) with Result '.model' in Schema and Event </h4>
     <v-form-base
       id="form-base-list"
       :value="myValue"
@@ -8,14 +8,14 @@
       @change:form-base-list="change"
     />
     
-    <v-btn
+    <!-- <v-btn
       v-if ="myValue.listObject.length < 4"
       dark
       color="blue"
       @click="add"
     >
       <v-icon>mdi-plus</v-icon>
-    </v-btn>
+    </v-btn> -->
 
     <infoline
       :value="myValue"
@@ -48,6 +48,7 @@ export default {
         ]
       },
       mySchema: {
+        
         listObject: {
           type: 'list',
           label: 'List Single',
@@ -65,16 +66,27 @@ export default {
           color: 'red',
           offset: 1,
           flex: 5
-        }
+        },
+        btn1: { type: 'btn', label:'Add', color: 'blue', flex: 2 },
+        btn2: { type: 'btn', label:'Add', color: 'red', flex: 2, offset: 4 },
       }
     }
   },
   methods: {
-    add(){
-      this.myValue.listObject.push({ line: this.myValue.listObject.length + 1, name: 'Musk' })
-    },
+    
+    change (val) {
 
-    change
+      change(val)
+
+      let { key } = val
+
+      if (key === 'btn1') this.myValue.listObject.push({ 
+        line: this.myValue.listObject.length + 1, name: 'Musk ' + Math.floor(Math.random() * 1000)
+      })
+      
+      if (key === 'btn2') this.myValue.listString.push( 'Musk ' + Math.floor(Math.random() * 1000))
+    
+    }
   }
 }
 </script>

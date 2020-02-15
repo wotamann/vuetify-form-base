@@ -37,6 +37,7 @@ import complex from '@/components/complex.vue'
 import arrayease from '@/components/arrayease.vue'
 import array from '@/components/array.vue'
 import selection from '@/components/selection.vue'
+import selectiondynamic from '@/components/selectiondynamic.vue'
 import treeview from '@/components/treeview.vue'
 import conditional from '@/components/conditional.vue'
 import list from '@/components/list.vue'
@@ -49,6 +50,7 @@ const items = [
     { value: 'css', text: 'CSS, Slots, Tooltips & Buttons'}, 
     { value: 'deep', text: 'Deep nested Data including Object & Arrays'}, 
     { value: 'selection', text: 'Selection, Combobox, Autocomplete from Schema-Array'}, 
+    { value: 'selectiondynamic', text: 'Cascading Selection using computed Schema-Array'}, 
     { value: 'list', text: 'List from Value-Array'}, 
     { value: 'treeview', text: 'Treeviews from Value-Array'}, 
     { value: 'arrayease', text: 'Edit Value-Array'}, 
@@ -62,7 +64,7 @@ const items = [
 
 export default {
   components: {
-    simple, basic, async, grid, css, deep, partial, complex, treeview, arrayease, array, selection, conditional, list, pickers
+    simple, basic, async, grid, css, deep, partial, complex, treeview, arrayease, array, selection, selectiondynamic, conditional, list, pickers
   },
   data () {
     return {
