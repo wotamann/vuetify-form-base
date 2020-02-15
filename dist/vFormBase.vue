@@ -5,10 +5,11 @@
     class="wrap"
   >
     <template v-for="(obj, index) in flatCombinedArraySorted">
+      <!-- Tooltip Wrapper -->
       <v-tooltip
         :key="index"
         :disabled="!obj.schema.tooltip"
-        v-bind="typeof obj.schema.tooltip === 'string' ? { bottom:true, label:'obj.schema.tooltip'} : obj.schema.tooltip"
+        v-bind="getShorthandTooltip(obj.schema.tooltip)"
       >
         <template v-slot:activator="{ on }">
           <v-flex
@@ -17,7 +18,7 @@
             v-touch="{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"
             :class="getClassName(obj)"
             @mouseenter="onEvent($event, obj)"
-            @mouseleave="onEvent($event, obj )"
+            @mouseleave="onEvent($event, obj)"
             v-on="on"
           >
             <!-- slot on top of type  -> <div slot="slot-bottom-type-[propertyName]> -->
@@ -29,6 +30,7 @@
             <slot :name="getTypeItemSlot(obj)">
               <!-- slot replaces complete item of defined KEY -> <div slot="slot-item-key-[propertyName]>-->
               <slot :name="getKeyItemSlot(obj)">
+                
                 <!-- radio -->
                 <v-radio-group
                   v-if="obj.schema.type === 'radio'"
@@ -113,7 +115,7 @@
                   </v-list>
                 </template>
 
-                <!-- checkbox || switch -->
+                <!-- checkbox | switch -->
                 <div
                   :is="mapTypeToComponent(obj.schema.type)"
                   v-else-if="obj.schema.type === 'switch' || obj.schema.type === 'checkbox'"
@@ -140,6 +142,7 @@
                 >
                   {{ setValue(obj) }}
                 </v-icon>
+                
                 <!-- btn-toggle -->
                 <v-btn-toggle
                   v-else-if="obj.schema.type === 'btn-toggle'"
@@ -191,7 +194,7 @@
                   </v-icon>
                 </v-btn>
 
-                <!-- if masked use this v-text-field section - https://vuejs-tips.github.io/vue-the-mask/  -->
+                <!-- only masked v-text-field use this Section - https://vuejs-tips.github.io/vue-the-mask/  -->
                 <v-text-field
                   v-else-if="obj.schema.mask"
                   v-mask="obj.schema.mask"
@@ -207,7 +210,7 @@
                   @input="onInput($event, obj)"
                 />
 
-                <!-- all other Types -> see typeToComponent -->
+                <!-- all other Types - see typeToComponent -->
                 <div
                   :is="mapTypeToComponent(obj.schema.type)"
                   v-else
@@ -222,6 +225,7 @@
                   @click:prepend-inner="onEvent($event, obj, prependInner )"
                   @input="onInput($event, obj)"
                 />
+
               </slot>
             </slot>
 
@@ -230,18 +234,18 @@
             <slot :name="getKeyBottomSlot(obj)" />
           </v-flex>
 
-          <!-- push next item to the right and fill space between items -->
+          <!-- schema.spacer:true - push next item to the right and fill space between items -->
           <v-spacer
             v-if="obj.schema.spacer"
             :key="`s-${index}`"
           />
         </template>
-        <!-- slot for tooltip - inspect css.vue how to use it -->
+        <!-- slot for tooltip - inspect css.vue for details -->
         <slot
           name="slot-tooltip"
           :obj="obj"
         >
-          <span>{{ typeof obj.schema.tooltip === 'string' ? obj.schema.tooltip : obj.schema.tooltip && obj.schema.tooltip.label }}</span>
+          <span>{{ getShorthandTooltipLabel(obj.schema.tooltip)}}</span>
         </slot>
       </v-tooltip>
     </template>
@@ -255,7 +259,7 @@ import { mask } from 'vue-the-mask'
 
 const typeToComponent = {
 
-  // use native HTML5 Input Types - https://www.wufoo.com/html5/
+  // map schema.type to type in v-text-field  - https://www.wufoo.com/html5/
   text: 'v-text-field',
   password: 'v-text-field',
   email: 'v-text-field',
@@ -281,10 +285,10 @@ const pathDelimiter = '.'
 const classKeyDelimiter = '-'
 const defaultID = 'form-base'
 
-const onEventDelay = 100 // ms
+const onEventDelay = 10 // ms
 const mouse = 'mouseenter|mouseleave'
-const change = 'input|click'
-const watch = 'focus|input|click|blur' // event mouse collects events 'focus|input|click|treeview|blur'
+const change = 'input|click'            // event change collects events 'input|click'
+const watch = 'focus|input|click|blur'  // event watch collects events 'focus|input|click|blur'
 
 const itemClassAppendix = 'item'
 const typeClassAppendix = 'type'
@@ -353,7 +357,7 @@ export default {
     index () {
       const m = this.ref && this.ref.match(/\d+/g)
       return m ? m.map(Number) : []
-    },
+    },   
     flatCombinedArraySorted () {
       return orderBy(this.flatCombinedArray, ['schema.sort'], [orderDirection])
     },
@@ -376,6 +380,16 @@ export default {
       return typeToComponent[type] ? typeToComponent[type] : `v-${type}`
     },
 
+    // TOOLTIP 
+    getShorthandTooltip(schemaTooltip){
+      // check if tooltip is typeof string ->  shorthand { bottom:true, label: obj.schema.tooltip} otherwise take original object
+      return isString(schemaTooltip) ? { bottom:true, label:schemaTooltip} : schemaTooltip
+    },
+    getShorthandTooltipLabel(schemaTooltip){
+      // check if tooltip is typeof string ->  return Label 
+      return isString(schemaTooltip) ? schemaTooltip : schemaTooltip && schemaTooltip.label
+    },
+    //
     // KEY SLOTS
     getKeyArraySlot (obj) {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-ARRAY-key-address-city'
@@ -483,17 +497,17 @@ export default {
       // Value after change in Control
       value = this.fromCtrl({ value, obj, data: this.storeStateData, schema: this.storeStateSchema })
 
-      // harmonize all empty strings to null, because clearable resets to null and not to empty string !!!
+      // harmonize empty strings to null, because clearable resets to null and not to empty string!
       value = value === '' ? null : value
 
       // update deep nested prop(key) with value
       this.setObjectByPath(this.storeStateData, obj.key, value)
-
+      
       this.emitValue('input', {
         on: 'input',
         id: this.ref,
-        index: this.index, // index: this.ref.replace(/\D/g, ''),
-        params: { index: this.index },
+        index: this.index, 
+        params: { index: this.index, lastValue:obj.value },
         key: obj.key,
         value,
         obj,
@@ -531,7 +545,7 @@ export default {
       this.emitValue('resize', { on: 'resize', id: this.ref, params: { x: window.innerWidth, y: window.innerHeight }, event, data: this.storeStateData, schema: this.storeStateSchema })
     },
     //
-    // Event Base
+    // Emit Event Base
     emitValue (emit, val) {
       this.parent.$emit(this.getEventName(emit), val) // listen to specific event only
       if (mouse.indexOf(emit) > -1) this.parent.$emit(this.getEventName('mouse'), val) // listen only to input
@@ -558,14 +572,17 @@ export default {
         obj.schema = get(schema, obj.key, null) // get - lodash
       })
     },
+    sanitizeShorthandType(schema){
+      // check if schema is typeof string ->  shorthand { type: obj } otherwise take original value
+      return isString(schema) ? { type: schema } : schema
+    },
     flattenObjects (dat, sch) {
       let data = {}
       let schema = {}
       // Organize Formular using Schema not Data 
       Object.keys(sch).forEach(i => {
 
-        // check if schema is typeof string ->  shorthand { type:'stringvalue' } otherwise take original value
-        sch[i] = isString(sch[i]) ? { type: sch[i] } : sch[i]
+        sch[i] = this.sanitizeShorthandType(sch[i])
        
         if ((!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object') || (Array.isArray(dat[i]) && Array.isArray(sch[i]))) {
           let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[i], sch[i])
