@@ -7,6 +7,16 @@
       :schema="mySchema"
       @change:form-base-list="change"
     />
+    
+    <v-btn
+      v-if ="myValue.listObject.length < 4"
+      dark
+      color="blue"
+      @click="add"
+    >
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
+
     <infoline
       :value="myValue"
       :schema="mySchema"
@@ -60,6 +70,10 @@ export default {
     }
   },
   methods: {
+    add(){
+      this.myValue.listObject.push({ line: this.myValue.listObject.length + 1, name: 'Musk' })
+    },
+
     change
   }
 }

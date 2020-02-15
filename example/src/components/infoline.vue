@@ -3,6 +3,14 @@
 </style>
 <template>
   <v-layout wrap>
+    <v-flex xs12>
+      <h4>
+        See Console for Events and <a
+          target="_blank"
+          :href="`${url}${path}.vue`"
+        >inspect the Code at '{{path}}.vue' in Directory Example</a>
+      </h4>
+    </v-flex>
     <v-flex xs6>
       <h4>Value-Data (JSON)</h4>
       <pre
@@ -14,13 +22,7 @@
       <pre
         v-text="JSON.stringify(schema, undefined, 3)"
       />
-    </v-flex>
-    <h4>
-      See Console for Events | <a
-        target="_blank"
-        :href="`${url}${path}.vue`"
-      >Inspect the Code at {{path}}.vue in Directory Example</a>
-    </h4>
+    </v-flex>    
   </v-layout>
 </template>
 

@@ -5,7 +5,7 @@
       <v-form-base
         :value="myValue"
         :schema="mySchema"
-        @change="change"
+        @input="change"
       />
       <!--
         You can compose listener to one or more of following events
@@ -42,6 +42,7 @@ import change from '@/lib'
 
 // More Info to Mask https://vuejs-tips.github.io/vue-the-mask/
 const mask = '####-####-####-####'
+
 // Accept only Images Files
 const accept = 'image/*'
 

@@ -4,13 +4,13 @@
   /* CSS Component --- Container */
   #form-base-css { background-color: #fff; }
   @media only screen and (max-width: 960px) {
-    #form-base-css { background-color: #d4fdc7; }
+    #form-base-css { background-color: #e6f1ff; }
   }
   @media only screen and (max-width: 720px) {
-    #form-base-css { background-color: #cfebf8; }
+    #form-base-css { background-color: #ffffe7; }
   }
   @media only screen and (max-width: 560px) {
-    #form-base-css { background-color: #fcd0c5; }
+    #form-base-css { background-color: #fdcdcd; }
   }
 
   /* CSS Item --- set all items  */

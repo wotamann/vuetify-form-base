@@ -1,5 +1,5 @@
 <style>
-  h4 { background-color: #a9d3f5; padding: 0.25rem; margin: 0.1rem; font-weight: 300}
+  h4 { background-color: #a9d3f5; padding: 0.2rem; margin-bottom: 1px; margin-right: 1px; font-weight: 300}
 </style>
 
 <template>
