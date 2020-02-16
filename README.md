@@ -60,7 +60,7 @@ If you have to generate forms or you have to edit Data presented as JSON- or JS-
 ---
 ## Demo
 
-[Look for an Example on Github](https://wotamann.github.io/)
+[See a Demo](https://wotamann.github.io/)
 
 or
 
