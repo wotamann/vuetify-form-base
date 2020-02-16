@@ -64,7 +64,7 @@ If you have to generate forms or you have to edit Data presented as JSON- or JS-
 
 or
 
-Download Project, change current directory to **../vuetify-form-base/example**  and then run
+Clone or Download the Project, change current directory to **../vuetify-form-base/example**  and then run
 
 `npm install`
 
