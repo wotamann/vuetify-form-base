@@ -60,11 +60,11 @@ If you have to generate forms or you have to edit Data presented as JSON- or JS-
 ---
 ## Demo
 
-[Look for an Example on Github](https://wotamann.github.io/)
+[See a Demo](https://wotamann.github.io/)
 
 or
 
-Download Project, change current directory to **../vuetify-form-base/example**  and then run
+Clone or download this Project, change current directory to **../vuetify-form-base/example**  and then run
 
 `npm install`
 
