@@ -4,7 +4,7 @@
 <template>
   <v-layout wrap>
     <v-flex xs12>
-      <h4>
+      <h4 v-if="path">
         See Console for Events and <a
           target="_blank"
           :href="`${url}${path}.vue`"

@@ -33,6 +33,7 @@ import grid from '@/components/grid.vue'
 import css from '@/components/css.vue'
 import deep from '@/components/deep.vue'
 import partial from '@/components/partial.vue'
+import multisourcedata from '@/components/multisourcedata.vue'
 import complex from '@/components/complex.vue'
 import arrayease from '@/components/arrayease.vue'
 import array from '@/components/array.vue'
@@ -55,6 +56,7 @@ const items = [
     { value: 'treeview', text: 'Treeviews from Value-Array'}, 
     { value: 'arrayease', text: 'Edit Value-Array'}, 
     { value: 'array', text: 'Add, Remove and Edit Items in nested Value-Array'}, 
+    { value: 'multisourcedata', text: 'Integrate Multi-Source Data by using Formbase in Formbase as Slot'}, 
     { value: 'pickers', text: 'Date, Time, Color Pickers'},
     { value: 'grid', text: 'Responsive Grid using Flex, Order and Offset'}, 
     { value: 'partial', text: 'Partial & Linked'}, 
@@ -64,7 +66,7 @@ const items = [
 
 export default {
   components: {
-    simple, basic, async, grid, css, deep, partial, complex, treeview, arrayease, array, selection, selectiondynamic, conditional, list, pickers
+    simple, basic, async, grid, css, deep, partial, multisourcedata, complex, treeview, arrayease, array, selection, selectiondynamic, conditional, list, pickers
   },
   data () {
     return {
