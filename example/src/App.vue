@@ -31,6 +31,7 @@ import basic from '@/components/basic.vue'
 import async from '@/components/async.vue'
 import grid from '@/components/grid.vue'
 import css from '@/components/css.vue'
+import displayhelpers from '@/components/displayhelpers.vue'
 import deep from '@/components/deep.vue'
 import partial from '@/components/partial.vue'
 import multisourcedata from '@/components/multisourcedata.vue'
@@ -49,6 +50,7 @@ const items = [
     { value: 'basic', text: 'Textfields with redundant Value & Schema'}, 
     { value: 'async', text: 'Lazy Loading of Component'}, 
     { value: 'css', text: 'CSS, Slots, Tooltips & Buttons'}, 
+    { value: 'displayhelpers', text: 'Display, Typo & Layout control with Vuetify display helpers'}, 
     { value: 'deep', text: 'Deep nested Data including Object & Arrays'}, 
     { value: 'selection', text: 'Selection, Combobox, Autocomplete from Schema-Array'}, 
     { value: 'selectiondynamic', text: 'Cascading Selection using computed Schema-Array'}, 
@@ -66,7 +68,7 @@ const items = [
 
 export default {
   components: {
-    simple, basic, async, grid, css, deep, partial, multisourcedata, complex, treeview, arrayease, array, selection, selectiondynamic, conditional, list, pickers
+    simple, basic, async, grid, css, displayhelpers, deep, partial, multisourcedata, complex, treeview, arrayease, array, selection, selectiondynamic, conditional, list, pickers
   },
   data () {
     return {

@@ -1,5 +1,5 @@
 <style>
-  #form-base { background-color: #fdcfcf56;; border: 1px solid #f71a1a56  }
+  #form-base-container { background-color: #fdcfcf56;; border: 1px solid #f71a1a56  }
   #form-base-slot  { background-color: #cee4f756; border: 1px dotted #78b5eb56; margin:1rem }
 </style>
 
@@ -9,6 +9,7 @@
     
     <!-- BASE -->
     <v-form-base
+      id="form-base-container"
       :value="myValue"
       :schema="mySchema"
       @input:form-base-container="change"
