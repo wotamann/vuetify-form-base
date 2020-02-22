@@ -1,20 +1,13 @@
 <style>
   /* INFO-SCOPED: Don't use '<style scoped>' because scoped CSS is inside a child-component not accessable */
 
+
   /* CSS Component --- Container */
   #form-base-css { background-color: #fff; }
-  @media only screen and (max-width: 960px) {
-    #form-base-css { background-color: #e6f1ff; }
-  }
-  @media only screen and (max-width: 720px) {
-    #form-base-css { background-color: #ffffe7; }
-  }
-  @media only screen and (max-width: 560px) {
-    #form-base-css { background-color: #fdcdcd; }
-  }
+  #form-base-css .title { width: 100%; color: #fdfdfd; background-color: #1965b1; padding:6px }
 
   /* CSS Item --- set all items  */
-  #form-base-css .item { border: 1px dashed #1965b1; padding:0.5rem; margin:1px }
+  #form-base-css .item { border-left: 1px dashed #1965b1; padding:0.5rem; margin:1px }
 
   /* CSS Type --- set all items of type ... */
   #form-base-css .type-checkbox { background-color: #f0d3d1}
@@ -22,7 +15,7 @@
   #form-base-css .type-slider { background-color: #44c45a77}
 
   /* CSS Keys --- set item with key on focus' */
-  #form-base-css .key-email input:focus { background-color: #1965b1; color:#FFF }
+  #form-base-css .key-email input:focus { background-color: #2175c9; color:#FFF }
 </style>
 
 <template>
@@ -34,6 +27,13 @@
       :schema="mySchema"
       @change:form-base-css="change"
     >
+      <!-- FORM SLOT -->
+      <h4 slot="form-base-css-top" class="title">
+        Top Slot of Form-Base
+      </h4>
+      <h4 slot="form-base-css-bottom" class="title">
+        Bottom Slot of Form-Base
+      </h4>  
       <!-- KEY SLOTS -->
       <h4 slot="slot-top-key-name">
         Slot at Top of Key Name

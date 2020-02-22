@@ -38,7 +38,7 @@ export default {
     mySchema() {
       return {
         selection1: { type: 'select', label: 'Base', items, multiple: true },
-        selection2: { type: 'select', label: 'Select Item of Base Selection', items: this.myValue.selection1, clearable:true, noDataText:'Select Base Items' },
+        selection2: { type: 'select', label: 'Select Item of Base Selection', items: this.myValue.selection1, clearable:true, noDataText:'First select Base Items' },
       }
     }
   },

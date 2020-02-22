@@ -1,12 +1,13 @@
 <template>
   <v-container fluid>
-    <h4>Edit Data by using a Schema for Items in Value-Array</h4>
+    <h4>Edit Data in Value-Array by using one Schema for all Items. Scroll and see Intersections in Log</h4>
 
     <v-form-base
-      id="array-simple"
+      id="array-ease"
       :value="myValue"
       :schema="mySchema"
-      @change:array-simple="change"
+      @change:array-ease="change"
+      @intersect:array-ease="intersect"
     />
 
     <infoline
@@ -33,6 +34,7 @@ export default {
           { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
           { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
           { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
+          { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
           { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) }
         ]
       },
@@ -49,7 +51,14 @@ export default {
     }
   },
   methods: {
-    change
+    change,
+
+     intersect ({ id, key, value, index, params }) {   
+      // log intersection  
+      if (key === 'title') {
+        console.log( `INTERSECTION: '${value}' ${params.isIntersecting ?  ' entry intersection':  ' leave intersection'} `);
+      }      
+    },
   }
 }
 </script>

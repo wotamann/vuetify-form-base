@@ -1,11 +1,12 @@
 <style>
   #form-base-container { background-color: #fdcfcf56;; border: 1px solid #f71a1a56  }
   #form-base-slot  { background-color: #cee4f756; border: 1px dotted #78b5eb56; margin:1rem }
+  .form-base-title { width: 100%; color: rgb(248, 247, 244); background-color: rgb(236, 122, 122); padding:6px }
 </style>
 
 <template>
   <v-container fluid>    
-    <h4>Edit Multi-Source Data in a single Form by using second Formbase as Slot</h4>
+    <h4>Edit Multisource Data in one Form binding second Formbase as Slot</h4>
     
     <!-- BASE -->
     <v-form-base
@@ -14,6 +15,11 @@
       :schema="mySchema"
       @input:form-base-container="change"
     >
+      <!-- TOP SLOT  -->
+      <div slot="form-base-container-top" class="form-base-title">
+        This is 'form-base-container'
+      </div>
+
       <!-- SLOT (replaces key 'Slotted')  -->
       <v-form-base
         id="form-base-slot"
@@ -21,7 +27,13 @@
         :value="myValueSlot"
         :schema="mySchemaSlot"
         @input:form-base-slot="changepartial"
-      />
+      >
+        <!-- TOP SLOT  -->
+        <div slot="form-base-slot-top" class="form-base-title">
+          This is 'form-base-slot'
+        </div> 
+      </v-form-base>
+    
     </v-form-base>
     
     <!-- Stuff  -->
@@ -70,8 +82,8 @@ export default {
       },
       mySchema: {
         checkbox: { type: 'checkbox', label: 'Base', color: 'red' },
-        switch: { type: 'switch', label: 'Base', color: 'red' },
         Slotted: {}, // empty object as placeholder
+        switch: { type: 'switch', label: 'Base', color: 'red' },
       },
 
       // SLOT 

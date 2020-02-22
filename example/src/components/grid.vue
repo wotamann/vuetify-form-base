@@ -44,7 +44,7 @@ export default {
     },
     // Change Class on resize
     layout () {
-      return this.$vuetify.breakpoint.mdAndUp ? 'red lighten-4' : this.$vuetify.breakpoint.smAndUp ? 'blue lighten-4' : 'white'
+      return this.$vuetify.breakpoint.mdAndUp ? 'blue lighten-3' : this.$vuetify.breakpoint.smAndUp ? 'blue lighten-4' : 'blue lighten-5'
     }
   },
   methods: {

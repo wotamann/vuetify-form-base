@@ -13,11 +13,11 @@
   "dependencies": {
     "css-loader": "^3.2.0",
     "lodash": "^4.17.13",
-    "sass-loader": "^7.2.0",
+    "sass-loader": "^7.3.1",
     "stylus-loader": "^3.0.2",
     "vue": "^2.6.10",
     "vue-the-mask": "^0.11.1",
-    "vuetify": "^2.0.0"
+    "vuetify": "^2.2.13"
   },
   "devDependencies": {
     "@mdi/font": "^4.0.96",

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Add, Remove and Edit Items in nested Value-Array</h4>
+    <h4>Add, Remove and Edit Items in nested Value-Array. </h4>
 
     <v-form-base
       id="array"
@@ -49,7 +49,7 @@ export default {
           {
             add: '',
             nr: 2,
-            task: 'Work out',
+            task: 'working',
             done: [
               this.getTicket(),
               this.getTicket(),
@@ -105,7 +105,6 @@ export default {
 
     change (val) {
       let { on, id, index, key, value } = update(val)
-
       // add task
       if (key === 'add') {
         setTimeout(() => this.myValue.tasks[index[0]].done.push( this.getTicket() ), 250)
