@@ -65,7 +65,7 @@ const items = [
     { value: 'grid', text: 'Responsive Grid using Flex, Order and Offset'}, 
     { value: 'partial', text: 'Partial & Linked'}, 
     { value: 'conditional', text: 'Conditional Form'}, 
-    { value: 'complex', text: 'Complex Form with Validation'}, 
+    { value: 'complex', text: 'Form with Rules and Validation'}, 
 ]
 
 export default {

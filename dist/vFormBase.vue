@@ -3,7 +3,10 @@
     :id="ref"
     v-resize.quiet="onResize"
     class="wrap"
-  >
+  >   
+    <!-- FORM-BASE TOP SLOT -->
+    <slot :name="getFormTopSlot()"/>  
+
     <template v-for="(obj, index) in flatCombinedArraySorted">
       <!-- Tooltip Wrapper -->
       <v-tooltip
@@ -15,20 +18,22 @@
           <v-flex
             v-show="!obj.schema.hidden"
             :key="index"
+            v-intersect="(entries, observer) => onIntersect(entries, observer, obj)"
             v-touch="{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"
             :class="getClassName(obj)"
             @mouseenter="onEvent($event, obj)"
             @mouseleave="onEvent($event, obj)"
+
             v-on="on"
           >
-            <!-- slot on top of type  -> <div slot="slot-bottom-type-[propertyName]> -->
+            <!-- slot on top of type  -> <div slot="slot-bottom-type-[propertyName]"> -->
             <slot :name="getTypeTopSlot(obj)" />
-            <!-- slot on top of key  -> <v-btn slot="slot-bottom-key-[propertyName]> -->
+            <!-- slot on top of key  -> <v-btn slot="slot-bottom-key-[propertyName]"> -->
             <slot :name="getKeyTopSlot(obj)" />
 
-            <!-- slot replaces complete item of defined TYPE -> <v-btn slot="slot-item-type-[propertyName]>-->
+            <!-- slot replaces complete item of defined TYPE -> <v-btn slot="slot-item-type-[propertyName]">-->
             <slot :name="getTypeItemSlot(obj)">
-              <!-- slot replaces complete item of defined KEY -> <div slot="slot-item-key-[propertyName]>-->
+              <!-- slot replaces complete item of defined KEY -> <div slot="slot-item-key-[propertyName]">-->
               <slot :name="getKeyItemSlot(obj)">
                 
                 <!-- radio -->
@@ -229,7 +234,7 @@
               </slot>
             </slot>
 
-            <!-- slot at bottom of item  -> <div slot="slot-bottom-key-[deep-nested-key-name]> -->
+            <!-- slot at bottom of item  -> <div slot="slot-bottom-key-[deep-nested-key-name]"> -->
             <slot :name="getTypeBottomSlot(obj)" />
             <slot :name="getKeyBottomSlot(obj)" />
           </v-flex>
@@ -249,12 +254,14 @@
         </slot>
       </v-tooltip>
     </template>
+    <!-- FORM-BASE BOTTOM SLOT -->
+    <slot :name="getFormBottomSlot()"/>   
   </v-layout>
 </template>
 
 <script>
 // import & declarations
-import { get, isPlainObject, isFunction, isString, orderBy, delay } from 'lodash'
+import { get, isPlainObject, isFunction, isString, isEmpty, orderBy, delay } from 'lodash'
 import { mask } from 'vue-the-mask'
 
 const typeToComponent = {
@@ -267,7 +274,10 @@ const typeToComponent = {
   url: 'v-text-field',
   search: 'v-text-field',
   number: 'v-text-field',
+  // use Input Type instead of Picker
   // date: 'v-text-field',
+  // time: 'v-text-field',
+  // color: 'v-text-field',
 
   // map schema.type to vuetify-control (vuetify 2.0)
   range: 'v-slider',
@@ -287,8 +297,9 @@ const defaultID = 'form-base'
 
 const onEventDelay = 10 // ms
 const mouse = 'mouseenter|mouseleave'
-const change = 'input|click'            // event change collects events 'input|click'
-const watch = 'focus|input|click|blur'  // event watch collects events 'focus|input|click|blur'
+const change = 'input|click'              // event change collects events 'input|click'
+const watch = 'focus|input|click|blur'    // event watch collects events 'focus|input|click|blur'
+const display = 'resize|swipe|intersect'  // event watch collects events 'resize|swipe|intersect'
 
 const itemClassAppendix = 'item'
 const typeClassAppendix = 'type'
@@ -308,6 +319,11 @@ const append = 'append'
 const appendOuter = 'append-outer'
 const prepend = 'prepend'
 const prependInner = 'prepend-inner'
+
+// Mapper for Autogeneration of Schema from Value
+const defaultSchemaIfValueIsString = key => ({ type:'text', label: key, flex: { xs:12, sm: 6, md:4, lg:3} })
+const defaultSchemaIfValueIsNumber = key => ({ type:'number', label: key, flex: { xs:12, sm: 6, md:4, lg:3} })
+const defaultSchemaIfValueIsBoolean = key => ({ type:'checkbox', label: key, flex: { xs:12, sm: 6, md:4, lg:3} })
 //
 export default {
 
@@ -322,11 +338,13 @@ export default {
       default: defaultID
     },
     value: {
-      type: [Object, Array, String],
+      type: [Object, Array],
+      default: () => ({}),
       required: true
-    },
+    },    
     schema: {
       type: [Object, Array],
+      default: () => ({}),
       required: true
     }
   },
@@ -369,11 +387,7 @@ export default {
       this.updateArrayFromState(this.value, this.schema)
       return this.schema
     }
-  },
-  created () {
-    this.flatCombinedArray = this.flattenAndCombineToArray(this.storeStateData, this.storeStateSchema)
-  },
-
+  },  
   methods: {
     mapTypeToComponent (type) {
       // map ie. schema:{ type:'password', ... } to vuetify control v-text-field'
@@ -388,6 +402,14 @@ export default {
     getShorthandTooltipLabel(schemaTooltip){
       // check if tooltip is typeof string ->  return Label 
       return isString(schemaTooltip) ? schemaTooltip : schemaTooltip && schemaTooltip.label
+    },
+    //
+    // FORM SLOT
+    getFormTopSlot () {
+      return this.id + '-top'
+    },
+    getFormBottomSlot () {
+      return this.id + '-bottom'
     },
     //
     // KEY SLOTS
@@ -514,7 +536,7 @@ export default {
         data: this.storeStateData,
         schema: this.storeStateSchema
       })
-    },
+    },    
     onEvent (event, obj, tag) {
       delay(() => {
         const text = event && event.srcElement && event.srcElement.innerText
@@ -537,6 +559,11 @@ export default {
         }),
         onEventDelay
       })
+    },
+    onIntersect (entries, observer, obj) {
+      const isIntersecting = entries[0].isIntersecting
+      const index = this.index
+      this.emitValue('intersect', { on: 'intersect', id: this.ref, index, key: obj.key, value: obj.value, obj, params: { isIntersecting, entries, observer }, data: this.storeStateData, schema: this.storeStateSchema })
     },
     onSwipe (tag, obj) {
       this.emitValue('swipe', { on: 'swipe', id: this.ref, key: obj.key, value: obj.value, obj, params: { tag }, data: this.storeStateData, schema: this.storeStateSchema })
@@ -581,7 +608,7 @@ export default {
       let schema = {}
       // Organize Formular using Schema not Data 
       Object.keys(sch).forEach(i => {
-
+        // convert string type to object
         sch[i] = this.sanitizeShorthandType(sch[i])
        
         if ((!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object') || (Array.isArray(dat[i]) && Array.isArray(sch[i]))) {
@@ -613,7 +640,24 @@ export default {
       let flattenedObjects = this.flattenObjects(data, schema)
       // ... and combine them to an array
       return this.combineObjectsToArray(flattenedObjects)
-    }
-  }
+    },
+    autogenerateSchema(value){
+     // generate a minimal default schema from value   
+      let schema = JSON.stringify(value);
+      schema = JSON.parse(schema, (key, val) => {        
+        if (typeof val === 'string')  return defaultSchemaIfValueIsString(key)
+        if (typeof val === 'number')  return defaultSchemaIfValueIsNumber(key)
+        if (typeof val === 'boolean') return defaultSchemaIfValueIsBoolean(key)
+        return val
+      })      
+      Object.keys(schema).forEach( key => this.schema[key] = schema[key] )
+    },
+  },
+  created () {    
+    // no schema defined - autogenerate primive schema
+    if (isEmpty(this.schema)) this.autogenerateSchema(this.value)
+    
+    this.flatCombinedArray = this.flattenAndCombineToArray(this.storeStateData, this.storeStateSchema)
+  }  
 }
 </script>
