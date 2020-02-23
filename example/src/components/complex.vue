@@ -17,6 +17,7 @@
       v-model="formValid"
       lazy-validation
     >
+      <!-- FORM-BASE-COMPONENT -->
       <v-form-base
         id="form-base-complete"
         :value="myValue"

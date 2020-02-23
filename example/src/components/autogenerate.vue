@@ -2,9 +2,10 @@
   <v-container fluid>
     <h4>Missing Schema will autogenerate Form if Value is String, Number or Boolean.</h4>
     
+    <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       :value="myValue"
-      @input="change"
+      @input="log"
     />
    
     <!-- Stuff   -->
@@ -18,7 +19,7 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import change from '@/lib'
+import log from '@/lib'
 
 export default {
   name: 'Autogenerate',
@@ -29,9 +30,9 @@ export default {
         person: {
           name: {
             prename:'Samuel',         
-            surname: 'Stoner'
+            surname: 'Base'
           },
-          email: 'Stoner@web.com',          
+          email: 'base@web.com',          
           age:37         
         },  
         todo: [
@@ -42,7 +43,7 @@ export default {
     }    
   },
   methods: {
-    change
+    log
   }
 }
 </script>

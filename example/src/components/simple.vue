@@ -1,34 +1,32 @@
 <template>
   <v-container fluid>
     <h4>Textfields and Fileselector with Mask and Tooltips</h4>
-    <v-form>
     
+    <v-form>
+      <!-- FORM-BASE-COMPONENT -->    
       <v-form-base
         :value="myValue"
         :schema="mySchema"
-        @blur="change"
+        @input="log"
       />
       <!--
-        You can compose listener to one or more of following events
-        @click= "change"
-        @input= "change"
-        @change="change"    // input & click
-        @watch= "change"    // focus & input & click &  blur
-        @focus= "change"
-        @blur=  "change"        
-        @mouse= "change"    // mouseenter & mouseleave  
-        @resize="change"
-        @intersect="change" // https://vuetifyjs.com/en/directives/intersect
-        @swipe= "change"    // touch events        
-        @update="change"    // catch all events
+        compose listener to one or more of following events
+        @click= "log"
+        @input= "log"
+        @change="log"    // input & click
+        @watch= "log"    // focus & input & click &  blur
+        @focus= "log"
+        @blur=  "log"        
+        @mouse= "log"    // mouseenter & mouseleave  
+        @resize="log"
+        @intersect="log" // https://vuetifyjs.com/en/directives/intersect
+        @swipe= "log"    // touch events        
+        @update="log"    // catch all events
      
-        // If ID is set then modify listener with ID
-        <v-form-base
-          id="form-base-list"
-          @change:form-base-list="change"
-        />
+        // If ID is set then add ID to event
+        id="form-base-list"
+        @change:form-base-list="log"        
       -->
-
     </v-form>
     
     <infoline
@@ -42,7 +40,7 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import change from '@/lib'
+import log from '@/lib'
 
 // More Info to Mask https://vuejs-tips.github.io/vue-the-mask/
 const mask = '####-####-####-####'
@@ -91,7 +89,7 @@ export default {
     }
   },
   methods: {
-    change
+    log
   }
 }
 </script>

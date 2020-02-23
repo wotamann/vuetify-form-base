@@ -1,27 +1,27 @@
+<style>
+  /* INFO-SCOPED: Don't use '<style scoped>' because scoped CSS is inside a child-component not accessable */
+  .array-tasks { border: 1px solid #dddddd; padding:8px; margin-bottom: 8px; background-color: #e6f0ff; box-shadow: 3px 3px #e9e9e9; }  
+  .key-task { background-color: #f4f8ff; padding:8px; }  
+</style>
+
 <template>
   <v-container fluid>
     <h4>Add, Remove and Edit Items in nested Value-Array. </h4>
 
+    <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       id="array"
       :value="myValue"
       :schema="mySchema"
-      @change:array="change"
+      @change:array="log"
     />
-
-    <v-btn
-      dark
-      color="blue"
-      @click="add"
-    >
-      <v-icon>mdi-plus</v-icon>
-    </v-btn>
 
     <infoline
       :value="myValue"
       :schema="mySchema"
       :path="$options._componentTag"
     />
+
   </v-container>
 </template>
 
@@ -38,22 +38,18 @@ export default {
       myValue: {
         tasks: [
           {
-            add: '',
             nr: 1,
-            task: 'coding',
-            done: [
-              this.getTicket(),
-              this.getTicket(),
+            title: 'Item 1',
+            task: [
+              this.getTask(),
             ]
           },
           {
-            add: '',
             nr: 2,
-            task: 'working',
-            done: [
-              this.getTicket(),
-              this.getTicket(),
-              this.getTicket(),
+            title: 'Item 2',
+            task: [
+              this.getTask(),
+              this.getTask(),
             ]
           }
         ]
@@ -63,19 +59,20 @@ export default {
           type: 'array',
           flex: 12,
           schema: {
-            add: { type: 'btn', 'small': true, iconCenter: 'add', dark: true, color: 'red', flex: 1 },
+            // Add Task Button in Schema only 
+            add: { type: 'btn', 'small': true, iconCenter: 'add', label:'Task', dark: true, color: 'red', flex: 2 },
             nr: {
               type: 'text',
               disabled: true,
               color: 'blue',
               flex: 1
             },
-            task: {
+            title: {
               type: 'text',
               color: 'blue',
-              flex: 10
+              flex: 9
             },
-            done: {
+            task: {
               type: 'array',
               schema: {
                 done: {
@@ -84,34 +81,42 @@ export default {
               }
             }
           }
-        }
+        },
+        // Add Item Button in Schema only 
+        add: { type: 'btn', 'small': true, iconCenter: 'add', label:'Item', dark: true, color: 'blue', flex: 1 }        
       }
     }
   },
   methods: {
 
-    getTicket(){ return { done: false, title: 'Ticket added ' + Math.floor(Math.random() * 1000) } },
+    getTask(){ return { done: false, title: 'Task ' + Math.floor(Math.random() * 1000) } },
 
-    add () {
+    addItem () {
       this.myValue.tasks.push({
-        add: '',
         nr: this.myValue.tasks.length + 1,
-        task: 'item ' + (this.myValue.tasks.length + 1) + ' added',
-        done: [
-          this.getTicket()
-        ]
+        title: 'Item ' + (this.myValue.tasks.length + 1),
+        task: [ this.getTask() ]
       })
     },
-
-    change (val) {
+    addTask(index){
+      this.myValue.tasks[index[0]].task.push(this.getTask())
+    },
+    removeTask(index){
+      this.myValue.tasks[index[0]].task.splice(index[1], 1) 
+    },
+    log (val) {
       let { on, id, index, key, value } = update(val)
+      // add item
+      if (key === 'add' && id === 'array') {
+        this.$nextTick( this.addItem() )
+      }
       // add task
-      if (key === 'add') {
-        setTimeout(() => this.myValue.tasks[index[0]].done.push( this.getTicket() ), 250)
+      if (key === 'add' && id.includes('array-tasks-') ) {
+        setTimeout( () => this.addTask(index), 250)
       }
       // remove task
       if (key === 'done' && value === true) {
-        setTimeout(() => this.myValue.tasks[index[0]].done.splice(index[1], 1), 250)
+        setTimeout(() => this.removeTask(index), 250)
       }
     }
   }

@@ -1,12 +1,15 @@
 <template>
   <v-container fluid>
     <h4>Display conditional Controls on Form</h4>
+    
+    <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       id="form-base-conditional"
       :value="myValue"
       :schema="mySchema"
-      @change:form-base-conditional="change"
+      @change:form-base-conditional="log"
     />
+    
     <v-btn
       dark
       color="blue lighten-3"
@@ -14,13 +17,7 @@
     >
       Click or Type 'Show'
     </v-btn>
-    <v-btn
-      dark
-      color="blue lighten-3"
-      @click="add"
-    >
-      Add Item
-    </v-btn>
+  
     <infoline
       :value="myValue"
       :schema="mySchema"
@@ -32,8 +29,10 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import change from '@/lib'
+import log from '@/lib'
 
+const getTask = () => { return { done: false, title: 'Ticket added ' + Math.floor(Math.random() * 1000) } }
+    
 export default {
   name: 'Conditional',
   components: { VFormBase, Infoline },
@@ -44,12 +43,11 @@ export default {
       myValue: {
         conditional: '',
         tasks: [
-          this.getTicket(),
-          this.getTicket(),
-          this.getTicket(),
+          getTask(),
+          getTask(),
+          getTask()
         ]
       }
-
     }
   },
   computed: {
@@ -69,21 +67,15 @@ export default {
     }
   },
   methods: {
-    
-    getTicket(){ return { done: false, title: 'Ticket added ' + Math.floor(Math.random() * 1000) } },
-
-    add () {
-      this.myValue.tasks.unshift(this.getTicket())
-    },
+        
     toggle () {
       this.hidden = !this.hidden
     },
 
-    change (val) {
+    log(val) {
+      log(val)
 
-      change(val)
-
-      let { index, key, value } = val
+      const { index, key, value } = val
 
       if (key === 'conditional') this.hidden = value !== 'show'
       // add  

@@ -6,7 +6,7 @@
 
 <template>
   <v-container fluid>    
-    <h4>Edit Multisource Data in one Form binding second Formbase as Slot</h4>
+    <h4>Edit Multisource Data in one Form binding other Formbase as Slot</h4>
     
     <!-- BASE -->
     <v-form-base
@@ -16,9 +16,7 @@
       @input:form-base-container="change"
     >
       <!-- TOP SLOT  -->
-      <div slot="form-base-container-top" class="form-base-title">
-        This is 'form-base-container'
-      </div>
+      <div slot="form-base-container-top" class="form-base-title">This is 'form-base-container' with data 'myValue'</div>
 
       <!-- SLOT (replaces key 'Slotted')  -->
       <v-form-base
@@ -29,11 +27,10 @@
         @input:form-base-slot="changepartial"
       >
         <!-- TOP SLOT  -->
-        <div slot="form-base-slot-top" class="form-base-title">
-          This is 'form-base-slot'
-        </div> 
+        <div slot="form-base-slot-top" class="form-base-title">This is 'Form-base-slot' with data 'myValueSlot'</div> 
       </v-form-base>
-    
+      <!-- END SLOT -->
+
     </v-form-base>
     
     <!-- Stuff  -->
@@ -89,10 +86,8 @@ export default {
       // SLOT 
       myValueSlot: {
         slot: [
-          { check: true, switch:true},
-          { check: true, switch:false},
           { check: false, switch:true},
-          { check: false, switch:false},
+          { check: true, switch:false},
         ]        
       },
       mySchemaSlot: {

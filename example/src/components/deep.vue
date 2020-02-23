@@ -11,12 +11,15 @@
 <template>
   <v-container fluid>
     <h4>Deep nested Data including Arrays and Objects mapped to Form</h4>
+
+    <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       id="form-base-nested"
       :value="myValue"
       :schema="mySchema"
       @change:form-base-nested="change"
     />
+    
     <infoline
       :value="myValue"
       :schema="mySchema"

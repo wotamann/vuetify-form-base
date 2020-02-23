@@ -70,6 +70,7 @@
                         :id="`${id}-${obj.key}-${idx}`"
                         :value="item"
                         :schema="obj.schema.schema"
+                        :class="`${id}-${obj.key}`"
                       />
                     </slot>
                   </div>
@@ -649,7 +650,8 @@ export default {
         if (typeof val === 'number')  return defaultSchemaIfValueIsNumber(key)
         if (typeof val === 'boolean') return defaultSchemaIfValueIsBoolean(key)
         return val
-      })      
+      })
+      // assign root props to avoid manipulating prop: schema       
       Object.keys(schema).forEach( key => this.schema[key] = schema[key] )
     },
   },

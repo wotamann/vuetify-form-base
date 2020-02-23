@@ -1,12 +1,13 @@
 <template>
   <v-container fluid>
-    <h4>Edit Data in Value-Array by using one Schema for all Items. Scroll and see Intersections in Log</h4>
+    <h4>Edit Data in Value-Array by using one Schema for all Items. Scroll for Intersections in Log</h4>
 
+    <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       id="array-ease"
       :value="myValue"
       :schema="mySchema"
-      @change:array-ease="change"
+      @change:array-ease="log"
       @intersect:array-ease="intersect"
     />
 
@@ -21,7 +22,9 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import change from '@/lib'
+import log from '@/lib'
+
+const getTask= () => { return { done: false, title: 'Task ' + Math.floor(Math.random() * 1000) } }
 
 export default {
   name: 'arrayease',
@@ -30,12 +33,11 @@ export default {
     return {
       myValue: {
         tasks: [
-          { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
-          { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
-          { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
-          { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
-          { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) },
-          { done: false, title: 'Ticket ' + Math.floor(Math.random() * 1000) }
+          getTask(), 
+          getTask(), 
+          getTask(), 
+          getTask(), 
+          getTask(), 
         ]
       },
       mySchema: {
@@ -51,14 +53,15 @@ export default {
     }
   },
   methods: {
-    change,
+    
+    log,
 
-     intersect ({ id, key, value, index, params }) {   
-      // log intersection  
+    // log intersection
+    intersect ({ id, key, value, index, params }) {  
       if (key === 'title') {
         console.log( `INTERSECTION: '${value}' ${params.isIntersecting ?  ' entry intersection':  ' leave intersection'} `);
       }      
-    },
+    }
   }
 }
 </script>

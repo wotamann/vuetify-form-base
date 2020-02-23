@@ -1,14 +1,14 @@
 <template>
   <v-container fluid>
-    <h4>Lazy Loading of Component handling async Value or Schema</h4>
+    <h4>Lazy Component loading for handling async Value or Schema</h4>
 
-    <v-form v-if="showFormbase">
-      <v-form-base
-        :value="myValue"
-        :schema="mySchema"
-        @change="change"
-      />
-    </v-form>
+    <!-- FORM-BASE-COMPONENT -->
+    <v-form-base 
+      v-if="showFormbase"
+      :value="myValue"
+      :schema="mySchema"
+      @change="log"
+    />
 
     <infoline
       :value="myValue"
@@ -20,12 +20,12 @@
 
 <script>
 import Infoline from '@/components/infoline'
-import change from '@/lib'
+import log from '@/lib'
 
 export default {
   name: 'AsyncLoad',
   components: {
-    // STEP 1) LAZY LOADING 'VFormBase' COMPONENT HERE
+    // STEP 1) Lazy Loading of 'vFormBase' component here
     'VFormBase': () => import('@/components/vFormBase'),
     Infoline
   },
@@ -38,12 +38,13 @@ export default {
   },
 
   async mounted () {
-    // STEP 2) ASYNC LOADING VALUE & SCHEMA
-    this.myValue = await this.delay({
+    // STEP 2a) Async Loading of Value
+      this.myValue = await this.delay({
       name: 'Base',
       password: 'abcdefgh',
       checkbox: true
     })
+    // STEP 2b) Async Loading of Schema
     this.mySchema = await this.delay({
       // Shorthand Definition
       // prop: text => shorthand for prop: { type: 'text' }
@@ -52,16 +53,16 @@ export default {
       checkbox: 'checkbox'
     })
 
-    // STEP 3) LAZY LOADING 'VFormbase' after making visible
+    // STEP 3) Important: only after lazy Loading display 'v-form-base'   
     this.showFormbase = true
   },
 
   methods: {
-    change,
+    log,
 
     delay (obj) {
       return new Promise((resolve, reject) => {
-        setTimeout(() => resolve(obj), 500)
+        setTimeout(() => resolve(obj), 1000)
       })
     }
   }

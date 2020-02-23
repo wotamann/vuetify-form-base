@@ -5,7 +5,7 @@
       id="form-base-selection"
       :value="myValue"
       :schema="mySchema"
-      @input:form-base-selection="change"
+      @input:form-base-selection="log"
     />
     <infoline
       :value="myValue"
@@ -18,12 +18,12 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import change from '@/lib'
+import log from '@/lib'
 
 const items = ['Musk', 'Jobs', 'Taleb', 'Harari']
 
 export default {
-  name: 'SelectionDynamic',
+  name: 'Cascading Selection',
   components: { VFormBase, Infoline },
   data () {
     return {
@@ -43,12 +43,13 @@ export default {
     }
   },
   methods: {
-    change (val) {
+    log (val) {
 
-      change(val)
+      log(val)
       
-      // delete selection2 if its value doesn't match with new Base Selection
-      if ( this.myValue.selection1.indexOf(this.myValue.selection2) === -1 ) {
+      // set null or delete selection2 if its value doesn't match with new Base Selection
+      if ( this.myValue.selection1.indexOf(this.myValue.selection2) === -1 ) {        
+        // this.myValue.selection2 = null
         delete this.myValue.selection2
       }        
     }

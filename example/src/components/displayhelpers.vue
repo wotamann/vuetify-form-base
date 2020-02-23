@@ -8,14 +8,14 @@
       <a target="_blank" href="https://vuetifyjs.com/en/styles/spacing">spacing</a>
       of content
     </h4>
-    <v-form>
-      <v-form-base
-        :value="myValue"
-        :schema="mySchema"
-        @input="change"
-      />
+
+    <!-- FORM-BASE-COMPONENT -->
+    <v-form-base
+      :value="myValue"
+      :schema="mySchema"
+      @input="log"
+    />
    
-    </v-form>
     <infoline
       :value="myValue"
       :schema="mySchema"
@@ -27,7 +27,7 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import change from '@/lib'
+import log from '@/lib'
 
 export default {
   name: 'DisplayHelpers',
@@ -35,7 +35,7 @@ export default {
   data () {
     return {
       myValue: {
-        name2: 'title & padding left + right',
+        name2: 'typo title & padding left + right',
         name3: 'visible only on sm',
         name4: 'visible only on xs',
       },
@@ -47,7 +47,7 @@ export default {
     }
   },
   methods: {
-    change
+    log
   }
 }
 </script>
