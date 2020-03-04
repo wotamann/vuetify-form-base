@@ -48,16 +48,6 @@
                 </slot>
               </div>
             </template>
-			
-			<!-- select -->
-            <v-select
-              v-else-if="obj.schema.type === 'select' "
-              :value="setValue(obj)"
-              v-bind="obj.schema"
-              @focus="onFocus($event, obj)"
-              @change="onInput($event, obj)"
-              @blur="onBlur($event, obj)"
-            ></v-select>
 
             <!-- treeview -->
             <v-treeview
@@ -192,7 +182,6 @@
               @click:prepend="onClick($event, obj, prepend )"
               @click:prepend-inner="onClick($event, obj, prependInner )"
               @input="onInput($event, obj)"
-			  @blur="onBlur($event, obj)"
             ></v-text-field>
 
             <!-- all other Types -> see typeToComponent -->
