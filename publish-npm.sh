@@ -1,3 +1,5 @@
 #!/bin/bash
-npm version patch
+cd example
+# npm version patch
+# npm publish --otp=<code>
 npm publish

@@ -1,43 +1,55 @@
 <template>
-  <v-container fluid >
-
+  <v-container fluid>
     <h4>Display conditional Controls on Form</h4>
-
-    <v-form-base id="form-base-conditional" :value= "myValue" :schema= "mySchema" @update:form-base-conditional= "update" />
-
-    <v-btn dark  color="blue lighten-3"  @click= "toggle">Click or Type 'Show'</v-btn>
-    <v-btn dark  color="blue lighten-3"  @click= "add">Add Item</v-btn>
-
-    <infoline :value= "myValue" :schema= "mySchema"></infoline>
-
+    
+    <!-- FORM-BASE-COMPONENT -->
+    <v-form-base
+      id="form-base-conditional"
+      :value="myValue"
+      :schema="mySchema"
+      @change:form-base-conditional="log"
+    />
+    
+    <v-btn
+      dark
+      color="blue lighten-3"
+      @click="toggle"
+    >
+      Click or Type 'Show'
+    </v-btn>
+  
+    <infoline
+      :value="myValue"
+      :schema="mySchema"
+      :path="$options._componentTag"
+    />
   </v-container>
 </template>
 
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import update from '@/lib'
+import log from '@/lib'
 
+const getTask = () => { return { done: false, title: 'Ticket added ' + Math.floor(Math.random() * 1000) } }
+    
 export default {
-  name: 'conditional',
+  name: 'Conditional',
   components: { VFormBase, Infoline },
 
   data () {
     return {
       hidden: true,
-
       myValue: {
         conditional: '',
         tasks: [
-          { done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) },
-          { done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) },
-          { done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) }
+          getTask(),
+          getTask(),
+          getTask()
         ]
       }
-
     }
   },
-
   computed: {
     mySchema () {
       return {
@@ -47,32 +59,29 @@ export default {
           hidden: this.hidden,
           flex: 12,
           schema: {
-            done: { type: 'checkbox', label: 'Done', color: 'green', flex: 3 },
-            title: { type: 'text', placeholder: '...', color: 'green', flex: 8 }
+            done: { type: 'checkbox', label: 'Done', color: 'red', flex: 2 },
+            title: { type: 'text', placeholder: '...', flex: 8 }
           }
         }
       }
     }
   },
-
   methods: {
-    add () {
-      this.myValue.tasks.unshift({ done: false, title: 'Task Nr ' + Math.floor(Math.random() * 1000) })
-    },
+        
     toggle () {
       this.hidden = !this.hidden
     },
 
-    update (val) {
-      update(val)
+    log(val) {
+      log(val)
 
-      let { index, key, value } = val
+      const { index, key, value } = val
 
       if (key === 'conditional') this.hidden = value !== 'show'
-
+      // add  
       if (key === 'done' && value === true) {
         setTimeout(() => this.myValue.tasks.splice(index, 1), 333)
-      }
+      }      
     }
   }
 }

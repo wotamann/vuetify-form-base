@@ -1,6 +1,6 @@
 {
   "name": "vuetify-form-base-example",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "private": true,
   "description": "Form Generator as Vue component based on Vuetify",
   "author": "wotamann@github",
@@ -13,37 +13,24 @@
   "dependencies": {
     "css-loader": "^3.2.0",
     "lodash": "^4.17.13",
-    "sass-loader": "^7.2.0",
+    "sass-loader": "^7.3.1",
     "stylus-loader": "^3.0.2",
     "vue": "^2.6.10",
-    "vuetify": "^2.0.0"
+    "vue-the-mask": "^0.11.1",
+    "vuetify": "^2.2.13"
   },
   "devDependencies": {
     "@mdi/font": "^4.0.96",
     "@mdi/js": "^4.0.96",
     "@vue/cli-plugin-babel": "^3.9.2",
     "@vue/cli-plugin-eslint": "^3.9.2",
-    "@vue/cli-service": "^3.9.3",
+    "@vue/cli-service": "^4.1.2",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.3",
     "vue-cli-plugin-vuetify": "^0.6.3",
     "vue-template-compiler": "^2.6.10"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "@vue/standard"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
   },
   "postcss": {
     "plugins": {
@@ -64,5 +51,23 @@
     "Formbuilder",
     "JS"
   ],
+  "eslintConfig": {
+    "root": false,
+    "env": {
+      "node": false,
+      "browser": false
+    },
+    "parserOptions": {
+      "parser": "babel-eslint",
+      "sourceType": "module"
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:vue/recommended",
+      "plugin:vue/essential",
+      "@vue/standard"
+    ],
+    "rules": {}
+  },
   "license": "MIT"
 }

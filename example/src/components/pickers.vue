@@ -1,14 +1,19 @@
 <template>
-  <v-container fluid >
-
+  <v-container fluid>
     <h4>Pickers </h4>
-
     <v-form>
-      <v-form-base id="form-base-pickers" :value= "myValue" :schema= "mySchema" @update:form-base-pickers= "update"/>
+      <v-form-base
+        id="form-base-pickers"
+        :value="myValue"
+        :schema="mySchema"
+        @update:form-base-pickers="update"
+      />
     </v-form>
-
-    <infoline :value= "myValue" :schema= "mySchema" ></infoline>
-
+    <infoline
+      :value="myValue"
+      :schema="mySchema"
+      :path="$options._componentTag"
+    />
   </v-container>
 </template>
 
@@ -18,7 +23,7 @@ import Infoline from '@/components/infoline'
 import update from '@/lib'
 
 export default {
-  name: 'pickers',
+  name: 'Pickers',
   components: { VFormBase, Infoline },
   data () {
     return {

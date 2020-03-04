@@ -1,43 +1,95 @@
 <template>
-  <v-container fluid >
-
-    <h4>Simple Form </h4>
-
+  <v-container fluid>
+    <h4>Textfields and Fileselector with Mask and Tooltips</h4>
+    
     <v-form>
-      <v-form-base :value= "myValue" :schema= "mySchema" @change= "change"/>
+      <!-- FORM-BASE-COMPONENT -->    
+      <v-form-base
+        :value="myValue"
+        :schema="mySchema"
+        @input="log"
+      />
+      <!--
+        compose listener to one or more of following events
+        @click= "log"
+        @input= "log"
+        @change="log"    // input & click
+        @watch= "log"    // focus & input & click &  blur
+        @focus= "log"
+        @blur=  "log"        
+        @mouse= "log"    // mouseenter & mouseleave  
+        @resize="log"
+        @intersect="log" // https://vuetifyjs.com/en/directives/intersect
+        @swipe= "log"    // touch events        
+        @update="log"    // catch all events
+     
+        // If ID is set then add ID to event
+        id="form-base-list"
+        @change:form-base-list="log"        
+      -->
     </v-form>
-
-    <infoline :value= "myValue" :schema= "mySchema" ></infoline>
-
+    
+    <infoline
+      :value="myValue"
+      :schema="mySchema"
+      :path="$options._componentTag"
+    />
   </v-container>
 </template>
 
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import change from '@/lib'
+import log from '@/lib'
+
+// More Info to Mask https://vuejs-tips.github.io/vue-the-mask/
+const mask = '####-####-####-####'
+
+// Accept only Images Files
+const accept = 'image/*'
 
 export default {
-  name: 'simple',
+  name: 'Textfields',
   components: { VFormBase, Infoline },
   data () {
     return {
       myValue: {
         name: 'Base',
-        password: '123456',
-        file: [], // contains a single or an array of File objects
-        checkbox: true
-      },
+        creditcard: '12345678',
+        password: 'abcdefgh',
+        file: [] // array of File objects
+      },      
       mySchema: {
-        name: { type: 'text', label: 'Name', flex: 4 },
-        password: { type: 'password', label: 'Password', clearable: true, flex: 3 },
-        file: { type: 'file', label: 'Image-Files', accept: 'image/*', multiple: true, flex: 4 },
-        checkbox: { type: 'checkbox', label: 'Ok', flex: 1 }
+        // schema prop: string 'text' => shorthand for prop: { type: 'text' }        
+        name: 'text',         
+        // schema prop: object definition
+        password: { 
+          type: 'password', 
+          clearable: true, 
+          flex: 12 
+        },
+        creditcard: { 
+          type: 'text', 
+          label: 'Creditcard', 
+          prependInnerIcon: 'credit_card', 
+          hint: mask, 
+          mask, 
+          tooltip: 'Creditcard', 
+          flex: 12 
+        },
+        file: { 
+          type: 'file', 
+          label: 'Files', 
+          accept, 
+          multiple: true, 
+          tooltip: { color: 'green', label: 'File Selection', top: true }, 
+          flex: 12 
+        }
       }
     }
   },
   methods: {
-    change
+    log
   }
 }
 </script>

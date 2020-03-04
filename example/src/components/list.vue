@@ -1,28 +1,37 @@
-<style>
-  .key-listObject .active  {background-color: rgb(218, 221, 238)}
-  .key-listObject .active *  {color: #3d3a3a}
-  .key-listString .active  {background-color: #C5CAE9}
-  .key-listString .active *  {color: #ffffff}
-</style>
-
 <template>
-  <v-container fluid >
+  <v-container fluid>
+    <h4>Add or Select Item from List (Array in Value) with Result '.model' in Schema and Event </h4>
+    <v-form-base
+      id="form-base-list"
+      :value="myValue"
+      :schema="mySchema"
+      @change:form-base-list="change"
+    />
+    
+    <!-- <v-btn
+      v-if ="myValue.listObject.length < 4"
+      dark
+      color="blue"
+      @click="add"
+    >
+      <v-icon>mdi-plus</v-icon>
+    </v-btn> -->
 
-    <h4>Select Item from Data-Array(List) with Result in 'schema.prop.selected'</h4>
-
-    <v-form-base id="form-base-list" :value= "myValue" :schema= "mySchema" @update:form-base-list= "update" />
-
-    <infoline :value= "myValue" :schema= "mySchema"></infoline>
-
+    <infoline
+      :value="myValue"
+      :schema="mySchema"
+      :path="$options._componentTag"
+    />
   </v-container>
 </template>
 
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import update from '@/lib'
+import change from '@/lib'
 
 export default {
+  name: 'Lists',
   components: { VFormBase, Infoline },
   data () {
     return {
@@ -39,13 +48,45 @@ export default {
         ]
       },
       mySchema: {
-        listObject: { type: 'list', item: 'name', selected: 2, color: '#C5CAE9', flex: 5 },
-        listString: { type: 'list', label: 'Label', selected: null, offset: 1, flex: 5 }
+        
+        listObject: {
+          type: 'list',
+          label: 'List Single',
+          icon: 'mdi-wifi',
+          item: 'name', // display name from object in array
+          model: 2,
+          color: 'blue',
+          flex: 5
+        },
+        listString: {
+          type: 'list',
+          label: 'List Multiple',
+          multiple: true,
+          model: [1, 2],
+          color: 'red',
+          offset: 1,
+          flex: 5
+        },
+        btn1: { type: 'btn', label:'Add', color: 'blue', flex: 2 },
+        btn2: { type: 'btn', label:'Add', color: 'red', flex: 2, offset: 4 },
       }
     }
   },
   methods: {
-    update
+    
+    change (val) {
+
+      change(val)
+
+      let { key } = val
+
+      if (key === 'btn1') this.myValue.listObject.push({ 
+        line: this.myValue.listObject.length + 1, name: 'Musk ' + Math.floor(Math.random() * 1000)
+      })
+      
+      if (key === 'btn2') this.myValue.listString.push( 'Musk ' + Math.floor(Math.random() * 1000))
+    
+    }
   }
 }
 </script>
