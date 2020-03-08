@@ -1,13 +1,22 @@
 <template>
   <v-container fluid>
-    <h4>Missing Schema will autogenerate Form if Value is String, Number or Boolean.</h4>
+    <h4>Missing Schema will autogenerate Form. Control Grid with Flex-Prop</h4>
     
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       :value="myValue"
+      :flex="{xs:12,sm:6}"
       @input="log"
     />
-   
+
+    <!-- 
+      FLEX default
+      default: {xs:12,sm:6,md:4,lg:3}
+      or
+      :flex="{xs:12,sm:6,md:4,lg:3}" 
+    -->
+
+
     <!-- Stuff   -->
     <infoline
       :value="myValue"
@@ -30,9 +39,9 @@ export default {
         person: {
           name: {
             prename:'Samuel',         
-            surname: 'Base'
+            surname: 'Stoner'
           },
-          email: 'base@web.com',          
+          email: 'Stoner@web.com',          
           age:37         
         },  
         todo: [

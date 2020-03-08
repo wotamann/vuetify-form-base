@@ -33,7 +33,8 @@
     <v-btn dark color="green lighten-3" @click= "resetValidation">
       Reset Validate
     </v-btn>
-
+    
+    <!-- Stuff   -->
     <infoline
       :value="myValue"
       :schema="mySchema"

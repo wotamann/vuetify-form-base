@@ -15,7 +15,8 @@
       :schema="mySchema"
       @input="log"
     />
-   
+    
+    <!-- Stuff   -->   
     <infoline
       :value="myValue"
       :schema="mySchema"

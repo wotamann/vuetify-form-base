@@ -3,16 +3,15 @@
 
   /* CSS Component --- Container */
   #form-base-css { background-color: #fff; }
-  #form-base-css .title { width: 100%; }
-  #form-base-css .slot { padding:2px; color:#b49403; background-color: #f7f2dc; border-bottom: 2px dotted #e9c837}
+  #form-base-css .slot { width: 100%; padding:2px; color:#947901; background-color: #fcf3d0; border: 1px dotted #e7c320}
 
   /* CSS Item --- set all items  */
-  #form-base-css .item { padding:0.5rem; border-bottom: 2px dotted #bbb}
+  #form-base-css .item { padding:0.5rem; border-bottom: 1px dotted #7f82ad}
 
   /* CSS Type --- set all items of type ... */
   #form-base-css .type-checkbox { background-color: #f0d3d1}
-  #form-base-css .type-switch { background-color: #46a7df73}
-  #form-base-css .type-slider { background-color: #44c45a77}
+  #form-base-css .type-slider { background-color: #46a7df73}
+  #form-base-css .type-switch { background-color: #44c45a77}
 
   /* CSS Keys --- set item with key on focus' */
   #form-base-css .key-email input { background-color: #cad7f077; color:#1951bb77 }
@@ -31,10 +30,10 @@
       @change:form-base-css="log"
     >
       <!-- FORM SLOT -->
-      <h4 slot="form-base-css-top" class="title slot">
+      <h4 slot="form-base-css-top" class="slot">
         Top Slot of 'Form'
       </h4>
-      <h4 slot="form-base-css-bottom" class="title slot">
+      <h4 slot="form-base-css-bottom" class="slot">
         Bottom Slot of 'Form'
       </h4>  
       <!-- KEY SLOTS -->
@@ -62,7 +61,7 @@
         slot="slot-tooltip"
         slot-scope="slotProps"
       >
-        {{ slotProps.obj.schema.tooltip }} has value '{{ slotProps.obj.value }}'
+        Tooltip-Slot: {{ slotProps.obj.schema.tooltip }} has value '{{ slotProps.obj.value || 'undefined' }}'
       </div>
       <!-- TOOLTIP SLOT -  New Syntax VUE 2.6.0 -->
       <!-- <template v-slot:slot-tooltip="slotProps">
@@ -70,6 +69,7 @@
       </template> -->
     </v-form-base>
 
+    <!-- Stuff   -->
     <infoline
       :value="myValue"
       :schema="mySchema"
@@ -105,7 +105,8 @@ export default {
           btnToggleSingle: ['B'],
           btnToggleMulti: 1,          
           btn: 'A', // ident with schema { label:'A', ... }
-          icon: 'print',
+          iconV: 'print',
+          // iconL: 'ignored',
           radio: 'A',
         }
       },
@@ -114,16 +115,20 @@ export default {
         password: { type: 'password', label: 'Password', flex: 4, tooltip: 'Password' },
         email: { type: 'email', label: 'Email', flex: 4, spacer: true, tooltip: 'Email' },
         controls: {
-          checkbox: { type: 'checkbox', label: 'Red', color: 'red', flex: 4, tooltip: 'Checkbox' },
-          switch: { type: 'switch', label: 'Blue', color: 'blue', flex: 4, tooltip: 'Switch' },
-          slider: { type: 'slider', label: 'Green', color: 'green', flex: 4, tooltip: 'Slider' },
+          checkbox: { type: 'checkbox', label: 'CSS-Red', color: 'red', flex: 4, tooltip: 'Checkbox' },
+          switch: { type: 'switch', label: 'CSS-Green', color: 'green', flex: 4, tooltip: 'Switch' },
+          slider: { type: 'slider', label: 'CSS-Blue', color: 'blue', flex: 4, tooltip: 'Slider' },
 
           btnToggleSingle: { type: 'btn-toggle', options, color:'red', multiple: true, tooltip: 'Multiple Button', flex: 6 },
           btnToggleMulti: { type: 'btn-toggle', options: optionsObj, color: 'blue', tooltip: 'Button', flex: 6 },
 
           btn: { type: 'btn', iconRight: 'print', color:'red', tooltip: 'Button', flex: 5 },
-          icon: { type: 'icon', large: true, color: 'green', tooltip: 'Icon', flex: 1 },
-          radio: { type: 'radio', label: 'Radio', options, row:true,  flex: 6 },
+          
+          // icon: try label or if undefined use value
+          iconV: { type: 'icon', color: 'red', tooltip: 'Icon Value', flex: 1 }, 
+          iconL: { type: 'icon', label:'print', large: true, color: 'blue', tooltip: 'Icon Label', flex: 1 },
+          
+          radio: { type: 'radio', label: 'Radio', options, row:true,  flex: 5 },
         }
       }
     }

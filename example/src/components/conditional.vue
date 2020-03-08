@@ -17,7 +17,8 @@
     >
       Click or Type 'Show'
     </v-btn>
-  
+    
+    <!-- Stuff   -->  
     <infoline
       :value="myValue"
       :schema="mySchema"

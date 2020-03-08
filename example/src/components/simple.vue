@@ -7,28 +7,32 @@
       <v-form-base
         :value="myValue"
         :schema="mySchema"
+        :flex="6"
         @input="log"
       />
       <!--
-        compose listener to one or more of following events
+        // compose listener to one or more of following Events:
         @click= "log"
         @input= "log"
-        @change="log"    // input & click
-        @watch= "log"    // focus & input & click &  blur
+        @change="log"    // input|click
+        @watch= "log"    // focus|input|click|blur
         @focus= "log"
         @blur=  "log"        
-        @mouse= "log"    // mouseenter & mouseleave  
-        @resize="log"
-        @intersect="log" // https://vuetifyjs.com/en/directives/intersect
-        @swipe= "log"    // touch events        
-        @update="log"    // catch all events
+        @mouse= "log"    // mouseenter|mouseleave  
+        @display= "log"  // resize|swipe|intersect 
+        @intersect="log" // intersect - https://vuetifyjs.com/en/directives/intersect
+        @resize= "log"
+        @swipe=  "log"   // touch events        
+        @update= "log"   // catch all events
      
-        // If ID is set then add ID to event
+        // if 'id' available append 'id' at Event: 
         id="form-base-list"
         @change:form-base-list="log"        
       -->
+    
     </v-form>
     
+    <!-- Stuff  -->    
     <infoline
       :value="myValue"
       :schema="mySchema"
@@ -66,7 +70,6 @@ export default {
         password: { 
           type: 'password', 
           clearable: true, 
-          flex: 12 
         },
         creditcard: { 
           type: 'text', 
@@ -75,15 +78,12 @@ export default {
           hint: mask, 
           mask, 
           tooltip: 'Creditcard', 
-          flex: 12 
         },
         file: { 
           type: 'file', 
           label: 'Files', 
           accept, 
           multiple: true, 
-          tooltip: { color: 'green', label: 'File Selection', top: true }, 
-          flex: 12 
         }
       }
     }

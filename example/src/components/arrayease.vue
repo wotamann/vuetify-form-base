@@ -10,7 +10,8 @@
       @change:array-ease="log"
       @intersect:array-ease="intersect"
     />
-
+    
+    <!-- Stuff   -->
     <infoline
       :value="myValue"
       :schema="mySchema"

@@ -7,6 +7,8 @@
       :schema="mySchema"
       @input:form-base-selection="update"
     />
+    
+    <!-- Stuff  -->
     <infoline
       :value="myValue"
       :schema="mySchema"

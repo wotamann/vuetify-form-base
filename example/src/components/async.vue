@@ -9,7 +9,8 @@
       :schema="mySchema"
       @change="log"
     />
-
+    
+    <!-- Stuff   -->
     <infoline
       :value="myValue"
       :schema="mySchema"

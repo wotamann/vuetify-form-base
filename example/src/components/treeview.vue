@@ -7,6 +7,8 @@
       :schema="mySchema"
       @change:treeview-demo="change"
     />
+    
+    <!-- Stuff  -->    
     <infoline
       :value="myValue"
       :schema="mySchema"

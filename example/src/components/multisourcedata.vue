@@ -26,10 +26,10 @@
         :schema="mySchemaSlot"
         @input:form-base-slot="changepartial"
       >
-        <!-- TOP SLOT  -->
+        <!-- TOP SLOT in Slotted -->
         <div slot="form-base-slot-top" class="form-base-title">This is 'Form-base-slot' with data 'myValueSlot'</div> 
-      </v-form-base>
-      <!-- END SLOT -->
+      </v-form-base>      
+      <!-- SLOT END -->
 
     </v-form-base>
     

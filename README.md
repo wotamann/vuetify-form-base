@@ -424,19 +424,48 @@ IF you want Schema Properties to be changed dynamic, then you must make your Sch
     },
 ```
 
-## Vuetify Layout and Grid
+## Vuetify Display, Typography and Spacing
 
-Integrate Vuetify Grid by using the Schema-Properties 'flex', 'offset' and 'order':
+Integrate Vuetify-Display and Layout behaviour by using the Schema-Property 'class':
 
 ```javascript
     mySchema: {
-      name: { type: 'text', flex: 4, offset: 2, order: 1 },
+      name: { type: 'text', class:'caption d-flex d-sm-none' },
+    }
+```
+[Vuetify - Display:](https://vuetifyjs.com/en/styles/display) 
+
+[Vuetify - Typography:](https://vuetifyjs.com/en/styles/typography) 
+
+[Vuetify - Spacing:](https://vuetifyjs.com/en/styles/spacing) 
+
+
+## Vuetify Grid
+
+Integrate Vuetify-Grid behaviour by setting the Form-Base Property 'flex':
+
+```html
+  <form-base :flex="{ xs:12, sm:8, md:6, lg:4 }" ... />
+  
+  <!-- or shorthand xs:12  -->
+  <form-base :flex="12" ... />
+```
+
+**Schema-Definition overrules Form-Base Definition!**
+
+Get individual Grid-Control by using Schema-Properties 'flex', 'offset' and 'order'.
+
+```javascript
+    mySchema: {
+      name1: { type: 'text', flex: { xs:12, sm:6, md:4 } },
+      
+      name2: { type: 'text', flex: 4, offset: 2, order: 1 },
+      // flex: 4     // shorthand for flex: { xs:4 }
+      // offset: 2   // shorthand for offset: { xs:2 }
+      // order: 1    // shorthand for order: { xs:1 }
     }
 ```
 
-    flex: 4     // shorthand for flex: { xs:4 }
-    offset: 2   // shorthand for offset: { xs:2 }
-    order: 1    // shorthand for order: { xs:1 }
     
 A more responsive Solution with 'flex', 'offset' or 'order' needs an Object as Value. For more Details see Vuetify Documentation:  
 
@@ -451,6 +480,7 @@ offset: { xs:0, sm:1, md:2, lg:2 }
 [Vuetify - Order:](https://vuetifyjs.com/en/framework/grid#order) 
 order: { xs:1, sm:1, md:2, lg:2 }
 
+
 ## Link & Synchronize
 
 Forms can be **linked** together using the same Value-Object. Changes in one Form are synchronized and reflected in the other Form. 
@@ -463,7 +493,7 @@ Forms can be **linked** together using the same Value-Object. Changes in one For
  
 ## Vuetify Controls API-Props
 
-[Vuetify Controls have a API with Props](https://vuetifyjs.com/en/components/text-fields#api) These Props in Vuetify-Controls comes in **kebab-case** amd must for use in Schema-Object converted to **CamelCase**
+[Vuetify Controls have a API with Props](https://vuetifyjs.com/en/components/text-fields#api) These Props in Vuetify-Controls comes in **kebab-case** amd must for use in Schema-Object converted to **camelCase**
 
     <!-- vuetifyjs.com -->
     Input & Controls
@@ -472,20 +502,19 @@ Forms can be **linked** together using the same Value-Object. Changes in one For
           append-icon
           background-color 
 
-    <!-- JS -->
-    mySchema: { 
-      name: { type:'text', appendIcon:'menu', backgroundColor': 'red' },
-      ...
-    }
-
+```javascript
+mySchema: { 
+  name: { type:'text', appendIcon:'menu', backgroundColor:'red' }  
+}
+```
 
 ## Schema
 
-	<form-base :schema="schema" ... />
+	<form-base :schema="mySchema" ... />
 
 Schema is an JS-Object, which defines and controls the behavior of your Form. Each Key Prop) in your Schema-Object must reflect a Key from your Data-Object. A minimalistic Definition of a text input could look like this:
 
-    schema:{
+    mySchema:{
       name: { type:'text'}  
     }
 

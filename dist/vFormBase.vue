@@ -145,8 +145,8 @@
                   v-else-if="obj.schema.type === 'icon'"
                   v-bind="obj.schema"
                   @click="onEvent($event, obj)"
+                  v-text = "getIconValue(obj)"
                 >
-                  {{ setValue(obj) }}
                 </v-icon>
                 
                 <!-- btn-toggle -->
@@ -321,10 +321,13 @@ const appendOuter = 'append-outer'
 const prepend = 'prepend'
 const prependInner = 'prepend-inner'
 
+// Default flex setting, overrideable by prop flex or by schema.flex definition  
+const flexDefault = '' // { xs:6, sm: 4, md:4, lg:4}
+
 // Mapper for Autogeneration of Schema from Value
-const defaultSchemaIfValueIsString = key => ({ type:'text', label: key, flex: { xs:12, sm: 6, md:4, lg:3} })
-const defaultSchemaIfValueIsNumber = key => ({ type:'number', label: key, flex: { xs:12, sm: 6, md:4, lg:3} })
-const defaultSchemaIfValueIsBoolean = key => ({ type:'checkbox', label: key, flex: { xs:12, sm: 6, md:4, lg:3} })
+const defaultSchemaIfValueIsString = key => ({ type:'text', label: key })
+const defaultSchemaIfValueIsNumber = key => ({ type:'number', label: key })
+const defaultSchemaIfValueIsBoolean = key => ({ type:'checkbox', label: key })
 //
 export default {
 
@@ -337,6 +340,10 @@ export default {
     id: {
       type: String,
       default: defaultID
+    },
+    flex: {
+      type: [Object, Number, String],
+      default: () => flexDefault,
     },
     value: {
       type: [Object, Array],
@@ -395,6 +402,12 @@ export default {
       return typeToComponent[type] ? typeToComponent[type] : `v-${type}`
     },
 
+
+    // ICON 
+    getIconValue(obj){
+      // icon: try label or if undefined use value  
+      return obj.schema.label ? obj.schema.label: this.setValue(obj) 
+    },
     // TOOLTIP 
     getShorthandTooltip(schemaTooltip){
       // check if tooltip is typeof string ->  shorthand { bottom:true, label: obj.schema.tooltip} otherwise take original object
@@ -468,9 +481,12 @@ export default {
       return this.getTypeClassNameWithAppendix(obj, typeClassAppendix)
     },
     getFlexGridClassName (obj) {
+      const keysToGridClassName = (key) => Object.keys(key).map(k => k + key[k]).join(' ') //  { xs:12, md:6, lg:4  } => 'xs12 md6 lg4'      
+      // schema.flex overrules property flex! 
       // get FLEX class from schema.flex ->  schema:{ flex:{ xs:12, md:4  } || flex: 4 } // flex: 4 -> is shorthand for -> flex:{ xs:4 }
-      const keysToGridClassName = (key) => Object.keys(key).map(k => k + key[k]).join(' ') //  { xs:12, md:6, lg:4  } => 'xs12 md6 lg4'
-      return obj.schema.flex ? isPlainObject(obj.schema.flex) ? keysToGridClassName(obj.schema.flex) : `xs${obj.schema.flex}` : ''
+      if (obj.schema.flex) return isPlainObject(obj.schema.flex) ? keysToGridClassName(obj.schema.flex) : `xs${obj.schema.flex}`
+      // take property flex: <v-form-base :flex="{xs:12,sm:6}" .... />  or  <v-form-base flex="6" .... />  
+      return isPlainObject(this.flex) ? keysToGridClassName(this.flex) : `xs${this.flex}` 
     },
     getOffsetGridClassName (obj) {
       // get OFFSET-FLEX class from schema.offset ->  schema:{ offset:{ xs:12, md:4  } || offset: 4 } // offset: 4 -> is shorthand for -> offset:{ xs:4 }
@@ -576,9 +592,10 @@ export default {
     // Emit Event Base
     emitValue (emit, val) {
       this.parent.$emit(this.getEventName(emit), val) // listen to specific event only
-      if (mouse.indexOf(emit) > -1) this.parent.$emit(this.getEventName('mouse'), val) // listen only to input
-      if (change.indexOf(emit) > -1) this.parent.$emit(this.getEventName('change'), val) // listen only to input|click|
-      if (watch.indexOf(emit) > -1) this.parent.$emit(this.getEventName('watch'), val) // listen to focus|input|click|blur
+      if (change.indexOf(emit) > -1) this.parent.$emit(this.getEventName('change'), val) // listen only to 'input|click'
+      if (watch.indexOf(emit) > -1) this.parent.$emit(this.getEventName('watch'), val) // listen to 'focus|input|click|blur'
+      if (mouse.indexOf(emit) > -1) this.parent.$emit(this.getEventName('mouse'), val) // listen to 'mouseenter|mouseleave  '
+      if (display.indexOf(emit) > -1) this.parent.$emit(this.getEventName('display'), val) // listen to 'resize|swipe|intersect'
       this.parent.$emit(this.getEventName('update'), val) // listen to all events
     },
     getEventName (eventName) {

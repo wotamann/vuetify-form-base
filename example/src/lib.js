@@ -1,5 +1,5 @@
-export default (val) => {
-  let { on, id, key, value, params, obj, data, schema, parent, index, event } = val
+export default (eventValue) => {
+  let { on, id, key, value, params, obj, data, schema, parent, index, event } = eventValue
 
   console.log(`-- v-form-base event ---------------------------------------`)
   console.log(`Event: ${on} | Key: ${key}@${id} | Value:`,value)
@@ -14,5 +14,5 @@ export default (val) => {
   // if (index == true) console.log(`Index of Array:>${index}<`)
   // if (event) console.log('Event:', event)
 
-  return val
+  return eventValue
 }

@@ -1,14 +1,16 @@
 <template>
   <v-container fluid>
-    <h4>Handling of undefined Textfields.</h4>
+    <h4>Handling of undefined Properties in Value or in Schema</h4>
     
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       :value="myValue"
       :schema="mySchema"
+      :flex="4"
       @change="log"
     />     
 
+    <!-- Stuff   -->
     <infoline
       :value="myValue"
       :schema="mySchema"
@@ -31,14 +33,14 @@ export default {
         name: 'Base',
         password: 'abcdefgh',
         // no definition in mySchema - property value remains untouched  
-        undefinedSchema: 'Value keeps untouched',  
+        undefinedSchema: 'This Value keeps untouched',  
       },
       mySchema: {
         // prop: text => shorthand for prop: { type: 'text' }
         name: 'text', 
         password: 'password', 
         // no definition in myValue - property will be added & edited
-        undefinedValue: { type:'text', label: 'undefined in Value' }  
+        undefinedValue: { type:'text', label: 'undefined in Value', tooltip: { color: 'orange', label:'undefined in Value', top: true },  }  
       }
     }
   },

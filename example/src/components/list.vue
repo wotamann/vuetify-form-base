@@ -8,15 +8,7 @@
       @change:form-base-list="change"
     />
     
-    <!-- <v-btn
-      v-if ="myValue.listObject.length < 4"
-      dark
-      color="blue"
-      @click="add"
-    >
-      <v-icon>mdi-plus</v-icon>
-    </v-btn> -->
-
+    <!-- Stuff   -->
     <infoline
       :value="myValue"
       :schema="mySchema"

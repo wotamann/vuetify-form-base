@@ -7,6 +7,8 @@
       :schema="mySchema"
       @change="change"
     />
+    
+    <!-- Stuff   -->    
     <infoline
       :value="myValue"
       :schema="mySchema"
