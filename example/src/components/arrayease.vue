@@ -25,7 +25,9 @@ import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
 import log from '@/lib'
 
-const getTask= () => { return { done: false, title: 'Task ' + Math.floor(Math.random() * 1000) } }
+const getRandomBool = () => Math.random() >= 0.5
+const getInnerTask= () => { return { in: getRandomBool(), title: 'Inner Task ' + Math.floor(Math.random() * 1000) } }
+const getOuterTask= () => { return { out: getRandomBool(), title: 'Outer Task ' + Math.floor(Math.random() * 1000), tasks:[{...getInnerTask()}, {...getInnerTask()} ] } }
 
 export default {
   name: 'arrayease',
@@ -33,21 +35,28 @@ export default {
   data () {
     return {
       myValue: {
-        tasks: [
-          getTask(), 
-          getTask(), 
-          getTask(), 
-          getTask(), 
-          getTask(), 
-        ]
+        tasks:[
+          getOuterTask(),
+          getOuterTask(),
+          getOuterTask(),
+          getOuterTask(),
+        ]        
       },
       mySchema: {
         tasks: {
           type: 'array',
-          flex: 12,
+          flex: 8,
           schema: {
-            done: { type: 'checkbox', label: 'Done', color: 'blue', flex: 2 },
-            title: { type: 'text', color: 'blue' }          
+            out: { type: 'checkbox', label: 'Out', color: 'blue', flex: 2 },
+            title: { type: 'text', color: 'blue', flex:6 },
+            tasks: {
+              type: 'array',
+              flex: 12,
+              schema: {
+                in: { type: 'checkbox', label: 'In', color: 'red', flex: 2, offset:2 },
+                title: { type: 'text', color: 'red', flex:4 }          
+              }
+            }          
           }
         }
       }

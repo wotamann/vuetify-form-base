@@ -23,14 +23,12 @@
             :class="getClassName(obj)"
             @mouseenter="onEvent($event, obj)"
             @mouseleave="onEvent($event, obj)"
-
             v-on="on"
           >
             <!-- slot on top of type  -> <div slot="slot-bottom-type-[propertyName]"> -->
             <slot :name="getTypeTopSlot(obj)" />
             <!-- slot on top of key  -> <v-btn slot="slot-bottom-key-[propertyName]"> -->
             <slot :name="getKeyTopSlot(obj)" />
-
             <!-- slot replaces complete item of defined TYPE -> <v-btn slot="slot-item-type-[propertyName]">-->
             <slot :name="getTypeItemSlot(obj)">
               <!-- slot replaces complete item of defined KEY -> <div slot="slot-item-key-[propertyName]">-->
@@ -76,6 +74,19 @@
                   </div>
                 </template>
 
+                <!-- card -->
+                <v-card 
+                  v-else-if="obj.schema.type === 'card'"
+                  v-bind="obj.schema"
+                >
+                  <v-card-title v-if="obj.schema.title" v-text="obj.schema.title" />
+                  <v-card-subtitle v-if="obj.schema.subtitle"  v-text="obj.schema.subtitle" />
+                  <v-form-base
+                    :value="setValue(obj)"
+                    :schema="obj.schema.schema"
+                  />
+                </v-card>  
+                
                 <!-- treeview -->
                 <v-treeview
                   v-else-if="obj.schema.type === treeview"
@@ -146,8 +157,7 @@
                   v-bind="obj.schema"
                   @click="onEvent($event, obj)"
                   v-text = "getIconValue(obj)"
-                >
-                </v-icon>
+                />
                 
                 <!-- btn-toggle -->
                 <v-btn-toggle
@@ -279,7 +289,6 @@ const typeToComponent = {
   // date: 'v-text-field',
   // time: 'v-text-field',
   // color: 'v-text-field',
-
   // map schema.type to vuetify-control (vuetify 2.0)
   range: 'v-slider',
   file: 'v-file-input',
@@ -288,7 +297,8 @@ const typeToComponent = {
   color: 'v-color-picker',
   date: 'v-date-picker',
   time: 'v-time-picker',
-  textarea: 'v-textarea'
+  textarea: 'v-textarea',
+  card: 'v-card'
 }
 // Declaration
 const orderDirection = 'ASC'
@@ -401,8 +411,6 @@ export default {
       // map ie. schema:{ type:'password', ... } to vuetify control v-text-field'
       return typeToComponent[type] ? typeToComponent[type] : `v-${type}`
     },
-
-
     // ICON 
     getIconValue(obj){
       // icon: try label or if undefined use value  
@@ -626,10 +634,11 @@ export default {
       let schema = {}
       // Organize Formular using Schema not Data 
       Object.keys(sch).forEach(i => {
+
         // convert string type to object
         sch[i] = this.sanitizeShorthandType(sch[i])
-       
-        if ((!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object') || (Array.isArray(dat[i]) && Array.isArray(sch[i]))) {
+
+        if ( (!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object' && sch[i] && (sch[i].type !== 'card') ) || (Array.isArray(dat[i]) && Array.isArray(sch[i])) ) {
           let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[i], sch[i])
           Object.keys(flatData).forEach(ii => {
             data[i + pathDelimiter + ii] = flatData[ii]

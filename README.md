@@ -1,12 +1,11 @@
-
 # Vuetify-Form-Base
 
-Imagine you get the following data as JS-Object and your Task is to design a Form to edit this data 
+Imagine you get this data as JS-Object and you have to create an editable form.
 
 ```javascript
 Value: {
-	name: 'Jumo',
-	position: 'Coder',
+	name: 'Stoner',
+	position: 'Admin',
 	tasks: [
 		{ 
 		  done: true,
@@ -26,18 +25,12 @@ Value: {
 
 Normally you have to flatten the Data-Structure and map all to an appropriate Format. Then you have to define a HTML-Form and animate it with your Data. 
 
-With **Vuetify-Form-Base** create a Schema Object with the same structure as your Data.
+With **Vuetify-Form-Base** create a Schema Object with the same Structure as your Data.
 
 ```javascript
 Schema: {
-	name: {
-		type:'text', 
-		label:'Name'
-	},
-	position: {
-		type:'text', 
-		label:'Position' 
-	},
+	name: { type:'text', label:'Name' },
+	position: { type:'text', label:'Position' },
 	tasks: { 
 		type: 'array',
 		schema: { 
@@ -48,11 +41,13 @@ Schema: {
 }  
 ```
 
-and you will get a full reactive and editable Form:
+and you will get a working Form:
 
 ![Form](./images/array-schema.PNG)
 
-If you have to generate forms or you have to edit Data presented as JSON- or JS-Objects, then take a closer look at **Vuetify-Form-Base** and try it. It can make your work much easier and save you time. This Form Generator works as [Vue.js 2.0 Component](https://vuejs.org/) and can simplify your Job by automatically creating Forms, based on your Schema-Definition. Edit your created Forms and you will automatically receive reactive Results.
+If you have to generate Forms or you have to edit Data presented as JSON- or JS-Objects, then take a closer look at **Vuetify-Form-Base** and try it. It can make your work much easier and save your time. This Form Generator works as [Vue.js 2.0 Component](https://vuejs.org/) and can simplify your Work by automatically creating Forms, based on your Schema-Definition. 
+
+Furthermore if you don't define a Schema, then **Vuetify-Form-Base** tries to generate a schema automatically. This works if the Data Values are of Type 'string', 'number' or 'bool'.
 
 **Vuetify-Form-Base** uses the well known and excellent [Component Framework Vuetify](https://vuetifyjs.com/) to style and layout your Form. Vuetify Controls have a clear, minimalistic design and support responsive Design.
 
@@ -60,11 +55,11 @@ If you have to generate forms or you have to edit Data presented as JSON- or JS-
 ---
 ## Demo
 
-[See a Demo](https://wotamann.github.io/)
+[Here you can see a Demo with some Examples](https://wotamann.github.io/)
 
 or
 
-Clone or download this Project, change current directory to **../vuetify-form-base/example**  and then run
+Clone or download this Project, change current directory to **./vuetify-form-base/example**  and then run
 
 `npm install`
 
@@ -75,7 +70,9 @@ Clone or download this Project, change current directory to **../vuetify-form-ba
 
 **vuetify-form-base** is a [Vue Component](https://vuejs.org/v2/guide/components.html) and can easily integrated into any Vue Project.   
 
-The Schema-Object has the **same structure** as the Value-Object. Create a Schema by cloning the Value-Object and replace the Values of the Data-Object by Definitions for your your Schema. The corresponding Schema-Object defines type, layout and functional behaviour of the Controls in your Form. 
+The Schema-Object has the **same Structure** as the Value-Object. Create a Schema by cloning the Value-Object and replace the Values of the Data-Object by Definitions for your your Schema. The corresponding Schema-Object defines type, layout and functional behaviour of the Controls in your Form. 
+
+If you don't define a Schema, then **Vuetify-Form-Base** tries to generate a schema automatically. But this works only if the Data Values are of Type **'string'**, **'number' or 'bool'.
 
 
 ![Form Example](./images/dat-schema.PNG)
@@ -96,7 +93,7 @@ If you want a **Partial-Form** which displays only parts of your Data.Object, th
 
 And if necessary you can also build a **Form in Form** by using **Slots**.
 
-Use the **v-on directive** of Vue.js to listen to Formbase **triggered Events** for 'Resize', 'Focus', 'Input', 'Blur', 'Click', 'Mouse' and 'Swipe'. Listening to 'Change' will catch all Value changing Events like 'Input' and 'Click'. 'Watch' will listen to 'Focus', 'Input', 'Blur' and 'Click'. Listening to 'Update' will catch all Events. 
+Use the **v-on directive** to listen to **Events** for 'Focus', 'Input',  'Click', 'Blur', 'Resize', 'Intersect', 'Mouse' and 'Swipe'. 'Change' will catch all Value changing Events like 'Input' and 'Click'. 'Watch' will listen to 'Focus', 'Input', 'Blur' and 'Click'. 'Update' will catch all Events. 
 
 ### Supported Controls from **Vuetify UI Input & Controls**  
 ---
@@ -430,14 +427,16 @@ Integrate Vuetify-Display and Layout behaviour by using the Schema-Property 'cla
 
 ```javascript
     mySchema: {
-      name: { type: 'text', class:'caption d-flex d-sm-none' },
+      name: { type: 'text', class:'title d-flex d-sm-none ml-4 pa-1 float-left' },
     }
 ```
-[Vuetify - Display:](https://vuetifyjs.com/en/styles/display) 
+[More Info at Vuetify Display:](https://vuetifyjs.com/en/styles/display) 
 
-[Vuetify - Typography:](https://vuetifyjs.com/en/styles/typography) 
+[More Info at Vuetify Typography:](https://vuetifyjs.com/en/styles/typography) 
 
-[Vuetify - Spacing:](https://vuetifyjs.com/en/styles/spacing) 
+[More Info at Vuetify Spacing:](https://vuetifyjs.com/en/styles/spacing) 
+
+[More Info at Vuetify Float:](https://vuetifyjs.com/en/styles/float) 
 
 
 ## Vuetify Grid
@@ -469,16 +468,11 @@ Get individual Grid-Control by using Schema-Properties 'flex', 'offset' and 'ord
     
 A more responsive Solution with 'flex', 'offset' or 'order' needs an Object as Value. For more Details see Vuetify Documentation:  
 
-[Vuetify - Grid:](https://vuetifyjs.com/en/framework/grid#usage) 
-flex: { xs:12, sm:8, md:6, lg:4 }
+[More Info at Vuetify Grid:](https://vuetifyjs.com/en/framework/grid#usage) 
 
+[More Info at Vuetify Offset:](https://vuetifyjs.com/en/framework/grid#offset) 
 
-[Vuetify - Offset:](https://vuetifyjs.com/en/framework/grid#offset) 
-offset: { xs:0, sm:1, md:2, lg:2 }
-
-
-[Vuetify - Order:](https://vuetifyjs.com/en/framework/grid#order) 
-order: { xs:1, sm:1, md:2, lg:2 }
+[More Info at Vuetify Order:](https://vuetifyjs.com/en/framework/grid#order) 
 
 
 ## Link & Synchronize
@@ -503,22 +497,42 @@ Forms can be **linked** together using the same Value-Object. Changes in one For
           background-color 
 
 ```javascript
-mySchema: { 
-  name: { type:'text', appendIcon:'menu', backgroundColor:'red' }  
-}
+  mySchema: { 
+    name: { type:'text', appendIcon:'menu', backgroundColor:'red' }  
+  }
 ```
 
 ## Schema
 
-	<form-base :schema="mySchema" ... />
+```HTML
 
-Schema is an JS-Object, which defines and controls the behavior of your Form. Each Key Prop) in your Schema-Object must reflect a Key from your Data-Object. A minimalistic Definition of a text input could look like this:
+<v-form-base :schema="mySchema" ... />
 
+<v-form-base 
+  id="myId" 
+  :value="myValue" 
+  :schema="mySchema" 
+  :flex="12" 
+  :change:myId="myEventHandler"
+/>
+```
+	
+Schema is an Object, which defines and controls the behavior of your Form. Each Key in your Schema-Object should reflect a Key from your Data-Object. A minimalistic Definition of a Text-Input could look like this:
+
+```javascript
+data () {
+  return {
+    myValue:{
+      name: 'Base'  
+    }, 
     mySchema:{
       name: { type:'text'}  
     }
+  }
+}
+```
 
-The next shows a more complex Schema:
+The next example shows a more complex Schema:
   
 ```javascript  
     // Partials Functions for Rules
@@ -527,21 +541,20 @@ The next shows a more complex Schema:
     const required = msg => v => !!v || msg
     const validEmail: msg => v => /.+@.+\..+/.test(v) || msg
   
-	// Destruct Value and return a Value! 
-    const toUpper = ( {value} ) => value && value.toUpperCase() 
-    
+	  // Destruct value from obj and return a modified value! 
+    const toUpper = ( {value} ) => typeof value === 'string' ? value.toUpperCase() : value 
+
     export default {
     
       components: { VFormBase },
+
       data () {
         return {
-          
           myValue: {
             name: 'Base',
             password: '123456',
             email: 'base@mail.com'
           },
-                  
           mySchema: {
             name: { 
               type: 'text', 
@@ -571,25 +584,28 @@ The next shows a more complex Schema:
           }
         }
       }
+
     }
 ```
 
-**Available Properties in Schema ( NEW: PICKERS and FILE-INPUT available )**
+**Available Properties in Schema **
   
-[For further Props see Vuetify Controls API](https://vuetifyjs.com/en/components/text-fields#api)  
+[For more Schema-Properties see Vuetify Controls API](https://vuetifyjs.com/en/components/text-fields#api)  
 
 	schema:{
       
-      type: string            // text, password, email, file, 
-                              // radio, switch, slider,
-                              // combobox, autocomplete, select,  
+      type: string            // text, password, email, file, textarea 
+                              // radio, switch, checkbox, slider,
+                              // select, combobox, autocomplete, 
+                              // array, list, treeview
+                              // icon, btn, btn-toggle 
                               // date, time, color    
 
-      sort: N                 // use simple order to display items 
+      sort: num               // use simple order to display items 
 
-      order: N or Object      // use Vuetify-Grid to order items responsive 
-      flex: N or Object       // See Vuetify Grid
-      offset: N or Object     // See Vuetify Grid
+      order: num or object    // use Vuetify-Grid to order items responsive 
+      flex:  num or object    // See Vuetify Grid
+      offset: num or object   // See Vuetify Grid
 
       label string,           // label of item    
       placeholder: string,    // placeholder 
@@ -598,7 +614,7 @@ The next shows a more complex Schema:
 
       color: string
       backgroundColor:string
-      css: string,            // inject classnames - schema:{ name:{ css:'small'}, ...  }
+      class: string,            // inject classnames - schema:{ name:{ css:'small'}, ...  }
         
       mask: string,           // regex to control input  
 
@@ -623,8 +639,8 @@ The next shows a more complex Schema:
 
 ## Events
 
-We can use the v-on directive to listen to vuetify-form-base events **'focus', 'input', 'blur', 'click', 'mouse', 'resize', 'swipe', 'update'** and run some Code when they’re triggered.
-    
+We can use the v-on directive to listen to vuetify-form-base events **'focus', 'input', 'click', 'blur', 'change', 'watch', 'mouse', 'display', 'intersect', 'resize', 'swipe', 'update'** and run some Code when they’re triggered.
+
 This Example use the Default ID and listen all events with 'update':
 
 ```HTML
@@ -644,42 +660,29 @@ The next Code has the Custom ID **'form-base-simple'**. In this case your v-on D
     />
 ```
 
-You can also listen to an specific event. Your v-on Directive must append the Custom ID:
+You can listen to one or more Events
 
 ```HTML
-    <!-- HTML -->
-    <v-form-base :value= "myValue" :schema= "mySchema" @blur= "blurCode" />
-   
-    <v-form-base 
-      id = "form-base-complete"
-      :value= "myValue" 
-      :schema= "mySchema"  
-      @click:form-base-complete= "clickCode"
-      @input:form-base-complete= "inputCode"
-      @change:form-base-complete= "changeCode"
-      @watch:form-base-complete= "watchCode"
-      @focus:form-base-complete= "focusCode"
-      @blur:form-base-complete= "blurCode"
-      @mouse:form-base-complete= "mouseCode"
-      @swipe:form-base-complete= "swipeCode"
-      @resize:form-base-complete= "resizeCode"
-      @update:form-base-complete= "updateCode"     
-    />
-
+  <!-- HTML -->
+  <!-- compose Listener to one or more of following Events: -->
+  <v-form-base 
+    :value= "myValue" 
+    :schema= "mySchema" 
+    
+    @click= "log"
+    @input= "log"
+    @change="log"    // input|click
+    @watch= "log"    // focus|input|click|blur
+    @focus= "log"
+    @blur=  "log"        
+    @mouse= "log"    // mouseenter|mouseleave  
+    @display= "log"  // resize|swipe|intersect 
+    @intersect="log" // intersect - https://vuetifyjs.com/en/directives/intersect
+    @resize= "log"
+    @swipe=  "log"   // touch events        
+    @update= "log"   // catch all events    
+  />      
 ```
-  
-  Listen to one or more of following events
-        
-        @input= "change"
-        @click= "change"
-        @change="change" // input & click
-        @watch= "change" // focus & input & click &  blur
-        @focus= "change"
-        @blur=  "change"
-        @mouse= "change" // mouseenter & mouseleave
-        @resize="change"
-        @swipe= "change"
-        @update="change" // catch all events
 
 **The Event-Signature:**
 
@@ -701,34 +704,29 @@ You can also listen to an specific event. Your v-on Directive must append the Cu
     schema -    Schema-Object
     parent -    Formbase-Object - if available 
 ---
-**Example: Use 'Update' Event to control Visibility of Password Element**
+**Example: Use 'Change' Event to change Visibility on Password Element**
 
 ```HTML
     <!-- HTML -->
-    <v-form-base :value="myValue" :schema="mySchema" @update="update">
+    <v-form-base :value="myValue" :schema="mySchema" @change="change">
 ```
 
 ```javascript
-    <!-- JS -->
-    // Schema
+    ...
+
     mySchema: {
-      password:{ type:'password', appendIcon:'visibility', .... }
+      firstPassword:{ type:'password', appendIcon:'visibility', .... }
     }
     
     ...
     
-    update ({ on, key, obj, params }) {
-      // test event is 'click' and comes from appendIcon on key 'password'
-      if (on == 'click' && key == 'password' && (params && params.tag) == 'append') {         
+    change ({ on, key, obj, params }) {
+      // test event is 'click' and comes from appendIcon on key 'firstPassword'
+      if (on == 'click' && key == 'firstPassword' && (params && params.tag) == 'append') {         
         // toggle icon
-        obj.schema.appendIcon = obj.schema.type === 'password' 
-          ? 'lock' 
-          : 'visibility'
-
+        obj.schema.appendIcon = obj.schema.type === 'password'? 'lock': 'visibility'
         // toggle visibility 
-        obj.schema.type = obj.schema.type === 'password' 
-          ? 'text' 
-          : 'password'
+        obj.schema.type = obj.schema.type === 'password'? 'text': 'password'
       }
     }
 ```

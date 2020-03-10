@@ -20,7 +20,7 @@
     <v-flex xs6>
       <h4>Schema-Definition (JSON)</h4>
       <pre
-        v-text="JSON.stringify(schema, undefined, 3)"
+        v-text="JSON.stringify(schema, replacer, 3)"
       />
     </v-flex>    
   </v-layout>
@@ -40,6 +40,9 @@ export default {
   },
   methods: {
     replacer (key, value) {
+      if (typeof value === 'function') {
+        return 'Function' // value.toString() 
+      }
       if (Array.isArray(value) && value[0] instanceof File) {
         return value.map(i => i.name + ' - (File Object)')
       }

@@ -30,17 +30,21 @@ import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
 import log from '@/lib'
 
+const toUpper = ( {value} ) => typeof value === 'string' ? value.toUpperCase() : value 
+
 export default {
   name: 'DisplayHelpers',
   components: { VFormBase, Infoline },
   data () {
     return {
       myValue: {
+        name1: 'to-Upper & float-left',
         name2: 'typo title & padding left + right',
         name3: 'visible only on sm',
         name4: 'visible only on xs',
       },
       mySchema: {
+        name1: { type: 'text', toCtrl: toUpper, fromCtrl: toUpper, class:'grey lighten-4 float-left' },
         name2: { type: 'text', class:'title px-4 blue lighten-5' },
         name3: { type: 'text', class:'d-none d-sm-flex d-md-none red lighten-5' },
         name4: { type: 'text', class:'caption d-flex d-sm-none green lighten-5 ' },

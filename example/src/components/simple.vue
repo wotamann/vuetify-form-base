@@ -51,7 +51,7 @@ const mask = '####-####-####-####'
 
 // Accept only Images Files
 const accept = 'image/*'
-
+   
 export default {
   name: 'Textfields',
   components: { VFormBase, Infoline },
@@ -69,7 +69,7 @@ export default {
         // schema prop: object definition
         password: { 
           type: 'password', 
-          clearable: true, 
+          clearable: true          
         },
         creditcard: { 
           type: 'text', 
@@ -77,13 +77,13 @@ export default {
           prependInnerIcon: 'credit_card', 
           hint: mask, 
           mask, 
-          tooltip: 'Creditcard', 
+          tooltip: 'Creditcard'
         },
         file: { 
           type: 'file', 
           label: 'Files', 
           accept, 
-          multiple: true, 
+          multiple: true
         }
       }
     }
