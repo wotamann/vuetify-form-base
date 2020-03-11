@@ -1,11 +1,11 @@
 <template>
   <v-container fluid>
-    <h4>Textfields and Fileselector with Mask and Tooltips</h4>
+    <h4>Textfields with Mask & Tooltips and Fileselector </h4>
     
     <v-form>
       <!-- FORM-BASE-COMPONENT -->    
-      <v-form-base
-        :value="myValue"
+      <v-form-base 
+        :model="myModel"
         :schema="mySchema"
         :flex="6"
         @input="log"
@@ -29,12 +29,11 @@
         id="form-base-list"
         @change:form-base-list="log"        
       -->
-    
     </v-form>
     
     <!-- Stuff  -->    
     <infoline
-      :value="myValue"
+      :value="myModel"
       :schema="mySchema"
       :path="$options._componentTag"
     />
@@ -57,19 +56,21 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {
+      myModel: {
         name: 'Base',
         creditcard: '12345678',
         password: 'abcdefgh',
+        count:100,
+        color:'#2AABFF',
         file: [] // array of File objects
       },      
       mySchema: {
-        // schema prop: string 'text' => shorthand for prop: { type: 'text' }        
-        name: 'text',         
-        // schema prop: object definition
+        name: { 
+          type:'text' 
+        },         
         password: { 
           type: 'password', 
-          clearable: true          
+          clearable: true 
         },
         creditcard: { 
           type: 'text', 
@@ -77,13 +78,20 @@ export default {
           prependInnerIcon: 'credit_card', 
           hint: mask, 
           mask, 
-          tooltip: 'Creditcard'
+        },
+        count:{ 
+          type:'number', 
+          label:'Counter', 
+          tooltip: 'Counter'
         },
         file: { 
           type: 'file', 
           label: 'Files', 
           accept, 
           multiple: true
+        },
+        color:{ 
+          type:'text', ext:'color' 
         }
       }
     }

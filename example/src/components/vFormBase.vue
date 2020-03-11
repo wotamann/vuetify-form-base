@@ -156,7 +156,15 @@
                   v-else-if="obj.schema.type === 'icon'"
                   v-bind="obj.schema"
                   @click="onEvent($event, obj)"
-                  v-text = "getIconValue(obj)"
+                  v-text ="getIconValue(obj)"
+                />
+
+                <!-- img -->
+                <v-img
+                  v-else-if="obj.schema.type === 'img'"
+                  v-bind="obj.schema"
+                  :src="getImageSource(obj)"
+                  @click="onEvent($event, obj)"
                 />
                 
                 <!-- btn-toggle -->
@@ -231,6 +239,7 @@
                   :is="mapTypeToComponent(obj.schema.type)"
                   v-else
                   v-bind="obj.schema"
+                  :type="checkExtensionType(obj)"
                   :value="setValue(obj)"
                   @focus="onEvent($event, obj)"
                   @blur="onEvent($event, obj)"
@@ -276,7 +285,6 @@ import { get, isPlainObject, isFunction, isString, isEmpty, orderBy, delay } fro
 import { mask } from 'vue-the-mask'
 
 const typeToComponent = {
-
   // map schema.type to type in v-text-field  - https://www.wufoo.com/html5/
   text: 'v-text-field',
   password: 'v-text-field',
@@ -284,21 +292,22 @@ const typeToComponent = {
   tel: 'v-text-field',
   url: 'v-text-field',
   search: 'v-text-field',
-  number: 'v-text-field',
-  // use Input Type instead of Picker
-  // date: 'v-text-field',
-  // time: 'v-text-field',
-  // color: 'v-text-field',
+  number: 'v-text-field', 
+  // date: 'v-text-field',       // use Input Type instead of Picker
+  // time: 'v-text-field',       
+  // color: 'v-text-field',      
+  
   // map schema.type to vuetify-control (vuetify 2.0)
+  img: 'v-img',
+  card: 'v-card',
+  textarea: 'v-textarea',
   range: 'v-slider',
   file: 'v-file-input',
   switch: 'v-switch',
   checkbox: 'v-checkbox',
-  color: 'v-color-picker',
-  date: 'v-date-picker',
+  date: 'v-date-picker',   // use  Picker
   time: 'v-time-picker',
-  textarea: 'v-textarea',
-  card: 'v-card'
+  color: 'v-color-picker'
 }
 // Declaration
 const orderDirection = 'ASC'
@@ -331,10 +340,14 @@ const appendOuter = 'append-outer'
 const prepend = 'prepend'
 const prependInner = 'prepend-inner'
 
+// name of Type wich will be used for grouping controls
+const groupingType ='card'
+      
 // Default flex setting, overrideable by prop flex or by schema.flex definition  
 const flexDefault = '' // { xs:6, sm: 4, md:4, lg:4}
 
 // Mapper for Autogeneration of Schema from Value
+const defaultSchemaIfValueIsNullOrUndefined = key => ({ type:'text', label: key })
 const defaultSchemaIfValueIsString = key => ({ type:'text', label: key })
 const defaultSchemaIfValueIsNumber = key => ({ type:'number', label: key })
 const defaultSchemaIfValueIsBoolean = key => ({ type:'checkbox', label: key })
@@ -345,7 +358,6 @@ export default {
 
   // Info Mask https://vuejs-tips.github.io/vue-the-mask/
   directives: { mask },
-
   props: {
     id: {
       type: String,
@@ -357,17 +369,20 @@ export default {
     },
     value: {
       type: [Object, Array],
-      default: () => ({}),
-      required: true
+      default: () => null,
+    },    
+    model: {
+      type: [Object, Array],
+      default: () => null,
     },    
     schema: {
       type: [Object, Array],
       default: () => ({}),
-      required: true
     }
   },
   data () {
     return {
+      valueIntern:{},
       flatCombinedArray: [],
       clear,
       button,
@@ -398,20 +413,30 @@ export default {
       return orderBy(this.flatCombinedArray, ['schema.sort'], [orderDirection])
     },
     storeStateData () {
-      this.updateArrayFromState(this.value, this.schema)
-      return this.value
+      this.updateArrayFromState(this.valueIntern, this.schema)
+      return this.valueIntern
     },
     storeStateSchema () {
-      this.updateArrayFromState(this.value, this.schema)
+      this.updateArrayFromState(this.valueIntern, this.schema)
       return this.schema
     }
   },  
   methods: {
-    mapTypeToComponent (type) {
+    mapTypeToComponent(type) {
       // map ie. schema:{ type:'password', ... } to vuetify control v-text-field'
       return typeToComponent[type] ? typeToComponent[type] : `v-${type}`
     },
-    // ICON 
+    // GET IMG SOURCE
+    getImageSource(obj) {
+      // if exist get source from src otherwise from join base & value
+      return obj.schema.src ? obj.schema.src : `${obj.schema.base}${obj.value}${obj.schema.tail}`
+    },
+    // EXT TYPE
+    checkExtensionType(obj) {
+      // check if ext:'color' exist take ext as type!!
+      return obj.schema.ext || obj.schema.type
+    },
+    // ICON  
     getIconValue(obj){
       // icon: try label or if undefined use value  
       return obj.schema.label ? obj.schema.label: this.setValue(obj) 
@@ -543,10 +568,10 @@ export default {
     onInput (value, obj) {
       // Value after change in Control
       value = this.fromCtrl({ value, obj, data: this.storeStateData, schema: this.storeStateSchema })
-
-      // harmonize empty strings to null, because clearable resets to null and not to empty string!
-      value = value === '' ? null : value
-
+      // harmonize undefined or empty strings => null, because clearable resets to null and not to empty string!
+      value = !value || value === '' ? null : value
+      // if schema type is number convert to number 
+      value = obj.schema.type === 'number' ? Number(value) : value
       // update deep nested prop(key) with value
       this.setObjectByPath(this.storeStateData, obj.key, value)
       
@@ -625,28 +650,29 @@ export default {
         obj.schema = get(schema, obj.key, null) // get - lodash
       })
     },
-    sanitizeShorthandType(schema){
+    sanitizeShorthandType(key, schema){
       // check if schema is typeof string ->  shorthand { type: obj } otherwise take original value
-      return isString(schema) ? { type: schema } : schema
+      return isString(schema) ? { type: schema, label:key } : schema
     },
     flattenObjects (dat, sch) {
+      
       let data = {}
       let schema = {}
+      
       // Organize Formular using Schema not Data 
-      Object.keys(sch).forEach(i => {
-
+      Object.keys(sch).forEach(key => {
         // convert string type to object
-        sch[i] = this.sanitizeShorthandType(sch[i])
+        sch[key] = this.sanitizeShorthandType(key, sch[key])
 
-        if ( (!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object' && sch[i] && (sch[i].type !== 'card') ) || (Array.isArray(dat[i]) && Array.isArray(sch[i])) ) {
-          let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[i], sch[i])
+        if ( (!Array.isArray(dat[key]) && dat[key] && typeof dat[key] === 'object' && sch[key] && (sch[key].type !== groupingType) ) || (Array.isArray(dat[key]) && Array.isArray(sch[key])) ) {
+          let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[key], sch[key])
           Object.keys(flatData).forEach(ii => {
-            data[i + pathDelimiter + ii] = flatData[ii]
-            schema[i + pathDelimiter + ii] = flatSchema[ii]
+            data[key + pathDelimiter + ii] = flatData[ii]
+            schema[key + pathDelimiter + ii] = flatSchema[ii]
           })
         } else {
-          data[i] = dat[i]
-          schema[i] = sch[i]
+          data[key] = dat[key]
+          schema[key] = sch[key]
         }
       })
       return { data, schema }
@@ -669,9 +695,10 @@ export default {
       return this.combineObjectsToArray(flattenedObjects)
     },
     autogenerateSchema(value){
-     // generate a minimal default schema from value   
-      let schema = JSON.stringify(value);
-      schema = JSON.parse(schema, (key, val) => {        
+      // generate a minimal default schema from value   
+      let schema = JSON.stringify(value, (key, val) => val === undefined ? null : val)      
+      schema = JSON.parse(schema, (key, val) => {    
+        if (val === null || val === undefined )  return defaultSchemaIfValueIsNullOrUndefined(key)
         if (typeof val === 'string')  return defaultSchemaIfValueIsString(key)
         if (typeof val === 'number')  return defaultSchemaIfValueIsNumber(key)
         if (typeof val === 'boolean') return defaultSchemaIfValueIsBoolean(key)
@@ -681,10 +708,14 @@ export default {
       Object.keys(schema).forEach( key => this.schema[key] = schema[key] )
     },
   },
-  created () {    
-    // no schema defined - autogenerate primive schema
-    if (isEmpty(this.schema)) this.autogenerateSchema(this.value)
-    
+  created () {
+    // use <formbase :model="myData" />  - check for legacy code <formbase :value="myData" />  
+    this.valueIntern = this.value || this.model
+    // break if no model found, but don't break if model is empty object (can filled by editing)
+    if (!this.valueIntern) throw `No 'model' definition found. Use '<formbase :model="myData" />' `
+    // no schema defined or empty -> autogenerate basic schema
+    if (isEmpty(this.schema)) this.autogenerateSchema(this.valueIntern)
+    // create flatted working array from schema and value    
     this.flatCombinedArray = this.flattenAndCombineToArray(this.storeStateData, this.storeStateSchema)
   }  
 }

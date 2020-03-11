@@ -1,11 +1,12 @@
 <template>
   <v-container fluid>
-    <h4>Pickers </h4>
+    <h4>Pickers and Image </h4>
     <v-form>
       <v-form-base
         id="form-base-pickers"
         :value="myValue"
         :schema="mySchema"
+        :flex="6"
         @update:form-base-pickers="update"
       />
     </v-form>
@@ -30,14 +31,18 @@ export default {
   data () {
     return {
       myValue: {
-        colorPicker: '#88000080',
+        colorPicker: '#2A2ACC',
         timePicker: '10:15',
-        datePicker: '2019-03-16'
+        datePicker: '2019-03-16', 
+        image:'random'
       },
       mySchema: {
-        colorPicker: { type: 'color', flex: { xs: 12, sm: 6, md: 4 } },
         timePicker: { type: 'time', format: '24hr', flex: { xs: 12, sm: 6, md: 4 } },
-        datePicker: { type: 'date', color: 'green', flex: { xs: 12, sm: 6, md: 4 } }
+        datePicker: { type: 'date', color: 'green', flex: { xs: 12, sm: 6, md: 4 } },
+        colorPicker: { type: 'color', flex: { xs: 12, sm: 6, md: 4 } },
+        image:{ type:'img', base:'https://picsum.photos/500/300?' },
+        // image:{ type:'img', src:'https://picsum.photos/510/300?random',['aspect-ratio']:'1.5' },
+
       }
     }
   },

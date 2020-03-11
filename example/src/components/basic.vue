@@ -1,18 +1,13 @@
 <template>
   <v-container fluid>
-    <h4>Handling of undefined Properties in Value or in Schema</h4>
+    <h4>Handling of undefined Properties in Model or in Schema</h4>
     
     <!-- FORM-BASE-COMPONENT -->
-    <v-form-base
-      :value="myValue"
-      :schema="mySchema"
-      :flex="4"
-      @change="log"
-    />     
+    <v-form-base :model="myModel" :schema="mySchema" @change="log"/>     
 
     <!-- Stuff   -->
     <infoline
-      :value="myValue"
+      :value="myModel"
       :schema="mySchema"
       :path="$options._componentTag"
     />
@@ -29,18 +24,15 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {
-        name: 'Base',
-        password: 'abcdefgh',
+      myModel: {
+        name: 'Defined in Model & Schema',
         // no definition in mySchema - property value remains untouched  
-        undefinedSchema: 'This Value keeps untouched',  
+        undefinedSchema: 'This Value is untouched',  
       },
       mySchema: {
-        // prop: text => shorthand for prop: { type: 'text' }
-        name: 'text', 
-        password: 'password', 
-        // no definition in myValue - property will be added & edited
-        undefinedValue: { type:'text', label: 'undefined in Value', tooltip: { color: 'orange', label:'undefined in Value', top: true },  }  
+       name: 'text', 
+        // no definition in myModel - property will be added & edited
+        undefinedModel: { type:'text', label: 'Undefined in Model' }  
       }
     }
   },

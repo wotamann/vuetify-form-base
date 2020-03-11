@@ -285,10 +285,10 @@ const typeToComponent = {
   url: 'v-text-field',
   search: 'v-text-field',
   number: 'v-text-field',
-  // use Input Type instead of Picker
-  // date: 'v-text-field',
-  // time: 'v-text-field',
-  // color: 'v-text-field',
+  // date: 'v-text-field',    // use Input Type instead of Picker
+  // time: 'v-text-field',    // use Input Type instead of Picker
+  // color: 'v-text-field',   // use Input Type instead of Picker
+  
   // map schema.type to vuetify-control (vuetify 2.0)
   range: 'v-slider',
   file: 'v-file-input',
@@ -331,6 +331,9 @@ const appendOuter = 'append-outer'
 const prepend = 'prepend'
 const prependInner = 'prepend-inner'
 
+// name of Type wich will be used for grouping controls
+const groupingType ='card'
+      
 // Default flex setting, overrideable by prop flex or by schema.flex definition  
 const flexDefault = '' // { xs:6, sm: 4, md:4, lg:4}
 
@@ -358,16 +361,22 @@ export default {
     value: {
       type: [Object, Array],
       default: () => ({}),
-      required: true
+      required: false
+    },    
+    model: {
+      type: [Object, Array],
+      default: () => ({}),
+      required: false
     },    
     schema: {
       type: [Object, Array],
       default: () => ({}),
-      required: true
+      required: false
     }
   },
   data () {
     return {
+      valueIntern:{},
       flatCombinedArray: [],
       clear,
       button,
@@ -398,11 +407,11 @@ export default {
       return orderBy(this.flatCombinedArray, ['schema.sort'], [orderDirection])
     },
     storeStateData () {
-      this.updateArrayFromState(this.value, this.schema)
-      return this.value
+      this.updateArrayFromState(this.valueIntern, this.schema)
+      return this.valueIntern
     },
     storeStateSchema () {
-      this.updateArrayFromState(this.value, this.schema)
+      this.updateArrayFromState(this.valueIntern, this.schema)
       return this.schema
     }
   },  
@@ -630,15 +639,17 @@ export default {
       return isString(schema) ? { type: schema } : schema
     },
     flattenObjects (dat, sch) {
+      
       let data = {}
       let schema = {}
+      
       // Organize Formular using Schema not Data 
       Object.keys(sch).forEach(i => {
 
         // convert string type to object
         sch[i] = this.sanitizeShorthandType(sch[i])
 
-        if ( (!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object' && sch[i] && (sch[i].type !== 'card') ) || (Array.isArray(dat[i]) && Array.isArray(sch[i])) ) {
+        if ( (!Array.isArray(dat[i]) && dat[i] && typeof dat[i] === 'object' && sch[i] && (sch[i].type !== groupingType) ) || (Array.isArray(dat[i]) && Array.isArray(sch[i])) ) {
           let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[i], sch[i])
           Object.keys(flatData).forEach(ii => {
             data[i + pathDelimiter + ii] = flatData[ii]
@@ -682,8 +693,13 @@ export default {
     },
   },
   created () {    
-    // no schema defined - autogenerate primive schema
-    if (isEmpty(this.schema)) this.autogenerateSchema(this.value)
+    // no schema defined - autogenerate primive 
+    
+    this.valueIntern = this.value || this.model || this.data
+    
+    console.log('CREATED', this.valueIntern , this.value , this.model ,this.data)
+
+    if (isEmpty(this.schema)) this.autogenerateSchema(this.valueIntern)
     
     this.flatCombinedArray = this.flattenAndCombineToArray(this.storeStateData, this.storeStateSchema)
   }  

@@ -5,14 +5,14 @@
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base 
       v-if="showFormbase"
-      :value="myValue"
+      :model="myModel"
       :schema="mySchema"
       @change="log"
     />
     
     <!-- Stuff   -->
     <infoline
-      :value="myValue"
+      :value="myModel"
       :schema="mySchema"
       :path="$options._componentTag"
     />
@@ -26,42 +26,39 @@ import log from '@/lib'
 export default {
   name: 'AsyncLoad',
   components: {
-    // STEP 1) Lazy Loading of 'vFormBase' component here
+    // # STEP 1) Lazy Loading of 'vFormBase' component here
     'VFormBase': () => import('@/components/vFormBase'),
     Infoline
   },
   data () {
     return {
       showFormbase: false,
-      myValue: {},
+      myModel: {},
       mySchema: {}
     }
   },
 
   async mounted () {
-    // STEP 2a) Async Loading of Value
-      this.myValue = await this.delay({
+    // # STEP 2a) Async Loading of Value
+      this.myModel = await this.delay({
       name: 'Base',
-      password: 'abcdefgh',
+      password: '12345678',
       checkbox: true
     })
-    // STEP 2b) Async Loading of Schema
+    // # STEP 2b) Async Loading of Schema
     this.mySchema = await this.delay({
-      // Shorthand Definition
-      // prop: text => shorthand for prop: { type: 'text' }
+      // prop: text => shorthand for prop: { type: 'text', label:'prop' }
       name: 'text',
       password: 'password',
       checkbox: 'checkbox'
     })
-
-    // STEP 3) Important: only after lazy Loading display 'v-form-base'   
+    // # STEP 3) Important: lazy Loading before displaying  'v-form-base'   
     this.showFormbase = true
   },
 
   methods: {
     log,
-
-    delay (obj) {
+    delay (obj) { 
       return new Promise((resolve, reject) => {
         setTimeout(() => resolve(obj), 1000)
       })

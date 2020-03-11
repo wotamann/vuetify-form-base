@@ -10,15 +10,15 @@
           :href="`${url}${path}.vue`"
         >inspect the Code at '{{path}}.vue' in Directory Example</a>
       </h4>
-    </v-flex>
+    </v-flex>    
     <v-flex xs6>
-      <h4>Value-Data (JSON)</h4>
+      <h4>Model</h4>
       <pre
         v-text="JSON.stringify(value, replacer, 3)"
       />
     </v-flex>
     <v-flex xs6>
-      <h4>Schema-Definition (JSON)</h4>
+      <h4>Schema</h4>
       <pre
         v-text="JSON.stringify(schema, replacer, 3)"
       />
@@ -28,14 +28,13 @@
 
 <script>
 const url = 'https://github.com/wotamann/vuetify-form-base/blob/master/example/src/components/'
+const fileObjectToString = (val) => `${val.name} - (File Object)` 
 
 export default {
   props: ['value', 'schema', 'editable', 'path'],
   data () {
     return {
       url,
-      valueClass: 'passed',
-      schemaClass: 'passed'
     }
   },
   methods: {
@@ -44,7 +43,10 @@ export default {
         return 'Function' // value.toString() 
       }
       if (Array.isArray(value) && value[0] instanceof File) {
-        return value.map(i => i.name + ' - (File Object)')
+        return value.map(i => fileObjectToString(i) )
+      }
+      if (value instanceof File) {
+        return fileObjectToString(value)
       }
       return value
     }

@@ -1,25 +1,13 @@
 <template>
   <v-container fluid>
-    <h4>Missing Schema will autogenerate Form. Control Grid with Flex-Prop</h4>
+    <h4>Autogenerate Form from Model (No Schema)</h4>
     
     <!-- FORM-BASE-COMPONENT -->
-    <v-form-base
-      :value="myValue"
-      :flex="{xs:12,sm:6}"
-      @input="log"
-    />
-
-    <!-- 
-      FLEX default
-      default: {xs:12,sm:6,md:4,lg:3}
-      or
-      :flex="{xs:12,sm:6,md:4,lg:3}" 
-    -->
-
+    <v-form-base :model="myModel" :flex="{xs:12,sm:6}" @input="log"/>
 
     <!-- Stuff   -->
     <infoline
-      :value="myValue"
+      :value="myModel"
       :path="$options._componentTag"
     />
   </v-container>
@@ -35,13 +23,13 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {
+      myModel: {
         person: {
           name: {
             prename:'Samuel',         
             surname: 'Stoner'
-          },
-          email: 'Stoner@web.com',          
+          },          
+          email: 'Stoner@mail.com',          
           age:37         
         },  
         todo: [
