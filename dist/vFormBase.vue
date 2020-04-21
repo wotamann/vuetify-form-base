@@ -56,7 +56,7 @@
                 >
                   <div
                     v-for="(item, idx) in setValue(obj)"
-                    :key="idx"
+                    :key="getKeyForArray(obj, item, idx)"
                     v-bind="obj.schema"
                     :value="setValue(obj)"
                   >
@@ -286,6 +286,8 @@ import { mask } from 'vue-the-mask'
 
 const typeToComponent = {
   // map schema.type to type in v-text-field  - https://www.wufoo.com/html5/
+  // For native <INPUT> type use ext.'range' - 
+  // { type:'text, ext:'date', ...} -> use native Input Type 'Date' instead of Date-Picker
   text: 'v-text-field',
   password: 'v-text-field',
   email: 'v-text-field',
@@ -293,9 +295,10 @@ const typeToComponent = {
   url: 'v-text-field',
   search: 'v-text-field',
   number: 'v-text-field', 
-  // date: 'v-text-field',       // use Input Type instead of Picker
-  // time: 'v-text-field',       
-  // color: 'v-text-field',      
+  // range: 'v-text-field',   //  { type:'text, ext:'range', ...}    
+  // date: 'v-text-field',    //  { type:'text, ext:'date', ...}       
+  // time: 'v-text-field',    //  { type:'text, ext:'time', ...}      
+  // color: 'v-text-field',   //  { type:'text, ext:'color', ...}      
   
   // map schema.type to vuetify-control (vuetify 2.0)
   img: 'v-img',
@@ -305,7 +308,7 @@ const typeToComponent = {
   file: 'v-file-input',
   switch: 'v-switch',
   checkbox: 'v-checkbox',
-  date: 'v-date-picker',   // use  Picker
+  date: 'v-date-picker',   
   time: 'v-time-picker',
   color: 'v-color-picker'
 }
@@ -372,6 +375,7 @@ export default {
       default: () => null,
     },    
     model: {
+      //  use value or model für presenting data 
       type: [Object, Array],
       default: () => null,
     },    
@@ -423,22 +427,39 @@ export default {
   },  
   methods: {
     mapTypeToComponent(type) {
-      // map ie. schema:{ type:'password', ... } to vuetify control v-text-field'
+      // map ie. schema:{ type:'password', ... } to specific vuetify-control or default to v-text-field'
       return typeToComponent[type] ? typeToComponent[type] : `v-${type}`
+    },
+    // GET ITERATION KEY FOR TYPE ARRAY
+    getKeyForArray(obj, item, index){
+      // IMPORTANT if you want to add or remove items in type:'array' 
+      // https://stackoverflow.com/questions/45655090/vue-array-splice-removing-wrong-item-from-list
+      
+      // create for iteration v-for an uniqe key from each object in array using index and time.hash 
+      // or define your key index by defining a key property
+      // MODEL
+      // arrayTasks: { trace:'100', label:'A', ... }
+      // SCHEMA
+      // arrayTasks: { type:'array', schema:{ ... } }                           -> KEY index_time.hash  0_1587498241149
+      // arrayTasks: { type:'array', key:'trace', schema:{ ... } }              -> KEY trace            100
+      // arrayTasks: { type:'array', key:['trace','label'], schema:{ ... } }    -> KEY trace_label      100_A
+      const k= obj.schema.key 
+      return k ? Array.isArray(k) ? k.map(i => item[i] ).join('_') : item[k] : `${index}_${Date.now()}` 
     },
     // GET IMG SOURCE
     getImageSource(obj) {
-      // if exist get source from src otherwise from join base & value
+      // if exist get source from src otherwise join schema.base & value & schema.tail
       return obj.schema.src ? obj.schema.src : `${obj.schema.base}${obj.value}${obj.schema.tail}`
     },
     // EXT TYPE
     checkExtensionType(obj) {
-      // check if ext:'color' exist take ext as type!!
+      // For native <INPUT> type use ext 
+      // { type:'text, ext:'date', ...} -> use native Input Type 'Date' instead of Date-Picker
       return obj.schema.ext || obj.schema.type
     },
     // ICON  
     getIconValue(obj){
-      // icon: try label or if undefined use value  
+      // icon: try schema.label or if undefined use value  
       return obj.schema.label ? obj.schema.label: this.setValue(obj) 
     },
     // TOOLTIP 
