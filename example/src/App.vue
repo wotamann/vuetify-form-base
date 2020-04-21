@@ -1,5 +1,5 @@
 <style>
-  h4 { background-color: #a9d3f5; padding: 0.2rem; margin-bottom: 1px; margin-right: 1px; font-weight: 300}
+  h4 { background-color: #64b5f6; padding: 0.2rem; margin-bottom: 1px; margin-right: 1px; font-weight: 300}
 </style>
 
 <template>
@@ -7,7 +7,7 @@
     <v-app-bar
       app
       dark
-      color="blue"
+      color="blue lighten-2"
     >
       <v-select
         dense           
@@ -15,7 +15,7 @@
         :items="items"
         item-text="text"
         item-value="value"
-        color="blue"
+        color="blue lighten-2"
       />
     </v-app-bar>
 
@@ -28,6 +28,7 @@
 <script>
 import autogenerate from '@/components/autogenerate.vue'
 import simple from '@/components/simple.vue'
+import textfields from '@/components/textfields.vue'
 import emptymodel from '@/components/emptymodel.vue'
 import basic from '@/components/basic.vue'
 import card from '@/components/card.vue'
@@ -50,6 +51,7 @@ import pickers from '@/components/pickers.vue'
 
 const items = [
     { value: 'simple', text: 'Textfields' }, 
+    { value: 'textfields', text: 'Textfields with HTML Type Attribute' }, 
     { value: 'emptymodel', text: 'Empty Model Object' }, 
     { value: 'autogenerate', text: 'Missing Schema Definition' }, 
     { value: 'basic', text: 'Missing Properties in Model or Schema'}, 
@@ -74,7 +76,7 @@ const items = [
 
 export default {
   components: {
-    autogenerate, simple,  emptymodel, basic, card, async, grid, css, displayhelpers, deep, partial, multisourcedata, 
+    autogenerate, simple, textfields, emptymodel, basic, card, async, grid, css, displayhelpers, deep, partial, multisourcedata, 
     complex, treeview, arrayease, array, selection, selectioncascading, conditional, list, pickers
   },
   data () {

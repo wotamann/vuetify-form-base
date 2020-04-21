@@ -56,7 +56,7 @@
                 >
                   <div
                     v-for="(item, idx) in setValue(obj)"
-                    :key="idx"
+                    :key="id-obj.key-idx"
                     v-bind="obj.schema"
                     :value="setValue(obj)"
                   >
@@ -293,9 +293,10 @@ const typeToComponent = {
   url: 'v-text-field',
   search: 'v-text-field',
   number: 'v-text-field', 
-  // date: 'v-text-field',       // use Input Type instead of Picker
-  // time: 'v-text-field',       
-  // color: 'v-text-field',      
+  // date: 'v-text-field',      // use  { type:'text', ext'date', ...} 
+  // time: 'v-text-field',      // use  { type:'text', ext'time', ...}  
+  // color: 'v-text-field',     // use  { type:'text', ext'color', ...} 
+  // range: 'v-text-field',     // use  { type:'text', ext'range', ...} 
   
   // map schema.type to vuetify-control (vuetify 2.0)
   img: 'v-img',
@@ -372,6 +373,7 @@ export default {
       default: () => null,
     },    
     model: {
+      //  [value | model]  
       type: [Object, Array],
       default: () => null,
     },    

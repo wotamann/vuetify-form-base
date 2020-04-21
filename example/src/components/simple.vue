@@ -3,6 +3,7 @@
     <h4>Textfields with Mask & Tooltips and Fileselector </h4>
     
     <v-form>
+     
       <!-- FORM-BASE-COMPONENT -->    
       <v-form-base 
         :model="myModel"
@@ -56,14 +57,15 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
+      
       myModel: {
         name: 'Base',
         creditcard: '12345678',
         password: 'abcdefgh',
-        count:100,
-        color:'#2AABFF',
         file: [] // array of File objects
-      },      
+      },     
+
+      // Schema-Order defines Order of Controls in Form    
       mySchema: {
         name: { 
           type:'text' 
@@ -78,20 +80,12 @@ export default {
           prependInnerIcon: 'credit_card', 
           hint: mask, 
           mask, 
-        },
-        count:{ 
-          type:'number', 
-          label:'Counter', 
-          tooltip: 'Counter'
-        },
+        },        
         file: { 
           type: 'file', 
-          label: 'Files', 
+          label: 'Images', 
           accept, 
           multiple: true
-        },
-        color:{ 
-          type:'text', ext:'color' 
         }
       }
     }

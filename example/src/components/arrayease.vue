@@ -1,12 +1,18 @@
 <template>
   <v-container fluid>
-    <h4>Edit Data in Value-Array by using one Schema for all Items. Scroll for Intersections in Log</h4>
+    <h4>Edit Data in nested Array by using one Schema for all Items. Scroll for Intersections in Log</h4>
 
+    <!-- 
+      If your model/value is an array you can wrap it into an Object like this. But this doesn't work with primitive datatypes 
+      :model="{t: myValue.tasks}"
+      :schema="{t: mySchema.tasks}"
+    -->
+    
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       id="array-ease"
-      :value="myValue"
-      :schema="mySchema"
+      :model="myValue"
+      :schema="mySchema" 
       @change:array-ease="log"
       @intersect:array-ease="intersect"
     />
@@ -33,10 +39,9 @@ export default {
   name: 'arrayease',
   components: { VFormBase, Infoline },
   data () {
-    return {
+    return {      
       myValue: {
         tasks:[
-          getOuterTask(),
           getOuterTask(),
           getOuterTask(),
           getOuterTask(),
@@ -61,7 +66,7 @@ export default {
         }
       }
     }
-  },
+  },  
   methods: {
     
     log,
@@ -73,5 +78,6 @@ export default {
       }      
     }
   }
+
 }
 </script>
