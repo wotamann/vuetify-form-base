@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Textfields using native HTML-Input Type attribute with computed Schema (Color)</h4>
+    <h4>Textfields Extension for native HTML-Input Type-Attribute and computed Schema (Color)</h4>
       <!-- 
         Most controls are based on vuetify and therefore 
         the properties of these controls can be used 
@@ -88,11 +88,14 @@ export default {
         date:{ 
           type:'text', 
           ext:'date', 
+          locale:'en',
+          prependIcon: 'event', 
           label:'Date'
         },
         time:{ 
           type:'text', 
           ext:'time', 
+          prependIcon: 'timer', 
           label:'Time'
         },
       }

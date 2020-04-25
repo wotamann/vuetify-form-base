@@ -36,13 +36,13 @@ export default {
     // Dynamic Schema must be Computed
     mySchema () {
       return {
-        name: { type: 'text', flex: { xs: 12, sm: 6 }, order: { xs: 0, sm: 8 }, offset: { xs: 0, sm: 3, md: 0 } },
+        name: { type: 'text', flex: { xs: 12, sm: 6 }, order: { xs: 0, sm: 8 }, offset: { xs: 0, sm: 0, md: 4 } },
         radio: { type: 'radio', row: !this.row, options: ['A', 'B', 'C', 'D'], flex: 8, order: 4 }
       }
     },
     // Change Layout from Row to Column on resize and change Radio-Orientation
     row () {
-      return this.$vuetify.breakpoint.mdAndUp
+      return !this.$vuetify.breakpoint.mdAndUp
     },
     // Change Class on resize
     layout () {

@@ -34,30 +34,63 @@
               <!-- slot replaces complete item of defined KEY -> <div slot="slot-item-key-[propertyName]">-->
               <slot :name="getKeyItemSlot(obj)">
                 
-                <!-- radio -->
+              <!-- RADIO -->
                 <v-radio-group
                   v-if="obj.schema.type === 'radio'"
-                  v-bind="obj.schema"
+                  v-bind="bindSchema(obj)"
                   :value="setValue(obj)"
                   @change="onInput($event, obj)"
                 >
                   <v-radio
-                    v-for="(o,ix) in obj.schema.options"
-                    :key="ix"
-                    v-bind="obj.schema"
+                    v-for="(o,idx) in obj.schema.options"
+                    :key="idx"
+                    v-bind="bindSchema(obj)"
                     :label="sanitizeOptions(o).label"
                     :value="sanitizeOptions(o).value"
                   />
                 </v-radio-group>
+              <!-- END RADIO -->
 
-                <!-- array -->
+              <!-- DATE TIME COLOR    type:'date' and NOT ext:'picker'-->
+                <v-menu
+                  v-else-if="isDateTimeColorExtension(obj)"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  :nudge-right="32"
+                  max-width="290px"
+                  min-width="290px"
+                >                  
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-on= "on"
+                      v-bind="bindSchema(obj)"
+                      type="text"
+                      readonly
+                      :value="setValue(obj)"
+                    >
+                      <!-- @input="onInput($event, obj)" -->
+                    </v-text-field>
+                  </template>
+                  <div
+                    :is="mapTypeToComponent( obj.schema.ext )" 
+                    v-bind="bindSchema(obj)"
+                    :type="checkExtensionType(obj)"
+                    :value="setValue(obj)"
+                    @input="onInput($event, obj)"
+                  >
+                  </div>
+                </v-menu>
+              <!-- END DATE TIME COLOR -->
+
+              <!-- ARRAY -->
                 <template
                   v-else-if="obj.schema.type === 'array'"
                 >
                   <div
                     v-for="(item, idx) in setValue(obj)"
                     :key="getKeyForArray(obj, item, idx)"
-                    v-bind="obj.schema"
+                    v-bind="bindSchema(obj)"
                     :value="setValue(obj)"
                   >
                     <slot
@@ -73,11 +106,12 @@
                     </slot>
                   </div>
                 </template>
+              <!-- END ARRAY -->
 
-                <!-- card -->
+              <!-- CARD -->
                 <v-card 
                   v-else-if="obj.schema.type === 'card'"
-                  v-bind="obj.schema"
+                  v-bind="bindSchema(obj)"
                 >
                   <v-card-title v-if="obj.schema.title" v-text="obj.schema.title" />
                   <v-card-subtitle v-if="obj.schema.subtitle"  v-text="obj.schema.subtitle" />
@@ -86,26 +120,28 @@
                     :schema="obj.schema.schema"
                   />
                 </v-card>  
+              <!-- END CARD -->
                 
-                <!-- treeview -->
+              <!-- TREEVIEW -->
                 <v-treeview
                   v-else-if="obj.schema.type === treeview"
                   v-model="obj.schema.model"
                   :items="setValue(obj)"
                   :active.sync="obj.schema.model"
                   :open.sync="obj.schema.open"
-                  v-bind="obj.schema"
+                  v-bind="bindSchema(obj)"
                   @update:open="onEvent({type:'click'}, obj, 'open' )"
                   @update:active="onEvent({type:'click'}, obj, 'selected' )"
                 />
-
-                <!-- list -->
+              <!-- END TREEVIEW -->
+              
+              <!-- LIST -->
                 <template
                   v-else-if="obj.schema.type === list"
                 >
                   <v-toolbar
                     v-if="obj.schema.label"
-                    v-bind="obj.schema"
+                    v-bind="bindSchema(obj)"
                     dark
                   >
                     <v-toolbar-title>{{ obj.schema.label }}</v-toolbar-title>
@@ -113,12 +149,12 @@
                   <v-list>
                     <v-list-item-group
                       v-model="obj.schema.model"
-                      v-bind="obj.schema"
+                      v-bind="bindSchema(obj)"
                       light
                     >
                       <v-list-item
-                        v-for="(item, ix) in setValue(obj)"
-                        :key="ix"
+                        v-for="(item, idx) in setValue(obj)"
+                        :key="idx"
                         @click="onEvent($event, obj, list )"
                       >
                         <v-list-item-icon>
@@ -131,54 +167,59 @@
                     </v-list-item-group>
                   </v-list>
                 </template>
-
-                <!-- checkbox | switch -->
+              <!-- END LIST -->
+              
+              <!-- CHECKBOX | SWITCH -->
                 <div
                   :is="mapTypeToComponent(obj.schema.type)"
                   v-else-if="obj.schema.type === 'switch' || obj.schema.type === 'checkbox'"
                   :input-value="setValue(obj)"
-                  v-bind="obj.schema"
+                  v-bind="bindSchema(obj)"
                   @change="onInput($event, obj)"
                 />
+              <!-- END CHECKBOX | SWITCH -->
 
-                <!-- file -->
+              <!-- FILE -->
                 <v-file-input
                   v-else-if="obj.schema.type === 'file' "
                   :value="setValue(obj)"
-                  v-bind="obj.schema"
+                  v-bind="bindSchema(obj)"
                   @focus="onEvent($event, obj)"
                   @blur="onEvent($event, obj)"
                   @change="onInput($event, obj)"
                 />
+              <!-- END FILE -->
 
-                <!-- icon -->
+              <!-- ICON -->
                 <v-icon
                   v-else-if="obj.schema.type === 'icon'"
-                  v-bind="obj.schema"
-                  @click="onEvent($event, obj)"
+                  v-bind="bindSchema(obj)"
                   v-text ="getIconValue(obj)"
+                  @click="onEvent($event, obj)"
                 />
+              <!-- END ICON -->
 
-                <!-- img -->
+              <!-- IMG -->
                 <v-img
                   v-else-if="obj.schema.type === 'img'"
-                  v-bind="obj.schema"
                   :src="getImageSource(obj)"
+                  v-bind="bindSchema(obj)"
                   @click="onEvent($event, obj)"
                 />
+              <!-- END IMG -->
                 
-                <!-- btn-toggle -->
+              <!-- BTN-TOGGLE -->
                 <v-btn-toggle
                   v-else-if="obj.schema.type === 'btn-toggle'"
-                  v-bind="obj.schema"
+                  v-bind="bindSchema(obj)"
                   color=""
                   :value="setValue(obj)"
                   @change="onInput($event, obj)"
                 >
                   <v-btn
-                    v-for="(b,ix) in obj.schema.options"
-                    :key="ix"
-                    v-bind="obj.schema"
+                    v-for="(b, idx) in obj.schema.options"
+                    :key="idx"
+                    v-bind="bindSchema(obj)"
                     :value="sanitizeOptions(b).value"
                   >
                     <v-icon :dark="obj.schema.dark">
@@ -187,11 +228,12 @@
                     {{ sanitizeOptions(b).label }}
                   </v-btn>
                 </v-btn-toggle>
+              <!-- END BTN-TOGGLE -->
 
-                <!-- btn   -->
+              <!-- BTN -->
                 <v-btn
                   v-else-if="obj.schema.type === 'btn'"
-                  v-bind="obj.schema"
+                  v-bind="bindSchema(obj)"
                   @click="onEvent($event, obj, button)"
                 >
                   <v-icon
@@ -217,12 +259,13 @@
                     {{ obj.schema.iconRight }}
                   </v-icon>
                 </v-btn>
+              <!-- END BTN -->
 
-                <!-- only masked v-text-field use this Section - https://vuejs-tips.github.io/vue-the-mask/  -->
+              <!-- MASK v-text-field use this Section - https://vuejs-tips.github.io/vue-the-mask/  -->
                 <v-text-field
                   v-else-if="obj.schema.mask"
                   v-mask="obj.schema.mask"
-                  v-bind="obj.schema"
+                  v-bind="bindSchema(obj)"
                   :value="setValue(obj)"
                   @focus="onEvent($event, obj)"
                   @blur="onEvent($event, obj)"
@@ -233,13 +276,14 @@
                   @click:prepend-inner="onEvent($event, obj, prependInner )"
                   @input="onInput($event, obj)"
                 />
+              <!-- END MASK -->
 
-                <!-- all other Types - see typeToComponent -->
+              <!-- DEFAULT all other Types -> typeToComponent -->
                 <div
                   :is="mapTypeToComponent(obj.schema.type)"
                   v-else
-                  v-bind="obj.schema"
-                  :type="checkExtensionType(obj)"
+                  v-bind="bindSchema(obj)"
+                  :type="checkExtensionType(obj)"                  
                   :value="setValue(obj)"
                   @focus="onEvent($event, obj)"
                   @blur="onEvent($event, obj)"
@@ -250,6 +294,7 @@
                   @click:prepend-inner="onEvent($event, obj, prependInner )"
                   @input="onInput($event, obj)"
                 />
+              <!-- END DEFAULT -->
 
               </slot>
             </slot>
@@ -265,12 +310,12 @@
             :key="`s-${index}`"
           />
         </template>
-        <!-- slot for tooltip - inspect css.vue for details -->
+        <!-- slot for TOOLTIP - inspect css.vue for details -->
         <slot
           name="slot-tooltip"
           :obj="obj"
         >
-          <span>{{ getShorthandTooltipLabel(obj.schema.tooltip)}}</span>
+          <span>{{getShorthandTooltipLabel(obj.schema.tooltip)}}</span>
         </slot>
       </v-tooltip>
     </template>
@@ -286,8 +331,6 @@ import { mask } from 'vue-the-mask'
 
 const typeToComponent = {
   // map schema.type to type in v-text-field  - https://www.wufoo.com/html5/
-  // For native <INPUT> type use ext.'range' - 
-  // { type:'text, ext:'date', ...} -> use native Input Type 'Date' instead of Date-Picker
   text: 'v-text-field',
   password: 'v-text-field',
   email: 'v-text-field',
@@ -295,12 +338,21 @@ const typeToComponent = {
   url: 'v-text-field',
   search: 'v-text-field',
   number: 'v-text-field', 
+  
+  // For native <INPUT> type use alternative schema prop ext  -> schema:{ type:'text, ext:'date', ...} 
   // range: 'v-text-field',   //  { type:'text, ext:'range', ...}    
   // date: 'v-text-field',    //  { type:'text, ext:'date', ...}       
   // time: 'v-text-field',    //  { type:'text, ext:'time', ...}      
   // color: 'v-text-field',   //  { type:'text, ext:'color', ...}      
   
+  // INFO: 2 Types of DATE / TIME / COLOR
+  // Date-Input         - schema:{ type:'text, ext:'date', ...}       
+  // Date-Picker        - schema:{ type:'date', ...}         
+
   // map schema.type to vuetify-control (vuetify 2.0)
+  date: 'v-date-picker',   
+  time: 'v-time-picker',
+  color: 'v-color-picker',
   img: 'v-img',
   card: 'v-card',
   textarea: 'v-textarea',
@@ -308,10 +360,8 @@ const typeToComponent = {
   file: 'v-file-input',
   switch: 'v-switch',
   checkbox: 'v-checkbox',
-  date: 'v-date-picker',   
-  time: 'v-time-picker',
-  color: 'v-color-picker'
-}
+
+  }
 // Declaration
 const orderDirection = 'ASC'
 const pathDelimiter = '.'
@@ -386,6 +436,8 @@ export default {
   },
   data () {
     return {
+      date: null,
+      menu:false,
       valueIntern:{},
       flatCombinedArray: [],
       clear,
@@ -430,6 +482,20 @@ export default {
       // map ie. schema:{ type:'password', ... } to specific vuetify-control or default to v-text-field'
       return typeToComponent[type] ? typeToComponent[type] : `v-${type}`
     },
+    // CHECK FOR DATE, TIME OR COLOR EXT
+    isDateTimeColorExtension(obj){
+      return 'date_time_color'.includes(obj.schema.ext)
+    },
+    // BIND SCHEMA FN
+    bindSchema(obj) {     
+      return obj.schema
+    },      
+    // EXT TYPE
+    checkExtensionType(obj) {
+      // For native <INPUT> type use ext 
+      // { type:'text, ext:'date', ...} -> use native Input Type 'Date' instead of Date-Picker
+      return obj.schema.ext || obj.schema.type
+    },
     // GET ITERATION KEY FOR TYPE ARRAY
     getKeyForArray(obj, item, index){
       // IMPORTANT if you want to add or remove items in type:'array' 
@@ -456,12 +522,7 @@ export default {
       // if exist get source from src otherwise join schema.base & value & schema.tail
       return obj.schema.src ? obj.schema.src : `${obj.schema.base}${obj.value}${obj.schema.tail}`
     },
-    // EXT TYPE
-    checkExtensionType(obj) {
-      // For native <INPUT> type use ext 
-      // { type:'text, ext:'date', ...} -> use native Input Type 'Date' instead of Date-Picker
-      return obj.schema.ext || obj.schema.type
-    },
+      
     // ICON  
     getIconValue(obj){
       // icon: try schema.label or if undefined use value  

@@ -48,6 +48,7 @@ import treeview from '@/components/treeview.vue'
 import conditional from '@/components/conditional.vue'
 import list from '@/components/list.vue'
 import pickers from '@/components/pickers.vue'
+import images from '@/components/images.vue'
 
 const items = [
     { value: 'simple', text: 'Textfields' }, 
@@ -67,7 +68,8 @@ const items = [
     { value: 'arrayease', text: 'Edit Value-Array'}, 
     { value: 'array', text: 'Add, Remove and Edit Items in nested Value-Array'}, 
     { value: 'multisourcedata', text: 'Integrate Multi-Source Data by using Formbase in Formbase as Slot'}, 
-    { value: 'pickers', text: 'Date, Time, Color Pickers'},
+    { value: 'pickers', text: 'Date, Time, Color Menu and Pickers'},
+    { value: 'images', text: 'Images'},
     { value: 'grid', text: 'Responsive Grid using Flex, Order and Offset'}, 
     { value: 'partial', text: 'Partial & Linked'}, 
     { value: 'conditional', text: 'Conditional Form'}, 
@@ -77,7 +79,7 @@ const items = [
 export default {
   components: {
     autogenerate, simple, textfields, emptymodel, basic, card, async, grid, css, displayhelpers, deep, partial, multisourcedata, 
-    complex, treeview, arrayease, array, selection, selectioncascading, conditional, list, pickers
+    complex, treeview, arrayease, array, selection, selectioncascading, conditional, list, pickers, images
   },
   data () {
     return {
