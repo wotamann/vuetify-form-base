@@ -30,22 +30,22 @@ import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
 import log from '@/lib'
 
+const toUpper = ( {value} ) => typeof value === 'string' ? value.toUpperCase() : value 
+const toReverse = ( {value} ) => typeof value === 'string' ? value.split("").reverse().join("") : value 
+
 export default {
   name: 'DisplayHelpers',
   components: { VFormBase, Infoline },
   data () {
     return {
       myValue: {
-        name1: 'Float left & Margin-Top',
-        name2: 'Typographie & Pad X-Axis',
-        name3: 'Visible on sm',
-        name4: 'Visible on xs, Margin-Bottom',
+        name1: 'manipulate value and display',
+        name2: 'manipulate input to value',
+      
       },
       mySchema: {
-        name1: { type: 'text', title:'grey lighten-3 float-left mt-6', class:'grey lighten-3 float-left mt-6' },
-        name2: { type: 'text', title:'title px-4 blue lighten-5', class:'title px-4 blue lighten-5' },
-        name3: { type: 'text', title:'d-none d-sm-flex d-md-none red lighten-4', class:'d-none d-sm-flex d-md-none red lighten-4' },
-        name4: { type: 'text', title:'caption d-flex d-sm-none green lighten-4 mb-2', class:'caption d-flex d-sm-none green lighten-4 mb-2' },
+        name1: { type: 'text', toCtrl: toUpper, fromCtrl: toUpper, label:'Value To Control' },
+        name2: { type: 'text', fromCtrl: toReverse, label:'Control To Value' },
       }
     }
   },

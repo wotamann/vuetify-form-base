@@ -12,6 +12,13 @@
         @input="log"
       />
       <!--
+        schema prop:'text' is shorthand for prop: { type: 'text', label:'prop' }  
+
+        Most controls are based on vuetify and therefore 
+        the properties of these controls can be used 
+        schema:{ type:'text',... } maps to <v-text-fields>
+        -> https://vuetifyjs.com/en/components/text-fields/
+
         // compose listener to one or more of following Events:
         @click= "log"
         @input= "log"
@@ -26,7 +33,7 @@
         @swipe=  "log"   // touch events        
         @update= "log"   // catch all events
      
-        // if 'id' available append 'id' at Event: 
+        // if 'id' available append 'id' at event -  
         id="form-base-list"
         @change:form-base-list="log"        
       -->

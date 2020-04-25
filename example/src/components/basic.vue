@@ -27,7 +27,7 @@ export default {
       myModel: {
         name: 'Defined in Model & Schema',
         // no definition in mySchema - property value remains untouched  
-        undefinedSchema: 'This Value is untouched',  
+        undefinedSchema: 'Value keeps untouched',  
       },
       mySchema: {
        name: 'text', 

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Textfields and Fileselector with Mask and Tooltips</h4>
+    <h4>Schema updates Model, even if it is only an empty Object</h4>
     
     <!-- FORM-BASE-COMPONENT -->    
     <v-form-base :model="myModel" :schema="mySchema" flex="6" @input="log"/>
@@ -25,7 +25,7 @@ export default {
   data () {
     return {
       myModel: {
-        // get input here
+        // updates input here
       },      
       mySchema: {
         name: 'text',         // schema prop:'text' is shorthand for prop: { type: 'text', label:'prop' }

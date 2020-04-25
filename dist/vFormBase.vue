@@ -433,6 +433,8 @@ export default {
     // GET ITERATION KEY FOR TYPE ARRAY
     getKeyForArray(obj, item, index){
       // IMPORTANT if you want to add or remove items in type:'array' 
+      // more Info -> 
+      // https://forum.vuejs.org/t/after-splicing-an-object-wrong-item-disappears-from-view/9247/4
       // https://stackoverflow.com/questions/45655090/vue-array-splice-removing-wrong-item-from-list
       
       // create for iteration v-for an uniqe key from each object in array using index and time.hash 
@@ -443,8 +445,11 @@ export default {
       // arrayTasks: { type:'array', schema:{ ... } }                           -> KEY index_time.hash  0_1587498241149
       // arrayTasks: { type:'array', key:'trace', schema:{ ... } }              -> KEY trace            100
       // arrayTasks: { type:'array', key:['trace','label'], schema:{ ... } }    -> KEY trace_label      100_A
-      const k= obj.schema.key 
-      return k ? Array.isArray(k) ? k.map(i => item[i] ).join('_') : item[k] : `${index}_${Date.now()}` 
+      
+      // IMPORTANT! Key should not contain an editable prop, because of new iteration on any change
+
+        const k= obj.schema.key 
+        return k ? Array.isArray(k) ? k.map(i => item[i] ).join('_') : item[k] : (!isNaN(index)) ? `${index}_${Date.now()}` : index 
     },
     // GET IMG SOURCE
     getImageSource(obj) {
