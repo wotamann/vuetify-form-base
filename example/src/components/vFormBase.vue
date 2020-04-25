@@ -51,7 +51,7 @@
                 </v-radio-group>
               <!-- END RADIO -->
 
-              <!-- DATE TIME COLOR    type:'date' and NOT ext:'picker'-->
+              <!-- DATE, TIME, COLOR MENU -->
                 <v-menu
                   v-else-if="isDateTimeColorExtension(obj)"
                   :close-on-content-click="false"
@@ -81,7 +81,7 @@
                   >
                   </div>
                 </v-menu>
-              <!-- END DATE TIME COLOR -->
+              <!-- END DATE, TIME, COLOR MENU -->
 
               <!-- ARRAY -->
                 <template
@@ -326,89 +326,88 @@
 
 <script>
 // import & declarations
-import { get, isPlainObject, isFunction, isString, isEmpty, orderBy, delay } from 'lodash'
-import { mask } from 'vue-the-mask'
+  import { get, isPlainObject, isFunction, isString, isEmpty, orderBy, delay } from 'lodash'
+  import { mask } from 'vue-the-mask'
 
-const typeToComponent = {
-  // map schema.type to type in v-text-field  - https://www.wufoo.com/html5/
-  text: 'v-text-field',
-  password: 'v-text-field',
-  email: 'v-text-field',
-  tel: 'v-text-field',
-  url: 'v-text-field',
-  search: 'v-text-field',
-  number: 'v-text-field', 
-  
-  // For native <INPUT> type use alternative schema prop ext  -> schema:{ type:'text, ext:'date', ...} 
-  // range: 'v-text-field',   //  { type:'text, ext:'range', ...}    
-  // date: 'v-text-field',    //  { type:'text, ext:'date', ...}       
-  // time: 'v-text-field',    //  { type:'text, ext:'time', ...}      
-  // color: 'v-text-field',   //  { type:'text, ext:'color', ...}      
-  
-  // INFO: 2 Types of DATE / TIME / COLOR
-  // Date-Input         - schema:{ type:'text, ext:'date', ...}       
-  // Date-Picker        - schema:{ type:'date', ...}         
+  const typeToComponent = {
+    // map schema.type to type in v-text-field  - https://www.wufoo.com/html5/
+    text: 'v-text-field',
+    password: 'v-text-field',
+    email: 'v-text-field',
+    tel: 'v-text-field',
+    url: 'v-text-field',
+    search: 'v-text-field',
+    number: 'v-text-field', 
+    
+    // For native <INPUT> type use alternative schema prop ext  -> schema:{ type:'text, ext:'date', ...} 
+    // range: 'v-text-field',   //  { type:'text, ext:'range', ...}    
+    // date: 'v-text-field',    //  { type:'text, ext:'date', ...}       
+    // time: 'v-text-field',    //  { type:'text, ext:'time', ...}      
+    // color: 'v-text-field',   //  { type:'text, ext:'color', ...}      
+    
+    // INFO: 2 Types of DATE / TIME / COLOR
+    // Date-Input         - schema:{ type:'text, ext:'date', ...}       
+    // Date-Picker        - schema:{ type:'date', ...}         
 
-  // map schema.type to vuetify-control (vuetify 2.0)
-  date: 'v-date-picker',   
-  time: 'v-time-picker',
-  color: 'v-color-picker',
-  img: 'v-img',
-  card: 'v-card',
-  textarea: 'v-textarea',
-  range: 'v-slider',
-  file: 'v-file-input',
-  switch: 'v-switch',
-  checkbox: 'v-checkbox',
+    // map schema.type to vuetify-control (vuetify 2.0)
+    date: 'v-date-picker',   
+    time: 'v-time-picker',
+    color: 'v-color-picker',
+    img: 'v-img',
+    card: 'v-card',
+    textarea: 'v-textarea',
+    range: 'v-slider',
+    file: 'v-file-input',
+    switch: 'v-switch',
+    checkbox: 'v-checkbox',
 
-  }
-// Declaration
-const orderDirection = 'ASC'
-const pathDelimiter = '.'
-const classKeyDelimiter = '-'
-const defaultID = 'form-base'
+    }
+  // Declaration
+  const orderDirection = 'ASC'
+  const pathDelimiter = '.'
+  const classKeyDelimiter = '-'
+  const defaultID = 'form-base'
 
-const onEventDelay = 10 // ms
-const mouse = 'mouseenter|mouseleave'
-const change = 'input|click'              // event change collects events 'input|click'
-const watch = 'focus|input|click|blur'    // event watch collects events 'focus|input|click|blur'
-const display = 'resize|swipe|intersect'  // event watch collects events 'resize|swipe|intersect'
+  const onEventDelay = 10 // ms
+  const mouse = 'mouseenter|mouseleave'
+  const change = 'input|click'              // event change collects events 'input|click'
+  const watch = 'focus|input|click|blur'    // event watch collects events 'focus|input|click|blur'
+  const display = 'resize|swipe|intersect'  // event watch collects events 'resize|swipe|intersect'
 
-const itemClassAppendix = 'item'
-const typeClassAppendix = 'type'
-const keyClassAppendix = 'key'
-const propertyClassAppendix = 'prop'
+  const itemClassAppendix = 'item'
+  const typeClassAppendix = 'type'
+  const keyClassAppendix = 'key'
+  const propertyClassAppendix = 'prop'
 
-const arraySlotAppendix = 'slot-array'
-const topSlotAppendix = 'slot-top'
-const itemSlotAppendix = 'slot-item'
-const bottomSlotAppendix = 'slot-bottom'
+  const arraySlotAppendix = 'slot-array'
+  const topSlotAppendix = 'slot-top'
+  const itemSlotAppendix = 'slot-item'
+  const bottomSlotAppendix = 'slot-bottom'
 
-const clear = 'clear'
-const button = 'button'
-const treeview = 'treeview'
-const list = 'list'
-const append = 'append'
-const appendOuter = 'append-outer'
-const prepend = 'prepend'
-const prependInner = 'prepend-inner'
+  const clear = 'clear'
+  const button = 'button'
+  const treeview = 'treeview'
+  const list = 'list'
+  const append = 'append'
+  const appendOuter = 'append-outer'
+  const prepend = 'prepend'
+  const prependInner = 'prepend-inner'
 
-// name of Type wich will be used for grouping controls
-const groupingType ='card'
-      
-// Default flex setting, overrideable by prop flex or by schema.flex definition  
-const flexDefault = '' // { xs:6, sm: 4, md:4, lg:4}
+  // name of Type wich will be used for grouping controls
+  const groupingType ='card'
+        
+  // Default flex setting, overrideable by prop flex or by schema.flex definition  
+  const flexDefault = '' // { xs:6, sm: 4, md:4, lg:4}
 
-// Mapper for Autogeneration of Schema from Value
-const defaultSchemaIfValueIsNullOrUndefined = key => ({ type:'text', label: key })
-const defaultSchemaIfValueIsString = key => ({ type:'text', label: key })
-const defaultSchemaIfValueIsNumber = key => ({ type:'number', label: key })
-const defaultSchemaIfValueIsBoolean = key => ({ type:'checkbox', label: key })
+  // Mapper for Autogeneration of Schema from Value
+  const defaultSchemaIfValueIsNullOrUndefined = key => ({ type:'text', label: key })
+  const defaultSchemaIfValueIsString = key => ({ type:'text', label: key })
+  const defaultSchemaIfValueIsNumber = key => ({ type:'number', label: key })
+  const defaultSchemaIfValueIsBoolean = key => ({ type:'checkbox', label: key })
 //
+
 export default {
-
   name: 'VFormBase',
-
   // Info Mask https://vuejs-tips.github.io/vue-the-mask/
   directives: { mask },
   props: {
@@ -435,9 +434,7 @@ export default {
     }
   },
   data () {
-    return {
-      date: null,
-      menu:false,
+    return {    
       valueIntern:{},
       flatCombinedArray: [],
       clear,
