@@ -1091,8 +1091,15 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 
 
 ---
+
+#### Version 0.1.17
+- fixed known  problem of splicing arrays in v-for and index key   
+
+#### Version 0.1.11
+- added support for grouping some control  | { type:'card', ...}   
+
 #### Version 0.1.9
-- added support for v-icon | { type:'icon'}   
+- added support for v-img | { type:'img'}   
 
 #### Version 0.1.8
 - Revision of example, 
