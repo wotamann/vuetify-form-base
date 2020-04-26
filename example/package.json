@@ -1,6 +1,6 @@
 {
   "name": "vuetify-form-base-example",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "private": true,
   "description": "Form Generator as Vue component based on Vuetify",
   "author": "wotamann@github",
