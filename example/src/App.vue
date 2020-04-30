@@ -18,7 +18,6 @@
         color="blue lighten-2"
       />
     </v-app-bar>
-
     <v-content app >
       <div :is="view" ></div>
     </v-content>
@@ -31,7 +30,7 @@ import simple from '@/components/simple.vue'
 import textfields from '@/components/textfields.vue'
 import emptymodel from '@/components/emptymodel.vue'
 import basic from '@/components/basic.vue'
-import card from '@/components/card.vue'
+import grouping from '@/components/grouping.vue'
 import async from '@/components/async.vue'
 import grid from '@/components/grid.vue'
 import css from '@/components/css.vue'
@@ -56,7 +55,7 @@ const items = [
     { value: 'emptymodel', text: 'Empty Model Object' }, 
     { value: 'autogenerate', text: 'Missing Schema Definition' }, 
     { value: 'basic', text: 'Missing Properties in Model or Schema'}, 
-    { value: 'card', text: 'Group Controls'}, 
+    { value: 'grouping', text: 'Group Controls'}, 
     { value: 'async', text: 'Lazy Loading of Component for Async-Data'}, 
     { value: 'css', text: 'CSS, Slots, Tooltips & Buttons'}, 
     { value: 'displayhelpers', text: 'Display, Typo & Layout control with Vuetify display helpers'}, 
@@ -78,7 +77,7 @@ const items = [
 
 export default {
   components: {
-    autogenerate, simple, textfields, emptymodel, basic, card, async, grid, css, displayhelpers, deep, partial, multisourcedata, 
+    autogenerate, simple, textfields, emptymodel, basic, grouping, async, grid, css, displayhelpers, deep, partial, multisourcedata, 
     complex, treeview, arrayease, array, selection, selectioncascading, conditional, list, pickers, images
   },
   data () {

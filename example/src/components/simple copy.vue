@@ -75,10 +75,10 @@ export default {
       // Schema-Order defines Order of Controls in Form    
       mySchema: {
         name: { 
-          type:'text'
+          type:'text' 
         },         
         password: { 
-          type: 'password',
+          type: 'password', 
           clearable: true 
         },
         creditcard: { 
@@ -86,7 +86,7 @@ export default {
           label: 'Creditcard', 
           prependInnerIcon: 'credit_card', 
           hint: mask, 
-          mask
+          mask, 
         },        
         file: { 
           type: 'file', 

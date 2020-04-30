@@ -75,6 +75,7 @@ export default {
             },
             task: {
               type: 'array',
+              offset:2,
               schema: {
                 done: {
                   type: 'checkbox', label: 'Done', color: 'red', offset: 1, flex: 2 },

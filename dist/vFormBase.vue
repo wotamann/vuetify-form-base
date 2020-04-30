@@ -108,19 +108,22 @@
                 </template>
               <!-- END ARRAY -->
 
-              <!-- CARD -->
-                <v-card 
-                  v-else-if="obj.schema.type === 'card'"
-                  v-bind="bindSchema(obj)"
-                >
-                  <v-card-title v-if="obj.schema.title" v-text="obj.schema.title" />
-                  <v-card-subtitle v-if="obj.schema.subtitle"  v-text="obj.schema.subtitle" />
-                  <v-form-base
-                    :value="setValue(obj)"
-                    :schema="obj.schema.schema"
-                  />
-                </v-card>  
-              <!-- END CARD -->
+              <!-- GROUP -->
+                <template v-else-if="obj.schema.type === 'group'">
+                  <div 
+                    v-bind="bindSchema(obj)" 
+                    @click="onEvent($event, obj)"
+                  >
+                  <div v-html="obj.schema.label" ></div>
+                    <v-form-base
+                      :id="`${id}-${obj.key}`"
+                      :value="setValue(obj)"
+                      :schema="obj.schema.schema"
+                    />
+                </div>
+                </template>
+
+              <!-- END GROUP -->
                 
               <!-- TREEVIEW -->
                 <v-treeview
@@ -273,7 +276,7 @@
                   @click:append-outer="onEvent($event, obj, appendOuter)"
                   @click:clear="onEvent($event, obj, clear )"
                   @click:prepend="onEvent($event, obj, prepend )"
-                  @click:prepend-inner="onEvent($event, obj, prependInner )"
+                  @click:prepend-inner="onEvent($event, obj, prependInner)"
                   @input="onInput($event, obj)"
                 />
               <!-- END MASK -->
@@ -328,7 +331,7 @@
 // import & declarations
   import { get, isPlainObject, isFunction, isString, isEmpty, orderBy, delay } from 'lodash'
   import { mask } from 'vue-the-mask'
-
+  
   const typeToComponent = {
     // map schema.type to type in v-text-field  - https://www.wufoo.com/html5/
     text: 'v-text-field',
@@ -354,12 +357,12 @@
     time: 'v-time-picker',
     color: 'v-color-picker',
     img: 'v-img',
-    card: 'v-card',
     textarea: 'v-textarea',
     range: 'v-slider',
     file: 'v-file-input',
     switch: 'v-switch',
     checkbox: 'v-checkbox',
+    card: 'v-card',
 
     }
   // Declaration
@@ -394,7 +397,7 @@
   const prependInner = 'prepend-inner'
 
   // name of Type wich will be used for grouping controls
-  const groupingType ='card'
+  const groupingType ='group'
         
   // Default flex setting, overrideable by prop flex or by schema.flex definition  
   const flexDefault = '' // { xs:6, sm: 4, md:4, lg:4}
@@ -474,7 +477,7 @@ export default {
       return this.schema
     }
   },  
-  methods: {
+  methods: {   
     mapTypeToComponent(type) {
       // map ie. schema:{ type:'password', ... } to specific vuetify-control or default to v-text-field'
       return typeToComponent[type] ? typeToComponent[type] : `v-${type}`
@@ -658,7 +661,7 @@ export default {
       value = obj.schema.type === 'number' ? Number(value) : value
       // update deep nested prop(key) with value
       this.setObjectByPath(this.storeStateData, obj.key, value)
-      
+
       this.emitValue('input', {
         on: 'input',
         id: this.ref,
@@ -708,6 +711,7 @@ export default {
     //
     // Emit Event Base
     emitValue (emit, val) {
+
       this.parent.$emit(this.getEventName(emit), val) // listen to specific event only
       if (change.indexOf(emit) > -1) this.parent.$emit(this.getEventName('change'), val) // listen only to 'input|click'
       if (watch.indexOf(emit) > -1) this.parent.$emit(this.getEventName('watch'), val) // listen to 'focus|input|click|blur'
@@ -758,7 +762,7 @@ export default {
           data[key] = dat[key]
           schema[key] = sch[key]
         }
-      })
+      }) 
       return { data, schema }
     },
     combineObjectsToArray ({ data, schema }) {

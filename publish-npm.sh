@@ -1,3 +1,5 @@
+
+# CHANGE TO ./EXAMPLE 
 #!/bin/bash
 cd example
 # npm version patch

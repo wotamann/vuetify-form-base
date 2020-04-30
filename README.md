@@ -49,8 +49,7 @@ If you have to generate Forms or you have to edit Data presented as JSON- or JS-
 
 Furthermore if you don't define a Schema, then **Vuetify-Form-Base** tries to generate a schema automatically. This works if the Data Values are of Type 'string', 'number' or 'bool'.
 
-**Vuetify-Form-Base** uses the well known and excellent [Component Framework Vuetify](https://vuetifyjs.com/) to style and layout your Form. Vuetify Controls have a clear, minimalistic design and support responsive Design.
-
+**Vuetify-Form-Base** uses the well known and excellent [Component Framework Vuetify 2.0](https://vuetifyjs.com/) to style and layout your Form. Vuetify Controls have a clear, minimalistic design and support responsive Design.
 
 ---
 ## Demo
@@ -100,7 +99,17 @@ If you want a **Partial-Form** which displays only parts of your Data.Object, th
 
 And if necessary you can also build a **Form in Form** by using **Slots**.
 
-Use the **v-on directive** to listen to **Events** for 'Focus', 'Input',  'Click', 'Blur', 'Resize', 'Intersect', 'Mouse' and 'Swipe'. 'Change' will catch all Value changing Events like 'Input' and 'Click'. 'Watch' will listen to 'Focus', 'Input', 'Blur' and 'Click'. 'Update' will catch all Events. 
+Use the **v-on directive** to listen to **Events** for 
+
+>**'Focus', 'Input',  'Click', 'Blur', 'Resize', 'Intersect', 'Mouse'** and **'Swipe'**. 
+
+>**'Change'** will catch 'Input' and 'Click'. 
+
+>**'Watch'** will listen to 'Focus', 'Input', 'Blur' and 'Click'. 
+
+>**'Update'** will catch all Events. 
+
+
 
 ```HTML
 <!-- No ID defined -->
@@ -108,7 +117,7 @@ Use the **v-on directive** to listen to **Events** for 'Focus', 'Input',  'Click
   :model="myModel"
   :schema="mySchema"
   @input="handleInput"
-  @resize="handleResizeEvent"
+  @resize="handleResize"
 />
 
 <!-- ID defined  -->
@@ -117,13 +126,13 @@ Use the **v-on directive** to listen to **Events** for 'Focus', 'Input',  'Click
   :model="myModel"
   :schema="mySchema"
   @input:form-base-person="handleInput"
-  @resize="handleResizeEvent"
+  @blur:form-base-person="handleblur"
 />
 
 ````
-
-### Supported Controls from **Vuetify UI Input & Controls**  
 ---
+## Supported Controls from **Vuetify UI Input & Controls**  
+
 ````javascript
   // Textfield - Text: 
   schema: { ctrl: 'text' }  // shorthand definition
@@ -150,7 +159,7 @@ Use the **v-on directive** to listen to **Events** for 'Focus', 'Input',  'Click
     ctrl: { type:'number', ...} 
   }
 
-  // Attributes from 
+  // Use most of Attributes from <v-text-field>
   schema: { 
     ctrl: { type:'text', label:'Search', hint:'Books', prependIcon:'search', clearable } 
   }
@@ -318,7 +327,7 @@ Prop 'ext' in combination with Type:'text' make the native [HTML Input Type ]( h
 ````
 ---
 ````javascript
-  // Card Grouping
+  // Grouping
   model:{
     group:{
       a: 'A',
@@ -328,7 +337,7 @@ Prop 'ext' in combination with Type:'text' make the native [HTML Input Type ]( h
   }
 	schema: { 
     group: { 
-      type:'card',
+      type:'group',
       schema: { a:'text', b:'text', c:'text' }
     }, 
 	}
@@ -339,8 +348,8 @@ Prop 'ext' in combination with Type:'text' make the native [HTML Input Type ]( h
 ---
 ````javascript
   // Color Picker: 
-	schema: { ctrl: 'color', ... }
-	schema: { ctrl: { type:'color', ...}, ... }
+  schema: { ctrl: 'color', ... }
+  schema: { ctrl: { type:'color', ...}, ... }
   
   // Color Menu
   color:{ 
@@ -390,7 +399,17 @@ Prop 'ext' in combination with Type:'text' make the native [HTML Input Type ]( h
 ---
 ## Installation
 
-For proper working you need a Vue.js Project with Vuetify 2.0 installed. For more Details see [Vuetify 2.0 Quickstart](https://dev.vuetifyjs.com/en-US/getting-started/quick-start).  
+For proper working you need a Vue.js Project with Vuetify 2.0 installed. Get started with **Vuetify**, the world’s most popular Vue.js framework for building feature rich, blazing fast application [here](https://vuetifyjs.com/en/getting-started/quick-start/).
+
+>**INFORMATION:** Vue-Loader doesn't autoload components, because Vuetify-Form-Base use built in Vue
+```html
+<component is="my-component" />
+```
+and therefore Components must be [manually imported](https://vuetifyjs.com/en/customization/a-la-carte/). More information about dynamic components is in the official [Vue documentation](https://vuejs.org/v2/guide/components.html#Dynamic-Components)
+
+
+
+
 After a successful installation of a Vue 2.6 Project with Vuetify 2.0  
 
     npm install vuetify-form-base --save
@@ -609,38 +628,43 @@ Integrate Vuetify-Display and Layout behaviour by using the Schema-Property 'cla
 
 ## Vuetify Grid
 
-Integrate Vuetify-Grid behaviour by setting the Form-Base Property 'flex':
+Integrate Vuetify-Grid behaviour by setting the Form-Base Property 'flex' or alternativ 'col':
+
+**Default Form-Base Definition**
 
 ```html
-  <form-base :flex="{ xs:12, sm:8, md:6, lg:4 }" ... />
+  <!-- object declaration -->
+  <form-base :flex="{ xs:12, sm:8, md:6, lg:4 }" ... />  
+  <!-- ident -->
+  <form-base :col="{ xs:12, sm:8, md:6, lg:4 }" ... />
   
-  <!-- or shorthand xs:12  -->
+  <!-- default grid -->
+  <form-base :col="{ cols:12 }" ... />
+  <form-base :col="{ cols:'auto' }" ... />
+  
+  <!-- or shorthand for {cols:12 }  -->
   <form-base :flex="12" ... />
+  <!-- ident -->
+  <form-base :col="12" ... />
 ```
 
-**Schema-Definition overrules Form-Base Definition!**
+**Schema-Definition (overrules Form-Base Definition)**
 
-Get individual Grid-Control by using Schema-Properties 'flex', 'offset' and 'order'.
+Get individual Grid-Control by using Schema-Properties 'col', 'offset' and 'order'.
 
 ```javascript
     mySchema: {
-      name1: { type: 'text', flex: { xs:12, sm:6, md:4 } },
+      name1: { type: 'text', col: { xs:12, sm:6, md:4 }, offset:{ xs:0, sm:1, md:2 } },
       
-      name2: { type: 'text', flex: 4, offset: 2, order: 1 },
-      // flex: 4     // shorthand for flex: { xs:4 }
-      // offset: 2   // shorthand for offset: { xs:2 }
-      // order: 1    // shorthand for order: { xs:1 }
+      name2: { type: 'text', col: 4, offset: 2, order: 1 },
+      // flex: 4     // shorthand for flex: { cols:4 }
+      // offset: 2   // shorthand for offset: { offset:2 }
+      // order: 1    // shorthand for order: { order:1 }
     }
 ```
----
-    
-A more responsive Solution with 'flex', 'offset' or 'order' needs an Object as Value. For more Details see Vuetify Documentation:  
-
+  
 [More Info at Vuetify Grid:](https://vuetifyjs.com/en/framework/grid#usage) 
-
-[More Info at Vuetify Offset:](https://vuetifyjs.com/en/framework/grid#offset) 
-
-[More Info at Vuetify Order:](https://vuetifyjs.com/en/framework/grid#order) 
+ 
 
 ---
 
@@ -773,12 +797,15 @@ The next example shows a more complex Schema:
                               // select, combobox, autocomplete, 
                               // array, list, treeview
                               // icon, btn, btn-toggle 
-                              // date, time, color    
+                              // date, time, color
+  
+  	  ext: string             // access to native HTML-Input Type 
 
       sort: num               // use simple order to display items 
 
-      order: num or object    // use Vuetify-Grid to order items responsive 
-      flex:  num or object    // See Vuetify Grid
+      flex:  num or object    // See Vuetify Grid  ident with 'col'
+      col:   num or object    // See Vuetify Grid
+      order: num or object    // use Vuetify-Grid  
       offset: num or object   // See Vuetify Grid
 
       label string,           // label of item    
@@ -810,7 +837,7 @@ The next example shows a more complex Schema:
       fromCtrl: function,     // ( {value, obj, data, schema} ) => value
     }
 
-
+---
 ## Events
 
 We can use the v-on directive to listen to vuetify-form-base events **'focus', 'input', 'click', 'blur', 'change', 'watch', 'mouse', 'display', 'intersect', 'resize', 'swipe', 'update'** and run some Code when they’re triggered.
@@ -909,22 +936,47 @@ You can listen to one or more Events
 
 Use Slots to pass Header and Footer into a Control. If necessary replace Controls by Slots. Any slot could be a v-form-base component itself.   
  
- ```HTML
-    <v-form-base :value="myValue" :schema="mySchema" @update="update">
-
-      <h4 slot="slot-top-key-name">Top Slot on Key Name</h4>
-      <h4 slot="slot-top-type-radio">Top Slot on Types Radio</h4>
-      
-      <h4 slot="slot-item-key-password">Slot replaces Key Password</h4>
-      
-      <h4 slot="slot-bottom-key-name">Bottom Slot Key Name</h4>
-      <h4 slot="slot-bottom-type-radio">Bottom Slot on Types Radio</h4>
-      
-      // Tooltip see css.vue in Example 
-      <div slot="slot-tooltip" slot-scope="slotProps">
-        {{ slotProps.obj.schema.tooltip }} has value '{{ slotProps.obj.value }}
+```HTML
+   <!-- FORM-BASE-COMPONENT -->
+    <v-form-base id="form-base-css" :value="myValue" :schema="mySchema" >
+      <!-- FORM SLOT -->
+      <h4 slot="form-base-css-top" class="slot">
+        Top Slot of 'Form'
+      </h4>
+      <h4 slot="form-base-css-bottom" class="slot">
+        Bottom Slot of 'Form'
+      </h4>  
+      <!-- KEY SLOTS -->
+      <h4 slot="slot-top-key-name" class="slot">
+        Slot at Top of Key 'Name'
+      </h4>
+      <h4 slot="slot-item-key-password" class="slot">
+        Slot replaces Key 'Password'
+      </h4>
+      <h4 slot="slot-bottom-key-email" class="slot">
+        Slot at Bottom of Key 'Email'
+      </h4>
+      <!-- TYPE SLOTS -->
+      <h4 slot="slot-top-type-btn-toggle" class="slot">
+        Slot at Top of Type 'Btn-Toggle'
+      </h4>
+      <h4 slot="slot-bottom-type-btn" class="slot">
+        Slot at Bottom of Type 'Btn'
+      </h4>
+      <h4 slot="slot-top-type-radio" class="slot">
+        Slot at Top of Type 'Radio'
+      </h4>
+      <!-- TOOLTIP SLOTS -->
+      <div
+        slot="slot-tooltip"
+        slot-scope="slotProps"
+      >
+        Tooltip-Slot: {{ slotProps.obj.schema.tooltip }} has value '{{ slotProps.obj.value || 'undefined' }}'
       </div>
-    
+      <!-- TOOLTIP SLOT -  New Syntax VUE 2.6.0 -->
+      <!-- <template v-slot:slot-tooltip="slotProps">
+         {{ slotProps.obj.schema.tooltip }} with Value: {{ slotProps.obj.value }}
+      </template> -->
     </v-form-base>
 ```
 
@@ -933,7 +985,7 @@ Use Slots to pass Header and Footer into a Control. If necessary replace Control
 ![Slots in Blue](./images/slot.png)
 
 ---
-## [Form Validation](https://wotamann.github.io/)
+## Form Validation
 
 If you need Form Validation you have to wrap **v-form-base** with **[v-form](https://next.vuetifyjs.com/en/components/forms#api)** and take the reference of v-form for working on.
     
@@ -953,6 +1005,9 @@ If you need Form Validation you have to wrap **v-form-base** with **[v-form](htt
       this.$refs.form.resetValidation()
     },
 ```
+
+[Try **Form with Rules and Validation** in Example](https://wotamann.github.io/)
+
 ---
 
 ## Style with CSS 
@@ -960,54 +1015,51 @@ If you need Form Validation you have to wrap **v-form-base** with **[v-form](htt
 
 Customize your **vuetify-form-base** component using CSS-Classnames 
  
->  IMPORTANT:  
->  Don't use `<style scoped>` in parents component, because scoped definitions
+[Try **CSS, SLots, Tooltips & Buttons** in Example](https://wotamann.github.io/)
+
+>  **IMPORTANT:**  
+>  Don't use **`<style scoped>`** in parents component, because scoped definitions
 >  are inside the child component not accessable
-   
-### Formbase - ID
+
+
+### Formbase - Default ID
 
 `#form-base` is the default ID of your component. If you need different CSS for two or more forms in the same parent component, then change default value by setting a different ID for each component and use this new ID. Using a 'custom-id' you have to modify the event-binding to @update:custom-id = "update" 
 
-
-```CSS
-    <!-- Default ID CSS-Style -->   	
-    #form-base {...} 
-```
+#### - Default ID   	
 ```HTML
     <!-- HTML-Template -->   
     <v-form-base @update= "update" />  
 ```
-
-```CSS 
-    <!-- Custom-ID CSS-Style -->   	
-    #custom-id {...} 
+```CSS
+    #form-base {...} 
 ```
+#### - Custom-ID
 ```HTML
 
     <!-- HTML-Template -->   
     <v-form-base id="custom-id" @update:custom-id= "update" />  
 ```
-
----
-
-### General - Classname
-
-    #form-base  {...}              
+```CSS 
+    #custom-id {...} 
+```
 
 ### Type - Classnames
 
   
   Style all items of a specific type, then use type specific classnames. They start with `type-` appended by any `type`. You can use following types in your Schema-Object: 
 
-`'text', 'email', 'password', 'textarea', 'select', 'autocomplete', 'combobox', 'radio', 'checkbox', 'slider', 'switch', 'date', 'time'` 
-	  
+```CSS
+
     #form-base .type-text { color: #44A }}           	  
     #form-base .type-email { font-weight:500; }  
 
+```
 ### Key - Classnames
 
   Set Classname of deep key in your Data-Object, by converting **.dot notation** 'person.adress.city' into **kebab case** 'person-adress-city' prepending 'key-' 
 
+```CSS
     <!-- 
 	    myValue{ person:{ adress:{ city:'',... } ... } ... } 
       CSS Classname to access to key 'city'
@@ -1026,15 +1078,17 @@ Customize your **vuetify-form-base** component using CSS-Classnames
       Access First Entry in Array of Key Slide 
     -->
     #form-base .key-controls-slide-0 { font-weight:500; }  
-
+```
 
 ### Validate with Pseudoselectors
-	  
+```CSS	  
     #form-base .item input:valid { background-color: #afa; }
     #form-base .type-email input:invalid { background-color: #faa; }
     #form-base .key-name input:focus { background-color: #ffd; }   
+```
 
 ### CSS - Example
+```javascript	  
     <!-- JS -->
     myValue: {
         name: 'Base',
@@ -1049,6 +1103,8 @@ Customize your **vuetify-form-base** component using CSS-Classnames
         }
       }
 
+```	  
+```CSS	  
      <!-- CSS  -->
     <style>
       #form-base { 
@@ -1071,8 +1127,7 @@ Customize your **vuetify-form-base** component using CSS-Classnames
       /* CSS Keys --- select key in object 'myValue.controls.slider' */
       #form-base .key-controls-slider { background-color: #fec }
     </style>
-
-[Try CSS & Slots in Example](https://wotamann.github.io/)
+```
 
 ![Slots in Blue](./images/css.PNG)
 
@@ -1080,23 +1135,31 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 ## Features
 
 * Vue-Component
-* integrates UI framework Vuetify with responsive Layout and Support of Grid
+* integrates UI framework Vuetify 2.0 with responsive Layout and Support of Grid
 * Use a lot of Vuetify Control & Input types inclusive most of available API-Props
 * Get full configurable Forms based on Schema Definition
+* Full control over Grid 
 * Edit plain or deep nested objects including Arrays, without the need to flatten your data
 * Get a full, reactive Result
-* Listen on 'Resize', 'Focus', 'Input', 'Blur', 'Click', 'Swipe', 'Mouse' and 'Update' Events
+* Listen on 'Resize', 'Focus', 'Input', 'Blur', 'Click', 'Swipe', 'Intersect', 'Mouse' and 'Update' Events
 * Use Slots to pass Header and Footer into a Control or replace a Control by a Slot.  Use  Slots to individualize your Tooltip   
 * Configurable CSS Style 
 
-
 ---
+## CHANGE
+
+#### Version 0.1.18
+- bug fix group | 
+- BREAKING: New grouping TYPE is { type:'group' }  instead of { type:'card' }    
 
 #### Version 0.1.17
 - fixed known  problem of splicing arrays in v-for and index key   
+- new Type { type:'text', ext:'date' }  gives you access to Datepicker linked to textfield 
+- new Type { type:'text', ext:'time' }  gives you access to Timepicker linked to textfield 
+- new Type { type:'text', ext:'color' }  gives you access to Colorpicker linked to textfield 
 
 #### Version 0.1.11
-- added support for grouping some control  | { type:'card', ...}   
+- added support for grouping some control  | { type:'group', ...}   
 
 #### Version 0.1.9
 - added support for v-img | { type:'img'}   
@@ -1106,7 +1169,7 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 - bug fixed with tooltip in array   
 
 #### Version 0.1.8
-- tooltip added
+- tooltip Slots added
 
 #### Version 0.1.6
 - tooltip added
