@@ -1,8 +1,8 @@
 <template>
-  <v-layout
+  <v-row
     :id="ref"
+    v-bind="getRow"
     v-resize.quiet="onResize"
-    class="wrap"
   >   
     <!-- FORM-BASE TOP SLOT -->
     <slot :name="getFormTopSlot()"/>  
@@ -14,17 +14,23 @@
         :disabled="!obj.schema.tooltip"
         v-bind="getShorthandTooltip(obj.schema.tooltip)"
       >
-        <template v-slot:activator="{ on }">
-          <v-flex
+        <template v-slot:activator="{ on }" >
+          <v-col
             v-show="!obj.schema.hidden"
-            :key="index"
+            :key= "index"
+            v-bind="getGridAttributes(obj)"
             v-intersect="(entries, observer) => onIntersect(entries, observer, obj)"
             v-touch="{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"
             :class="getClassName(obj)"
             @mouseenter="onEvent($event, obj)"
             @mouseleave="onEvent($event, obj)"
             v-on="on"
-          >
+
+            :draggable="obj.schema.drag" 
+            @dragstart="dragstart($event, obj)"
+            @dragover= "dragover($event, obj)"
+            @drop= "drop($event, obj)"
+          >           
             <!-- slot on top of type  -> <div slot="slot-bottom-type-[propertyName]"> -->
             <slot :name="getTypeTopSlot(obj)" />
             <!-- slot on top of key  -> <v-btn slot="slot-bottom-key-[propertyName]"> -->
@@ -305,7 +311,7 @@
             <!-- slot at bottom of item  -> <div slot="slot-bottom-key-[deep-nested-key-name]"> -->
             <slot :name="getTypeBottomSlot(obj)" />
             <slot :name="getKeyBottomSlot(obj)" />
-          </v-flex>
+          </v-col>
 
           <!-- schema.spacer:true - push next item to the right and fill space between items -->
           <v-spacer
@@ -324,7 +330,7 @@
     </template>
     <!-- FORM-BASE BOTTOM SLOT -->
     <slot :name="getFormBottomSlot()"/>   
-  </v-layout>
+  </v-row>
 </template>
 
 <script>
@@ -371,7 +377,7 @@
   const classKeyDelimiter = '-'
   const defaultID = 'form-base'
 
-  const onEventDelay = 10 // ms
+  const onEventDelay = 1 // ms
   const mouse = 'mouseenter|mouseleave'
   const change = 'input|click'              // event change collects events 'input|click'
   const watch = 'focus|input|click|blur'    // event watch collects events 'focus|input|click|blur'
@@ -398,9 +404,14 @@
 
   // name of Type wich will be used for grouping controls
   const groupingType ='group'
-        
-  // Default flex setting, overrideable by prop flex or by schema.flex definition  
-  const flexDefault = '' // { xs:6, sm: 4, md:4, lg:4}
+  // symbol on drop
+  const dropEffect = 'move'  // 'copy, link, move      
+  // Default row setting if no row-attribute defined  
+  const rowDefault = { noGutters:true } // { noGutters:true, justify:'center', align:'center' } 
+
+  // Default col setting, overrideable by prop col or by schema.col definition   
+  // Default col setting, overrideable by prop flex or by schema.flex definition (flex is DEPRECATED use col instead)  
+  const colDefault = { cols:'auto' } // { cols:12, sm: 6, md:4, lg:3, xl:2}
 
   // Mapper for Autogeneration of Schema from Value
   const defaultSchemaIfValueIsNullOrUndefined = key => ({ type:'text', label: key })
@@ -408,7 +419,6 @@
   const defaultSchemaIfValueIsNumber = key => ({ type:'number', label: key })
   const defaultSchemaIfValueIsBoolean = key => ({ type:'checkbox', label: key })
 //
-
 export default {
   name: 'VFormBase',
   // Info Mask https://vuejs-tips.github.io/vue-the-mask/
@@ -418,9 +428,14 @@ export default {
       type: String,
       default: defaultID
     },
+    row: {
+      type: [Object],
+    },
+    col: {
+      type: [Object, Number, String],
+    },
     flex: {
       type: [Object, Number, String],
-      default: () => flexDefault,
     },
     value: {
       type: [Object, Array],
@@ -464,6 +479,9 @@ export default {
     index () {
       const m = this.ref && this.ref.match(/\d+/g)
       return m ? m.map(Number) : []
+    },
+    getRow(){
+      return this.row || rowDefault
     },   
     flatCombinedArraySorted () {
       return orderBy(this.flatCombinedArray, ['schema.sort'], [orderDirection])
@@ -477,7 +495,8 @@ export default {
       return this.schema
     }
   },  
-  methods: {   
+  methods: {     
+    // MAP TYPE
     mapTypeToComponent(type) {
       // map ie. schema:{ type:'password', ... } to specific vuetify-control or default to v-text-field'
       return typeToComponent[type] ? typeToComponent[type] : `v-${type}`
@@ -496,7 +515,7 @@ export default {
       // { type:'text, ext:'date', ...} -> use native Input Type 'Date' instead of Date-Picker
       return obj.schema.ext || obj.schema.type
     },
-    // GET ITERATION KEY FOR TYPE ARRAY
+  // GET ITERATION KEY FOR TYPE ARRAY
     getKeyForArray(obj, item, index){
       // IMPORTANT if you want to add or remove items in type:'array' 
       // more Info -> 
@@ -517,18 +536,20 @@ export default {
         const k= obj.schema.key 
         return k ? Array.isArray(k) ? k.map(i => item[i] ).join('_') : item[k] : (!isNaN(index)) ? `${index}_${Date.now()}` : index 
     },
-    // GET IMG SOURCE
+  //
+  // GET IMG SOURCE
     getImageSource(obj) {
       // if exist get source from src otherwise join schema.base & value & schema.tail
       return obj.schema.src ? obj.schema.src : `${obj.schema.base}${obj.value}${obj.schema.tail}`
     },
-      
-    // ICON  
+  //    
+  // ICON  
     getIconValue(obj){
       // icon: try schema.label or if undefined use value  
       return obj.schema.label ? obj.schema.label: this.setValue(obj) 
     },
-    // TOOLTIP 
+  //  
+  // TOOLTIP 
     getShorthandTooltip(schemaTooltip){
       // check if tooltip is typeof string ->  shorthand { bottom:true, label: obj.schema.tooltip} otherwise take original object
       return isString(schemaTooltip) ? { bottom:true, label:schemaTooltip} : schemaTooltip
@@ -537,16 +558,16 @@ export default {
       // check if tooltip is typeof string ->  return Label 
       return isString(schemaTooltip) ? schemaTooltip : schemaTooltip && schemaTooltip.label
     },
-    //
-    // FORM SLOT
+  //
+  // FORM SLOT
     getFormTopSlot () {
       return this.id + '-top'
     },
     getFormBottomSlot () {
       return this.id + '-bottom'
     },
-    //
-    // KEY SLOTS
+  //
+  // KEY SLOTS
     getKeyArraySlot (obj) {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-ARRAY-key-address-city'
       return this.getKeyClassNameWithAppendix(obj, arraySlotAppendix + '-key')
@@ -563,8 +584,8 @@ export default {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-bottom-key-address-city'
       return this.getKeyClassNameWithAppendix(obj, bottomSlotAppendix + '-key')
     },
-    //
-    // TYPE SLOTS
+  //
+  // TYPE SLOTS
     getTypeItemSlot (obj) {
       // get Type specific slot name  -> 'slot-item-type-radio'
       return this.getTypeClassNameWithAppendix(obj, itemSlotAppendix + '-type')
@@ -577,8 +598,8 @@ export default {
       // get Type specific slot name  -> 'slot-bottom-type-radio'
       return this.getTypeClassNameWithAppendix(obj, bottomSlotAppendix + '-type')
     },
-    //
-    // CLASS Names
+  //
+  // CLASS Names
     getPropertyClassNameWithAppendix (obj, appendix) {
       // get PROP specific name by app-/prepending 'appendix-' and replacing '.' with '-' in nested key path  -> 'controls switch'
       return obj.key ? obj.key.split(pathDelimiter).map(s => `${appendix ? appendix + classKeyDelimiter : ''}${s}`).join(' ') : ''
@@ -600,59 +621,123 @@ export default {
     getTypeClassName (obj) {
       return this.getTypeClassNameWithAppendix(obj, typeClassAppendix)
     },
-    getFlexGridClassName (obj) {
-      const keysToGridClassName = (key) => Object.keys(key).map(k => k + key[k]).join(' ') //  { xs:12, md:6, lg:4  } => 'xs12 md6 lg4'      
-      // schema.flex overrules property flex! 
-      // get FLEX class from schema.flex ->  schema:{ flex:{ xs:12, md:4  } || flex: 4 } // flex: 4 -> is shorthand for -> flex:{ xs:4 }
-      if (obj.schema.flex) return isPlainObject(obj.schema.flex) ? keysToGridClassName(obj.schema.flex) : `xs${obj.schema.flex}`
-      // take property flex: <v-form-base :flex="{xs:12,sm:6}" .... />  or  <v-form-base flex="6" .... />  
-      return isPlainObject(this.flex) ? keysToGridClassName(this.flex) : `xs${this.flex}` 
-    },
-    getOffsetGridClassName (obj) {
-      // get OFFSET-FLEX class from schema.offset ->  schema:{ offset:{ xs:12, md:4  } || offset: 4 } // offset: 4 -> is shorthand for -> offset:{ xs:4 }
-      const keysToOffsetClassName = (key) => Object.keys(key).map(k => `offset-${k}${key[k]}`).join(' ') //  { xs:12, md:6, lg:4  } => 'xs12 md6 lg4'
-      return obj.schema.offset ? isPlainObject(obj.schema.offset) ? keysToOffsetClassName(obj.schema.offset) : `offset-xs${obj.schema.offset}` : ''
-    },
-    getOrderGridClassName (obj) {
-      // get ORDER-FLEX class from schema.order ->  schema:{ order:{ xs:12, md:4  } || order: 4 } // order: 4 -> is shorthand for -> order:{ xs:4 }
-      const keysToOrderClassName = (key) => Object.keys(key).map(k => `order-${k}${key[k]}`).join(' ') //  { xs:12, md:6, lg:4  } => 'xs12 md6 lg4'
-      return obj.schema.order ? isPlainObject(obj.schema.order) ? keysToOrderClassName(obj.schema.order) : `order-xs${obj.schema.order}` : ''
-    },
-    getGridClassName (obj) {
-      // combine Flex, Offset, Order into a classname
-      return `${this.getFlexGridClassName(obj)} ${this.getOffsetGridClassName(obj)} ${this.getOrderGridClassName(obj)}`
-    },
     getClassName (obj) {
       // combines all into a single classname
-      // class => ie. 'item type-checkbox key-address-zip prop-adress prop-zip xs12 md6 offset-xs0'
-      return `${itemClassAppendix} ${this.getTypeClassName(obj)} ${this.getKeyClassName(obj)} ${this.getPropertyClassName(obj)} ${this.getGridClassName(obj)}`
+      // class => ie. 'item type-checkbox key-address-zip prop-adress prop-zip'
+      return `${itemClassAppendix} ${this.getTypeClassName(obj)} ${this.getKeyClassName(obj)} ${this.getPropertyClassName(obj)}` 
     },
-    //
-    // Map Values coming FROM Control or going TO Control
-    toCtrl (params) {
-      // manipulate value going to control, toCtrl-function must return a (modified) value
-      // schema:{ name: { type:'text', toCtrl: ( {value} ) value && value.toUpperCase, ... }, ... }
-      return isFunction(params.obj.schema.toCtrl) ? params.obj.schema.toCtrl(params) : params.value
+  //
+  // GRID
+    gridMapper(obj, prepender){ 
+      if(obj)  
+        ['sm', 'md', 'lg', 'xl' ].map( k => { 
+          if(obj[k]) { obj[prepender + k] = obj[k]; delete obj[k] }
+        })
     },
-    fromCtrl (params) {
-      // manipulate updated value from control, fromCtrl-function must return a (modified) value
-      // schema:{ name: { type:'text', fromCtrl: ( {value} ) value && value.toUpperCase, ... }, ... }
-      return isFunction(params.obj.schema.fromCtrl) ? params.obj.schema.fromCtrl(params) : params.value
+    gridReplaceXS(obj, replacer){
+      // see vuetify Grid - replace Prop XS -V1.5 with COLS, ORDER, OFFSET - V2.0
+      // xs must be replaced in new Vuetify 2.0 Grid with cols, offset, order
+      if(obj && obj.xs) { obj[replacer] = obj.xs; delete obj.xs }
     },
-    //
-    // Button-Toggle sanitize item from array schema.options
+    getGridAttributes(obj){ 
+      // flex:{ cols|sm|md|lg|xl } - value:number|string
+      // order:{ order|sm|md|lg|xl|order-sm|order-md|order-lg|order-xl } - value:number|string
+      // offset:{ offset|sm|md|lg|xl|offset-sm|offset-md|offset-lg|offset-xl } - value:number|string
+
+      const col = obj.schema.col || obj.schema.flex
+      const colAttr= this.col || this.flex || colDefault
+      let colObject = col ?
+      // schema definition of cols
+      ( isPlainObject(col) ? col : { cols: col} ) 
+      // formbase attr definition of cols
+      : colAttr ? ( isPlainObject(colAttr) ? colAttr : { cols: colAttr} ) 
+        // no definition set to 'auto'
+      : { cols:'auto'}
+      this.gridReplaceXS(colObject, 'cols')
+
+      // schema definition of offset
+      const offset = obj.schema.offset
+      let offsetObject = offset ? ( isPlainObject(offset) ? offset : { offset } ) : offset   
+      this.gridMapper(offsetObject, 'offset-')
+      this.gridReplaceXS(offsetObject, 'offset')
+
+      // schema definition of offset
+      const order = obj.schema.order
+      let orderObject = order ? ( isPlainObject(order) ? order : { order} ) : order         
+      this.gridMapper(orderObject, 'order-')
+      this.gridReplaceXS(orderObject, 'order')
+      
+      return { ...colObject, ...offsetObject, ...orderObject  }
+    },   
+  //
+  // SANITIZE BUTTON - Toggle sanitize item from array schema.options
     sanitizeOptions (b) {
       return isString(b) ? { value: b, label: b } : b
     },
-    //
-    // Set Value
+  //
+  // Map Values coming FROM Control, TO Control or DROP on Control
+    toCtrl (params) {
+      // signature params { value, obj, data, schema }
+      //
+      // manipulate value going to control, function must return a (modified) value
+      // schema:{ name: { type:'text', toCtrl: ( {value} ) => value && value.toUpperCase, ... }, ... }
+      return isFunction(params.obj.schema.toCtrl) ? params.obj.schema.toCtrl(params) : params.value
+    },
+    fromCtrl (params) {
+      // signature params { value, obj, data, schema }
+      //
+      // manipulate updated value from control, function must return a (modified) value
+      // schema:{ name: { type:'text', fromCtrl: ( {value} ) => value && value.toUpperCase, ... }, ... }
+      return isFunction(params.obj.schema.fromCtrl) ? params.obj.schema.fromCtrl(params) : params.value
+    },
+    dropCtrl (params) {
+      // signature params { value, obj, dragObject, dragEvent, event,data, schema }
+      //
+      // manipulate dropped value from control, function must return a (modified) value
+      // schema:{ name: { type:'text', drop: ( {value} ) => value && value.toUpperCase, ... }, ... }
+      return isFunction(params.obj.schema.drop) ? params.obj.schema.drop(params) : params.value
+    },
+  // 
+  // Drag / Drop / DropValue
+    dragstart(event, obj){
+      if (!obj.schema.drag) return
+     
+      event.dataTransfer.dropEffect = dropEffect
+      event.dataTransfer.effectAllowed  = dropEffect
+
+      const dragEvent = this.onEvent(event, obj)
+      event.dataTransfer.setData("text", JSON.stringify( dragEvent ) )
+    },
+
+    dragover(event,obj){ return obj.schema.drop ? event.preventDefault() : null },
+    
+    drop(event, obj){
+      if (!obj.schema.drop) return event.preventDefault()
+      // get dragEvent and dragEvent.obj
+      obj.dragEvent = JSON.parse(event.dataTransfer.getData("text") )
+      event.dataTransfer.clearData();
+      // no drop on drag object
+      if (obj.key === obj.dragEvent.obj.key && obj.id === obj.dragEvent.id) return event.preventDefault()      
+      // handle schema.drop function
+      if ( isFunction(obj.schema.drop) ) obj.value =  this.dropValue( obj, event )  
+     
+      this.onEvent(event, obj )
+     
+      event.preventDefault();
+    },
+
+    dropValue (obj, event) {
+      return this.dropCtrl({ value: obj.dragEvent.value, obj, event, data: this.storeStateData, schema: this.storeStateSchema })
+    },    
+  //
+  // Set Value
     setValue (obj) {
       // Control gets a Value
       return this.toCtrl({ value: obj.value, obj, data: this.storeStateData, schema: this.storeStateSchema })
     },
     //
-    // Get Value from Input & other Events
-    onInput (value, obj) {
+  // EVENTS Get Value from Input & other Events
+    onInput (value, obj, type = 'input' ) {
       // Value after change in Control
       value = this.fromCtrl({ value, obj, data: this.storeStateData, schema: this.storeStateSchema })
       // harmonize undefined or empty strings => null, because clearable resets to null and not to empty string!
@@ -662,8 +747,8 @@ export default {
       // update deep nested prop(key) with value
       this.setObjectByPath(this.storeStateData, obj.key, value)
 
-      this.emitValue('input', {
-        on: 'input',
+      const emitObj = {
+        on: type,
         id: this.ref,
         index: this.index, 
         params: { index: this.index, lastValue:obj.value },
@@ -672,30 +757,36 @@ export default {
         obj,
         data: this.storeStateData,
         schema: this.storeStateSchema
-      })
-    },    
+      }
+      this.emitValue(type, emitObj)
+     
+      return emitObj
+    },      
     onEvent (event, obj, tag) {
-      delay(() => {
-        const text = event && event.srcElement && event.srcElement.innerText
-        const model = obj.schema.model
-        const open = obj.schema.open
-        const index = this.index
+      const text = event && event.srcElement && event.srcElement.innerText
+      const model = obj.schema.model
+      const open = obj.schema.open
+      const index = this.index
+      // avoid circular JSON in dragstart
+      const parent = event.type !== 'dragstart' ? this.parent : undefined
+      
+      const emitObj = {
+        on: event.type,
+        id: this.ref,
+        index,
+        params: { text, tag, model, open, index },
+        key: obj.key,
+        value: obj.value,
+        obj,
+        event,
+        data: this.storeStateData,
+        schema: this.storeStateSchema,
+        // parent
+      }
+      
+      delay(() => { this.emitValue(event.type, emitObj), onEventDelay })  
 
-        this.emitValue(event.type, {
-          on: event.type,
-          id: this.ref,
-          index,
-          params: { text, tag, model, open, index },
-          key: obj.key,
-          value: obj.value,
-          obj,
-          event,
-          data: this.storeStateData,
-          schema: this.storeStateSchema,
-          parent: this.parent
-        }),
-        onEventDelay
-      })
+      return emitObj
     },
     onIntersect (entries, observer, obj) {
       const isIntersecting = entries[0].isIntersecting
@@ -708,8 +799,8 @@ export default {
     onResize (event) {
       this.emitValue('resize', { on: 'resize', id: this.ref, params: { x: window.innerWidth, y: window.innerHeight }, event, data: this.storeStateData, schema: this.storeStateSchema })
     },
-    //
-    // Emit Event Base
+  //
+  // Emit Event Base
     emitValue (emit, val) {
 
       this.parent.$emit(this.getEventName(emit), val) // listen to specific event only
@@ -722,8 +813,8 @@ export default {
     getEventName (eventName) {
       return this.parent.id !== defaultID ? `${eventName}:${this.parent.id}` : eventName
     },
-    //
-    // PREPARE ARRAYS DATA & SCHEMA
+  //
+  // PREPARE ARRAYS DATA & SCHEMA
     setObjectByPath (object, path, value) {
       // resolves chained keys (like 'user.address.street') on an object and set the value
       let pathArray = path.split(pathDelimiter)
@@ -795,6 +886,7 @@ export default {
       // assign root props to avoid manipulating prop: schema       
       Object.keys(schema).forEach( key => this.schema[key] = schema[key] )
     },
+  //  
   },
   created () {
     // use <formbase :model="myData" />  - check for legacy code <formbase :value="myData" />  

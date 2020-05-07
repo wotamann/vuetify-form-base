@@ -3,7 +3,7 @@
     <h4>Schema updates Model, even if it is only an empty Object</h4>
     
     <!-- FORM-BASE-COMPONENT -->    
-    <v-form-base :model="myModel" :schema="mySchema" flex="6" @input="log"/>
+    <v-form-base :model="myModel" :schema="mySchema" col=6 @input="log"/>
     
     <!-- Stuff  -->    
     <infoline

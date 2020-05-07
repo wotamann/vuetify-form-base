@@ -6,18 +6,19 @@
 
 <template>
   <v-container fluid>
-    <h4>Add, Remove and Edit Items in nested Value-Array. </h4>
+    <h4>Add, Edit and Drag to Remove Items in dynamic nested Value-Array</h4>
 
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       id="array"
-      :value="myValue"
+      :model="myValue"
       :schema="mySchema"
       @change:array="log"
+      @drop:array="log"
     />
     
     <!-- Stuff   -->
-    <infoline
+    <infoline 
       :value="myValue"
       :schema="mySchema"
       :path="$options._componentTag"
@@ -29,7 +30,7 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import update from '@/lib'
+import log from '@/lib'
 
 export default {
   name: 'Array',
@@ -61,37 +62,38 @@ export default {
           flex: 12,
           schema: {
             // Add Task Button in Schema only 
-            add: { type: 'btn', 'small': true, iconCenter: 'add', label:'Task', dark: true, color: 'red', flex: 2 },
+            add: { type: 'btn', iconLeft: 'add', label:'Click', dark: true, color: 'green' },
+            delete: { type: 'btn', iconRight: 'remove', label:'Drop', dark: true, color: 'amber', drop:true },
             nr: {
               type: 'text',
               disabled: true,
-              color: 'blue',
-              flex: 1
+              color: 'blue',     
+              offset:1         
             },
             title: {
               type: 'text',
               color: 'blue',
-              flex: 9
             },
             task: {
               type: 'array',
-              offset:2,
+              offset:3,
+              flex:9,              
               schema: {
-                done: {
-                  type: 'checkbox', label: 'Done', color: 'red', offset: 1, flex: 2 },
-                  title: { type: 'text', color: 'red' },
+                done: { type: 'checkbox', label: 'Done', color: 'red', offset: 1, flex: 2 },
+                  title: { type: 'text', color: 'red', label:'Drag Title', drag:true },
               }
             }
           }
         },
         // Add Item Button in Schema only 
-        add: { type: 'btn', 'small': true, iconCenter: 'add', label:'Item', dark: true, color: 'blue', flex: 1 }        
+        add: { type: 'btn', iconCenter: 'add', label:'Item', dark: true, color: 'blue' }        
       }
     }
   },
-  methods: {
-
+  methods: {  
     getTask(){ return { done: false, title: 'Task ' + Math.floor(Math.random() * 1000) } },
+    addTask(index){ this.myValue.tasks[index[0]].task.push(this.getTask()) },
+    removeTask(index){ this.myValue.tasks[index[0]].task.splice(index[1], 1) },
 
     addItem () {
       this.myValue.tasks.push({
@@ -100,14 +102,9 @@ export default {
         task: [ this.getTask() ]
       })
     },
-    addTask(index){
-      this.myValue.tasks[index[0]].task.push(this.getTask())
-    },
-    removeTask(index){
-      this.myValue.tasks[index[0]].task.splice(index[1], 1) 
-    },
-    log (val) {
-      let { on, id, index, key, value } = update(val)
+    
+    log (val){
+      let { on, id, index, key, value, obj } = log(val)
       // add item
       if (key === 'add' && id === 'array') {
         this.$nextTick( this.addItem() )
@@ -116,9 +113,13 @@ export default {
       if (key === 'add' && id.includes('array-tasks-') ) {
         setTimeout( () => this.addTask(index), 250)
       }
-      // remove task
+      // remove task with checkbox
       if (key === 'done' && value === true) {
-        setTimeout(() => this.removeTask(index), 250)
+        setTimeout(() => this.removeTask(index), 100)
+      }
+      // remove task with drop
+      if (key === 'delete' && obj.dragEvent) {
+        setTimeout(() => this.removeTask(obj.dragEvent.index), 100)
       }
     }
   }

@@ -8,17 +8,10 @@
       <v-form-base 
         :model="myModel"
         :schema="mySchema"
-        :flex="6"
+        :col=6
         @input="log"
       />
       <!--
-        schema prop:'text' is shorthand for prop: { type: 'text', label:'prop' }  
-
-        Most controls are based on vuetify and therefore 
-        the properties of these controls can be used 
-        schema:{ type:'text',... } maps to <v-text-fields>
-        -> https://vuetifyjs.com/en/components/text-fields/
-
         // compose listener to one or more of following Events:
         @click= "log"
         @input= "log"
@@ -35,7 +28,15 @@
      
         // if 'id' available append 'id' at event -  
         id="form-base-list"
-        @change:form-base-list="log"        
+        @change:form-base-list="log"
+
+
+        schema prop:'text' is shorthand for key: { type: 'text', label:key }
+
+        Most controls are based on vuetify and therefore 
+        the properties of these controls can be used in 
+        schema:{ type:'text', hint:'myHint', ... } maps to <v-text-fields>
+        -> https://vuetifyjs.com/en/components/text-fields/
       -->
     </v-form>
     
@@ -64,7 +65,6 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      
       myModel: {
         name: 'Base',
         creditcard: '12345678',
@@ -79,20 +79,20 @@ export default {
         },         
         password: { 
           type: 'password',
-          clearable: true 
+          clearable: true,
         },
         creditcard: { 
           type: 'text', 
           label: 'Creditcard', 
           prependInnerIcon: 'credit_card', 
           hint: mask, 
-          mask
+          mask,
         },        
         file: { 
           type: 'file', 
           label: 'Images', 
           accept, 
-          multiple: true
+          multiple: true,
         }
       }
     }

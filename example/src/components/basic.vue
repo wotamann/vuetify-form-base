@@ -3,7 +3,12 @@
     <h4>Handling of undefined Properties in Model or in Schema</h4>
     
     <!-- FORM-BASE-COMPONENT -->
-    <v-form-base :model="myModel" :schema="mySchema" @change="log"/>     
+    <v-form-base 
+      :model="myModel" 
+      :schema="mySchema"
+      col=6 
+      @change="log"
+    />     
 
     <!-- Stuff   -->
     <infoline

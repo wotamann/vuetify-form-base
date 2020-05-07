@@ -1,12 +1,20 @@
 <template>
   <v-container fluid>
-    <h4>Resize Window to change Layout, Offset and Order of Controls</h4>
+    <h4>Resize Window to change Layout, Offset and Order of Controls. Use 'row' Attribute centering Controls</h4>
     <v-form-base
-      :class="layout"
       :value="myValue"
       :schema="mySchema"
+      :class="layout"      
+      :row="rowAttribute"      
       @change="change"
     />
+    <!--
+      VUETIFY 2.0 NEW GRID SYSTEM - https://vuetifyjs.com/en/components/grids/
+      Vuetify comes with a 12 point grid system built using flex-box. 
+      The grid is used to create specific layouts within an application's content. 
+      It contains 5 types of media breakpoints that are used for targeting specific 
+      screen sizes or orientations, xs, sm, md, lg and xl. 
+    -->
     
     <!-- Stuff   -->    
     <infoline
@@ -26,6 +34,8 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
+      rowAttribute:{align:'center', justify:'center', noGutters:true },
+      
       myValue: {
         name: 'Grid',
         radio: 'A'
@@ -36,17 +46,23 @@ export default {
     // Dynamic Schema must be Computed
     mySchema () {
       return {
-        name: { type: 'text', flex: { xs: 12, sm: 6 }, order: { xs: 0, sm: 8 }, offset: { xs: 0, sm: 0, md: 4 } },
-        radio: { type: 'radio', row: !this.row, options: ['A', 'B', 'C', 'D'], flex: 8, order: 4 }
+        name: { type: 'text', col: { cols: 12, sm: 6 }, order: this.order, offset: { sm: 1 } },
+        radio: { type: 'radio', row: !this.row, options: ['A', 'B', 'C', 'D'], col: 6 }
       }
     },
     // Change Layout from Row to Column on resize and change Radio-Orientation
     row () {
       return !this.$vuetify.breakpoint.mdAndUp
     },
-    // Change Class on resize
+    // Change Order from Row to Column on resize and change Radio-Orientation
+    order(){
+      const { smAndDown } = this.$vuetify.breakpoint      
+      return smAndDown ?  { order: 'last' } : { order: 'first' } 
+    },
+    // Change Class for Layout on resize
     layout () {
-      return this.$vuetify.breakpoint.mdAndUp ? 'blue lighten-3' : this.$vuetify.breakpoint.smAndUp ? 'blue lighten-4' : 'blue lighten-5'
+      const { lgAndUp, lg, md, sm } = this.$vuetify.breakpoint      
+      return md ? 'blue lighten-3' : sm ? 'blue lighten-4' : lgAndUp ? 'blue lighten-5' : 'blue lighten-2'
     }
   },
   methods: {

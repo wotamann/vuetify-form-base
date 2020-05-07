@@ -33,6 +33,7 @@ import basic from '@/components/basic.vue'
 import grouping from '@/components/grouping.vue'
 import async from '@/components/async.vue'
 import grid from '@/components/grid.vue'
+import dragdrop from '@/components/dragdrop.vue'
 import css from '@/components/css.vue'
 import displayhelpers from '@/components/displayhelpers.vue'
 import deep from '@/components/deep.vue'
@@ -58,6 +59,7 @@ const items = [
     { value: 'grouping', text: 'Group Controls'}, 
     { value: 'async', text: 'Lazy Loading of Component for Async-Data'}, 
     { value: 'css', text: 'CSS, Slots, Tooltips & Buttons'}, 
+    { value: 'dragdrop', text: 'Drag & Drop'}, 
     { value: 'displayhelpers', text: 'Display, Typo & Layout control with Vuetify display helpers'}, 
     { value: 'deep', text: 'Deep nested Data including Object & Arrays'}, 
     { value: 'selection', text: 'Selection, Combobox, Autocomplete from Schema-Array'}, 
@@ -65,7 +67,7 @@ const items = [
     { value: 'list', text: 'List from Value-Array'}, 
     { value: 'treeview', text: 'Treeviews from Value-Array'}, 
     { value: 'arrayease', text: 'Edit Value-Array'}, 
-    { value: 'array', text: 'Add, Remove and Edit Items in nested Value-Array'}, 
+    { value: 'array', text: 'Add, Edit and Drag to Remove Items in nested Value-Array'}, 
     { value: 'multisourcedata', text: 'Integrate Multi-Source Data by using Formbase in Formbase as Slot'}, 
     { value: 'pickers', text: 'Date, Time, Color Menu and Pickers'},
     { value: 'images', text: 'Images'},
@@ -77,7 +79,7 @@ const items = [
 
 export default {
   components: {
-    autogenerate, simple, textfields, emptymodel, basic, grouping, async, grid, css, displayhelpers, deep, partial, multisourcedata, 
+    autogenerate, simple, textfields, emptymodel, basic, grouping, async, grid, dragdrop, css, displayhelpers, deep, partial, multisourcedata, 
     complex, treeview, arrayease, array, selection, selectioncascading, conditional, list, pickers, images
   },
   data () {

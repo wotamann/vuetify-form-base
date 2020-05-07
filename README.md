@@ -41,7 +41,7 @@ Schema: {
 }  
 ```
 
-and you will get a working Form:
+and you will get a working Form. 
 
 ![Form](./images/array-schema.PNG)
 
@@ -49,7 +49,7 @@ If you have to generate Forms or you have to edit Data presented as JSON- or JS-
 
 Furthermore if you don't define a Schema, then **Vuetify-Form-Base** tries to generate a schema automatically. This works if the Data Values are of Type 'string', 'number' or 'bool'.
 
-**Vuetify-Form-Base** uses the well known and excellent [Component Framework Vuetify 2.0](https://vuetifyjs.com/) to style and layout your Form. Vuetify Controls have a clear, minimalistic design and support responsive Design.
+**Vuetify-Form-Base** uses the well known and excellent [Component Framework Vuetify 2.0](https://vuetifyjs.com/) to style and layout your Form. Vuetify Controls have a clear, minimalistic design and support responsive Design. If necessary add specific layouts by using the implemented Vuetify [Grid System](https://vuetifyjs.com/en/components/grids/).
 
 ---
 ## Demo
@@ -67,11 +67,12 @@ Clone or download this Project, change current directory to **./vuetify-form-bas
 ---
 ## Intro
 
-**vuetify-form-base** is a [Vue Component](https://vuejs.org/v2/guide/components.html) and can easily integrated into any Vue Project.   
+**vuetify-form-base** comes as a singular File. It is a [Vue Component](https://vuejs.org/v2/guide/components.html) and can easily integrated into any Vue Project.   
 
 ```HTML
 <v-form-base :model="myModel" :schema="mySchema" @input="handleInput" />
-<!-- is ident with  -->
+
+<!-- ident but deprecated  -->
 <v-form-base :value="myModel" :schema="mySchema" @input="handleInput" />
 ````
 
@@ -81,7 +82,7 @@ The Schema-Object has the **same Structure** as the Model-Object. Create a Schem
 
 ---
 
-The [Component Framework Vuetify 2.0](https://vuetifyjs.com/) styles your Form. The Controls have a clear design, but don't worry if you need more you can change your style in a lot of ways. For more details see section **Style with CSS**
+The [Component Framework Vuetify 2.0](https://vuetifyjs.com/) styles your Form. The Controls have a clear design, but don't worry if you need more you can change  Style and Layout in a lot of Ways. For more Details see Section **Style with CSS**
 
 #### Autogenerating Schema
 If you don't define a Schema, then **Vuetify-Form-Base** tries to generate a schema automatically. But this works only if the Model Values are of Type 'String','Number' or 'Bool'.
@@ -99,6 +100,8 @@ If you want a **Partial-Form** which displays only parts of your Data.Object, th
 
 And if necessary you can also build a **Form in Form** by using **Slots**.
 
+**Events**
+
 Use the **v-on directive** to listen to **Events** for 
 
 >**'Focus', 'Input',  'Click', 'Blur', 'Resize', 'Intersect', 'Mouse'** and **'Swipe'**. 
@@ -108,8 +111,6 @@ Use the **v-on directive** to listen to **Events** for
 >**'Watch'** will listen to 'Focus', 'Input', 'Blur' and 'Click'. 
 
 >**'Update'** will catch all Events. 
-
-
 
 ```HTML
 <!-- No ID defined -->
@@ -128,10 +129,30 @@ Use the **v-on directive** to listen to **Events** for
   @input:form-base-person="handleInput"
   @blur:form-base-person="handleblur"
 />
-
 ````
 ---
-## Supported Controls from **Vuetify UI Input & Controls**  
+## Supported Attributes **'v-form-base'**  
+```HTML
+
+<v-form-base 
+  id="my-form-base"
+  :model="myModel"
+  :schema="mySchema"
+  :row ="rowAttributesForLayoutControl"
+  :col = "globalColDefinition"  
+  @input:my-form-base="handleInputOrOtherEvents"
+/>
+<!-- deprecated -->
+<v-form-base 
+  :value= "myModel"
+  :flex = "globalColDefinition"  
+/>
+````
+---
+## Supported Controls - **Vuetify Input & Controls**  
+---
+
+#### Text-Field
 
 ````javascript
   // Textfield - Text: 
@@ -161,8 +182,13 @@ Use the **v-on directive** to listen to **Events** for
 
   // Use most of Attributes from <v-text-field>
   schema: { 
-    ctrl: { type:'text', label:'Search', hint:'Books', prependIcon:'search', clearable } 
-  }
+    ctrl: { 
+      type:'text', 
+      label:'Search', 
+      hint:'Books', 
+      prependIcon:'search', 
+      clearable:true } 
+    }
 ````
 
   [More Informations to Vuetify-Textfield Attributes find here](https://vuetifyjs.com/en/components/text-fields/). 
@@ -220,7 +246,7 @@ Prop 'ext' in combination with Type:'text' make the native [HTML Input Type ]( h
 
 ---
 
-#### Checkbox:
+#### Checkbox, Radio or Switch:
 ````javascript 
 	schema: { ctrl: 'checkbox', ... }
 	schema: { ctrl: { type:'checkbox', ...}, ... }
@@ -270,12 +296,14 @@ Prop 'ext' in combination with Type:'text' make the native [HTML Input Type ]( h
 
 ---
 
-**_Select Data from Array defined in Schema_**
+**Select, Combobox, Autocomplete**
+
+Select Data from Array defined in Schema
 
 ````javascript
   // Select:
 	schema: { ctrl: 'select', ... }
-	schema: { ctrl: { type:'select', ...}, ... }
+	schema: { ctrl: { type:'select', , items:['I1','I2'] }, ... }
 ````
 [More Informations to Vuetify Select find here](https://vuetifyjs.com/en/components/select/). 
 ````javascript
@@ -293,7 +321,9 @@ Prop 'ext' in combination with Type:'text' make the native [HTML Input Type ]( h
 
 ---
 
-**_Select or Edit Array in your Model_**
+**List or Treeview**
+
+Select Items from an Array in your Model
 ````javascript
   // List: Edit  
 	schema: { ctrl: 'list', ... }
@@ -326,26 +356,29 @@ Prop 'ext' in combination with Type:'text' make the native [HTML Input Type ]( h
 	}
 ````
 ---
+**Group Controls**
 ````javascript
   // Grouping
   model:{
-    group:{
-      a: 'A',
-      b: 'B',
-      c: 'C'
-    }
+    group1:{ a: 'A', b: 'B', c: 'C' }
+    group2:{ a: 'A', b: 'B', c: 'C' }
   }
 	schema: { 
-    group: { 
+    group1: { 
+      type:'group',
+      schema: { a:'text', b:'text', c:'text' }
+    }, 
+    group2: { 
       type:'group',
       schema: { a:'text', b:'text', c:'text' }
     }, 
 	}
 ````
 
-[See more under Section 'Group Controls'](https://wotamann.github.io/) 
+[See more under Example 'Group Controls'](https://wotamann.github.io/) 
 
 ---
+**Color - Pickers & Menu**
 ````javascript
   // Color Picker: 
   schema: { ctrl: 'color', ... }
@@ -361,6 +394,7 @@ Prop 'ext' in combination with Type:'text' make the native [HTML Input Type ]( h
 ````
 [More Informations to Vuetify Color-Pickers find here](https://vuetifyjs.com/en/components/color-pickers/). 
 
+**Date - Pickers & Menu**
 ````javascript
   // Date Picker: 
   schema: { ctrl: 'date', ... }
@@ -377,6 +411,7 @@ Prop 'ext' in combination with Type:'text' make the native [HTML Input Type ]( h
 ````	
 [More Informations to Vuetify Date-Pickers find here](https://vuetifyjs.com/en/components/date-pickers/). 
 
+**Time - Pickers & Menu**
 ````javascript
   // Time Picker: 
   schema: { ctrl: 'time', ... }
@@ -427,7 +462,7 @@ In order for your application to work properly, you must wrap it in a [v-app](ht
     <v-content>
       <v-container fluid>
         <v-form>
-          <v-form-base :value="myModel" :schema="mySchema" @input="handleInput"/>
+          <v-form-base :model="myModel" :schema="mySchema" @input="handleInput"/>
         </v-form>
       </v-container>   
     </v-content>
@@ -479,41 +514,41 @@ and you will get a full editable Form based on your schema and filled with your 
 In Reality sometimes you will have deep nested objects or arrays, which should be edited. **vuetify-form-base** works for you and flatten internally this nested object and build a plain Form.   
 
 ```javascript
-      myValue: {
-        name: 'Base',
-        controls:{
-          selection:{
-            select: 'Tesla',
-            selectM: ['Jobs'],
-          },
-          switch: [ true,false ],
-          checkbox: [ false, true, { 
-            checkboxArray: [ true, false ]}
-          ]
-        }       
-      },
+myValue: {
+  name: 'Base',
+  controls:{
+    selection:{
+      select: 'Tesla',
+      selectM: ['Jobs'],
+    },
+    switch: [ true,false ],
+    checkbox: [ false, true, { 
+      checkboxArray: [ true, false ]}
+    ]
+  }       
+},
 
-      mySchema: {
-        name: { type: 'text', label: 'Name'},
-        controls:{
-          selection:{
-            select: { type: 'select', label: 'Select', items: ['Tesla', 'Jobs', 'Taleb'] },        
-            selectM: { type: 'select', label: 'M-Select', multiple:true, items: ['Tesla', 'Jobs', 'Taleb']}
-          },
-          switch: [ 
-            { type: 'switch', label: '1' }, 
-            { type: 'switch', label: '2' } 
-          ],
-          checkbox: [
-            { type: 'checkbox', label: 'A' },
-            { type: 'checkbox', label: 'B' }, 
-            { checkboxArray: [
-              { type: 'checkbox', label: 'C-A', color:'red' },
-              { type: 'checkbox', label: 'C-B', color:'red' }
-            ]}  
-          ],
-        }
-      }
+mySchema: {
+  name: { type: 'text', label: 'Name'},
+  controls:{
+    selection:{
+      select: { type: 'select', label: 'Select', items: ['Tesla', 'Jobs', 'Taleb'] },        
+      selectM: { type: 'select', label: 'M-Select', multiple:true, items: ['Tesla', 'Jobs', 'Taleb']}
+    },
+    switch: [ 
+      { type: 'switch', label: '1' }, 
+      { type: 'switch', label: '2' } 
+    ],
+    checkbox: [
+      { type: 'checkbox', label: 'A' },
+      { type: 'checkbox', label: 'B' }, 
+      { checkboxArray: [
+        { type: 'checkbox', label: 'C-A', color:'red' },
+        { type: 'checkbox', label: 'C-B', color:'red' }
+      ]}  
+    ],
+  }
+}
 ```
 
 ![Form Example](./images/deep.png)
@@ -561,7 +596,8 @@ For editing arrays use the type 'array' and define an nested 'schema' property.
     mySchema: {
       tasks: {
         type: 'array',
-        // optional for working on array (ie removing) define a key
+        // 'key' is optional.
+        // For working on arrays (ie removing) define a key
         // IMPORTANT: don't use an editable key (because of permanent re-iteration on change) 
         key:'idx',
         schema: { 
@@ -575,32 +611,29 @@ For editing arrays use the type 'array' and define an nested 'schema' property.
 ![Form Example](./images/array-template.png)
 
 ---
-## Computed Schema
+## Dynamic Schema
  
-IF you want Schema Properties to be changed dynamic, then you must make your Schema Object a computed property. This Example turns the Radio Layout from Column to Row on Resizing to medium Size or greater. 
+IF you want Schema Properties to be changed **dynamic**, then you must make a **computed** Schema Object. 
+
+This Example turns the Radio Layout from Column to Row on Resizing to Layout-Size medium or greater. 
 
 ```javascript
-    data () {
-      return {
-    
-        myValue: {
-          radio: 'A',
-        }
-    
-      }   
-    },
-    computed: {          
-    
-      mySchema(){ 
-        return {
-          radio: { type: 'radio', row: this.row, options:['A','B'] }
-        }
-      },
-    
-      row () {
-        return this.$vuetify.breakpoint.mdAndUp 
-      }
-    },
+data () {
+  return {
+    myModel:{
+      radio: 'A',
+    }, 
+  }
+},
+//  dynamic Schema with computed 
+computed:{
+  mySchema() { 
+    return {       
+      radio: { type: 'radio', row: this.row, options:['A','B'] }
+    }  
+  },
+  row () { return this.$vuetify.breakpoint.mdAndUp }
+}
 ```
 ---
 
@@ -633,34 +666,59 @@ Integrate Vuetify-Grid behaviour by setting the Form-Base Property 'flex' or alt
 **Default Form-Base Definition**
 
 ```html
-  <!-- object declaration -->
-  <form-base :flex="{ xs:12, sm:8, md:6, lg:4 }" ... />  
-  <!-- ident -->
-  <form-base :col="{ xs:12, sm:8, md:6, lg:4 }" ... />
-  
-  <!-- default grid -->
-  <form-base :col="{ cols:12 }" ... />
-  <form-base :col="{ cols:'auto' }" ... />
-  
-  <!-- or shorthand for {cols:12 }  -->
-  <form-base :flex="12" ... />
-  <!-- ident -->
-  <form-base :col="12" ... />
-```
+<!-- object declaration -->
+<form-base :col="{ cols:12, sm:8, md:6, lg:4 }" ... />
+<!-- ident but deprecated -->
+<form-base :flex="{ xs:12, sm:8, md:6, lg:4 }" ... />  
 
+<!-- default grid -->
+<form-base :col="{ cols:12 }" ... />
+<form-base :col="{ cols:'auto' }" ... />
+
+<!-- or shorthand for {cols:12 }  -->
+<form-base :col=12 ... />
+<form-base :col="12" ... />
+<!-- ident but deprecated -->
+<form-base :flex="12" ... />
+
+<!-- NEW 'row' Attribute 
+set v-row and is a wrapper component for v-col. It utilizes flex properties 
+to control the layout and flow of its inner columns. Standard gutter can be
+reduced with the dense prop or removed completely with no-gutters
+
+see -> https://vuetifyjs.com/en/components/grids/ 
+-->
+<form-base :row="rowAttribute" :col="12" ... />
+```
+```javascript
+const rowAttribute = { justify:'center', align:'center', noGutters:true } 
+```
+  
 **Schema-Definition (overrules Form-Base Definition)**
 
 Get individual Grid-Control by using Schema-Properties 'col', 'offset' and 'order'.
 
 ```javascript
-    mySchema: {
-      name1: { type: 'text', col: { xs:12, sm:6, md:4 }, offset:{ xs:0, sm:1, md:2 } },
-      
-      name2: { type: 'text', col: 4, offset: 2, order: 1 },
-      // flex: 4     // shorthand for flex: { cols:4 }
-      // offset: 2   // shorthand for offset: { offset:2 }
-      // order: 1    // shorthand for order: { order:1 }
-    }
+mySchema: {      
+  name: { type: 'text', col: 4, offset: 2, order: 1 },
+    // col: 4     // shorthand for col: { cols:4 }
+    // offset: 2   // shorthand for offset: { offset:2 }
+    // order: 1    // shorthand for order: { order:1 }
+  }
+  name: { 
+    type: 'text', 
+    col: { cols:12, sm:6, md:4, lg:3, xl:2 }, 
+    offset:{ offset:0, sm:1, md:2,  } 
+    order:{ order:0, sm:1, md:2 } 
+  },
+  // nameOld is ident to name, but 'xs' is deprecated 'xs'  
+  // use for default 'cols', offset' or 'order' (GRID Vuetify2.0)
+  nameOld: { 
+    type: 'text', 
+    flex: { xs:12, sm:6, md:4 }, 
+    offset:{ xs:0, sm:1, md:2 } 
+    order:{ xs:0, sm:1, md:2 } 
+  },
 ```
   
 [More Info at Vuetify Grid:](https://vuetifyjs.com/en/framework/grid#usage) 
@@ -674,16 +732,14 @@ Forms can be **linked** together using the same Model-Object. Changes in one For
 
 ```HTML
 	<v-form-base :model="myValue" :schema="mySchema" />
-  <!-- is ident to  -->
-	<v-form-base :value="myValue" :schema="mySchema" />
-
+  
 	<v-form-base id="form-sync" :model="myValue" :schema="mySchema" />
 ```
 ---
 
-## Vuetify Controls API-Props
+## From 'cebab-case' to 'camelCase' in Vuetify-Controls API
 
-[Vuetify Controls have a API with Props](https://vuetifyjs.com/en/components/text-fields#api) These Props in Vuetify-Controls comes in **kebab-case** amd must for use in Schema-Object converted to **camelCase**
+[Use Vuetify Controls API:](https://vuetifyjs.com/en/components/text-fields#api) Props in Vuetify-Controls in **kebab-case** must be converted to **camelCase** in Schema-Definition.
 
     <!-- vuetifyjs.com -->
     Input & Controls
@@ -713,7 +769,7 @@ Forms can be **linked** together using the same Model-Object. Changes in one For
 />
 ```
 	
-Schema is an Object, which defines and controls the behavior of your Form. Each Key in your Schema-Object should reflect a Key from your Data-Object. A minimalistic Definition of a Text-Input could look like this:
+Schema is an Object, which defines and controls the behavior of your Form. Each Key in your Schema-Object should reflect a Key from your Data-Object. 
 
 ```javascript
 data () {
@@ -867,7 +923,7 @@ You can listen to one or more Events
   <!-- HTML -->
   <!-- compose Listener to one or more of following Events: -->
   <v-form-base 
-    :value= "myValue" 
+    :model= "myValue" 
     :schema= "mySchema" 
     
     @click= "log"
@@ -909,7 +965,7 @@ You can listen to one or more Events
 
 ```HTML
     <!-- HTML -->
-    <v-form-base :value="myValue" :schema="mySchema" @change="change">
+    <v-form-base :model="myValue" :schema="mySchema" @change="change">
 ```
 
 ```javascript
@@ -938,7 +994,7 @@ Use Slots to pass Header and Footer into a Control. If necessary replace Control
  
 ```HTML
    <!-- FORM-BASE-COMPONENT -->
-    <v-form-base id="form-base-css" :value="myValue" :schema="mySchema" >
+    <v-form-base id="form-base-css" :model="myValue" :schema="mySchema" >
       <!-- FORM SLOT -->
       <h4 slot="form-base-css-top" class="slot">
         Top Slot of 'Form'
@@ -992,7 +1048,7 @@ If you need Form Validation you have to wrap **v-form-base** with **[v-form](htt
 ```HTML    
     <!-- HTML -->    
     <v-form ref="form" v-model= "formValid" lazy-validation>
-      <v-form-base :value= "myValue" :schema= "mySchema" @update= "update"/>
+      <v-form-base :model= "myValue" :schema= "mySchema" @update= "update"/>
     </v-form>
 ```
 ```javascript

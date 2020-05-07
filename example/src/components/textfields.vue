@@ -13,8 +13,14 @@
         prop 'ext' in combination with schema:{ type:'text', ext:'color', ...} makes native Type of HTML INPUT-TAG available 
       
         property FLEX for global setting grid: 
+          
+          DEPRECATED VUETIFY 1.5 
           shorthand                     :flex:"6"  
-          object to make it responsible :flex="{ xs:12, sm:6, md:4 }" 
+          object to make it responsible :flex="{ xs:12, sm:6, md:4 }"
+          
+          GRID VUETIFY 2.0 
+          shorthand                     :col:"6"  
+          object to make it responsible :col="{ cols:12, sm:6, md:4 }" 
 
         COMPUTED SCHEMA updates Layout (see color)    
       -->
@@ -23,7 +29,7 @@
       <v-form-base 
         :model="myModel"
         :schema="mySchema"
-        :flex="{ xs:12, sm:6, md:4 }"
+        :col="{ cols:12, sm:6, md:4 }"
         @input="log"
       />
     
@@ -46,6 +52,7 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
+
       myModel: {
         password: 'abcdefgh',
         count:100,
