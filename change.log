@@ -27,7 +27,7 @@ Mouse Event will listen to mouseenter, mouseleave
 Display will listen to resize, swipe, intersect 
 Update will listen to all events 
 
-NEW 0.1.16
+0.1.16
 added new property 'flex' for setting default grid behaviour
   <v-form-base :flex="{xs:12,sm:6}" .... />
   <v-form-base flex="12" .... />  ident with  xs:12
@@ -36,6 +36,17 @@ added Icon     { type:'icon' [,label:'print'] ... }  // icon: try label or if un
 
 0.1.18
 BUG GROUP FIXED  
-BREAKING CHANGE GROUPING {type:'card' } into { type:'group }  - see grouping example
+BREAKING CHANGE GROUPING from {type:'card' } into { type:'group } - see grouping example
 
+0.1.19
+change to new grid system vuetify 2.0. 
+It comes with a 12 point grid system built using flex-box.  
+schema { type:'text', name:{ col: { cols: 12, sm: 6, md:4, lg:3, xl:2 }} }
+https://vuetifyjs.com/en/components/grids/#grid-system
 
+add drag & drop  
+schema {  
+  name1: {  type:'text', drag:true },                 
+  name2: {  type:'text', drop:({value}) => value },                 
+  name4: {  type:'text', drag:true, drop:true }
+}  
