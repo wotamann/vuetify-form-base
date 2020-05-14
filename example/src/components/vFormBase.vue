@@ -725,7 +725,7 @@ export default {
       if (!obj.schema.drop) return event.preventDefault()
       // get dragEvent and dragEvent.obj
       obj.dragEvent = JSON.parse(event.dataTransfer.getData("text") )
-      event.dataTransfer.clearData();
+      
       // no drop on drag object
       if (obj.key === obj.dragEvent.obj.key && obj.id === obj.dragEvent.id) return event.preventDefault()      
       // handle schema.drop function
