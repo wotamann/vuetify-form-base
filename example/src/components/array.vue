@@ -1,7 +1,7 @@
 <style>
   /* INFO-SCOPED: Don't use '<style scoped>' because scoped CSS is inside a child-component not accessable */
-  .array-tasks { border: 1px solid #dddddd; padding:8px; margin-bottom: 8px; background-color: #e6f0ff; box-shadow: 3px 3px #e9e9e9; }  
-  .key-task { background-color: #f4f8ff; padding:8px; }  
+  .array-tasks { border: 1px solid #dddddd; padding:8px; margin-bottom: 8px; background-color: #98ccfd; box-shadow: 3px 3px #e9e9e9; }  
+  .key-task { background-color: #c6e4ff; padding:8px; }  
 </style>
 
 <template>
@@ -62,8 +62,8 @@ export default {
           flex: 12,
           schema: {
             // Add Task Button in Schema only 
-            add: { type: 'btn', iconLeft: 'add', label:'Click', dark: true, color: 'green' },
-            delete: { type: 'btn', iconRight: 'remove', label:'Drop', dark: true, color: 'amber', drop:true },
+            add: { type: 'btn', iconLeft: 'add', label:'Task', dark: true, color: 'blue lighten-2' },
+            delete: { type: 'btn', iconRight: 'remove', label:'Drop', dark: true, color: 'blue lighten-2', class:'mx-1', drop:true, tooltip:'Drop Task to remove' },
             nr: {
               type: 'text',
               disabled: true,
@@ -86,7 +86,7 @@ export default {
           }
         },
         // Add Item Button in Schema only 
-        add: { type: 'btn', iconCenter: 'add', label:'Item', dark: true, color: 'blue' }        
+        add: { type: 'btn', iconCenter: 'add', label:'Item', dark: true, class:'mb-2', color: 'blue lighten-2' }        
       }
     }
   },

@@ -42,6 +42,10 @@ BREAKING CHANGE GROUPING from {type:'card' } into { type:'group } - see grouping
 change to new grid system vuetify 2.0. 
 It comes with a 12 point grid system built using flex-box.  
 schema { type:'text', name:{ col: { cols: 12, sm: 6, md:4, lg:3, xl:2 }} }
+  or 
+adding grid as attribute :flex="12" or :col="12" 
+<v-form-base :model="myModel" :schema="mySchema" :col="{ cols:6, sm:4, md:3, lg:2,xl:1 }" />
+
 https://vuetifyjs.com/en/components/grids/#grid-system
 
 add drag & drop  
@@ -50,3 +54,6 @@ schema {
   name2: {  type:'text', drop:({value}) => value },                 
   name4: {  type:'text', drag:true, drop:true }
 }  
+0.1.20
+implement dynamic change of attributes model, schema and grid
+bug fix error using v-file-input  

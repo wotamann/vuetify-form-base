@@ -442,18 +442,16 @@ export default {
       default: () => null,
     },    
     model: {
-      //  use value or model für presenting data 
       type: [Object, Array],
       default: () => null,
     },    
     schema: {
       type: [Object, Array],
       default: () => ({}),
-    }
-  },
+    },
+   },
   data () {
     return {    
-      valueIntern:{},
       flatCombinedArray: [],
       clear,
       button,
@@ -465,7 +463,19 @@ export default {
       prependInner
     }
   },
-  computed: {
+  watch: { 
+    schema: function(newSchema) { 
+      this.rebuildArrays(this.valueIntern, newSchema)
+      this.schema = newSchema 
+    }
+  },
+  computed: {    
+    valueIntern() { 
+      // use <formbase :model="myData" />  ->  legacy code <formbase :value="myData" />  
+      let model = this.model || this.value 
+      this.updateArrayFromState(model, this.schema)
+      return model 
+    },
     ref () {
       return this.id
     },
@@ -781,7 +791,7 @@ export default {
         event,
         data: this.storeStateData,
         schema: this.storeStateSchema,
-        // parent
+        parent
       }
       
       delay(() => { this.emitValue(event.type, emitObj), onEventDelay })  
@@ -840,10 +850,11 @@ export default {
       
       // Organize Formular using Schema not Data 
       Object.keys(sch).forEach(key => {
-        // convert string type to object
-        sch[key] = this.sanitizeShorthandType(key, sch[key])
 
-        if ( (!Array.isArray(dat[key]) && dat[key] && typeof dat[key] === 'object' && sch[key] && (sch[key].type !== groupingType) ) || (Array.isArray(dat[key]) && Array.isArray(sch[key])) ) {
+        // convert string definition of name:'text' into object name:{type:'text'} 
+        sch[key] = this.sanitizeShorthandType(key, sch[key])
+  
+        if ( (!Array.isArray(dat[key]) && dat[key] && typeof dat[key] === 'object' && !(dat[key] instanceof File) && sch[key] && (sch[key].type !== groupingType) ) || (Array.isArray(dat[key]) && Array.isArray(sch[key])) ) {
           let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[key], sch[key])
           Object.keys(flatData).forEach(ii => {
             data[key + pathDelimiter + ii] = flatData[ii]
@@ -858,9 +869,10 @@ export default {
     },
     combineObjectsToArray ({ data, schema }) {
       let arr = []
-      Object.keys(data).forEach(key => {        
+      // Object.keys(data).forEach(key => {        
+      Object.keys(schema).forEach(key => {        
         if (!isPlainObject(schema[key])) {
-          console.warn( `From Schema:`,schema,` the Prop '${key}' must be a string with value of type { type:[stringvalue] } or a plainobject with at least { type:'text'} definition.  Schema Prop '${key}' will be ignored!`)
+          console.warn( `From Schema:`,schema,` the Prop '${key}' must be a string with value of type key:'value' or a plainobject with at least key:{ type:'text'} definition.  Schema Prop '${key}' will be ignored!`)
           return
         }
         arr.push({ key, value: data[key], schema: schema[key] })
@@ -886,17 +898,18 @@ export default {
       // assign root props to avoid manipulating prop: schema       
       Object.keys(schema).forEach( key => this.schema[key] = schema[key] )
     },
+    rebuildArrays(model, schema){
+      // break if no model found, but don't break if model is empty object (can filled by editing)
+      if (!model) throw `No 'model' definition found. Use '<formbase :model="myData" />' `
+      // no schema defined or empty -> autogenerate basic schema
+      if (isEmpty(schema)) this.autogenerateSchema(model)
+      // create flatted working array from schema and value    
+      this.flatCombinedArray = this.flattenAndCombineToArray(this.storeStateData, this.storeStateSchema)
+    },
   //  
   },
   created () {
-    // use <formbase :model="myData" />  - check for legacy code <formbase :value="myData" />  
-    this.valueIntern = this.value || this.model
-    // break if no model found, but don't break if model is empty object (can filled by editing)
-    if (!this.valueIntern) throw `No 'model' definition found. Use '<formbase :model="myData" />' `
-    // no schema defined or empty -> autogenerate basic schema
-    if (isEmpty(this.schema)) this.autogenerateSchema(this.valueIntern)
-    // create flatted working array from schema and value    
-    this.flatCombinedArray = this.flattenAndCombineToArray(this.storeStateData, this.storeStateSchema)
+    this.rebuildArrays(this.valueIntern, this.schema)
   }  
 }
 </script>

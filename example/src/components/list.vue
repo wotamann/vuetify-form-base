@@ -59,8 +59,8 @@ export default {
           offset: 1,
           flex: 5
         },
-        btn1: { type: 'btn', label:'Add', color: 'blue', flex: 2 },
-        btn2: { type: 'btn', label:'Add', color: 'red', flex: 2, offset: 4 },
+        btn1: { type: 'btn', label:'Add', dark:true, color: 'blue', class:'mb-1',flex: 2 },
+        btn2: { type: 'btn', label:'Add', dark:true, color: 'red', class:'mb-1', flex: 2, offset: 4 },
       }
     }
   },

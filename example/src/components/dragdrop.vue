@@ -28,7 +28,7 @@ import Infoline from '@/components/infoline'
 import log from '@/lib'
 
 // destruct value and must return a (modified) value
-const addDragValue = ( {value, obj}) => `${obj.value} added ${value}`
+const addDragValue = ( {value, obj}) => `${obj.value} + ${value}`
 
 export default {
   name: 'DragDrop',

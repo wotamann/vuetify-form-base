@@ -13,6 +13,7 @@
     <v-form-base
       :value="myValue"
       :schema="mySchema"
+      :col="6"
       @input="log"
     />
     

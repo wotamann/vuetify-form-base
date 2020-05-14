@@ -49,13 +49,15 @@ import conditional from '@/components/conditional.vue'
 import list from '@/components/list.vue'
 import pickers from '@/components/pickers.vue'
 import images from '@/components/images.vue'
+import dynamic from '@/components/dynamic-attributes.vue'
 
 const items = [
-    { value: 'simple', text: 'Textfields' }, 
+  { value: 'simple', text: 'Textfields' }, 
     { value: 'textfields', text: 'Textfields with HTML Type Attribute' }, 
     { value: 'emptymodel', text: 'Empty Model Object' }, 
     { value: 'autogenerate', text: 'Missing Schema Definition' }, 
     { value: 'basic', text: 'Missing Properties in Model or Schema'}, 
+    { value: 'dynamic', text: 'Dynamic Attributes' }, 
     { value: 'grouping', text: 'Group Controls'}, 
     { value: 'async', text: 'Lazy Loading of Component for Async-Data'}, 
     { value: 'css', text: 'CSS, Slots, Tooltips & Buttons'}, 
@@ -79,7 +81,7 @@ const items = [
 
 export default {
   components: {
-    autogenerate, simple, textfields, emptymodel, basic, grouping, async, grid, dragdrop, css, displayhelpers, deep, partial, multisourcedata, 
+    autogenerate, dynamic, simple, textfields, emptymodel, basic, grouping, async, grid, dragdrop, css, displayhelpers, deep, partial, multisourcedata, 
     complex, treeview, arrayease, array, selection, selectioncascading, conditional, list, pickers, images
   },
   data () {

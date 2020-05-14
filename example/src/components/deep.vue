@@ -2,10 +2,10 @@
   /* INFO-SCOPED: don't use '<style scoped>' because scoped CSS is inside a child-component not accessable */
 
   /* CSS for property from myValue object */
-  #form-base-nested .prop-controls  { background-color: #e1f5f8;  border: solid 2px #06a0bb }
-  #form-base-nested .prop-switch  { margin:3px; border: solid 2px #cf0520 }
-  #form-base-nested .prop-checkbox  {  margin:6px; border: solid 2px #1a54d1 }
-  #form-base-nested .prop-checkboxArray  {  margin:9px; border: solid 2px #0c972f }
+  #form-base-nested .prop-controls  { margin: 0 0  -2px -2px;  background-color: #f0f0f0;  border: solid 2px #636363 }
+  #form-base-nested .prop-switch  { padding:3px; border: solid 2px #cf0520 }
+  #form-base-nested .prop-checkbox  { padding:6px; border: solid 2px #1a54d1 }
+  #form-base-nested .prop-checkboxArray  { padding:9px; border: solid 2px #0c972f }
 </style>
 
 <template>
@@ -15,14 +15,15 @@
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       id="form-base-nested"
-      :value="myValue"
+      :model="myModel"
       :schema="mySchema"
+      :col="{ cols:6, sm:4, md:3, lg:2,xl:1 }"
       @change:form-base-nested="change"
     />
     
     <!-- Stuff   -->    
     <infoline
-      :value="myValue"
+      :value="myModel"
       :schema="mySchema"
       :path="$options._componentTag"
     />
@@ -38,7 +39,7 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {
+      myModel: {
         controls: {
           base: true,
           switch: [

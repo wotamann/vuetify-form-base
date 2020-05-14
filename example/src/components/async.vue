@@ -1,12 +1,12 @@
 <template>
   <v-container fluid>
-    <h4>Lazy Component loading for handling async Value or Schema</h4>
+    <h4>Lazy Component and async loading of Model, Schema and Grid</h4>
 
-    <!-- FORM-BASE-COMPONENT -->
+    <!-- FORM-BASE-COMPONENT -->    
     <v-form-base 
-      v-if="showFormbase"
-      :model="myModel"
-      :schema="mySchema"
+      :model= "myModel"
+      :schema= "mySchema"
+      :col= "col"
       @change="log"
     />
     
@@ -34,26 +34,31 @@ export default {
     return {
       showFormbase: false,
       myModel: {},
-      mySchema: {}
+      mySchema: {},
+      col: {}
     }
   },
 
   async mounted () {
     // # STEP 2a) Async Loading of Value
-      this.myModel = await this.delay({
+    this.myModel = await this.delay({
       name: 'Base',
       password: '12345678',
-      checkbox: true
+      checkbox: true      
     })
     // # STEP 2b) Async Loading of Schema
     this.mySchema = await this.delay({
       // prop: text => shorthand for prop: { type: 'text', label:'prop' }
       name: 'text',
       password: 'password',
-      checkbox: 'checkbox'
+      checkbox: 'checkbox'      
+    }),
+    // # STEP 2c) Async Loading of Grid
+    this.col = await this.delay({
+      cols:12, 
+      sm:6, 
+      md:4,
     })
-    // # STEP 3) Important: lazy Loading before displaying  'v-form-base'   
-    this.showFormbase = true
   },
 
   methods: {
