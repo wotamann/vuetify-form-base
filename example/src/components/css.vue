@@ -21,12 +21,17 @@
 <template>
   <v-container fluid>
     <h4>Play around and resize with predefined CSS, Buttons, Icons, Slots and individual Tooltips</h4>
-    
+    <v-row>
+      <v-col cols="auto">
+        <v-slider :value=44 ></v-slider>
+      </v-col>
+    </v-row>
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       id="form-base-css"
       :value="myValue"
       :schema="mySchema"
+      :col=12
       @change:form-base-css="log"
     >
       <!-- FORM SLOT -->
@@ -105,30 +110,31 @@ export default {
           btnToggleSingle: ['B'],
           btnToggleMulti: 1,          
           btn: 'A', // ident with schema { label:'A', ... }
-          iconV: 'print',
-          // iconL: 'ignored',
+          // iconLabel: 'ignored',
+          iconValue: 'print',
           radio: 'A',
         }
       },
       mySchema: {
-        name: { type: 'text', label: 'Name', flex: 4, appendIcon: 'more_vert', tooltip: 'Name' },
-        password: { type: 'password', label: 'Password', flex: 4, tooltip: 'Password' },
-        email: { type: 'email', label: 'Email', flex: 4, spacer: true, tooltip: 'Email' },
+        name: { type: 'text', label: 'Name', col: 4, appendIcon: 'more_vert', tooltip: 'Name' },
+        password: { type: 'password', label: 'Password', col: 4, tooltip: 'Password' },
+        email: { type: 'email', label: 'Email', col: 4, spacer: true, tooltip: 'Email' },
         controls: {
-          checkbox: { type: 'checkbox', label: 'CSS-Red', color: 'red', flex: 4, tooltip: 'Checkbox' },
-          switch: { type: 'switch', label: 'CSS-Green', color: 'green', flex: 4, tooltip: 'Switch' },
-          slider: { type: 'slider', label: 'CSS-Blue', color: 'blue', flex: 4, tooltip: 'Slider' },
+          checkbox: { type: 'checkbox', label: 'CSS-Red', color: 'red', col: 4, tooltip: 'Checkbox' },
+          switch: { type: 'switch', label: 'CSS-Green', color: 'green', col: 4, tooltip: 'Switch' },
+          slider: { type: 'slider', label: 'CSS-Blue', color: 'blue', col: 4, tooltip: 'Slider' },
 
-          btnToggleSingle: { type: 'btn-toggle', options, color:'red', multiple: true, tooltip: 'Multiple Button', flex: 6 },
-          btnToggleMulti: { type: 'btn-toggle', options: optionsObj, color: 'blue', tooltip: 'Button', flex: 6 },
+          btnToggleSingle: { type: 'btn-toggle', options, color:'red', multiple: true, tooltip: 'Multiple Button', col: 6 },
+          btnToggleMulti: { type: 'btn-toggle', options: optionsObj, color: 'blue', tooltip: 'Button', col: 6 },
 
-          btn: { type: 'btn', iconRight: 'print', color:'red', tooltip: 'Button', flex: 5 },
+          btn: { type: 'btn', iconRight: 'print', color:'red', tooltip: 'Button', col: 5 },
           
-          // icon: try label or if undefined use value
-          iconV: { type: 'icon', color: 'red', tooltip: 'Icon Value', flex: 1 }, 
-          iconL: { type: 'icon', label:'print', large: true, color: 'blue', tooltip: 'Icon Label', flex: 1 },
+          // icon try label 
+          iconLabel: { type: 'icon', label:'print', large: true, color: 'blue', tooltip: 'Icon Label', col: 1 },
+          // or if undefined use value
+          iconValue: { type: 'icon', color: 'red', tooltip: 'Icon Value', col: 1 }, 
           
-          radio: { type: 'radio', label: 'Radio', options, row:true,  flex: 5 },
+          radio: { type: 'radio', label: 'Radio', options, row:true,  col: 5 },
         }
       }
     }

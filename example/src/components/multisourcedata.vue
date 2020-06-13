@@ -18,16 +18,17 @@
       <!-- TOP SLOT  -->
       <div slot="form-base-container-top" class="form-base-title">This is 'form-base-container' with data 'myValue'</div>
 
-      <!-- SLOT (replaces key 'Slotted')  -->
-      <v-form-base
-        id="form-base-slot"
-        slot="slot-item-key-Slotted"
-        :value="myValueSlot"
-        :schema="mySchemaSlot"
-        @input:form-base-slot="changepartial"
-      >
-        <!-- TOP SLOT in Slotted -->
+        <!-- SLOT (replaces schema key 'SlotPlaceholder' )  slot="slot-item-key-SlotPlaceholder"  -->
+        <v-form-base
+          id="form-base-slot"
+          slot="slot-item-key-SlotPlaceholder"
+          :value="myValueSlot"
+          :schema="mySchemaSlot"
+          @input:form-base-slot="changepartial"
+        >
+        <!-- TOP SLOT in SlotPlaceholder -->
         <div slot="form-base-slot-top" class="form-base-title">This is 'Form-base-slot' with data 'myValueSlot'</div> 
+      
       </v-form-base>      
       <!-- SLOT END -->
 
@@ -79,7 +80,7 @@ export default {
       },
       mySchema: {
         checkbox: { type: 'checkbox', label: 'Base', color: 'red' },
-        Slotted: {}, // empty object as placeholder
+        SlotPlaceholder: {}, // empty object as placeholder 
         switch: { type: 'switch', label: 'Base', color: 'red' },
       },
 

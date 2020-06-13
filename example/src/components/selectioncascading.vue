@@ -25,7 +25,7 @@ import log from '@/lib'
 const items = ['Musk', 'Jobs', 'Taleb', 'Harari']
 
 export default {
-  name: 'Cascading Selection',
+  name: 'CascadingSelection',
   components: { VFormBase, Infoline },
   data () {
     return {

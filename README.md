@@ -1,6 +1,6 @@
 # Vuetify-Form-Base
 
-Imagine you get this data as JS-Object and you have to create an editable form.
+Imagine you get Data as JS-Object and you have to create an editable Form.
 
 ```javascript
 Model: {

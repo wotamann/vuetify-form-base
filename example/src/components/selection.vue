@@ -23,7 +23,7 @@ import Infoline from '@/components/infoline'
 import update from '@/lib'
 
 const items = ['Musk', 'Jobs', 'Taleb', 'Harari']
-
+const itemsObj = [{name:'This is A', val:'A'}, {name:'This is B', val:'B'}, {name:'This is C', val:'C'}]
 export default {
   name: 'Selection',
   components: { VFormBase, Infoline },
@@ -31,19 +31,23 @@ export default {
     return {
       myValue: {
         selectSingle: 'Musk',
+        selectObject: itemsObj[2],
         selectMultiple: ['Musk', 'Taleb'],
+        selectMultipleObject:[itemsObj[1], itemsObj[2]],
         comboboxSingle: 'Harari',
         comboboxMultiple: ['Harari', 'Musk'],
         autocompleteSingle: 'Taleb',
         autocompleteMultiple: ['Taleb', 'Jobs']
       },
       mySchema: {
-        selectSingle: { type: 'select', label: 'Select', selected: 0, items, flex: { xs: 12, sm: 6, md: 4 } },
-        comboboxSingle: { type: 'combobox', label: 'Combobox', color: 'green', items, flex: { xs: 12, sm: 6, md: 4 } },
-        autocompleteSingle: { type: 'autocomplete', label: 'AutoComplete', color: 'red', items, flex: { xs: 12, sm: 6, md: 4 } },
-        selectMultiple: { type: 'select', label: 'Multi-Select', items, multiple: true, flex: { xs: 12, sm: 6, md: 4 } },
-        comboboxMultiple: { type: 'combobox', label: 'Multi-Combobox', items, color: 'green', multiple: true, flex: { xs: 12, sm: 6, md: 4 } },
-        autocompleteMultiple: { type: 'autocomplete', label: 'Multi-AutoComplete', multiple: true, color: 'red', items, flex: { xs: 12, sm: 6, md: 4 } }
+        selectSingle: { type: 'select', label: 'Select', items, flex: { xs: 12, sm: 6, md: 3 } },
+        selectObject: { type: 'select', label: 'Select-Object', returnObject:true, itemText:'name', items:itemsObj, flex: { xs: 12, sm: 6, md: 3 } },
+        comboboxSingle: { type: 'combobox', label: 'Combobox', color: 'green', items, flex: { xs: 12, sm: 6, md: 3 } },
+        autocompleteSingle: { type: 'autocomplete', label: 'AutoComplete', color: 'red', items, flex: { xs: 12, sm: 6, md: 3 } },
+        selectMultiple: { type: 'select', label: 'Multi-Select', items, multiple: true, flex: { xs: 12, sm: 6, md: 3 } },
+        selectMultipleObject: { type: 'select', label: 'Multi-Select-Object', multiple: true, returnObject:true, itemText:'name', items:itemsObj, flex: { xs: 12, sm: 6, md: 3 } },
+        comboboxMultiple: { type: 'combobox', label: 'Multi-Combobox', items, color: 'green', multiple: true, flex: { xs: 12, sm: 6, md: 3 } },
+        autocompleteMultiple: { type: 'autocomplete', label: 'Multi-AutoComplete', multiple: true, color: 'red', items, flex: { xs: 12, sm: 6, md: 3 } }
       }
     }
   },

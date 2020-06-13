@@ -335,7 +335,7 @@
 
 <script>
 // import & declarations
-  import { get, isPlainObject, isFunction, isString, isEmpty, orderBy, delay } from 'lodash'
+  import { get, isPlainObject, isFunction, isString, isNumber, isEmpty, orderBy, delay } from 'lodash'
   import { mask } from 'vue-the-mask'
   
   const typeToComponent = {
@@ -650,20 +650,31 @@ export default {
       if(obj && obj.xs) { obj[replacer] = obj.xs; delete obj.xs }
     },
     getGridAttributes(obj){ 
-      // flex:{ cols|sm|md|lg|xl } - value:number|string
+      // DEPRECATED 
+      // flex:{ xs|sm|md|lg } - value:number|string
+      // use COL instead of FLEX
+      // col:{ cols|sm|md|lg|xl } - value:number|string      
       // order:{ order|sm|md|lg|xl|order-sm|order-md|order-lg|order-xl } - value:number|string
       // offset:{ offset|sm|md|lg|xl|offset-sm|offset-md|offset-lg|offset-xl } - value:number|string
 
-      const col = obj.schema.col || obj.schema.flex
-      const colAttr= this.col || this.flex || colDefault
-      let colObject = col ?
+      const colSchema = obj.schema.col || obj.schema.flex
+
+      const colAttr = this.col || this.flex || colDefault
+   
+      let colObject = colSchema ?
       // schema definition of cols
-      ( isPlainObject(col) ? col : { cols: col} ) 
+      ( isPlainObject(colSchema) ? colSchema : isNumber(colSchema) || isString(colSchema) ? { cols: colSchema} : { cols: 'auto' } ) 
+      // ( isPlainObject(colSchema) ? colSchema : { cols: 'auto' } ) 
       // formbase attr definition of cols
-      : colAttr ? ( isPlainObject(colAttr) ? colAttr : { cols: colAttr} ) 
+      : colAttr ? ( isPlainObject(colAttr) ? colAttr : isNumber(colAttr) || isString(colAttr) ? { cols: colAttr} : { cols: 'auto' }  ) 
+      // : colAttr ? ( isPlainObject(colAttr) ? colAttr :  { cols: 'auto' }  ) 
         // no definition set to 'auto'
       : { cols:'auto'}
-      this.gridReplaceXS(colObject, 'cols')
+
+      this.gridReplaceXS(colObject, 'cols')  
+      
+      console.log( 'colObject', colObject,'colAttr,', colAttr, this.col , this.flex, 'colDefault,',colDefault );
+
 
       // schema definition of offset
       const offset = obj.schema.offset
@@ -742,10 +753,10 @@ export default {
   //
   // Set Value
     setValue (obj) {
-      // Control gets a Value
+      // Use 'schema.toCtrl' Function for setting a modified Value  
       return this.toCtrl({ value: obj.value, obj, data: this.storeStateData, schema: this.storeStateSchema })
     },
-    //
+  //
   // EVENTS Get Value from Input & other Events
     onInput (value, obj, type = 'input' ) {
       // Value after change in Control
@@ -853,23 +864,64 @@ export default {
 
         // convert string definition of name:'text' into object name:{type:'text'} 
         sch[key] = this.sanitizeShorthandType(key, sch[key])
-  
-        if ( (!Array.isArray(dat[key]) && dat[key] && typeof dat[key] === 'object' && !(dat[key] instanceof File) && sch[key] && (sch[key].type !== groupingType) ) || (Array.isArray(dat[key]) && Array.isArray(sch[key])) ) {
+        
+        // LAST XXXXXXXXXXXXXXXXXXXXXX
+        // if ( (!Array.isArray(dat[key]) && dat[key] && typeof dat[key] === 'object' && !(dat[key] instanceof File) && sch[key] && (sch[key].type !== groupingType)  ) || (Array.isArray(dat[key]) && Array.isArray(sch[key])) ) {
+          // const B = !Array.isArray(dat[key]) && typeof dat[key] === 'object' && !(dat[key] instanceof File) && (sch[key].type !== groupingType) && (!sch[key].returnObject )
+        
+      console.log('KEY', key, 'DAT', dat[key], 'SCH', sch[key])
+
+        const A = Array.isArray(dat[key]) && Array.isArray(sch[key])
+        const B = isPlainObject(dat[key]) && !sch[key].type
+        // const B =!(sch[key] === 'type' || (dat && dat[key].type) )   
+        // const B = !(Array.isArray(dat[key]) && !Array.isArray(sch[key] ))  
+        // const O = isPlainObject(dat[key]) && sch[key].returnObject === true 
+        // const B = !Array.isArray(dat[key]) && dat[key] && typeof dat[key] === 'object' && !(dat[key] instanceof File) && sch[key] && (sch[key].type !== groupingType) && (!sch[key].returnObject ) 
+   
+        // const B = dat[key] && dat[key] instanceof File
+        // const C = sch[key] && sch[key].type === groupingType
+        // const D = sch[key] && sch[key].returnObject
+        // const B = !Array.isArray(dat[key]) && typeof dat[key] === 'object' && !(dat[key] instanceof File) && (sch[key].type !== groupingType) && (!sch[key].returnObject )
+        // const C = typeof dat[key] === 'object' && !(dat[key] instanceof File) && (sch[key].type !== groupingType) && (!sch[key].returnObject )
+        // const B = !Array.isArray(dat[key]) && dat[key] && typeof dat[key] === 'object' && !(dat[key] instanceof File) && sch[key] && (sch[key].type !== groupingType) && (!sch[key].returnObject )
+        // const C = (!Array.isArray(dat[key]) && dat[key] && typeof dat[key] === 'object' && !(dat[key] instanceof File) && sch[key] && (sch[key].type !== groupingType) && (!sch[key].returnObject )  )  
+        // const D = (!Array.isArray(dat[key]) && dat[key] && typeof dat[key] === 'object' && !(dat[key] instanceof File) && sch[key] && (sch[key].type !== groupingType) && (!sch[key].returnObject )  )  
+
+        // if ( A || B  ) {
+ if ( (!Array.isArray(dat[key]) && dat[key] && typeof dat[key] === 'object' && !(dat[key] instanceof File) && sch[key] && (sch[key].type !== groupingType)  ) || (Array.isArray(dat[key]) && Array.isArray(sch[key])) ) {
+        // if ( A || B || C || D || O ) {
+          // recursive
+          console.log('recursive', key, A, B);
           let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[key], sch[key])
           Object.keys(flatData).forEach(ii => {
             data[key + pathDelimiter + ii] = flatData[ii]
             schema[key + pathDelimiter + ii] = flatSchema[ii]
           })
         } else {
+          // finish
+          console.log('finish', key, A, B);
           data[key] = dat[key]
           schema[key] = sch[key]
         }
       }) 
+
+      // if ( A || B  ) {
+        // // if ( A || B || C || D ) {
+        //   // recursive
+        //   let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[key], sch[key])
+        //   Object.keys(flatData).forEach(ii => {
+        //     data[key + pathDelimiter + ii] = flatData[ii]
+        //     schema[key + pathDelimiter + ii] = flatSchema[ii]
+        //   })
+        // } else {
+        //   // finish
+        //   data[key] = dat[key]
+        //   schema[key] = sch[key]
+        // }
       return { data, schema }
     },
     combineObjectsToArray ({ data, schema }) {
       let arr = []
-      // Object.keys(data).forEach(key => {        
       Object.keys(schema).forEach(key => {        
         if (!isPlainObject(schema[key])) {
           console.warn( `From Schema:`,schema,` the Prop '${key}' must be a string with value of type key:'value' or a plainobject with at least key:{ type:'text'} definition.  Schema Prop '${key}' will be ignored!`)

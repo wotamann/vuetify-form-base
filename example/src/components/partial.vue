@@ -45,8 +45,7 @@ export default {
         radios: {
           radioA: 'A',
           radioB: 'B'
-        },
-        slider: 33
+        }
       },
       mySchema: {
         checkbox: { type: 'checkbox', label: 'Red', color: 'red' },
@@ -55,7 +54,6 @@ export default {
           radioA: { type: 'radio', label: 'RadioA', options, row: true },
           radioB: { type: 'radio', label: 'RadioB', options }
         },
-        slider: { type: 'slider', label: 'Slide' }
       }
     }
   },

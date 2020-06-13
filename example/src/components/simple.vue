@@ -75,7 +75,9 @@ export default {
       // Schema-Order defines Order of Controls in Form    
       mySchema: {
         name: { 
-          type:'text'
+          type:'text', 
+          solo:true,
+          class:'mx-1 mt-1'
         },         
         password: { 
           type: 'password',
