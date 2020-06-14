@@ -49,8 +49,8 @@ import conditional from '@/components/conditional.vue'
 import list from '@/components/list.vue'
 import pickers from '@/components/pickers.vue'
 import images from '@/components/images.vue'
-import dynamic from '@/components/dynamic-attributes.vue'
-import typehandling from '@/components/type-handling.vue'
+import dynamic from '@/components/dynamicattributes.vue'
+import typehandling from '@/components/typehandling.vue'
 
 const items = [
   { value: 'simple', text: 'Textfields' }, 
