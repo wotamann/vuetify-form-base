@@ -75,7 +75,6 @@
                       readonly
                       :value="setValue(obj)"
                     >
-                      <!-- @input="onInput($event, obj)" -->
                     </v-text-field>
                   </template>
                   <div
@@ -85,7 +84,6 @@
                     @input="onInput($event, obj)"
                   >
                   </div>
-                    <!-- :type="checkExtensionType(obj)" -->
                 </v-menu>
               <!-- END DATE, TIME, COLOR MENU -->
 
