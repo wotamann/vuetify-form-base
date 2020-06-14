@@ -6,20 +6,22 @@
         the properties of these controls can be used 
         
         schema:{ type:'text',hint:'ABC', persistentHint:true, ... } 
+        
           maps to 
-        <v-text-fields hint="ABC" persistent-hint> 
+        
+        <v-text-fields hint="ABC" persistent-hint > 
         see more -> https://vuetifyjs.com/en/components/text-fields/
         
-        prop 'ext' in combination with schema:{ type:'text', ext:'color', ...} makes native Type of HTML INPUT-TAG available 
+        Prop 'ext' in combination with schema:{ type:'text', ext:'color', ...} makes native Type of HTML INPUT-TAG available 
       
-        property FLEX for global setting grid: 
+        Attribute COL ( FLEX is deprecated) for global GRID-Setting: 
           
           DEPRECATED VUETIFY 1.5 
-          shorthand                     :flex:"6"  
+          string shorthand                     :flex:"6"  
           object to make it responsible :flex="{ xs:12, sm:6, md:4 }"
           
           GRID VUETIFY 2.0 
-          shorthand                     :col:"6"  
+          string shorthand                     :col:"6"  
           object to make it responsible :col="{ cols:12, sm:6, md:4 }" 
 
         COMPUTED SCHEMA updates Layout (see color)    
@@ -57,7 +59,7 @@ export default {
         password: 'abcdefgh',
         count:100,
         range:33,
-        color:'#FF2AAB',
+        color:'#6666FF',
         time:'01:15',
         date:'2020-02-25',
       },  

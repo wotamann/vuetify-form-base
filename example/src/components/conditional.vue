@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Display conditional Controls on Form</h4>
+    <h4>Display conditional Controls by using computed Schema</h4>
     
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base

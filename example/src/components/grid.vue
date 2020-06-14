@@ -2,7 +2,7 @@
   <v-container fluid>
     <h4>Resize Window to change Layout, Offset and Order of Controls. Use 'row' Attribute centering Controls</h4>
     <v-form-base
-      :value="myValue"
+      :model="myModel"
       :schema="mySchema"
       :class="layout"      
       :row="rowAttribute"      
@@ -18,7 +18,7 @@
     
     <!-- Stuff   -->    
     <infoline
-      :value="myValue"
+      :value="myModel"
       :schema="mySchema"
       :path="$options._componentTag"
     />
@@ -36,7 +36,7 @@ export default {
     return {
       rowAttribute:{align:'center', justify:'center', noGutters:true },
       
-      myValue: {
+      myModel: {
         name: 'Grid',
         radio: 'A'
       }
@@ -62,7 +62,7 @@ export default {
     // Change Class for Layout on resize
     layout () {
       const { lgAndUp, lg, md, sm } = this.$vuetify.breakpoint      
-      return md ? 'blue lighten-3' : sm ? 'blue lighten-4' : lgAndUp ? 'blue lighten-5' : 'blue lighten-2'
+      return md ? 'blue lighten-4' : sm ? 'blue lighten-3' : lgAndUp ? 'blue lighten-5' : 'blue lighten-2'
     }
   },
   methods: {

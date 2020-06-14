@@ -58,6 +58,7 @@ const required = msg => v => !!v || msg
 // Rules
 const rules = {
   requiredEmail: required('E-mail is required'),
+  requiredSel: required('Selection is required'),
   max12: maxLen(12),
   min6: minLen(6),
   validEmail: v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
@@ -72,7 +73,7 @@ export default {
         email: 'base@web.com',
         password: 'abcdefgh',
         subgroups: {
-          select: 'Tesla',
+          select: null,
           multiple: ['Jobs', 'Taleb'],
           tasks: [
              this.getTicket(),
@@ -83,10 +84,10 @@ export default {
         }
       },
       mySchema: {
-        email: { type: 'email', label: 'Email', rules: [rules.validEmail, rules.requiredEmail], flex: { xs: 12, sm: 6 } },
+        email: { type: 'email', label: 'Email', rules: [rules.requiredEmail, rules.validEmail], flex: { xs: 12, sm: 6 } },
         password: { type: 'password', label: 'Password', hint: '6 to 12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: { xs: 12, sm: 6 } },
         subgroups: {
-          select: { type: 'select', label: 'Select', items, flex: { xs: 12, sm: 6 } },
+          select: { type: 'select', label: 'Select', items, rules: [rules.requiredSel], flex: { xs: 12, sm: 6 } },
           multiple: { type: 'select', label: 'Multi-Select', clearable:true, items, multiple: true, flex: { xs: 12, sm: 6 } },
           tasks: { type: 'array', schema: { done: { type: 'checkbox', label: 'Ok', flex: 3 }, title: { type: 'text', placeholder: 'to do...', flex: 8 } }, flex: { xs: 12, sm: 6 } },
           content: { type: 'textarea', label: 'Content', hint: 'Auto-Growing...', autoGrow: true, prependInnerIcon: 'print', rules: [ required('Content required') ], flex: { xs: 12, sm: 6 } },

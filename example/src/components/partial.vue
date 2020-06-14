@@ -5,23 +5,24 @@
 
 <template>
   <v-container fluid>
-    <h4>Complete Formbase from 'myValue'</h4>
+    <h4>Complete Formbase from 'myModel'</h4>
     <v-form-base
-      :value="myValue"
+      :model="myModel"
       :schema="mySchema"
-      @change="change"
+      col=3
+      @input="change"
     />
-    <h4>Partial Formbase from 'myValue.radios' synchronized with 'myValue'</h4>
+    <h4>Partial Formbase from 'myModel.radios' linked with 'myModel' Object</h4>
     <v-form-base
       id="form-base-partial"
-      :value="myValue.radios"
+      :model="myModel.radios"
       :schema="mySchema.radios"
-      @change:form-base-partial="changepartial"
+      @input:form-base-partial="changepartial"
     />
     
     <!-- Stuff  -->    
     <infoline
-      :value="myValue"
+      :value="myModel"
       :schema="mySchema"
       :path="$options._componentTag"
     />
@@ -39,13 +40,14 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {
+      myModel: {
         checkbox: true,
         switch: true,
         radios: {
           radioA: 'A',
           radioB: 'B'
-        }
+        },
+        slider: 33
       },
       mySchema: {
         checkbox: { type: 'checkbox', label: 'Red', color: 'red' },
@@ -54,14 +56,20 @@ export default {
           radioA: { type: 'radio', label: 'RadioA', options, row: true },
           radioB: { type: 'radio', label: 'RadioB', options }
         },
+        slider: { type: 'slider', label: 'Slide', col: 4 },
       }
     }
   },
   methods: {
 
-    change,
-
-    changepartial: change
+    change(v){ 
+      console.log('--- CHANGED IN COMPLETE ---');
+      change(v)
+    },
+    changepartial(v){ 
+      console.log('--- CHANGED IN PARTIAL ---');
+      change(v)
+    }
 
   }
 }

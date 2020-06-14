@@ -1,7 +1,8 @@
 <template>
   <v-container fluid>
-    <h4>Autogenerate Form from Model (No Schema)</h4>
-    
+    <h4>Autogenerate Form from Model, if Schema Object doesn't exist</h4>
+    <!-- Works only if Model-Data is String, Number or Array  -->
+
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base :model="myModel" :flex="{xs:12,sm:6}" @input="log"/>
 

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Change Attributes Model, Schema or Grid of 'vuetify-form-base'</h4>
+    <h4>Change Attributes Model, Schema or Col of 'vuetify-form-base'</h4>
     
       <!-- FORM-BASE-COMPONENT -->    
       <v-form-base 

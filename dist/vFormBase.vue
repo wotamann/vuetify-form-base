@@ -59,7 +59,7 @@
 
               <!-- DATE, TIME, COLOR MENU -->
                 <v-menu
-                  v-else-if="isDateTimeColorExtension(obj)"
+                  v-else-if="isDateTimeColorTypeAndExtensionText(obj)"
                   :close-on-content-click="false"
                   transition="scale-transition"
                   offset-y
@@ -79,13 +79,13 @@
                     </v-text-field>
                   </template>
                   <div
-                    :is="mapTypeToComponent( obj.schema.ext )" 
+                    :is="mapTypeToComponent( obj.schema.type )" 
                     v-bind="bindSchema(obj)"
-                    :type="checkExtensionType(obj)"
                     :value="setValue(obj)"
                     @input="onInput($event, obj)"
                   >
                   </div>
+                    <!-- :type="checkExtensionType(obj)" -->
                 </v-menu>
               <!-- END DATE, TIME, COLOR MENU -->
 
@@ -207,6 +207,14 @@
                   @click="onEvent($event, obj)"
                 />
               <!-- END ICON -->
+              
+              <!-- SLIDER -->
+                <v-slider
+                  v-else-if="obj.schema.type === 'slider'"
+                  v-bind="bindSchema(obj)"
+                  @input="onInput($event, obj)"
+                />
+              <!-- END SLIDER -->
 
               <!-- IMG -->
                 <v-img
@@ -302,7 +310,10 @@
                   @click:prepend="onEvent($event, obj, prepend )"
                   @click:prepend-inner="onEvent($event, obj, prependInner )"
                   @input="onInput($event, obj)"
-                />
+                >
+                  {{obj.schema.textContent}}
+                </div>
+
               <!-- END DEFAULT -->
 
               </slot>
@@ -335,7 +346,7 @@
 
 <script>
 // import & declarations
-  import { get, isPlainObject, isFunction, isString, isEmpty, orderBy, delay } from 'lodash'
+  import { get, isPlainObject, isFunction, isString, isNumber, isEmpty, orderBy, delay } from 'lodash'
   import { mask } from 'vue-the-mask'
   
   const typeToComponent = {
@@ -511,6 +522,10 @@ export default {
       // map ie. schema:{ type:'password', ... } to specific vuetify-control or default to v-text-field'
       return typeToComponent[type] ? typeToComponent[type] : `v-${type}`
     },
+    // CHECK FOR TYPE: DATE, TIME OR COLOR and EXT: TEXT
+    isDateTimeColorTypeAndExtensionText(obj){
+      return  'date_time_color'.includes(obj.schema.type) && obj.schema.ext === 'text' 
+    },
     // CHECK FOR DATE, TIME OR COLOR EXT
     isDateTimeColorExtension(obj){
       return 'date_time_color'.includes(obj.schema.ext)
@@ -650,21 +665,27 @@ export default {
       if(obj && obj.xs) { obj[replacer] = obj.xs; delete obj.xs }
     },
     getGridAttributes(obj){ 
-      // flex:{ cols|sm|md|lg|xl } - value:number|string
+      // FLEX DEPRECATED use COL instead of FLEX
+      // flex:{ xs|sm|md|lg } - value:number|string
+       
+      // col:{ cols|sm|md|lg|xl } - value:number|string      
       // order:{ order|sm|md|lg|xl|order-sm|order-md|order-lg|order-xl } - value:number|string
       // offset:{ offset|sm|md|lg|xl|offset-sm|offset-md|offset-lg|offset-xl } - value:number|string
 
-      const col = obj.schema.col || obj.schema.flex
-      const colAttr= this.col || this.flex || colDefault
-      let colObject = col ?
-      // schema definition of cols
-      ( isPlainObject(col) ? col : { cols: col} ) 
-      // formbase attr definition of cols
-      : colAttr ? ( isPlainObject(colAttr) ? colAttr : { cols: colAttr} ) 
-        // no definition set to 'auto'
-      : { cols:'auto'}
-      this.gridReplaceXS(colObject, 'cols')
+      const colSchema = obj.schema.col || obj.schema.flex
 
+      const colAttr = this.col || this.flex || colDefault
+   
+      let colObject = colSchema ?
+      // if available use schema definition of cols
+      ( isPlainObject(colSchema) ? colSchema : isNumber(colSchema) || isString(colSchema) ? { cols: colSchema} : { cols: 'auto' } ) 
+      // else use formbase attribute definition of cols
+      : colAttr ? ( isPlainObject(colAttr) ? colAttr : isNumber(colAttr) || isString(colAttr) ? { cols: colAttr} : { cols: 'auto' }  ) 
+      // if no definition set cols to 'auto'
+      : { cols:'auto'}
+
+      this.gridReplaceXS(colObject, 'cols')  
+      
       // schema definition of offset
       const offset = obj.schema.offset
       let offsetObject = offset ? ( isPlainObject(offset) ? offset : { offset } ) : offset   
@@ -725,7 +746,7 @@ export default {
       if (!obj.schema.drop) return event.preventDefault()
       // get dragEvent and dragEvent.obj
       obj.dragEvent = JSON.parse(event.dataTransfer.getData("text") )
-      event.dataTransfer.clearData();
+      
       // no drop on drag object
       if (obj.key === obj.dragEvent.obj.key && obj.id === obj.dragEvent.id) return event.preventDefault()      
       // handle schema.drop function
@@ -742,10 +763,10 @@ export default {
   //
   // Set Value
     setValue (obj) {
-      // Control gets a Value
+      // Use 'schema.toCtrl' Function for setting a modified Value  
       return this.toCtrl({ value: obj.value, obj, data: this.storeStateData, schema: this.storeStateSchema })
     },
-    //
+  //
   // EVENTS Get Value from Input & other Events
     onInput (value, obj, type = 'input' ) {
       // Value after change in Control
@@ -840,21 +861,26 @@ export default {
       })
     },
     sanitizeShorthandType(key, schema){
-      // check if schema is typeof string ->  shorthand { type: obj } otherwise take original value
+      // if key in schema is string only, then handle shorthand definition
+      // schema:{ name:'text' }  => schema:{ name: { type:'text', label: 'name' }
       return isString(schema) ? { type: schema, label:key } : schema
     },
     flattenObjects (dat, sch) {
       
       let data = {}
-      let schema = {}
-      
+      let schema = {}      
       // Organize Formular using Schema not Data 
       Object.keys(sch).forEach(key => {
 
         // convert string definition of name:'text' into object name:{type:'text'} 
         sch[key] = this.sanitizeShorthandType(key, sch[key])
-  
-        if ( (!Array.isArray(dat[key]) && dat[key] && typeof dat[key] === 'object' && !(dat[key] instanceof File) && sch[key] && (sch[key].type !== groupingType) ) || (Array.isArray(dat[key]) && Array.isArray(sch[key])) ) {
+
+        const bothArray = Array.isArray(dat[key]) && Array.isArray(sch[key])
+        const datObjectWithoutSchemaType = isPlainObject(dat[key]) && !sch[key].type
+        const datObjectContainsTypeKey = (dat[key] && dat[key].type && (sch[key] && sch[key].type) )
+        const notInstanceOfFileObject = !(dat[key] instanceof File)
+
+        if ( bothArray || datObjectWithoutSchemaType || (datObjectContainsTypeKey && notInstanceOfFileObject) ) {
           let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[key], sch[key])
           Object.keys(flatData).forEach(ii => {
             data[key + pathDelimiter + ii] = flatData[ii]
@@ -869,10 +895,9 @@ export default {
     },
     combineObjectsToArray ({ data, schema }) {
       let arr = []
-      // Object.keys(data).forEach(key => {        
       Object.keys(schema).forEach(key => {        
         if (!isPlainObject(schema[key])) {
-          console.warn( `From Schema:`,schema,` the Prop '${key}' must be a string with value of type key:'value' or a plainobject with at least key:{ type:'text'} definition.  Schema Prop '${key}' will be ignored!`)
+          console.warn( `Schema '${schema}' of Prop '${key}' must be a string with value of type key:'text' or a plainobject with at least key:{ type:'text'} definition.  Prop '${key}' will be ignored!`)
           return
         }
         arr.push({ key, value: data[key], schema: schema[key] })

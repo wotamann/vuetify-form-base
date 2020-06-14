@@ -378,13 +378,20 @@ Select Items from an Array in your Model
 [See more under Example 'Group Controls'](https://wotamann.github.io/) 
 
 ---
-**Color - Pickers & Menu**
+**CHANGE - Color - Pickers & Menu**
 ````javascript
   // Color Picker: 
   schema: { ctrl: 'color', ... }
   schema: { ctrl: { type:'color', ...}, ... }
   
-  // Color Menu
+  // Textfield with linked Color Menu
+  color:{ 
+    type:'color', 
+    ext:'text',
+    prependIcon: 'palette', 
+    label:'Color'
+  }    
+  // Color - Native HTML <Input type="color" /> 
   color:{ 
     type:'text', 
     ext:'color',
@@ -394,13 +401,22 @@ Select Items from an Array in your Model
 ````
 [More Informations to Vuetify Color-Pickers find here](https://vuetifyjs.com/en/components/color-pickers/). 
 
-**Date - Pickers & Menu**
+**CHANGE - Date - Pickers & Menu**
 ````javascript
   // Date Picker: 
   schema: { ctrl: 'date', ... }
   schema: { ctrl: { type:'date', ...}, ... }
   
-  // Date Menu
+  // Textfield with linked Date Menu
+  date:{ 
+    type:'date', 
+    ext:'text', 
+    locale:'en',
+    prependIcon: 'event', 
+    label:'Date'
+  }
+  
+  // Date - Native HTML <Input type="date" />
   date:{ 
     type:'text', 
     ext:'date', 
@@ -411,13 +427,22 @@ Select Items from an Array in your Model
 ````	
 [More Informations to Vuetify Date-Pickers find here](https://vuetifyjs.com/en/components/date-pickers/). 
 
-**Time - Pickers & Menu**
+**CHANGE - Time - Pickers & Menu**
 ````javascript
   // Time Picker: 
   schema: { ctrl: 'time', ... }
   schema: { ctrl: { type:'time', ...}, ... }
   
-  // Time Menu
+  // Textfield with linked Time Menu
+  time:{ 
+    type:'time', 
+    ext:'text', 
+    format:'24h',
+    prependIcon: 'timer', 
+    label:'Time'
+  }
+
+  // Time  - Native HTML <Input type="time" />
   time:{ 
     type:'text', 
     ext:'time', 

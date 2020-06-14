@@ -18,9 +18,9 @@
         color="blue lighten-2"
       />
     </v-app-bar>
-    <v-content app >
+    <v-main app >
       <div :is="view" ></div>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
@@ -50,40 +50,41 @@ import list from '@/components/list.vue'
 import pickers from '@/components/pickers.vue'
 import images from '@/components/images.vue'
 import dynamic from '@/components/dynamic-attributes.vue'
+import typehandling from '@/components/type-handling.vue'
 
 const items = [
-  { value: 'selection', text: 'Selection, Combobox, Autocomplete from Schema-Array'}, 
   { value: 'simple', text: 'Textfields' }, 
   { value: 'textfields', text: 'Textfields with HTML Type Attribute' }, 
-  { value: 'emptymodel', text: 'Empty Model Object' }, 
   { value: 'autogenerate', text: 'Missing Schema Definition' }, 
+  { value: 'emptymodel', text: 'Empty Model Object' }, 
   { value: 'basic', text: 'Missing Properties in Model or Schema'}, 
-  { value: 'dynamic', text: 'Dynamic Attributes' }, 
+  { value: 'typehandling', text: `Handling special Schema-Key 'type' occuring in Model-Data `}, 
+  { value: 'dynamic', text: 'Work with Dynamic Attributes Schema, Model and Grid' }, 
   { value: 'grouping', text: 'Group Controls'}, 
-  { value: 'async', text: 'Lazy Loading of Component for Async-Data'}, 
+  { value: 'async', text: 'Async Loading of Form-Base Attributes'}, 
   { value: 'css', text: 'CSS, Slots, Tooltips & Buttons'}, 
   { value: 'dragdrop', text: 'Drag & Drop'}, 
   { value: 'displayhelpers', text: 'Display, Typo & Layout control with Vuetify display helpers'}, 
-  { value: 'deep', text: 'Deep nested Data including Object & Arrays'}, 
+  { value: 'deep', text: 'Deep nested Model-Data including Objects & Arrays'}, 
   { value: 'selection', text: 'Selection, Combobox, Autocomplete from Schema-Array'}, 
   { value: 'selectioncascading', text: 'Cascading Selection using computed Schema-Array'}, 
-  { value: 'list', text: 'List from Value-Array'}, 
-  { value: 'treeview', text: 'Treeviews from Value-Array'}, 
-  { value: 'arrayease', text: 'Edit Value-Array'}, 
-  { value: 'array', text: 'Add, Edit and Drag to Remove Items in nested Value-Array'}, 
-  { value: 'multisourcedata', text: 'Integrate Multi-Source Data by using Formbase in Formbase as Slot'}, 
-  { value: 'pickers', text: 'Date, Time, Color Menu and Pickers'},
+  { value: 'list', text: 'List from Model-Data'}, 
+  { value: 'treeview', text: 'Treeviews from Model-Data'}, 
+  { value: 'arrayease', text: 'Dynamic Array from Model-Data '}, 
+  { value: 'array', text: 'Add, Edit and Drag to Remove Items from Array in Model-Data'}, 
+  { value: 'multisourcedata', text: 'Integrate Multi-Source Data by using Form-Base as Slot in Form-Base'}, 
+  { value: 'pickers', text: 'Date, Time, Color as native HTML-Type, Menu and Pickers'},
   { value: 'images', text: 'Images'},
   { value: 'grid', text: 'Responsive Grid using Flex, Order and Offset'}, 
-  { value: 'partial', text: 'Partial & Linked'}, 
+  { value: 'partial', text: 'Partial & Linked Model-Data Object'}, 
   { value: 'conditional', text: 'Conditional Form'}, 
-  { value: 'complex', text: 'Form with Rules and Validation'}, 
+  { value: 'complex', text: 'Form-Base with Rules and Validation'}, 
 ]
 
 export default {
   components: {
     autogenerate, dynamic, simple, textfields, emptymodel, basic, grouping, async, grid, dragdrop, css, displayhelpers, deep, partial, multisourcedata, 
-    complex, treeview, arrayease, array, selection, selectioncascading, conditional, list, pickers, images
+    complex, treeview, arrayease, array, selection, selectioncascading, conditional, list, pickers, images, typehandling 
   },
   data () {
     return {

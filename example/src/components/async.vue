@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Lazy Component and async loading of Model, Schema and Grid</h4>
+    <h4>Async loading of Model, Schema and Grid</h4>
 
     <!-- FORM-BASE-COMPONENT -->    
     <v-form-base 
@@ -56,8 +56,6 @@ export default {
     // # STEP 2c) Async Loading of Grid
     this.col = await this.delay({
       cols:12, 
-      sm:6, 
-      md:4,
     })
   },
 

@@ -21,17 +21,12 @@
 <template>
   <v-container fluid>
     <h4>Play around and resize with predefined CSS, Buttons, Icons, Slots and individual Tooltips</h4>
-    <v-row>
-      <v-col cols="auto">
-        <v-slider :value=44 ></v-slider>
-      </v-col>
-    </v-row>
+    
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       id="form-base-css"
       :value="myValue"
       :schema="mySchema"
-      :col=12
       @change:form-base-css="log"
     >
       <!-- FORM SLOT -->
@@ -106,12 +101,17 @@ export default {
         controls: {
           checkbox: true,
           switch: true,
+          
           slider: 33,
+          
           btnToggleSingle: ['B'],
           btnToggleMulti: 1,          
-          btn: 'A', // ident with schema { label:'A', ... }
+          
+          btn: 'A', // is ident to schema { label:'A', ... }
+          
           // iconLabel: 'ignored',
           iconValue: 'print',
+          
           radio: 'A',
         }
       },
@@ -122,6 +122,8 @@ export default {
         controls: {
           checkbox: { type: 'checkbox', label: 'CSS-Red', color: 'red', col: 4, tooltip: 'Checkbox' },
           switch: { type: 'switch', label: 'CSS-Green', color: 'green', col: 4, tooltip: 'Switch' },
+          
+          // v-slider doesn't work with col { cols='auto' }
           slider: { type: 'slider', label: 'CSS-Blue', color: 'blue', col: 4, tooltip: 'Slider' },
 
           btnToggleSingle: { type: 'btn-toggle', options, color:'red', multiple: true, tooltip: 'Multiple Button', col: 6 },
