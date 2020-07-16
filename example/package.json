@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "css-loader": "^3.5.3",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "sass-loader": "^7.3.1",
     "stylus-loader": "^3.0.2",
     "vue": "^2.6.11",
