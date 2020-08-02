@@ -1,18 +1,12 @@
 <template>
   <v-container fluid>
-    <h4>Vuetify display helpers, allow to control the  
-      <a target="_blank" href="https://vuetifyjs.com/en/styles/display">display</a>
-      or 
-      <a target="_blank" href="https://vuetifyjs.com/en/styles/typography">typography</a>
-      or
-      <a target="_blank" href="https://vuetifyjs.com/en/styles/spacing">spacing</a>
-      of content
-    </h4>
+    <h4>Modify in-/outgoing Data going to or coming from Control</h4>
 
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       :value="myValue"
       :schema="mySchema"
+      :col=4
       @input="log"
     />
     
@@ -30,8 +24,9 @@ import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
 import log from '@/lib'
 
+// ( { value, obj, data, schema } )  => value
 const toUpper = ( {value} ) => typeof value === 'string' ? value.toUpperCase() : value 
-const toReverse = ( {value} ) => typeof value === 'string' ? value.split("").reverse().join("") : value 
+const toLower = ( {value} ) => typeof value === 'string' ? value.toLowerCase() : value 
 
 export default {
   name: 'DisplayHelpers',
@@ -39,13 +34,15 @@ export default {
   data () {
     return {
       myValue: {
-        name1: 'manipulate value and display',
-        name2: 'manipulate input to value',
+        name1: 'UPPER',
+        name2: 'lower',
+        joined:''
       
       },
       mySchema: {
-        name1: { type: 'text', toCtrl: toUpper, fromCtrl: toUpper, label:'Value To Control' },
-        name2: { type: 'text', fromCtrl: toReverse, label:'Control To Value' },
+        name1: { type: 'text',  toCtrl: toUpper, fromCtrl: toUpper, label:'toUpper' },
+        name2: { type: 'text', toCtrl: toLower, fromCtrl: toLower, label:'toLower' },
+        joined: { type: 'text', toCtrl: ( {data} ) => {data.joined = data.name1 + ' | ' + data.name2; return data.joined}, disabled:true,  label:'Joined' },
       }
     }
   },

@@ -57,3 +57,5 @@ schema {
 0.1.20
 implement dynamic change of attributes model, schema and grid
 bug fix error using v-file-input  
+
+0.1.21

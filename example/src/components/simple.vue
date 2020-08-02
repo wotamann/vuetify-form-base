@@ -93,6 +93,8 @@ export default {
         file: { 
           type: 'file', 
           label: 'Images', 
+          showSize:true,
+          counter:true,
           accept, 
           multiple: true,
         }

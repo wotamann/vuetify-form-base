@@ -1,10 +1,14 @@
 {
   "name": "vuetify-form-base",
   "version": "0.1.22",
-  "description": "Form-Generator is Vue-Component using Vuetify 2.0, responsive Design, Grid",
+  "description": "Form-Generator as Vue-Component using Vuetify 2.0",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"No test specified\""
+  "module": "dist/vFormBase.umd.min.js",
+  "unpkg": "dist/vFormBase.umd.min.js",
+  "scripts": {},
+  "dependencies": {
+    "lodash": "^4.17.19",
+    "vue-the-mask": "^0.11.1"
   },
   "repository": {
     "type": "git",
@@ -14,11 +18,14 @@
     "vue",
     "vue 2.0",
     "vuetify",
-    "formular",
+    "form",
     "generator",
     "json",
     "schema",
+    "model",
+    "date",
     "responsive",
+    "grid",
     "reactive",
     "select",
     "multiselect",
@@ -30,8 +37,5 @@
   "bugs": {
     "url": "https://github.com/wotamann/vuetify-form-base/issues"
   },
-  "homepage": "https://github.com/wotamann/vuetify-form-base#readme",
-  "dependencies": {
-    "vue-the-mask": "^0.11.1"
-  }
+  "homepage": "https://github.com/wotamann/vuetify-form-base#readme"
 }

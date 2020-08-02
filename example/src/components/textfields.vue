@@ -58,7 +58,7 @@ export default {
       myModel: {
         password: 'abcdefgh',
         count:100,
-        range:33,
+        range:50,
         color:'#6666FF',
         time:'01:15',
         date:'2020-02-25',

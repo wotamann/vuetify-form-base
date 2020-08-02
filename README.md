@@ -1228,6 +1228,10 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 
 ---
 ## CHANGE
+#### Version 0.1.23
+- custom components see customcomponent example
+- in Slots is Control-Object with key, value and schema available
+- https://unpkg.com/  available
 
 #### Version 0.1.18
 - bug fix group | 

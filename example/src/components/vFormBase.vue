@@ -32,14 +32,15 @@
             @drop= "drop($event, obj)"
           >           
             <!-- slot on top of type  -> <div slot="slot-bottom-type-[propertyName]"> -->
-            <slot :name="getTypeTopSlot(obj)" />
+            <slot :name="getTypeTopSlot(obj)" :obj= "obj"/>
             <!-- slot on top of key  -> <v-btn slot="slot-bottom-key-[propertyName]"> -->
-            <slot :name="getKeyTopSlot(obj)" />
+            <slot :name="getKeyTopSlot(obj)" :obj= "obj"/>
+            
             <!-- slot replaces complete item of defined TYPE -> <v-btn slot="slot-item-type-[propertyName]">-->
-            <slot :name="getTypeItemSlot(obj)">
+            <slot :name="getTypeItemSlot(obj)" :obj= "obj">
               <!-- slot replaces complete item of defined KEY -> <div slot="slot-item-key-[propertyName]">-->
-              <slot :name="getKeyItemSlot(obj)">
-                
+              <slot :name="getKeyItemSlot(obj)" :obj= "obj" >
+
               <!-- RADIO -->
                 <v-radio-group
                   v-if="obj.schema.type === 'radio'"
@@ -300,6 +301,7 @@
                   v-bind="bindSchema(obj)"
                   :type="checkExtensionType(obj)"                  
                   :value="setValue(obj)"
+                  :obj="obj"
                   @focus="onEvent($event, obj)"
                   @blur="onEvent($event, obj)"
                   @click:append="onEvent($event, obj, append)"
@@ -318,8 +320,8 @@
             </slot>
 
             <!-- slot at bottom of item  -> <div slot="slot-bottom-key-[deep-nested-key-name]"> -->
-            <slot :name="getTypeBottomSlot(obj)" />
-            <slot :name="getKeyBottomSlot(obj)" />
+            <slot :name="getTypeBottomSlot(obj)" :obj="obj"/>
+            <slot :name="getKeyBottomSlot(obj)" :obj="obj"/>
           </v-col>
 
           <!-- schema.spacer:true - push next item to the right and fill space between items -->
@@ -329,10 +331,7 @@
           />
         </template>
         <!-- slot for TOOLTIP - inspect css.vue for details -->
-        <slot
-          name="slot-tooltip"
-          :obj="obj"
-        >
+        <slot name="slot-tooltip" :obj="obj">
           <span>{{getShorthandTooltipLabel(obj.schema.tooltip)}}</span>
         </slot>
       </v-tooltip>
@@ -344,11 +343,11 @@
 
 <script>
 // import & declarations
+  import Vue from 'vue'
   import { get, isPlainObject, isFunction, isString, isNumber, isEmpty, orderBy, delay } from 'lodash'
   import { mask } from 'vue-the-mask'
   
   const typeToComponent = {
-    // map schema.type to type in v-text-field  - https://www.wufoo.com/html5/
     text: 'v-text-field',
     password: 'v-text-field',
     email: 'v-text-field',
@@ -357,15 +356,17 @@
     search: 'v-text-field',
     number: 'v-text-field', 
     
+    // map schema.type to type in v-text-field  - https://www.wufoo.com/html5/
     // For native <INPUT> type use alternative schema prop ext  -> schema:{ type:'text, ext:'date', ...} 
     // range: 'v-text-field',   //  { type:'text, ext:'range', ...}    
     // date: 'v-text-field',    //  { type:'text, ext:'date', ...}       
     // time: 'v-text-field',    //  { type:'text, ext:'time', ...}      
     // color: 'v-text-field',   //  { type:'text, ext:'color', ...}      
     
-    // INFO: 2 Types of DATE / TIME / COLOR
-    // Date-Input         - schema:{ type:'text, ext:'date', ...}       
-    // Date-Picker        - schema:{ type:'date', ...}         
+    // INFO: 3 Types of DATE / TIME / COLOR
+    // Date-Input           - schema:{ type:'text, ext:'date', ...}       
+    // Date-Picker          - schema:{ type:'date', ...}         
+    // Date-Picker-Text     - schema:{ type:'date', ext:'text'...}         
 
     // map schema.type to vuetify-control (vuetify 2.0)
     date: 'v-date-picker',   
@@ -377,8 +378,40 @@
     file: 'v-file-input',
     switch: 'v-switch',
     checkbox: 'v-checkbox',
-    card: 'v-card',
+    card: 'v-card'
+    /*
+      HOW TO USE CUSTOM Components
+      1)  
+        Name and Register your Custom-Control Component globally in 'main.js' 
+        but avoid collision with registered names of Vuetify - Controls 
+        See: https://vuejs.org/v2/guide/components-registration.html
+   
+        Vue.component('custom-component', () => import('@/components/custom-component.vue') )
+    
+      2)  
+        use it in Schema 
 
+        mySchema: { myCustom: { type: 'custom-component' }
+
+      3)  
+        <template>
+          <v-text-field v-model="inp"  label="Basic"></v-text-field>
+        </template>
+        <script>
+          export default {
+            props: ['type','value', 'obj'],  
+            computed:{
+              inp:{
+                get(){  return this.value},
+                set(v){ this.$emit('input', v)}
+              }
+            }  
+          }
+        < /script>    
+    */
+    
+    
+    
     }
   // Declaration
   const orderDirection = 'ASC'
@@ -411,8 +444,6 @@
   const prepend = 'prepend'
   const prependInner = 'prepend-inner'
 
-  // name of Type wich will be used for grouping controls
-  const groupingType ='group'
   // symbol on drop
   const dropEffect = 'move'  // 'copy, link, move      
   // Default row setting if no row-attribute defined  
@@ -432,7 +463,7 @@ export default {
   name: 'VFormBase',
   // Info Mask https://vuejs-tips.github.io/vue-the-mask/
   directives: { mask },
-  props: {
+  props: {    
     id: {
       type: String,
       default: defaultID
@@ -458,7 +489,7 @@ export default {
       type: [Object, Array],
       default: () => ({}),
     },
-   },
+  },
   data () {
     return {    
       flatCombinedArray: [],
@@ -490,9 +521,11 @@ export default {
     },
     parent () {
       let p = this
-      while (p.id.startsWith(p.$parent.$parent.id + '-')) {
-        p = p.$parent.$parent
-      }
+      if (p.$parent && p.$parent.$parent) {
+        while (p.id.startsWith(p.$parent.$parent.id + '-')) {
+          p = p.$parent.$parent
+        }
+       }
       return p
     },
     index () {
@@ -512,13 +545,16 @@ export default {
     storeStateSchema () {
       this.updateArrayFromState(this.valueIntern, this.schema)
       return this.schema
-    }
+    }    
   },  
-  methods: {     
+  methods: {
     // MAP TYPE
     mapTypeToComponent(type) {
+      // get all global registered components and merge them into typeToComponent Object
+      const allTypeComponents = { ...typeToComponent, ...Vue.options.components}
+      // console.warn('####',JSON.stringify(allTypeComponents));
       // map ie. schema:{ type:'password', ... } to specific vuetify-control or default to v-text-field'
-      return typeToComponent[type] ? typeToComponent[type] : `v-${type}`
+      return allTypeComponents[type] ? allTypeComponents[type] : `v-${type}`
     },
     // CHECK FOR TYPE: DATE, TIME OR COLOR and EXT: TEXT
     isDateTimeColorTypeAndExtensionText(obj){
@@ -769,7 +805,7 @@ export default {
     onInput (value, obj, type = 'input' ) {
       // Value after change in Control
       value = this.fromCtrl({ value, obj, data: this.storeStateData, schema: this.storeStateSchema })
-      // harmonize undefined or empty strings => null, because clearable resets to null and not to empty string!
+      // harmonize undefined or empty strings => null, because 'clearable' in vuetify controls resets to null and not to empty string!
       value = !value || value === '' ? null : value
       // if schema type is number convert to number 
       value = obj.schema.type === 'number' ? Number(value) : value
@@ -788,7 +824,6 @@ export default {
         schema: this.storeStateSchema
       }
       this.emitValue(type, emitObj)
-     
       return emitObj
     },      
     onEvent (event, obj, tag) {
@@ -831,12 +866,11 @@ export default {
   //
   // Emit Event Base
     emitValue (emit, val) {
-
       this.parent.$emit(this.getEventName(emit), val) // listen to specific event only
-      if (change.indexOf(emit) > -1) this.parent.$emit(this.getEventName('change'), val) // listen only to 'input|click'
-      if (watch.indexOf(emit) > -1) this.parent.$emit(this.getEventName('watch'), val) // listen to 'focus|input|click|blur'
-      if (mouse.indexOf(emit) > -1) this.parent.$emit(this.getEventName('mouse'), val) // listen to 'mouseenter|mouseleave  '
-      if (display.indexOf(emit) > -1) this.parent.$emit(this.getEventName('display'), val) // listen to 'resize|swipe|intersect'
+      if (change.indexOf(emit) > -1) this.parent.$emit(this.getEventName('change'), val)    // listen to 'input|click'
+      if (watch.indexOf(emit) > -1) this.parent.$emit(this.getEventName('watch'), val)      // listen to 'focus|input|click|blur'
+      if (mouse.indexOf(emit) > -1) this.parent.$emit(this.getEventName('mouse'), val)      // listen to 'mouseenter|mouseleave  '
+      if (display.indexOf(emit) > -1) this.parent.$emit(this.getEventName('display'), val)  // listen to 'resize|swipe|intersect'
       this.parent.$emit(this.getEventName('update'), val) // listen to all events
     },
     getEventName (eventName) {
@@ -923,7 +957,7 @@ export default {
     },
     rebuildArrays(model, schema){
       // break if no model found, but don't break if model is empty object (can filled by editing)
-      if (!model) throw `No 'model' definition found. Use '<formbase :model="myData" />' `
+      if (!model) throw `No 'model' definition found. Use '<v-form-base :model="myData" :schema="mySchema" />' `
       // no schema defined or empty -> autogenerate basic schema
       if (isEmpty(schema)) this.autogenerateSchema(model)
       // create flatted working array from schema and value    

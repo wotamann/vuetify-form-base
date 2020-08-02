@@ -4,20 +4,28 @@
   "private": true,
   "description": "Form Generator as Vue component based on Vuetify",
   "author": "wotamann@github",
+  
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "npm run build:vue & npm run build:cli & npm run copy",
+    "build:vue": "vue-cli-service build --dest ../dist/app",
+    "build:cli": "vue-cli-service build --dest ../dist/build --target lib --name vFormBase ./src/components/vFormBase.vue",
+    "build:wc": "vue-cli-service build --dest ../dist/wc --target lib --name v-form-base ./src/components/vFormBase.vue",
+    "copy": "node ./scripts/copy.js",
     "test": "echo \"No test specified\"",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vue/compiler-sfc": "^3.0.0-rc.5",
     "css-loader": "^3.5.3",
-    "lodash": "^4.17.13",
-    "sass-loader": "^7.3.1",
+    "lodash": "^4.17.19",
+    "rollup": "^2.23.0",
+    "rollup-plugin-vue": "^6.0.0-beta.10",
+    "sass-loader": "^9.0.2",
     "stylus-loader": "^3.0.2",
     "vue": "^2.6.11",
     "vue-the-mask": "^0.11.1",
-    "vuetify": "^2.3"
+    "vuetify": "^2.3.4"
   },
   "devDependencies": {
     "@mdi/font": "^4.9.95",

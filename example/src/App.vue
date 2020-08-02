@@ -51,10 +51,13 @@ import pickers from '@/components/pickers.vue'
 import images from '@/components/images.vue'
 import dynamic from '@/components/dynamicattributes.vue'
 import typehandling from '@/components/typehandling.vue'
+import toctrfunction from '@/components/tocontrolfunction.vue'
+import customcomponentdemo from '@/components/customcomponentdemo.vue'
 
 const items = [
   { value: 'simple', text: 'Textfields' }, 
   { value: 'textfields', text: 'Textfields with HTML Type Attribute' }, 
+  { value: 'customcomponentdemo', text: 'Use Component as Custom Control' }, 
   { value: 'autogenerate', text: 'Missing Schema Definition' }, 
   { value: 'emptymodel', text: 'Empty Model Object' }, 
   { value: 'basic', text: 'Missing Properties in Model or Schema'}, 
@@ -64,6 +67,7 @@ const items = [
   { value: 'async', text: 'Async Loading of Form-Base Attributes'}, 
   { value: 'css', text: 'CSS, Slots, Tooltips & Buttons'}, 
   { value: 'dragdrop', text: 'Drag & Drop'}, 
+  // { value: 'toctrfunction', text: 'Manipulate Data incoming/outgoing to Control' }, 
   { value: 'displayhelpers', text: 'Display, Typo & Layout control with Vuetify display helpers'}, 
   { value: 'deep', text: 'Deep nested Model-Data including Objects & Arrays'}, 
   { value: 'selection', text: 'Selection, Combobox, Autocomplete from Schema-Array'}, 
@@ -84,7 +88,7 @@ const items = [
 export default {
   components: {
     autogenerate, dynamic, simple, textfields, emptymodel, basic, grouping, async, grid, dragdrop, css, displayhelpers, deep, partial, multisourcedata, 
-    complex, treeview, arrayease, array, selection, selectioncascading, conditional, list, pickers, images, typehandling 
+    complex, treeview, arrayease, array, selection, selectioncascading, conditional, list, pickers, images, typehandling, toctrfunction, customcomponentdemo 
   },
   data () {
     return {

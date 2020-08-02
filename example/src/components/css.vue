@@ -15,7 +15,7 @@
 
   /* CSS Keys --- set item with key on focus' */
   #form-base-css .key-email input { background-color: #cad7f077; color:#1951bb77 }
-  #form-base-css .key-email input:focus { background-color: #2761cc77; color:#FFF }
+  #form-base-css .key-email input:focus { background-color: #1951bb77; color:#FFF }
 </style>
 
 <template>
@@ -30,43 +30,55 @@
       @change:form-base-css="log"
     >
       <!-- FORM SLOT -->
-      <h4 slot="form-base-css-top" class="slot">
-        Top Slot of 'Form'
-      </h4>
-      <h4 slot="form-base-css-bottom" class="slot">
-        Bottom Slot of 'Form'
-      </h4>  
+      <template #form-base-css-top>
+        <h4 class="slot">
+          Top Slot of 'Form'
+        </h4>
+      </template>
+      <template #form-base-css-bottom>
+        <h4 class="slot">
+          Bottom Slot of 'Form'
+        </h4>  
+      </template>
+      
       <!-- KEY SLOTS -->
-      <h4 slot="slot-top-key-name" class="slot">
-        Slot at Top of Key 'Name'
-      </h4>
-      <h4 slot="slot-item-key-password" class="slot">
-        Slot replaces Key 'Password'
-      </h4>
-      <h4 slot="slot-bottom-key-email" class="slot">
-        Slot at Bottom of Key 'Email'
-      </h4>
+      <template #slot-top-key-name="{obj}">
+        <h4 class="slot">
+          Slot at Top of Key 'Name' - {{obj.value}}
+        </h4>
+      </template>
+      <template #slot-item-key-password="{obj}">
+        <div class="slot caption">
+          Slot replaces Key 'Password'<hr/>Object:<br/>{{obj}}
+        </div>
+      </template>
+      <template #slot-bottom-key-email="{obj}">
+        <h4 class="slot">
+          Slot at Bottom of Key 'Email' - {{obj.value}}
+        </h4>
+      </template>
+
       <!-- TYPE SLOTS -->
-      <h4 slot="slot-top-type-btn-toggle" class="slot">
-        Slot at Top of Type 'Btn-Toggle'
-      </h4>
-      <h4 slot="slot-bottom-type-btn" class="slot">
-        Slot at Bottom of Type 'Btn'
-      </h4>
-      <h4 slot="slot-top-type-radio" class="slot">
-        Slot at Top of Type 'Radio'
-      </h4>
-      <!-- TOOLTIP SLOTS -->
-      <div
-        slot="slot-tooltip"
-        slot-scope="slotProps"
-      >
-        Tooltip-Slot: {{ slotProps.obj.schema.tooltip }} has value '{{ slotProps.obj.value || 'undefined' }}'
-      </div>
+      <template #slot-top-type-btn-toggle="{obj}">
+        <h4 class="slot">
+          Slot at Top of Type 'Btn-Toggle' - {{obj.value}}
+        </h4>
+      </template>
+      <template #slot-bottom-type-btn="{obj}">
+        <h4 class="slot">
+          Slot at Bottom of Type 'Btn' - {{obj.value}}
+        </h4>
+      </template>
+      <template #slot-top-type-radio="{obj}">
+        <h4 class="slot">
+          Slot at Top of Type 'Radio' - {{obj.value}}
+        </h4>
+      </template>
+     
       <!-- TOOLTIP SLOT -  New Syntax VUE 2.6.0 -->
-      <!-- <template v-slot:slot-tooltip="slotProps">
-         {{ slotProps.obj.schema.tooltip }} with Value: {{ slotProps.obj.value }}
-      </template> -->
+      <template #slot-tooltip="{obj}">
+         {{ obj.schema.tooltip }} with Value: {{ obj.value }}
+      </template>
     </v-form-base>
 
     <!-- Stuff   -->

@@ -41,7 +41,8 @@ export default {
   methods: {
     replacer (key, value) {
       if (typeof value === 'function') {
-        return 'Function' // value.toString() 
+        // return  value.toString() 
+        return 'Function' 
       }
       if (Array.isArray(value) && value[0] instanceof File) {
         return value.map(i => fileObjectToString(i) )
