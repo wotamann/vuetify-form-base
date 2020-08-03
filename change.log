@@ -1,12 +1,11 @@
-Version 0.1.4 - 21.08.2019
-Please Update to Vuetify > 2.0 
+0.1.3
+- control type 'list' and 'array' added
 
-NEW
-added FileInput     { type:'file', ... } 
-added Time Picker   { type:'time', ... }
-added Date Picker   { type:'date', ... }
-added Color Picker  { type:'color', ... }
-added Button Toggle (Group) { type:'btn-toggle', ... }
+0.1.4 - 21.08.2019
+- Please Update to Vuetify > 2.0 
+- File Input added (type:'file')
+- Pickers for Color, Date and Time added/adapted (type:'color|date|time')   
+- added Button Toggle (Group) { type:'btn-toggle', ... }
 
 NEW CSS class for PROPS 
   value:{ num: { int: { one:1 } } }  ->  .prop-num  .prop-int  .prop-one   
@@ -16,23 +15,36 @@ CSS class for KEY
 NEW Change Event will listen only to input & click 
     Update Event will listen to input, click, focus, resize, swipe 
 
-NEW
-added Mouseenter, -over, -leave event 
-added Tooltip Support  ( schema:{ ..., tooltip: 'myTooltip' } )  or use <div slot="slot-tooltip" >
+0.1.5
+- Event 'blur' available  
 
-NEW 
-Change Event will listen only to input & click 
-Watch Event will listen to focus, input, click, blur
-Mouse Event will listen to mouseenter, mouseleave
-Display will listen to resize, swipe, intersect 
-Update will listen to all events 
+0.1.6
+- added Mouseenter, -over, -leave event 
+- added Tooltip Support  ( schema:{ ..., tooltip: 'myTooltip' } )  or use <div slot="slot-tooltip" >
+Events
+- Change Event will listen only to input & click 
+- Watch Event will listen to focus, input, click, blur
+- Mouse Event will listen to mouseenter, mouseleave
+- Display will listen to resize, swipe, intersect 
+- Update will listen to all events 
+
+0.1.9
+- added support for v-img | { type:'img'}   
+
+0.1.11
+- added support for grouping some control  | { type:'group', ...}   
 
 0.1.16
-added new property 'flex' for setting default grid behaviour
+-added new property 'flex' for setting default grid behaviour
   <v-form-base :flex="{xs:12,sm:6}" .... />
   <v-form-base flex="12" .... />  ident with  xs:12
+- added Icon     { type:'icon' [,label:'print'] ... }  // icon: try label or if undefined use value
 
-added Icon     { type:'icon' [,label:'print'] ... }  // icon: try label or if undefined use value
+0.1.17
+- fixed known problem of splicing arrays in v-for and index key   
+- new Type { type:'text', ext:'date' }  gives you access to Datepicker linked to textfield 
+- new Type { type:'text', ext:'time' }  gives you access to Timepicker linked to textfield 
+- new Type { type:'text', ext:'color' }  gives you access to Colorpicker linked to textfield 
 
 0.1.18
 BUG GROUP FIXED  
@@ -58,4 +70,7 @@ schema {
 implement dynamic change of attributes model, schema and grid
 bug fix error using v-file-input  
 
-0.1.21
+0.1.22 - 2.8.2020
+- custom components added. See custom component example
+- in Slots current control data-object (key, value and schema) available
+- https://unpkg.com/  available

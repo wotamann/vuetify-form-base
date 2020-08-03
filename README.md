@@ -1217,9 +1217,11 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 
 * Vue-Component
 * integrates UI framework Vuetify 2.0 with responsive Layout and Support of Grid
-* Use a lot of Vuetify Control & Input types inclusive most of available API-Props
+* Use Vuetify Control & Input types inclusive most of available API-Props
+* Define and use custom Components
 * Get full configurable Forms based on Schema Definition
-* Full control over Grid 
+* Full control over Grid
+* Drag and Drop Integration 
 * Edit plain or deep nested objects including Arrays, without the need to flatten your data
 * Get a full, reactive Result
 * Listen on 'Resize', 'Focus', 'Input', 'Blur', 'Click', 'Swipe', 'Intersect', 'Mouse' and 'Update' Events
@@ -1228,48 +1230,8 @@ Customize your **vuetify-form-base** component using CSS-Classnames
 
 ---
 ## CHANGE
-#### Version 0.1.23
-- custom components see customcomponent example
-- in Slots is Control-Object with key, value and schema available
-- https://unpkg.com/  available
 
-#### Version 0.1.18
-- bug fix group | 
-- BREAKING: New grouping TYPE is { type:'group' }  instead of { type:'card' }    
-
-#### Version 0.1.17
-- fixed known  problem of splicing arrays in v-for and index key   
-- new Type { type:'text', ext:'date' }  gives you access to Datepicker linked to textfield 
-- new Type { type:'text', ext:'time' }  gives you access to Timepicker linked to textfield 
-- new Type { type:'text', ext:'color' }  gives you access to Colorpicker linked to textfield 
-
-#### Version 0.1.11
-- added support for grouping some control  | { type:'group', ...}   
-
-#### Version 0.1.9
-- added support for v-img | { type:'img'}   
-
-#### Version 0.1.8
-- Revision of example, 
-- bug fixed with tooltip in array   
-
-#### Version 0.1.8
-- tooltip Slots added
-
-#### Version 0.1.6
-- tooltip added
-
-#### Version 0.1.5
-- Event 'blur' available  
-
-#### Version 0.1.4
-
-- File Input added (type:'file')
-- Pickers for Color, Date and Time added/adapted (type:'color|date|time')   
-
-#### Version 0.1.3
-
-- control type 'list' and 'array' added
+ See change.log File
 
 ---
 ## Dependencies
