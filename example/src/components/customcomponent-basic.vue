@@ -1,7 +1,7 @@
 
 <template>
   <div class="ma-3 pa-4 grey lighten-3 caption">
-    <h4>Custom Control Basic</h4>
+    <h4>{{obj.schema.label}}</h4>
     <v-text-field v-model="inp"  label="Basic"></v-text-field>
     <br>
       type: {{type}}

@@ -48,8 +48,8 @@ export default {
       },
       mySchema: {
         name: { type: 'text', label: 'Name' },
-        custom1: { type: 'custom-basic' },
-        custom2: { type: 'custom-object' },
+        custom1: { type: 'custom-basic', label:'Component - Basic' },
+        custom2: { type: 'custom-object', label:'Component - Object' },
       }
     }
   },
