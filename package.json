@@ -3,8 +3,8 @@
   "version": "0.2.2",
   "description": "Form-Generator as Vue-Component using Vuetify 2.0",
   "main": "index.js",
-  "module": "dist/vFormBase.umd.min.js",
-  "unpkg": "dist/vFormBase.umd.min.js",
+  "module": "dist/build/vFormBase.umd.min.js",
+  "unpkg": "dist/build/vFormBase.umd.min.js",
   "scripts": {},
   "dependencies": {
     "lodash": "^4.17.19",

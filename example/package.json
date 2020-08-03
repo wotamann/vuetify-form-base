@@ -9,7 +9,7 @@
     "serve": "vue-cli-service serve",
     "build": "npm run build:vue & npm run build:cli & npm run copy",
     "build:vue": "vue-cli-service build --dest ../dist/app",
-    "build:cli": "vue-cli-service build --dest ../dist/build --target lib --name vFormBase ./src/components/vFormBase.vue",
+    "build:cli": "vue-cli-service build --dest ../umd --target lib --name vFormBase ./src/components/vFormBase.vue",
     "build:wc": "vue-cli-service build --dest ../dist/wc --target lib --name v-form-base ./src/components/vFormBase.vue",
     "copy": "node ./scripts/copy.js",
     "test": "echo \"No test specified\"",
