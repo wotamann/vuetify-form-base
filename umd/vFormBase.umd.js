@@ -20478,16 +20478,16 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"15343318-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/vFormBase.vue?vue&type=template&id=1f839a4b&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"15343318-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/vFormBase.vue?vue&type=template&id=3cb66dcf&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-row',_vm._b({directives:[{name:"resize",rawName:"v-resize.quiet",value:(_vm.onResize),expression:"onResize",modifiers:{"quiet":true}}],attrs:{"id":_vm.ref}},'v-row',_vm.getRow,false),[_vm._t(_vm.getFormTopSlot()),_vm._l((_vm.flatCombinedArraySorted),function(obj,index){return [_c('v-tooltip',_vm._b({key:index,attrs:{"disabled":!obj.schema.tooltip},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
 var on = ref.on;
 return [_c('v-col',_vm._g(_vm._b({directives:[{name:"show",rawName:"v-show",value:(!obj.schema.hidden),expression:"!obj.schema.hidden"},{name:"intersect",rawName:"v-intersect",value:(function (entries, observer) { return _vm.onIntersect(entries, observer, obj); }),expression:"(entries, observer) => onIntersect(entries, observer, obj)"},{name:"touch",rawName:"v-touch",value:({ left: function () { return _vm.onSwipe('left', obj); }, right: function () { return _vm.onSwipe('right', obj); }, up: function () { return _vm.onSwipe('up', obj); }, down: function () { return _vm.onSwipe('down', obj); } }),expression:"{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"}],key:index,class:_vm.getClassName(obj),attrs:{"draggable":obj.schema.drag},on:{"mouseenter":function($event){return _vm.onEvent($event, obj)},"mouseleave":function($event){return _vm.onEvent($event, obj)},"dragstart":function($event){return _vm.dragstart($event, obj)},"dragover":function($event){return _vm.dragover($event, obj)},"drop":function($event){return _vm.drop($event, obj)}}},'v-col',_vm.getGridAttributes(obj),false),on),[_vm._t(_vm.getTypeTopSlot(obj),null,{"obj":obj}),_vm._t(_vm.getKeyTopSlot(obj),null,{"obj":obj}),_vm._t(_vm.getTypeItemSlot(obj),[_vm._t(_vm.getKeyItemSlot(obj),[(obj.schema.type === 'radio')?_c('v-radio-group',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'v-radio-group',_vm.bindSchema(obj),false),_vm._l((obj.schema.options),function(o,idx){return _c('v-radio',_vm._b({key:idx,attrs:{"label":_vm.sanitizeOptions(o).label,"value":_vm.sanitizeOptions(o).value}},'v-radio',_vm.bindSchema(obj),false))}),1):(_vm.isDateTimeColorTypeAndExtensionText(obj))?_c('v-menu',{attrs:{"close-on-content-click":false,"transition":"scale-transition","offset-y":"","nudge-right":32,"max-width":"290px","min-width":"290px"},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
 var on = ref.on;
-return [_c('v-text-field',_vm._g(_vm._b({attrs:{"type":"text","readonly":"","value":_vm.setValue(obj)}},'v-text-field',_vm.bindSchema(obj),false),on))]}}],null,true)},[_c(_vm.mapTypeToComponent( obj.schema.type ),_vm._b({tag:"div",attrs:{"value":_vm.setValue(obj)},on:{"input":function($event){return _vm.onInput($event, obj)}}},'div',_vm.bindSchema(obj),false))],1):(obj.schema.type === 'array')?_vm._l((_vm.setValue(obj)),function(item,idx){return _c('div',_vm._b({key:_vm.getKeyForArray(obj, item, idx),attrs:{"value":_vm.setValue(obj)}},'div',_vm.bindSchema(obj),false),[_vm._t(_vm.getKeyArraySlot(obj),[_c('v-form-base',{class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key) + "-" + idx),"value":item,"schema":obj.schema.schema}})],{"item":item})],2)}):(obj.schema.type === 'group')?[_c('div',_vm._b({on:{"click":function($event){return _vm.onEvent($event, obj)}}},'div',_vm.bindSchema(obj),false),[_c('div',{domProps:{"innerHTML":_vm._s(obj.schema.label)}}),_c('v-form-base',{attrs:{"id":(_vm.id + "-" + (obj.key)),"value":_vm.setValue(obj),"schema":obj.schema.schema}})],1)]:(obj.schema.type === _vm.treeview)?_c('v-treeview',_vm._b({attrs:{"items":_vm.setValue(obj),"active":obj.schema.model,"open":obj.schema.open},on:{"update:active":[function($event){return _vm.$set(obj.schema, "model", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'selected' )}],"update:open":[function($event){return _vm.$set(obj.schema, "open", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'open' )}]},model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-treeview',_vm.bindSchema(obj),false)):(obj.schema.type === _vm.list)?[(obj.schema.label)?_c('v-toolbar',_vm._b({attrs:{"dark":""}},'v-toolbar',_vm.bindSchema(obj),false),[_c('v-toolbar-title',[_vm._v(_vm._s(obj.schema.label))])],1):_vm._e(),_c('v-list',[_c('v-list-item-group',_vm._b({attrs:{"light":""},model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-list-item-group',_vm.bindSchema(obj),false),_vm._l((_vm.setValue(obj)),function(item,idx){return _c('v-list-item',{key:idx,on:{"click":function($event){return _vm.onEvent($event, obj, _vm.list )}}},[_c('v-list-item-icon',[_c('v-icon',{domProps:{"textContent":_vm._s(obj.schema.icon)}})],1),_c('v-list-item-content',[_c('v-list-item-title',{domProps:{"textContent":_vm._s(obj.schema.item ? item[obj.schema.item] : item)}})],1)],1)}),1)],1)]:(obj.schema.type === 'switch' || obj.schema.type === 'checkbox')?_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b({tag:"div",attrs:{"input-value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'div',_vm.bindSchema(obj),false)):(obj.schema.type === 'file' )?_c('v-file-input',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"change":function($event){return _vm.onInput($event, obj)}}},'v-file-input',_vm.bindSchema(obj),false)):(obj.schema.type === 'icon')?_c('v-icon',_vm._b({domProps:{"textContent":_vm._s(_vm.getIconValue(obj))},on:{"click":function($event){return _vm.onEvent($event, obj)}}},'v-icon',_vm.bindSchema(obj),false)):(obj.schema.type === 'slider')?_c('v-slider',_vm._b({on:{"input":function($event){return _vm.onInput($event, obj)}}},'v-slider',_vm.bindSchema(obj),false)):(obj.schema.type === 'img')?_c('v-img',_vm._b({attrs:{"src":_vm.getImageSource(obj)},on:{"click":function($event){return _vm.onEvent($event, obj)}}},'v-img',_vm.bindSchema(obj),false)):(obj.schema.type === 'btn-toggle')?_c('v-btn-toggle',_vm._b({attrs:{"color":"","value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'v-btn-toggle',_vm.bindSchema(obj),false),_vm._l((obj.schema.options),function(b,idx){return _c('v-btn',_vm._b({key:idx,attrs:{"value":_vm.sanitizeOptions(b).value}},'v-btn',_vm.bindSchema(obj),false),[_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(_vm.sanitizeOptions(b).icon)+" ")]),_vm._v(" "+_vm._s(_vm.sanitizeOptions(b).label)+" ")],1)}),1):(obj.schema.type === 'btn')?_c('v-btn',_vm._b({on:{"click":function($event){return _vm.onEvent($event, obj, _vm.button)}}},'v-btn',_vm.bindSchema(obj),false),[(obj.schema.iconLeft)?_c('v-icon',{attrs:{"left":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconLeft)+" ")]):_vm._e(),_vm._v(" "+_vm._s(_vm.setValue(obj))+" "),(obj.schema.iconCenter)?_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconCenter)+" ")]):_vm._e(),_vm._v(" "+_vm._s(obj.schema.label)+" "),(obj.schema.iconRight)?_c('v-icon',{attrs:{"right":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconRight)+" ")]):_vm._e()],1):(obj.schema.mask)?_c('v-text-field',_vm._b({directives:[{name:"mask",rawName:"v-mask",value:(obj.schema.mask),expression:"obj.schema.mask"}],attrs:{"value":_vm.setValue(obj)},on:{"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append":function($event){return _vm.onEvent($event, obj, _vm.append)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)},"input":function($event){return _vm.onInput($event, obj)}}},'v-text-field',_vm.bindSchema(obj),false)):_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b({tag:"div",attrs:{"type":_vm.checkExtensionType(obj),"value":_vm.setValue(obj),"obj":obj},on:{"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append":function($event){return _vm.onEvent($event, obj, _vm.append)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner )},"input":function($event){return _vm.onInput($event, obj)}}},'div',_vm.bindSchema(obj),false),[_vm._v(" "+_vm._s(obj.schema.textContent)+" ")])],{"obj":obj})],{"obj":obj}),_vm._t(_vm.getTypeBottomSlot(obj),null,{"obj":obj}),_vm._t(_vm.getKeyBottomSlot(obj),null,{"obj":obj})],2),(obj.schema.spacer)?_c('v-spacer',{key:("s-" + index)}):_vm._e()]}}],null,true)},'v-tooltip',_vm.getShorthandTooltip(obj.schema.tooltip),false),[_vm._t("slot-tooltip",[_c('span',[_vm._v(_vm._s(_vm.getShorthandTooltipLabel(obj.schema.tooltip)))])],{"obj":obj})],2)]}),_vm._t(_vm.getFormBottomSlot())],2)}
+return [_c('v-text-field',_vm._g(_vm._b({attrs:{"type":"text","readonly":"","value":_vm.setValue(obj)}},'v-text-field',_vm.bindSchema(obj),false),on))]}}],null,true)},[_c(_vm.mapTypeToComponent( obj.schema.type ),_vm._b({tag:"div",attrs:{"type":_vm.checkExtensionType(obj),"value":_vm.setValue(obj)},on:{"input":function($event){return _vm.onInput($event, obj)}}},'div',_vm.bindSchema(obj),false))],1):(obj.schema.type === 'array')?_vm._l((_vm.setValue(obj)),function(item,idx){return _c('div',_vm._b({key:_vm.getKeyForArray(obj, item, idx),attrs:{"value":_vm.setValue(obj)}},'div',_vm.bindSchema(obj),false),[_vm._t(_vm.getKeyArraySlot(obj),[_c('v-form-base',{class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key) + "-" + idx),"model":item,"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)}})],{"item":item})],2)}):(obj.schema.type === 'group')?[_c('div',_vm._b({on:{"click":function($event){return _vm.onEvent($event, obj)}}},'div',_vm.bindSchema(obj),false),[_c('div',{domProps:{"innerHTML":_vm._s(obj.schema.label)}}),_c('v-form-base',{class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key)),"model":_vm.setValue(obj),"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)}})],1)]:(obj.schema.type === _vm.treeview)?_c('v-treeview',_vm._b({attrs:{"items":_vm.setValue(obj),"active":obj.schema.model,"open":obj.schema.open},on:{"update:active":[function($event){return _vm.$set(obj.schema, "model", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'selected' )}],"update:open":[function($event){return _vm.$set(obj.schema, "open", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'open' )}]},model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-treeview',_vm.bindSchema(obj),false)):(obj.schema.type === _vm.list)?[(obj.schema.label)?_c('v-toolbar',_vm._b({attrs:{"dark":""}},'v-toolbar',_vm.bindSchema(obj),false),[_c('v-toolbar-title',[_vm._v(_vm._s(obj.schema.label))])],1):_vm._e(),_c('v-list',[_c('v-list-item-group',_vm._b({attrs:{"light":""},model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-list-item-group',_vm.bindSchema(obj),false),_vm._l((_vm.setValue(obj)),function(item,idx){return _c('v-list-item',{key:idx,on:{"click":function($event){return _vm.onEvent($event, obj, _vm.list )}}},[_c('v-list-item-icon',[_c('v-icon',{domProps:{"textContent":_vm._s(obj.schema.icon)}})],1),_c('v-list-item-content',[_c('v-list-item-title',{domProps:{"textContent":_vm._s(obj.schema.item ? item[obj.schema.item] : item)}})],1)],1)}),1)],1)]:(obj.schema.type === 'switch' || obj.schema.type === 'checkbox')?_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b({tag:"div",attrs:{"input-value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'div',_vm.bindSchema(obj),false)):(obj.schema.type === 'file' )?_c('v-file-input',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"change":function($event){return _vm.onInput($event, obj)}}},'v-file-input',_vm.bindSchema(obj),false)):(obj.schema.type === 'icon')?_c('v-icon',_vm._b({domProps:{"textContent":_vm._s(_vm.getIconValue(obj))},on:{"click":function($event){return _vm.onEvent($event, obj)}}},'v-icon',_vm.bindSchema(obj),false)):(obj.schema.type === 'slider')?_c('v-slider',_vm._b({on:{"input":function($event){return _vm.onInput($event, obj)}}},'v-slider',_vm.bindSchema(obj),false)):(obj.schema.type === 'img')?_c('v-img',_vm._b({attrs:{"src":_vm.getImageSource(obj)},on:{"click":function($event){return _vm.onEvent($event, obj)}}},'v-img',_vm.bindSchema(obj),false)):(obj.schema.type === 'btn-toggle')?_c('v-btn-toggle',_vm._b({attrs:{"color":"","value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'v-btn-toggle',_vm.bindSchema(obj),false),_vm._l((obj.schema.options),function(b,idx){return _c('v-btn',_vm._b({key:idx,attrs:{"value":_vm.sanitizeOptions(b).value}},'v-btn',_vm.bindSchema(obj),false),[_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(_vm.sanitizeOptions(b).icon)+" ")]),_vm._v(" "+_vm._s(_vm.sanitizeOptions(b).label)+" ")],1)}),1):(obj.schema.type === 'btn')?_c('v-btn',_vm._b({on:{"click":function($event){return _vm.onEvent($event, obj, _vm.button)}}},'v-btn',_vm.bindSchema(obj),false),[(obj.schema.iconLeft)?_c('v-icon',{attrs:{"left":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconLeft)+" ")]):_vm._e(),_vm._v(" "+_vm._s(_vm.setValue(obj))+" "),(obj.schema.iconCenter)?_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconCenter)+" ")]):_vm._e(),_vm._v(" "+_vm._s(obj.schema.label)+" "),(obj.schema.iconRight)?_c('v-icon',{attrs:{"right":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconRight)+" ")]):_vm._e()],1):(obj.schema.mask)?_c('v-text-field',_vm._b({directives:[{name:"mask",rawName:"v-mask",value:(obj.schema.mask),expression:"obj.schema.mask"}],attrs:{"value":_vm.setValue(obj)},on:{"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append":function($event){return _vm.onEvent($event, obj, _vm.append)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)},"input":function($event){return _vm.onInput($event, obj)}}},'v-text-field',_vm.bindSchema(obj),false)):_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b({tag:"div",attrs:{"type":_vm.checkExtensionType(obj),"value":_vm.setValue(obj),"obj":obj},on:{"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append":function($event){return _vm.onEvent($event, obj, _vm.append)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner )},"input":function($event){return _vm.onInput($event, obj)}}},'div',_vm.bindSchema(obj),false),[_vm._v(" "+_vm._s(obj.schema.textContent)+" ")])],{"obj":obj})],{"obj":obj}),_vm._t(_vm.getTypeBottomSlot(obj),null,{"obj":obj}),_vm._t(_vm.getKeyBottomSlot(obj),null,{"obj":obj})],2),(obj.schema.spacer)?_c('v-spacer',{key:("s-" + index)}):_vm._e()]}}],null,true)},'v-tooltip',_vm.getShorthandTooltip(obj.schema.tooltip),false),[_vm._t("slot-tooltip",[_c('span',[_vm._v(_vm._s(_vm.getShorthandTooltipLabel(obj.schema.tooltip)))])],{"obj":obj})],2)]}),_vm._t(_vm.getFormBottomSlot())],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/vFormBase.vue?vue&type=template&id=1f839a4b&
+// CONCATENATED MODULE: ./src/components/vFormBase.vue?vue&type=template&id=3cb66dcf&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
 var es_array_concat = __webpack_require__("99af");
@@ -20966,6 +20966,8 @@ var vue_the_mask = __webpack_require__("3a60");
 //
 //
 //
+//
+//
 // import & declarations
 
 
@@ -21034,6 +21036,7 @@ var orderDirection = 'ASC';
 var pathDelimiter = '.';
 var classKeyDelimiter = '-';
 var defaultID = 'form-base';
+var isPicker = 'date|time|color';
 var onEventDelay = 1; // ms
 
 var mouse = 'mouseenter|mouseleave';
@@ -21155,12 +21158,6 @@ var defaultSchemaIfValueIsBoolean = function defaultSchemaIfValueIsBoolean(key) 
       prependInner: prependInner
     };
   },
-  watch: {
-    schema: function schema(newSchema) {
-      this.rebuildArrays(this.valueIntern, newSchema);
-      this.schema = newSchema;
-    }
-  },
   computed: {
     valueIntern: function valueIntern() {
       // use <formbase :model="myData" />  ->  legacy code <formbase :value="myData" />  
@@ -21201,23 +21198,29 @@ var defaultSchemaIfValueIsBoolean = function defaultSchemaIfValueIsBoolean(key) 
       return this.schema;
     }
   },
+  watch: {
+    schema: function schema(newSchema) {
+      this.rebuildArrays(this.valueIntern, newSchema);
+      this.schema = newSchema;
+    }
+  },
   methods: {
     // MAP TYPE
     mapTypeToComponent: function mapTypeToComponent(type) {
-      // get all global registered components and merge them into typeToComponent Object
-      var allTypeComponents = _objectSpread2(_objectSpread2({}, typeToComponent), external_commonjs_vue_commonjs2_vue_root_Vue_default.a.options.components); // console.warn('####',JSON.stringify(allTypeComponents));
-      // map ie. schema:{ type:'password', ... } to specific vuetify-control or default to v-text-field'
+      // merge global registered components into typeToComponent Object
+      var allTypeComponents = _objectSpread2(_objectSpread2({}, typeToComponent), external_commonjs_vue_commonjs2_vue_root_Vue_default.a.options.components); // const typeToComponent -> maps type to according v-component 
+      // ie. schema:{ type:'password', ... } to specific vuetify-control or default to v-text-field'
 
 
       return allTypeComponents[type] ? allTypeComponents[type] : "v-".concat(type);
     },
     // CHECK FOR TYPE: DATE, TIME OR COLOR and EXT: TEXT
     isDateTimeColorTypeAndExtensionText: function isDateTimeColorTypeAndExtensionText(obj) {
-      return 'date_time_color'.includes(obj.schema.type) && obj.schema.ext === 'text';
+      return isPicker.includes(obj.schema.type) && obj.schema.ext === 'text';
     },
     // CHECK FOR DATE, TIME OR COLOR EXT
     isDateTimeColorExtension: function isDateTimeColorExtension(obj) {
-      return 'date_time_color'.includes(obj.schema.ext);
+      return isPicker.includes(obj.schema.ext);
     },
     // BIND SCHEMA FN
     bindSchema: function bindSchema(obj) {
@@ -21225,9 +21228,9 @@ var defaultSchemaIfValueIsBoolean = function defaultSchemaIfValueIsBoolean(key) 
     },
     // EXT TYPE
     checkExtensionType: function checkExtensionType(obj) {
-      // For native <INPUT> type use ext 
-      // { type:'text, ext:'date', ...} -> use native Input Type 'Date' instead of Date-Picker
-      return obj.schema.ext || obj.schema.type;
+      // For native <INPUT> type use ext or typeInt
+      // { type:'date', ext:'text', typeInt:'month' ...} -> use native Input Type 'Date' instead of Date-Picker
+      return obj.schema.typeInt || obj.schema.ext || obj.schema.type;
     },
     // GET ITERATION KEY FOR TYPE ARRAY
     getKeyForArray: function getKeyForArray(obj, item, index) {
@@ -21370,8 +21373,8 @@ var defaultSchemaIfValueIsBoolean = function defaultSchemaIfValueIsBoolean(key) 
       // offset:{ offset|sm|md|lg|xl|offset-sm|offset-md|offset-lg|offset-xl } - value:number|string
       var colSchema = obj.schema.col || obj.schema.flex;
       var colAttr = this.col || this.flex || colDefault;
-      var colObject = colSchema ? // if available use schema definition of cols
-      Object(lodash["isPlainObject"])(colSchema) ? colSchema : Object(lodash["isNumber"])(colSchema) || Object(lodash["isString"])(colSchema) ? {
+      var colObject = colSchema // if available use schema definition of cols
+      ? Object(lodash["isPlainObject"])(colSchema) ? colSchema : Object(lodash["isNumber"])(colSchema) || Object(lodash["isString"])(colSchema) ? {
         cols: colSchema
       } : {
         cols: 'auto'
@@ -21400,6 +21403,12 @@ var defaultSchemaIfValueIsBoolean = function defaultSchemaIfValueIsBoolean(key) 
       this.gridMapper(orderObject, 'order-');
       this.gridReplaceXS(orderObject, 'order');
       return _objectSpread2(_objectSpread2(_objectSpread2({}, colObject), offsetObject), orderObject);
+    },
+    getRowGroupOrArray: function getRowGroupOrArray(obj) {
+      return obj.schema.row || this.row || rowDefault;
+    },
+    getColGroupOrArray: function getColGroupOrArray(obj) {
+      return obj.schema.col || this.col || colDefault;
     },
     //
     // SANITIZE BUTTON - Toggle sanitize item from array schema.options
@@ -21439,7 +21448,7 @@ var defaultSchemaIfValueIsBoolean = function defaultSchemaIfValueIsBoolean(key) 
       event.dataTransfer.dropEffect = dropEffect;
       event.dataTransfer.effectAllowed = dropEffect;
       var dragEvent = this.onEvent(event, obj);
-      event.dataTransfer.setData("text", JSON.stringify(dragEvent));
+      event.dataTransfer.setData('text', JSON.stringify(dragEvent));
     },
     dragover: function dragover(event, obj) {
       return obj.schema.drop ? event.preventDefault() : null;
@@ -21447,7 +21456,7 @@ var defaultSchemaIfValueIsBoolean = function defaultSchemaIfValueIsBoolean(key) 
     drop: function drop(event, obj) {
       if (!obj.schema.drop) return event.preventDefault(); // get dragEvent and dragEvent.obj
 
-      obj.dragEvent = JSON.parse(event.dataTransfer.getData("text")); // no drop on drag object
+      obj.dragEvent = JSON.parse(event.dataTransfer.getData('text')); // no drop on drag object
 
       if (obj.key === obj.dragEvent.obj.key && obj.id === obj.dragEvent.id) return event.preventDefault(); // handle schema.drop function
 
@@ -21633,9 +21642,11 @@ var defaultSchemaIfValueIsBoolean = function defaultSchemaIfValueIsBoolean(key) 
         label: key
       } : schema;
     },
-    flattenObjects: function flattenObjects(dat, sch) {
+    flattenObjects: function flattenObjects() {
       var _this3 = this;
 
+      var dat = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var sch = arguments.length > 1 ? arguments[1] : undefined;
       var data = {};
       var schema = {}; // Organize Formular using Schema not Data 
 
@@ -21672,7 +21683,7 @@ var defaultSchemaIfValueIsBoolean = function defaultSchemaIfValueIsBoolean(key) 
       var arr = [];
       Object.keys(schema).forEach(function (key) {
         if (!Object(lodash["isPlainObject"])(schema[key])) {
-          console.warn("Schema '".concat(schema, "' of Prop '").concat(key, "' must be a string with value of type key:'text' or a plainobject with at least key:{ type:'text'} definition.  Prop '").concat(key, "' will be ignored!"));
+          console.warn("Schema '".concat(JSON.stringify(schema), "' of Prop '").concat(key, "' must be a string with value of type key:'text' or a plainobject with at least key:{ type:'text'} definition.  Prop '").concat(key, "' will be ignored!"));
           return;
         }
 
@@ -21709,11 +21720,52 @@ var defaultSchemaIfValueIsBoolean = function defaultSchemaIfValueIsBoolean(key) 
         return _this4.schema[key] = schema[key];
       });
     },
-    rebuildArrays: function rebuildArrays(model, schema) {
-      // break if no model found, but don't break if model is empty object (can filled by editing)
-      if (!model) throw "No 'model' definition found. Use '<v-form-base :model=\"myData\" :schema=\"mySchema\" />' "; // no schema defined or empty -> autogenerate basic schema
+    tryAutogenerateModelStructure: function tryAutogenerateModelStructure(model, schema) {
+      var _this5 = this;
 
-      if (Object(lodash["isEmpty"])(schema)) this.autogenerateSchema(model); // create flatted working array from schema and value    
+      // generate or complete an empty model based on schema structure
+      Object.keys(schema).forEach(function (key) {
+        // model must be at least an empty Object. It doesn't work with 'null', 'undefined' or any 'primitive value' 
+        // Autogeneration from Schema works only if model is an empty Object 
+        // if model is NOT an empty Object, no action is applied, otherwise data in model could be changed or modified
+        if (!Object(lodash["isEmpty"])(model[key])) return;
+        var val = schema[key];
+
+        if (val.type === 'group') {
+          _this5.$set(model, key, {});
+
+          _this5.tryAutogenerateModelStructure(model[key], val.schema);
+        } else if (val.type === 'array') {
+          _this5.$set(model, key, []);
+
+          _this5.tryAutogenerateModelStructure(model[key], val.schema);
+        } else if (val.type === 'list') {
+          _this5.$set(model, key, []);
+        } else if (Object(lodash["isPlainObject"])(val) && !val.type) {
+          _this5.$set(model, key, {});
+
+          _this5.tryAutogenerateModelStructure(model[key], val);
+        }
+
+        if (Array.isArray(val) && !val.type) {
+          _this5.$set(model, key, []);
+
+          _this5.tryAutogenerateModelStructure(model[key], val);
+        }
+      });
+    },
+    rebuildArrays: function rebuildArrays(model, schema) {
+      // undefined, null or primitive value for model can't work because you need reference to object for working on 
+      if (!model) throw "Property 'model' is null or undefined. Use '<v-form-base :model=\"myModel\" :schema=\"mySchema\" />'. myModel must be at least an empty Object."; // noise if async loading
+
+      if (Object(lodash["isEmpty"])(schema) && Object(lodash["isEmpty"])(model)) {
+        console.warn("At least one of the properties 'model' or 'schema' in <v-form-base /> must be at least an empty Object. Ignore this Warning on async loading 'model' or 'schema' "); // return
+      } // generate/complete structure of model
+
+
+      this.tryAutogenerateModelStructure(model, schema); // no schema defined or empty -> autogenerate basic schema
+
+      if (Object(lodash["isEmpty"])(schema)) this.autogenerateSchema(model); // create flatted working array from schema and value
 
       this.flatCombinedArray = this.flattenAndCombineToArray(this.storeStateData, this.storeStateSchema);
     } //  

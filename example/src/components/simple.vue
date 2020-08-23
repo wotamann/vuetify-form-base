@@ -7,7 +7,7 @@
       <!-- FORM-BASE-COMPONENT -->    
       <v-form-base 
         :model="myModel"
-        schema="mySchema"
+        :schema="mySchema"
         :col=6
         @input="log"
       />

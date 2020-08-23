@@ -7,6 +7,7 @@
     <!-- FORM-BASE TOP SLOT -->
     <slot :name="getFormTopSlot()"/>  
 
+    <!-- main loop over components/controls -->
     <template v-for="(obj, index) in flatCombinedArraySorted">
       <!-- Tooltip Wrapper -->
       <v-tooltip
@@ -14,33 +15,31 @@
         :disabled="!obj.schema.tooltip"
         v-bind="getShorthandTooltip(obj.schema.tooltip)"
       >
-        <template v-slot:activator="{ on }" >
+        <template v-slot:activator="{ on }">
           <v-col
             v-show="!obj.schema.hidden"
-            :key= "index"
+            :key="index"
             v-bind="getGridAttributes(obj)"
             v-intersect="(entries, observer) => onIntersect(entries, observer, obj)"
             v-touch="{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"
             :class="getClassName(obj)"
+            :draggable="obj.schema.drag" 
             @mouseenter="onEvent($event, obj)"
             @mouseleave="onEvent($event, obj)"
-            v-on="on"
 
-            :draggable="obj.schema.drag" 
+            v-on="on"
             @dragstart="dragstart($event, obj)"
-            @dragover= "dragover($event, obj)"
-            @drop= "drop($event, obj)"
+            @dragover="dragover($event, obj)"
+            @drop="drop($event, obj)"
           >           
             <!-- slot on top of type  -> <div slot="slot-bottom-type-[propertyName]"> -->
             <slot :name="getTypeTopSlot(obj)" :obj= "obj"/>
             <!-- slot on top of key  -> <v-btn slot="slot-bottom-key-[propertyName]"> -->
-            <slot :name="getKeyTopSlot(obj)" :obj= "obj"/>
-            
+            <slot :name="getKeyTopSlot(obj)" :obj= "obj"/>          
             <!-- slot replaces complete item of defined TYPE -> <v-btn slot="slot-item-type-[propertyName]">-->
             <slot :name="getTypeItemSlot(obj)" :obj= "obj">
               <!-- slot replaces complete item of defined KEY -> <div slot="slot-item-key-[propertyName]">-->
               <slot :name="getKeyItemSlot(obj)" :obj= "obj" >
-
               <!-- RADIO -->
                 <v-radio-group
                   v-if="obj.schema.type === 'radio'"
@@ -70,21 +69,20 @@
                 >                  
                   <template v-slot:activator="{ on }">
                     <v-text-field
-                      v-on= "on"
+                      v-on="on"
                       v-bind="bindSchema(obj)"
                       type="text"
                       readonly
                       :value="setValue(obj)"
-                    >
-                    </v-text-field>
+                    />
                   </template>
                   <div
                     :is="mapTypeToComponent( obj.schema.type )" 
                     v-bind="bindSchema(obj)"
+                    :type="checkExtensionType(obj)"
                     :value="setValue(obj)"
                     @input="onInput($event, obj)"
-                  >
-                  </div>
+                  />
                 </v-menu>
               <!-- END DATE, TIME, COLOR MENU -->
 
@@ -104,8 +102,10 @@
                     >
                       <v-form-base
                         :id="`${id}-${obj.key}-${idx}`"
-                        :value="item"
+                        :model="item"
                         :schema="obj.schema.schema"
+                        :row="getRowGroupOrArray(obj)"
+                        :col="getColGroupOrArray(obj)"
                         :class="`${id}-${obj.key}`"
                       />
                     </slot>
@@ -119,11 +119,14 @@
                     v-bind="bindSchema(obj)" 
                     @click="onEvent($event, obj)"
                   >
-                  <div v-html="obj.schema.label" ></div>
+                    <div v-html="obj.schema.label" />
                     <v-form-base
                       :id="`${id}-${obj.key}`"
-                      :value="setValue(obj)"
+                      :model="setValue(obj)"
                       :schema="obj.schema.schema"
+                      :row="getRowGroupOrArray(obj)"
+                      :col="getColGroupOrArray(obj)"
+                      :class="`${id}-${obj.key}`"
                     />
                 </div>
                 </template>
@@ -202,7 +205,7 @@
                 <v-icon
                   v-else-if="obj.schema.type === 'icon'"
                   v-bind="bindSchema(obj)"
-                  v-text ="getIconValue(obj)"
+                  v-text="getIconValue(obj)"
                   @click="onEvent($event, obj)"
                 />
               <!-- END ICON -->
@@ -315,7 +318,6 @@
                 </div>
 
               <!-- END DEFAULT -->
-
               </slot>
             </slot>
 
@@ -410,16 +412,15 @@
         < /script>    
     */
     
-    
-    
     }
   // Declaration
   const orderDirection = 'ASC'
   const pathDelimiter = '.'
   const classKeyDelimiter = '-'
   const defaultID = 'form-base'
-
+  const isPicker = 'date|time|color'
   const onEventDelay = 1 // ms
+
   const mouse = 'mouseenter|mouseleave'
   const change = 'input|click'              // event change collects events 'input|click'
   const watch = 'focus|input|click|blur'    // event watch collects events 'focus|input|click|blur'
@@ -445,7 +446,7 @@
   const prependInner = 'prepend-inner'
 
   // symbol on drop
-  const dropEffect = 'move'  // 'copy, link, move      
+  const dropEffect = 'move' // 'copy, link, move      
   // Default row setting if no row-attribute defined  
   const rowDefault = { noGutters:true } // { noGutters:true, justify:'center', align:'center' } 
 
@@ -469,26 +470,26 @@ export default {
       default: defaultID
     },
     row: {
-      type: [Object],
+      type: [Object]
     },
     col: {
-      type: [Object, Number, String],
+      type: [Object, Number, String]
     },
     flex: {
-      type: [Object, Number, String],
+      type: [Object, Number, String]
     },
     value: {
       type: [Object, Array],
-      default: () => null,
+      default: () => null
     },    
     model: {
       type: [Object, Array],
-      default: () => null,
+      default: () => null
     },    
     schema: {
       type: [Object, Array],
-      default: () => ({}),
-    },
+      default: () => ({})
+    }
   },
   data () {
     return {    
@@ -501,12 +502,6 @@ export default {
       appendOuter,
       prepend,
       prependInner
-    }
-  },
-  watch: { 
-    schema: function(newSchema) { 
-      this.rebuildArrays(this.valueIntern, newSchema)
-      this.schema = newSchema 
     }
   },
   computed: {    
@@ -546,23 +541,29 @@ export default {
       this.updateArrayFromState(this.valueIntern, this.schema)
       return this.schema
     }    
-  },  
+  },
+  watch: { 
+    schema: function(newSchema) { 
+      this.rebuildArrays(this.valueIntern, newSchema)
+      this.schema = newSchema 
+    }
+  }, 
   methods: {
     // MAP TYPE
     mapTypeToComponent(type) {
-      // get all global registered components and merge them into typeToComponent Object
+      // merge global registered components into typeToComponent Object
       const allTypeComponents = { ...typeToComponent, ...Vue.options.components}
-      // console.warn('####',JSON.stringify(allTypeComponents));
-      // map ie. schema:{ type:'password', ... } to specific vuetify-control or default to v-text-field'
+      // const typeToComponent -> maps type to according v-component 
+      // ie. schema:{ type:'password', ... } to specific vuetify-control or default to v-text-field'
       return allTypeComponents[type] ? allTypeComponents[type] : `v-${type}`
     },
     // CHECK FOR TYPE: DATE, TIME OR COLOR and EXT: TEXT
     isDateTimeColorTypeAndExtensionText(obj){
-      return  'date_time_color'.includes(obj.schema.type) && obj.schema.ext === 'text' 
+      return isPicker.includes(obj.schema.type) && obj.schema.ext === 'text' 
     },
     // CHECK FOR DATE, TIME OR COLOR EXT
-    isDateTimeColorExtension(obj){
-      return 'date_time_color'.includes(obj.schema.ext)
+    isDateTimeColorExtension (obj){
+      return isPicker.includes(obj.schema.ext)
     },
     // BIND SCHEMA FN
     bindSchema(obj) {     
@@ -570,9 +571,9 @@ export default {
     },      
     // EXT TYPE
     checkExtensionType(obj) {
-      // For native <INPUT> type use ext 
-      // { type:'text, ext:'date', ...} -> use native Input Type 'Date' instead of Date-Picker
-      return obj.schema.ext || obj.schema.type
+      // For native <INPUT> type use ext or typeInt
+      // { type:'date', ext:'text', typeInt:'month' ...} -> use native Input Type 'Date' instead of Date-Picker
+      return obj.schema.typeInt || obj.schema.ext || obj.schema.type
     },
   // GET ITERATION KEY FOR TYPE ARRAY
     getKeyForArray(obj, item, index){
@@ -593,11 +594,11 @@ export default {
       // IMPORTANT! Key should not contain an editable prop, because of new iteration on any change
 
         const k= obj.schema.key 
-        return k ? Array.isArray(k) ? k.map(i => item[i] ).join('_') : item[k] : (!isNaN(index)) ? `${index}_${Date.now()}` : index 
+        return k ? Array.isArray(k) ? k.map(i => item[i]).join('_') : item[k] : (!isNaN(index)) ? `${index}_${Date.now()}` : index 
     },
   //
   // GET IMG SOURCE
-    getImageSource(obj) {
+    getImageSource(obj){
       // if exist get source from src otherwise join schema.base & value & schema.tail
       return obj.schema.src ? obj.schema.src : `${obj.schema.base}${obj.value}${obj.schema.tail}`
     },
@@ -689,7 +690,7 @@ export default {
   // GRID
     gridMapper(obj, prepender){ 
       if(obj)  
-        ['sm', 'md', 'lg', 'xl' ].map( k => { 
+        ['sm', 'md', 'lg', 'xl' ].map(k => { 
           if(obj[k]) { obj[prepender + k] = obj[k]; delete obj[k] }
         })
     },
@@ -710,11 +711,11 @@ export default {
 
       const colAttr = this.col || this.flex || colDefault
    
-      let colObject = colSchema ?
+      let colObject = colSchema
       // if available use schema definition of cols
-      ( isPlainObject(colSchema) ? colSchema : isNumber(colSchema) || isString(colSchema) ? { cols: colSchema} : { cols: 'auto' } ) 
+      ? (isPlainObject(colSchema) ? colSchema : isNumber(colSchema) || isString(colSchema) ? { cols: colSchema} : { cols: 'auto' }) 
       // else use formbase attribute definition of cols
-      : colAttr ? ( isPlainObject(colAttr) ? colAttr : isNumber(colAttr) || isString(colAttr) ? { cols: colAttr} : { cols: 'auto' }  ) 
+      : colAttr ? (isPlainObject(colAttr) ? colAttr : isNumber(colAttr) || isString(colAttr) ? { cols: colAttr} : { cols: 'auto' }) 
       // if no definition set cols to 'auto'
       : { cols:'auto'}
 
@@ -722,17 +723,23 @@ export default {
       
       // schema definition of offset
       const offset = obj.schema.offset
-      let offsetObject = offset ? ( isPlainObject(offset) ? offset : { offset } ) : offset   
+      let offsetObject = offset ? (isPlainObject(offset) ? offset : { offset }) : offset   
       this.gridMapper(offsetObject, 'offset-')
       this.gridReplaceXS(offsetObject, 'offset')
 
       // schema definition of offset
       const order = obj.schema.order
-      let orderObject = order ? ( isPlainObject(order) ? order : { order} ) : order         
+      let orderObject = order ? (isPlainObject(order) ? order : { order}) : order         
       this.gridMapper(orderObject, 'order-')
       this.gridReplaceXS(orderObject, 'order')
       
-      return { ...colObject, ...offsetObject, ...orderObject  }
+      return { ...colObject, ...offsetObject, ...orderObject }
+    },
+    getRowGroupOrArray(obj) {
+      return obj.schema.row || this.row || rowDefault
+    },
+    getColGroupOrArray(obj) {
+      return obj.schema.col || this.col || colDefault
     },   
   //
   // SANITIZE BUTTON - Toggle sanitize item from array schema.options
@@ -768,10 +775,10 @@ export default {
       if (!obj.schema.drag) return
      
       event.dataTransfer.dropEffect = dropEffect
-      event.dataTransfer.effectAllowed  = dropEffect
+      event.dataTransfer.effectAllowed = dropEffect
 
       const dragEvent = this.onEvent(event, obj)
-      event.dataTransfer.setData("text", JSON.stringify( dragEvent ) )
+      event.dataTransfer.setData('text', JSON.stringify(dragEvent))
     },
 
     dragover(event,obj){ return obj.schema.drop ? event.preventDefault() : null },
@@ -779,16 +786,16 @@ export default {
     drop(event, obj){
       if (!obj.schema.drop) return event.preventDefault()
       // get dragEvent and dragEvent.obj
-      obj.dragEvent = JSON.parse(event.dataTransfer.getData("text") )
+      obj.dragEvent = JSON.parse(event.dataTransfer.getData('text'))
       
       // no drop on drag object
       if (obj.key === obj.dragEvent.obj.key && obj.id === obj.dragEvent.id) return event.preventDefault()      
       // handle schema.drop function
-      if ( isFunction(obj.schema.drop) ) obj.value =  this.dropValue( obj, event )  
+      if (isFunction(obj.schema.drop)) obj.value = this.dropValue(obj, event)  
      
-      this.onEvent(event, obj )
+      this.onEvent(event, obj)
      
-      event.preventDefault();
+      event.preventDefault()
     },
 
     dropValue (obj, event) {
@@ -802,7 +809,7 @@ export default {
     },
   //
   // EVENTS Get Value from Input & other Events
-    onInput (value, obj, type = 'input' ) {
+    onInput (value, obj, type = 'input') {
       // Value after change in Control
       value = this.fromCtrl({ value, obj, data: this.storeStateData, schema: this.storeStateSchema })
       // harmonize undefined or empty strings => null, because 'clearable' in vuetify controls resets to null and not to empty string!
@@ -897,22 +904,20 @@ export default {
       // schema:{ name:'text' }  => schema:{ name: { type:'text', label: 'name' }
       return isString(schema) ? { type: schema, label:key } : schema
     },
-    flattenObjects (dat, sch) {
-      
+    flattenObjects (dat = {}, sch) {
       let data = {}
       let schema = {}      
       // Organize Formular using Schema not Data 
       Object.keys(sch).forEach(key => {
-
         // convert string definition of name:'text' into object name:{type:'text'} 
         sch[key] = this.sanitizeShorthandType(key, sch[key])
 
         const bothArray = Array.isArray(dat[key]) && Array.isArray(sch[key])
         const datObjectWithoutSchemaType = isPlainObject(dat[key]) && !sch[key].type
-        const datObjectContainsTypeKey = (dat[key] && dat[key].type && (sch[key] && sch[key].type) )
+        const datObjectContainsTypeKey = (dat[key] && dat[key].type && (sch[key] && sch[key].type))
         const notInstanceOfFileObject = !(dat[key] instanceof File)
 
-        if ( bothArray || datObjectWithoutSchemaType || (datObjectContainsTypeKey && notInstanceOfFileObject) ) {
+        if (bothArray || datObjectWithoutSchemaType || (datObjectContainsTypeKey && notInstanceOfFileObject)) {
           let { data: flatData, schema: flatSchema } = this.flattenObjects(dat[key], sch[key])
           Object.keys(flatData).forEach(ii => {
             data[key + pathDelimiter + ii] = flatData[ii]
@@ -927,9 +932,9 @@ export default {
     },
     combineObjectsToArray ({ data, schema }) {
       let arr = []
-      Object.keys(schema).forEach(key => {        
+      Object.keys(schema).forEach(key => {    
         if (!isPlainObject(schema[key])) {
-          console.warn( `Schema '${schema}' of Prop '${key}' must be a string with value of type key:'text' or a plainobject with at least key:{ type:'text'} definition.  Prop '${key}' will be ignored!`)
+          console.warn(`Schema '${JSON.stringify(schema)}' of Prop '${key}' must be a string with value of type key:'text' or a plainobject with at least key:{ type:'text'} definition.  Prop '${key}' will be ignored!`)
           return
         }
         arr.push({ key, value: data[key], schema: schema[key] })
@@ -946,23 +951,66 @@ export default {
       // generate a minimal default schema from value   
       let schema = JSON.stringify(value, (key, val) => val === undefined ? null : val)      
       schema = JSON.parse(schema, (key, val) => {    
-        if (val === null || val === undefined )  return defaultSchemaIfValueIsNullOrUndefined(key)
-        if (typeof val === 'string')  return defaultSchemaIfValueIsString(key)
-        if (typeof val === 'number')  return defaultSchemaIfValueIsNumber(key)
+        if (val === null || val === undefined) return defaultSchemaIfValueIsNullOrUndefined(key)
+        if (typeof val === 'string') return defaultSchemaIfValueIsString(key)
+        if (typeof val === 'number') return defaultSchemaIfValueIsNumber(key)
         if (typeof val === 'boolean') return defaultSchemaIfValueIsBoolean(key)
         return val
       })
       // assign root props to avoid manipulating prop: schema       
-      Object.keys(schema).forEach( key => this.schema[key] = schema[key] )
+      Object.keys(schema).forEach(key => this.schema[key] = schema[key])
     },
-    rebuildArrays(model, schema){
-      // break if no model found, but don't break if model is empty object (can filled by editing)
-      if (!model) throw `No 'model' definition found. Use '<v-form-base :model="myData" :schema="mySchema" />' `
+
+    tryAutogenerateModelStructure (model, schema) {
+      // generate or complete an empty model based on schema structure
+      
+      Object.keys(schema).forEach(key => {
+        
+        // model must be at least an empty Object. It doesn't work with 'null', 'undefined' or any 'primitive value' 
+        // Autogeneration from Schema works only if model is an empty Object 
+        // if model is NOT an empty Object, no action is applied, otherwise data in model could be changed or modified
+        if ( !isEmpty(model[key]) ) return
+       
+        let val = schema[key]
+        if (val.type === 'group') {
+          this.$set(model, key, {})
+          this.tryAutogenerateModelStructure(model[key], val.schema)
+        } else
+        if (val.type === 'array') {
+          this.$set(model, key, [])
+          this.tryAutogenerateModelStructure(model[key], val.schema)
+        } else
+        if (val.type === 'list') {
+          this.$set(model, key, [])
+        } else
+        if ( isPlainObject(val) && !val.type ) {
+          this.$set(model, key, {})
+          this.tryAutogenerateModelStructure(model[key], val)
+        }
+        if ( Array.isArray(val) && !val.type) {
+          this.$set(model, key, [])
+          this.tryAutogenerateModelStructure(model[key], val)
+        }
+      })
+    },
+    rebuildArrays (model, schema) {
+      // undefined, null or primitive value for model can't work because you need reference to object for working on 
+      if (!model) throw `Property 'model' is null or undefined. Use '<v-form-base :model="myModel" :schema="mySchema" />'. myModel must be at least an empty Object.`
+
+      // noise if async loading
+      if (isEmpty(schema) && isEmpty(model)) {
+        console.warn(`At least one of the properties 'model' or 'schema' in <v-form-base /> must be at least an empty Object. Ignore this Warning on async loading 'model' or 'schema' `)
+        // return
+      }
+      // generate/complete structure of model
+      this.tryAutogenerateModelStructure(model, schema)
+      
       // no schema defined or empty -> autogenerate basic schema
       if (isEmpty(schema)) this.autogenerateSchema(model)
-      // create flatted working array from schema and value    
+
+      // create flatted working array from schema and value
       this.flatCombinedArray = this.flattenAndCombineToArray(this.storeStateData, this.storeStateSchema)
-    },
+    }
   //  
   },
   created () {
