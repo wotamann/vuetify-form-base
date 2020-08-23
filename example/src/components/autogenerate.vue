@@ -4,7 +4,7 @@
     <!-- Works only if Model-Data is String, Number or Array  -->
 
     <!-- FORM-BASE-COMPONENT -->
-    <v-form-base :model="myModel" :flex="{xs:12,sm:6}" @input="log"/>
+    <v-form-base :model="myModel" :col="{xs:12,sm:6}" @input="log"/>
 
     <!-- Stuff   -->
     <infoline

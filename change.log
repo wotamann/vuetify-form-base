@@ -74,3 +74,28 @@ bug fix error using v-file-input
 - custom components added. See custom component example
 - in Slots current control data-object (key, value and schema) available
 - https://unpkg.com/  available
+
+0.2.25 -23.8.2020
+- Issue #53 Row gutters in grouped controls -fixed
+  fix: row & col configuration works in group & array schema too
+  grouped: { 
+    type: "group", 
+    row:{ noGutters:false}, // global for next schema
+    col: 6,                 // global for next schema
+    schema:{ A:{ type:'text', col:4, ... }
+  }
+
+- issue #47 Error with empty model - enhancement generate/complete model in deep nested schema structure
+  if model is an empty object or an incomplete object 
+  schema:{ a:{type: "group", schema: { b: [ {c:'text'} ] } } }
+  then the model structure now will be constructed/completed from schema 
+  model:{}  -> model:{ "a": { "b": { "0": {} } } }
+  Important this works only with model (not with deprecated value) 	
+  
+- Issue #52 Month picker display - updated
+  any 'type' prop in vuetify-control or your custom component is shadowed from v-form-base schema 'type' property
+  if '<v-datepicker type="month">' control needs type="month" 
+  then you solve this with 'typeInt' -> schema { monthselect: { type:'date', typeInt:'month'}
+
+  components internal 'type' mapping works in this order typeInt || ext || type
+  schema { vc: { type:'v-control', typeInt:'any-v-type', ext:'any-ext' } -> <v-control type ="typeInt || ext || type" >

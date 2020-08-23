@@ -3,7 +3,7 @@
     <h4>Select Items defined in Schema-Array</h4>
     <v-form-base
       id="form-base-selection"
-      :value="myValue"
+      :model="myValue"
       :schema="mySchema"
       @input:form-base-selection="update"
     />

@@ -11,7 +11,7 @@
 
 <template>
   <v-container fluid>
-    <h4>Rules in Schema and Form Validation</h4>
+    <h4>Rules in Schema with Form Validation</h4>
     <v-form
       ref="myForm"
       v-model="formValid"
@@ -20,7 +20,7 @@
       <!-- FORM-BASE-COMPONENT -->
       <v-form-base
         id="form-base-complete"
-        :value="myValue"
+        :model="myValue"
         :schema="mySchema"
         @change:form-base-complete="change"
       />
@@ -54,11 +54,13 @@ const items = ['Tesla', 'Jobs', 'Taleb', 'Harari']
 const minLen = l => v => (v && v.length >= l) || `min. ${l} Characters`
 const maxLen = l => v => (v && v.length <= l) || `max. ${l} Characters`
 const required = msg => v => !!v || msg
+const requiredArray = msg => v => (Array.isArray(v) && v.length>1) || msg
 
 // Rules
 const rules = {
   requiredEmail: required('E-mail is required'),
   requiredSel: required('Selection is required'),
+  requiredSelMult: requiredArray('2 Selections are required'),
   max12: maxLen(12),
   min6: minLen(6),
   validEmail: v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
@@ -70,34 +72,26 @@ export default {
     return {
       formValid: true,
       myValue: {
-        email: 'base@web.com',
-        password: 'abcdefgh',
+        email: 'base@',
+        password: 'abc',
         subgroups: {
           select: null,
-          multiple: ['Jobs', 'Taleb'],
-          tasks: [
-             this.getTicket(),
-             this.getTicket(),
-             this.getTicket(),
-          ],
-          content: `Design principles of Vuetify ...`
+          multiple: ['Taleb'],
+          content: ``
         }
       },
       mySchema: {
-        email: { type: 'email', label: 'Email', rules: [rules.requiredEmail, rules.validEmail], flex: { xs: 12, sm: 6 } },
-        password: { type: 'password', label: 'Password', hint: '6 to 12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, flex: { xs: 12, sm: 6 } },
+        email: { type: 'email', label: 'Email', rules: [rules.requiredEmail, rules.validEmail], col: { xs: 12, sm: 6 } },
+        password: { type: 'password', label: 'Password', hint: '6 to 12 Chars', appendIcon: 'visibility', counter: 12, rules: [rules.min6, rules.max12], clearable: true, col: { xs: 12, sm: 6 } },
         subgroups: {
-          select: { type: 'select', label: 'Select', items, rules: [rules.requiredSel], flex: { xs: 12, sm: 6 } },
-          multiple: { type: 'select', label: 'Multi-Select', clearable:true, items, multiple: true, flex: { xs: 12, sm: 6 } },
-          tasks: { type: 'array', schema: { done: { type: 'checkbox', label: 'Ok', flex: 3 }, title: { type: 'text', placeholder: 'to do...', flex: 8 } }, flex: { xs: 12, sm: 6 } },
-          content: { type: 'textarea', label: 'Content', hint: 'Auto-Growing...', autoGrow: true, prependInnerIcon: 'print', rules: [ required('Content required') ], flex: { xs: 12, sm: 6 } },
+          select: { type: 'select', label: 'Select', items, rules: [rules.requiredSel], col: { xs: 12, sm: 6 } },
+          multiple: { type: 'select', label: 'Multi-Select', clearable:true, items, rules: [rules.requiredSelMult], multiple: true, col: { xs: 12, sm: 6 } },
+          content: { type: 'textarea', label: 'Textarea', hint: 'Auto-Growing...', autoGrow: true, prependInnerIcon: 'print', rules: [ required('Content required') ], col: { xs: 12, sm: 6 } },
         }
       }
     }
   },
   methods: {
-
-    getTicket(){ return { done: false, title: 'Ticket added ' + Math.floor(Math.random() * 1000) } },
 
     validate () {
       this.$refs.myForm.validate()

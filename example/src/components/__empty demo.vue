@@ -7,7 +7,7 @@
       <!-- FORM-BASE-COMPONENT -->    
       <v-form-base 
         :model="myModel"
-        schema="mySchema"
+        :schema="mySchema"
         :col=6
         @input="log"
       />
@@ -66,37 +66,42 @@ export default {
   data () {
     return {
       myModel: {
-        name: 'Base',
-        creditcard: '12345678',
-        password: 'abcdefgh',
-        file: [] // array of File objects
-      },     
-
-      // Schema-Order defines Order of Controls in Form    
-      mySchema: {
-        name: { 
-          type:'text',           
-        },         
-        password: { 
-          type: 'password',
-          clearable: true,
-          solo:true,
-          class:'mx-2 mt-2'
+        a:{},
+         controls:{          
+         }
+      },
+      mySchema: { 
+        a:{
+          type: "group",
+          label: "Group",
+          row:{ noGutters:false},
+          schema: {
+            a1: [ { 'a1-0':'text'}],
+            a2: { type:'text', label:'a2-text' }
+          },
         },
-        creditcard: { 
-          type: 'text', 
-          label: 'Creditcard', 
-          prependInnerIcon: 'credit_card', 
-          hint: mask, 
-          mask,
-        },        
-        file: { 
-          type: 'file', 
-          label: 'Images', 
-          showSize:true,
-          counter:true,
-          accept, 
-          multiple: true,
+        
+        b: {
+          base: { type: 'checkbox', label: 'Base' },
+          // array
+          switch: [
+            { type: 'switch', label: 'SW1' },
+            { type: 'switch', label: 'SW2' }
+          ],
+          checkbox: [
+            { type: 'checkbox', label: 'A' },
+            { type: 'checkbox', label: 'B' },
+            // nested array
+            [
+              { type: 'checkbox', label: 'C-A', color: 'teal' },
+              { type: 'checkbox', label: 'C-B', color: 'teal' }
+            ],
+            { checkboxArray: [
+              { type: 'checkbox', label: 'D-A', value: 'checked', color: 'red' },
+              { type: 'checkbox', label: 'D-B', value: 'checked', color: 'red' }
+            ]
+            }
+          ]
         }
       }
     }

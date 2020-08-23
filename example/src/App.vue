@@ -39,7 +39,7 @@ import displayhelpers from '@/components/displayhelpers.vue'
 import deep from '@/components/deep.vue'
 import partial from '@/components/partial.vue'
 import multisourcedata from '@/components/multisourcedata.vue'
-import complex from '@/components/complex.vue'
+import validate from '@/components/validate.vue'
 import arrayease from '@/components/arrayease.vue'
 import array from '@/components/array.vue'
 import selection from '@/components/selection.vue'
@@ -82,13 +82,13 @@ const items = [
   { value: 'grid', text: 'Responsive Grid using Flex, Order and Offset'}, 
   { value: 'partial', text: 'Partial & Linked Model-Data Object'}, 
   { value: 'conditional', text: 'Conditional Form'}, 
-  { value: 'complex', text: 'Form-Base with Rules and Validation'}, 
+  { value: 'validate', text: 'Form-Base with Rules and Validation'}, 
 ]
 
 export default {
   components: {
     autogenerate, dynamic, simple, textfields, emptymodel, basic, grouping, async, grid, dragdrop, css, displayhelpers, deep, partial, multisourcedata, 
-    complex, treeview, arrayease, array, selection, selectioncascading, conditional, list, pickers, images, typehandling, toctrfunction, customcomponentdemo 
+    validate, treeview, arrayease, array, selection, selectioncascading, conditional, list, pickers, images, typehandling, toctrfunction, customcomponentdemo 
   },
   data () {
     return {

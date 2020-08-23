@@ -6,7 +6,7 @@
         id="form-base-images"
         :value="myValue"
         :schema="mySchema"
-        :flex="6"
+        :col="6"
         @update:form-base-images="update"
       />
     </v-form>

@@ -11,7 +11,7 @@
     <!-- BASE -->
     <v-form-base
       id="form-base-container"
-      :value="myValue"
+      :model="myValue"
       :schema="mySchema"
       @input:form-base-container="change"
     >
@@ -22,7 +22,7 @@
         <v-form-base
           id="form-base-slot"
           slot="slot-item-key-SlotPlaceholder"
-          :value="myValueSlot"
+          :model="myValueSlot"
           :schema="mySchemaSlot"
           @input:form-base-slot="changepartial"
         >
@@ -80,7 +80,7 @@ export default {
       },
       mySchema: {
         checkbox: { type: 'checkbox', label: 'Base', color: 'red' },
-        SlotPlaceholder: {}, // empty object as placeholder 
+        SlotPlaceholder: 'placeholder', // take any string or numeric value but EMPTY OBJECT IS NOT ALLOWED (would try to generate model from that)
         switch: { type: 'switch', label: 'Base', color: 'red' },
       },
 

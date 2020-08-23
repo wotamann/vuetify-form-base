@@ -1,10 +1,11 @@
 <template>
   <v-container fluid>
-    <h4>Resize Window to change Layout, Offset and Order of Controls. Use 'row' Attribute centering Controls</h4>
+    <h4>Resize Window to change Layout, Offset and Order of Controls. Computed Schema for dynamic 'row' Attribute</h4>
     <v-form-base
       :model="myModel"
       :schema="mySchema"
-      :class="layout"      
+      :class="layout"    
+      :col=12  
       :row="rowAttribute"      
       @change="change"
     />
@@ -38,7 +39,8 @@ export default {
       
       myModel: {
         name: 'Grid',
-        radio: 'A'
+        radio1: 'A',
+        radio2: '1'
       }
     }
   },
@@ -47,8 +49,23 @@ export default {
     mySchema () {
       return {
         name: { type: 'text', col: { cols: 12, sm: 6 }, order: this.order, offset: { sm: 1 } },
-        radio: { type: 'radio', row: !this.row, options: ['A', 'B', 'C', 'D'], col: 6 }
+        group: {
+          type:'group',
+          label:'Group with dynamic row-attributes',
+          class:'grey lighten-3 pa-3',
+          row: this.rowGutter, 
+          col: 6,
+          schema: {      
+            text1:'text',      
+            text2:'text',      
+            radio1: { type: 'radio', row: !this.row, options: ['A', 'B', 'C'] },
+            radio2: { type: 'radio', row: !this.row, options: ['1', '2', '3'] }
+          }  
+        }
       }
+    },
+    rowGutter(){
+      return this.$vuetify.breakpoint.mdAndUp ? {noGutters:false} : {noGutters:true}
     },
     // Change Layout from Row to Column on resize and change Radio-Orientation
     row () {
