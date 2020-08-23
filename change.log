@@ -75,7 +75,7 @@ bug fix error using v-file-input
 - in Slots current control data-object (key, value and schema) available
 - https://unpkg.com/  available
 
-0.2.25 -23.8.2020
+0.2.5 -23.8.2020
 - Issue #53 Row gutters in grouped controls -fixed
   fix: row & col configuration works in group & array schema too
   grouped: { 
