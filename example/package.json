@@ -4,7 +4,6 @@
   "private": true,
   "description": "Form Generator as Vue component based on Vuetify",
   "author": "wotamann@github",
-  
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "npm run build:vue & npm run build:cli & npm run copy",
@@ -24,6 +23,7 @@
     "sass-loader": "^9.0.2",
     "stylus-loader": "^3.0.2",
     "vue": "^2.6.11",
+    "vue-tel-input-vuetify": "^1.2.12",
     "vue-the-mask": "^0.11.1",
     "vuetify": "^2.3.4"
   },

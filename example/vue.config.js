@@ -4,5 +4,10 @@ module.exports = {
     public :'http://192.168.0.137:8080/',
     disableHostCheck : true
   },  
-  lintOnSave: false
+  lintOnSave: false,
+
+  // transpileDependencies: [
+  //   "vuetify",
+  //   "vue-tel-input-vuetify"
+  // ]
 }

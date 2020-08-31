@@ -53,6 +53,7 @@ import dynamic from '@/components/dynamicattributes.vue'
 import typehandling from '@/components/typehandling.vue'
 import toctrfunction from '@/components/tocontrolfunction.vue'
 import customcomponentdemo from '@/components/customcomponentdemo.vue'
+import fetchautocomplete from '@/components/fetchautocomplete.vue'
 
 const items = [
   { value: 'simple', text: 'Textfields' }, 
@@ -71,6 +72,7 @@ const items = [
   { value: 'displayhelpers', text: 'Display, Typo & Layout control with Vuetify display helpers'}, 
   { value: 'deep', text: 'Deep nested Model-Data including Objects & Arrays'}, 
   { value: 'selection', text: 'Selection, Combobox, Autocomplete from Schema-Array'}, 
+  { value: 'fetchautocomplete', text: 'Fetch Data on Search Input with Autocomplete or Combobox'}, 
   { value: 'selectioncascading', text: 'Cascading Selection using computed Schema-Array'}, 
   { value: 'list', text: 'List from Model-Data'}, 
   { value: 'treeview', text: 'Treeviews from Model-Data'}, 
@@ -88,7 +90,7 @@ const items = [
 export default {
   components: {
     autogenerate, dynamic, simple, textfields, emptymodel, basic, grouping, async, grid, dragdrop, css, displayhelpers, deep, partial, multisourcedata, 
-    validate, treeview, arrayease, array, selection, selectioncascading, conditional, list, pickers, images, typehandling, toctrfunction, customcomponentdemo 
+    validate, treeview, arrayease, array, selection, fetchautocomplete, selectioncascading, conditional, list, pickers, images, typehandling, toctrfunction, customcomponentdemo 
   },
   data () {
     return {

@@ -28,12 +28,14 @@ import log from '@/lib'
 
 /* IMPORTANT !!!
 
-  You have to register your Custom-Control Component globally in 'main.js'
-  See: https://vuejs.org/v2/guide/components-registration.html
+  // You have to register your Custom-Control Component globally in 'main.js'
+  // See: https://vuejs.org/v2/guide/components-registration.html
   
   Vue.component('custom-basic', () => import('@/components/customcomponent-basic.vue') )
   Vue.component('custom-object', () => import('@/components/customcomponent-object.vue') )
-
+  // customBasic splits to custom-basic 
+  // Case-sensitive attribute names don't work with v-bind 
+  // https://github.com/vuejs/vue/issues/4212
 */
 
 export default {
@@ -48,7 +50,7 @@ export default {
       },
       mySchema: {
         name: { type: 'text', label: 'Name' },
-        custom1: { type: 'custom-basic', label:'Component - Basic' },
+        custom1: { type: 'customBasic', label:'Component - Basic' },
         custom2: { type: 'custom-object', label:'Component - Object' },
       }
     }
