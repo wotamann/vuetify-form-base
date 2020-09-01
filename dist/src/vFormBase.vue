@@ -305,6 +305,7 @@
                   :type="checkExtensionType(obj)"                  
                   :value="setValue(obj)"
                   :obj="obj"
+                  :search-input.sync="obj.schema.searchInput"       
                   @focus="onEvent($event, obj)"
                   @blur="onEvent($event, obj)"
                   @click:append="onEvent($event, obj, append)"
@@ -833,7 +834,7 @@ export default {
       this.emitValue(type, emitObj)
       return emitObj
     },      
-    onEvent (event, obj, tag) {
+    onEvent (event={}, obj, tag) {       
       const text = event && event.srcElement && event.srcElement.innerText
       const model = obj.schema.model
       const open = obj.schema.open
