@@ -1,6 +1,6 @@
 {
   "name": "vuetify-form-base",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Form-Generator as Vue-Component using Vuetify 2.0",
   "main": "index.js",
   "module": "umd/vFormBase.umd.min.js",
