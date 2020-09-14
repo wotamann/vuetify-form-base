@@ -478,6 +478,46 @@ After a successful installation of a Vue 2.6 Project with Vuetify 2.0
 
 In order for your application to work properly, you must wrap it in a [v-app](https://next.vuetifyjs.com/en-US/framework/default-markup) component. This component is required and can exist anywhere inside the body, but must be the parent of ALL Vuetify components. **v-content** needs to be a direct descendant of **v-app**. 
 
+### How to manually import components and directives
+
+#### Steps to import
+1. Go to the file ```src/plugins/vuetify.js```
+2. Import the necessary components and directives used by vuetify-form-base:
+  - Components
+    - VRow
+    - VCol
+    - VTooltip
+  - Directives
+    - Ripple
+    - Intersect
+    - Touch
+    - Resize
+3. After this, the library will be successfully imported to your Vue file, and no errors on the console should appear.
+4. If a new error appears on the console, it means component you are using is not imported. See the name of the component on the console and add tot he plugin file.
+
+#### Example file from ```src/plugins/vuetify.js```
+
+```js
+import Vue from 'vue';
+import Vuetify, {
+    VRow,
+    VCol,
+    VTextField,
+    VTooltip,
+    VCheckbox,
+    VSelect,
+} from 'vuetify/lib';
+import { Ripple, Intersect, Touch, Resize } from 'vuetify/lib/directives';
+
+Vue.use(Vuetify, {
+    components: { VRow, VTooltip, VCol, VTextField, VCheckbox, VSelect },
+    directives: { Ripple, Intersect, Touch, Resize },
+});
+
+export default new Vuetify({});
+```
+In this example shows how to import the needed components and directives to use the vuetify-form-base and some basic components like VTextField, VCheckbox, VSelect.
+
 ### Quickstart with VUE-File
 ```HTML
 <!-- exampleFile.vue -->
