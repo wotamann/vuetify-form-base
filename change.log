@@ -103,3 +103,7 @@ bug fix error using v-file-input
   0.2.6 -23.8.2020
   fix: handle in onEvent function - undefined event
   issue #55 add attribute :search-input.sync="obj.schema.searchInput"   
+
+  0.2.7 -17.9.2020
+  issue #58 and #52  add: control <menu> in text-picker  
+  schema:{ ..., menu:{ closeOnContentClick:true, nudgeRight:96 } }   
