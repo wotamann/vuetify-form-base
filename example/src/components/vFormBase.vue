@@ -57,15 +57,10 @@
                 </v-radio-group>
               <!-- END RADIO -->
 
-              <!-- DATE, TIME, COLOR MENU -->
+              <!-- DATE, TIME, COLOR TEXT-MENU -->   
                 <v-menu
                   v-else-if="isDateTimeColorTypeAndExtensionText(obj)"
-                  :close-on-content-click="false"
-                  transition="scale-transition"
-                  offset-y
-                  :nudge-right="32"
-                  max-width="290px"
-                  min-width="290px"
+                  v-bind="bindPickerSchemaMenu(obj)"
                 >                  
                   <template v-slot:activator="{ on }">
                     <v-text-field
@@ -84,7 +79,7 @@
                     @input="onInput($event, obj)"
                   />
                 </v-menu>
-              <!-- END DATE, TIME, COLOR MENU -->
+              <!-- END DATE, TIME, COLOR TEXT-MENU -->
 
               <!-- ARRAY -->
                 <template
@@ -460,6 +455,8 @@
   const defaultSchemaIfValueIsString = key => ({ type:'text', label: key })
   const defaultSchemaIfValueIsNumber = key => ({ type:'number', label: key })
   const defaultSchemaIfValueIsBoolean = key => ({ type:'checkbox', label: key })
+  // Menu triggered DateTimePicker Default 
+  const defaultPickerMenu = { closeOnContentClick:false, transition:"scale-transition", nudgeRight:32, maxWidth:'290px', minWidth:'290px' }
 //
 export default {
   name: 'VFormBase',
@@ -567,6 +564,9 @@ export default {
       return isPicker.includes(obj.schema.ext)
     },
     // BIND SCHEMA FN
+    bindPickerSchemaMenu(obj, schemaProp ) {           
+      return { ...defaultPickerMenu, ...obj.schema.menu}
+    },      
     bindSchema(obj) {     
       return obj.schema
     },      

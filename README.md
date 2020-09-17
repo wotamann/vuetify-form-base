@@ -439,7 +439,8 @@ Select Items from an Array in your Model
     ext:'text', 
     format:'24h',
     prependIcon: 'timer', 
-    label:'Time'
+    label:'Time',    
+    menu:{ closeOnContentClick:false, nudgeRight:200, maxWidth:'290px', minWidth:'290px' }
   }
 
   // Time  - Native HTML <Input type="time" />
@@ -468,9 +469,7 @@ For proper working you need a Vue.js Project with Vuetify 2.0 installed. Get sta
 and therefore Components must be [manually imported](https://vuetifyjs.com/en/customization/a-la-carte/). More information about dynamic components is in the official [Vue documentation](https://vuejs.org/v2/guide/components.html#Dynamic-Components)
 
 
-
-
-After a successful installation of a Vue 2.6 Project with Vuetify 2.0  
+After successful installation of Vue 2.6 Project with Vuetify 2.0  
 
     npm install vuetify-form-base --save
 
@@ -516,7 +515,7 @@ Vue.use(Vuetify, {
 
 export default new Vuetify({});
 ```
-In this example shows how to import the needed components and directives to use the vuetify-form-base and some basic components like VTextField, VCheckbox, VSelect.
+This example shows how to import the needed components and directives to use the vuetify-form-base and some basic components like VTextField, VCheckbox, VSelect.
 
 ### Quickstart with VUE-File
 ```HTML
