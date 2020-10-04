@@ -77,6 +77,9 @@
                     :type="checkExtensionType(obj)"
                     :value="setValue(obj)"
                     @input="onInput($event, obj)"
+                    @click:hour="onEvent({type:'click'}, obj, hour)"
+                    @click:minute="onEvent({type:'click'}, obj, minute)"
+                    @click:second="onEvent({type:'click'}, obj, second)"
                   />
                 </v-menu>
               <!-- END DATE, TIME, COLOR TEXT-MENU -->
@@ -307,7 +310,10 @@
                   @click:append-outer="onEvent($event, obj, appendOuter)"
                   @click:clear="onEvent($event, obj, clear )"
                   @click:prepend="onEvent($event, obj, prepend )"
-                  @click:prepend-inner="onEvent($event, obj, prependInner )"
+                  @click:prepend-inner="onEvent($event, obj, prependInner)"
+                  @click:hour="onEvent({type:'click'}, obj, hour)"
+                  @click:minute="onEvent({type:'click'}, obj, minute)"
+                  @click:second="onEvent({type:'click'}, obj, second)"
                   @input="onInput($event, obj)"
                 >
                   {{obj.schema.textContent}}
@@ -440,6 +446,10 @@
   const appendOuter = 'append-outer'
   const prepend = 'prepend'
   const prependInner = 'prepend-inner'
+  
+  const hour = 'hour'
+  const minute = 'minute'
+  const second = 'second'
 
   // symbol on drop
   const dropEffect = 'move' // 'copy, link, move      

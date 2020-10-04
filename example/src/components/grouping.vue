@@ -9,7 +9,7 @@
     <!-- FORM-BASE-COMPONENT -->    
     <v-form-base 
       id="group"  
-      :model="myValue" 
+      :model="myModel" 
       :schema="mySchema" 
       :col=4
       :row="{align:'center', justify:'center', noGutters:false}" 
@@ -23,7 +23,7 @@
     
     
     <!-- Stuff  -->    
-    <infoline :value="myValue" :schema="mySchema" :path="$options._componentTag"/>
+    <infoline :value="myModel" :schema="mySchema" :path="$options._componentTag"/>
   </v-container>
 </template>
 
@@ -38,7 +38,7 @@
     data () {
       return {
 
-        myValue: {
+        myModel: {
           card1:{ name:'Harari' , read:true, book:'Homo Deus' },  
           card2:{ 
             tasks:[
@@ -49,7 +49,59 @@
           },  
           card3:{ name:'Jobs', read:true, book:'My Apple' },  
         }, 
+        
+        GroupDemo: {
+          /*
+          Die Grundintention by vuetify-formbase war es das Schema auf der Model-Structure basierend zu erstellen. 
+          
+          Wenn die Modellstruktur eine Gruppierung beinhaltet, ist eine Gruppeirung möglich
+          
+          model: {
+            person:{ 
+              name:'Harari', 
+              age:40 
+            },  
+            adress:{
+              street:'5th Avenue',
+              city:'NY'
+            } 
+          }
+          schema: {
+            person:{ 
+              type:'group', 
+              label:'Person', 
+              schema: {
+                name: { type: 'text' },    
+                age: { type: 'number' }
+              } 
+            },  
+            adress:{
+              type:'group', 
+              label:'Adress', 
+              schema: {
+                street:{ type: 'text' },
+                city:{ type: 'text' }
+            } 
+          }
+          
 
+          */
+          person:{ 
+            name:'Harari', 
+            age:40 
+          },  
+          adress:{
+            street:'5th Avenue',
+            city:'NY'
+          } 
+        }, 
+        GroupPlain: {
+          name:'Harari', 
+          age:40,
+          street:'5th Avenue',
+          city:'NY'
+        }, 
+        
         mySchema: {
           card1: { type:'group', label:'<u>Base</u>', col:5, class:'title pa-2 elevation-4 red--text red lighten-4', 
             schema: {
@@ -69,6 +121,11 @@
         }
       }
     },
+    // computed:{
+    //   grouped(){
+    //     return { person:{}}
+    //   }
+    // },
     methods: {
       log
     }
