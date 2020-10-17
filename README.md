@@ -2,6 +2,16 @@
 
 Imagine you get Data as JS-Object and you have to create an editable Form.
 
+:tada: :100:
+
+::: tip
+This is a tip
+:::
+
+::: warning
+This is a warning
+:::
+
 ```javascript
 Model: {
 	name: 'Stoner',
@@ -66,11 +76,11 @@ Clone or download this Project, change current directory to **./vuetify-form-bas
 
 or 
 
-[Download this HTML File](https://github.com/wotamann/vuetify-form-base/blob/master/umd/demo.html)
+[Download this HTML File with CDN](https://github.com/wotamann/vuetify-form-base/blob/master/umd/demo.html)
 
 or 
 
-Copy this HTML File
+Copy this HTML File with CDN
 ```HTML
 <html>
 	<head>
@@ -107,7 +117,7 @@ Copy this HTML File
 					file: [] // array of File objects
 				  },     
 				  schema: {
-					text: 'text',                    
+					text: 'text', // shorthand for ->  text: { type:'text', label:'text' }                   
 					password: { 
 					  type: 'password',
 					  clearable: true,
