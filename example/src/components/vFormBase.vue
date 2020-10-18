@@ -9,6 +9,7 @@
 
     <!-- main loop over components/controls -->
     <template v-for="(obj, index) in flatCombinedArraySorted">
+      
       <!-- Tooltip Wrapper -->
       <v-tooltip
         :key="index"
@@ -31,7 +32,8 @@
             @dragstart="dragstart($event, obj)"
             @dragover="dragover($event, obj)"
             @drop="drop($event, obj)"
-          >           
+          >      
+
             <!-- slot on top of type  -> <div slot="slot-bottom-type-[propertyName]"> -->
             <slot :name="getTypeTopSlot(obj)" :obj= "obj"/>
             <!-- slot on top of key  -> <v-btn slot="slot-bottom-key-[propertyName]"> -->
@@ -117,7 +119,9 @@
                     v-bind="bindSchema(obj)" 
                     @click="onEvent($event, obj)"
                   >
-                    <div v-html="obj.schema.label" />
+                    <slot :name="getKeyLabelSlot(obj)" :obj= "obj">
+                      <span v-html="obj.schema.label" />
+                    </slot>
                     <v-form-base
                       :id="`${id}-${obj.key}`"
                       :model="setValue(obj)"
@@ -128,9 +132,29 @@
                     />
                 </div>
                 </template>
-
               <!-- END GROUP -->
                 
+              <!-- WRAP -->
+                <template v-else-if="obj.schema.type === 'wrap'">
+                  <div
+                    v-bind="bindSchema(obj)" 
+                    @click="onEvent($event, obj)"
+                  >
+                  <slot :name="getKeyLabelSlot(obj)" :obj= "obj">
+                    <span v-html="obj.schema.label" />
+                  </slot>
+                    <v-form-base
+                      :id="`${id}-${obj.key}`"
+                      :model="setValueWrap(obj)"
+                      :schema="obj.schema.schema"
+                      :row="getRowGroupOrArray(obj)"
+                      :col="getColGroupOrArray(obj)"
+                      :class="`${id}-${obj.key}`"
+                    />
+                  </div>
+                </template>
+              <!-- END WRAP -->
+
               <!-- TREEVIEW -->
                 <v-treeview
                   v-else-if="obj.schema.type === treeview"
@@ -148,13 +172,15 @@
                 <template
                   v-else-if="obj.schema.type === list"
                 >
-                  <v-toolbar
-                    v-if="obj.schema.label"
-                    v-bind="bindSchema(obj)"
-                    dark
-                  >
-                    <v-toolbar-title>{{ obj.schema.label }}</v-toolbar-title>
-                  </v-toolbar>
+                  <slot :name="getKeyLabelSlot(obj)" :obj= "obj">
+                    <v-toolbar
+                      v-if="obj.schema.label"
+                      v-bind="bindSchema(obj)"
+                      dark
+                    >
+                      <v-toolbar-title>{{ obj.schema.label }}</v-toolbar-title>
+                    </v-toolbar>
+                  </slot>
                   <v-list>
                     <v-list-item-group
                       v-model="obj.schema.model"
@@ -397,7 +423,7 @@
 
         mySchema: { myCustom: { type: 'custom-component' }
 
-      3)  
+      3) // custom-component.vue 
         <template>
           <v-text-field v-model="inp"  label="Basic"></v-text-field>
         </template>
@@ -436,6 +462,7 @@
   const arraySlotAppendix = 'slot-array'
   const topSlotAppendix = 'slot-top'
   const itemSlotAppendix = 'slot-item'
+  const labelSlotAppendix = 'slot-label'
   const bottomSlotAppendix = 'slot-bottom'
 
   const clear = 'clear'
@@ -647,6 +674,11 @@ export default {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-address-city'
       return this.getKeyClassNameWithAppendix(obj, itemSlotAppendix + '-key')
     },
+    getKeyLabelSlot (obj) {
+      // used from GROUP, WRAP
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-label'  -> 'slot-label-key-address-city'
+      return this.getKeyClassNameWithAppendix(obj, labelSlotAppendix + '-key')
+    },
     getKeyTopSlot (obj) {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-top'  -> 'slot-top-key-address-city'
       return this.getKeyClassNameWithAppendix(obj, topSlotAppendix + '-key')
@@ -764,7 +796,7 @@ export default {
       //
       // manipulate value going to control, function must return a (modified) value
       // schema:{ name: { type:'text', toCtrl: ( {value} ) => value && value.toUpperCase, ... }, ... }
-      return isFunction(params.obj.schema.toCtrl) ? params.obj.schema.toCtrl(params) : params.value
+      return isFunction(params.obj.schema && params.obj.schema.toCtrl) ? params.obj.schema.toCtrl(params) : params.value
     },
     fromCtrl (params) {
       // signature params { value, obj, data, schema }
@@ -818,9 +850,14 @@ export default {
       // Use 'schema.toCtrl' Function for setting a modified Value  
       return this.toCtrl({ value: obj.value, obj, data: this.storeStateData, schema: this.storeStateSchema })
     },
+    setValueWrap (obj) {
+      // Use 'schema.toCtrl' Function for setting a modified Value  
+      return this.toCtrl({ value: this.storeStateData, obj, data: this.storeStateData, schema: this.storeStateSchema })
+    },
   //
   // EVENTS Get Value from Input & other Events
     onInput (value, obj, type = 'input') {
+     
       // Value after change in Control
       value = this.fromCtrl({ value, obj, data: this.storeStateData, schema: this.storeStateSchema })
       // harmonize undefined or empty strings => null, because 'clearable' in vuetify controls resets to null and not to empty string!
@@ -845,6 +882,7 @@ export default {
       return emitObj
     },      
     onEvent (event={}, obj, tag) {       
+      
       const text = event && event.srcElement && event.srcElement.innerText
       const model = obj.schema.model
       const open = obj.schema.open
@@ -884,6 +922,7 @@ export default {
   //
   // Emit Event Base
     emitValue (emit, val) {
+     
       this.parent.$emit(this.getEventName(emit), val) // listen to specific event only
       if (change.indexOf(emit) > -1) this.parent.$emit(this.getEventName('change'), val)    // listen to 'input|click'
       if (watch.indexOf(emit) > -1) this.parent.$emit(this.getEventName('watch'), val)      // listen to 'focus|input|click|blur'

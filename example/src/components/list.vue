@@ -6,7 +6,14 @@
       :value="myValue"
       :schema="mySchema"
       @change:form-base-list="change"
-    />
+    >
+     <!-- Label Slot -->
+      <template #slot-label-key-listString="{obj}">
+        <v-toolbar dark color="red lighten-2" >
+          <v-toolbar-title>{{ obj.schema.label }} (SLOT)</v-toolbar-title>
+        </v-toolbar>        
+      </template>
+    </v-form-base>
     
     <!-- Stuff   -->
     <infoline

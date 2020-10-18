@@ -25,12 +25,13 @@
 </template>
 
 <script>
-import autogenerate from '@/components/autogenerate.vue'
 import simple from '@/components/simple.vue'
+import autogenerate from '@/components/autogenerate.vue'
 import textfields from '@/components/textfields.vue'
 import emptymodel from '@/components/emptymodel.vue'
 import basic from '@/components/basic.vue'
 import grouping from '@/components/grouping.vue'
+import groupingExternal from '@/components/groupingExternal.vue'
 import async from '@/components/async.vue'
 import grid from '@/components/grid.vue'
 import dragdrop from '@/components/dragdrop.vue'
@@ -64,7 +65,8 @@ const items = [
   { value: 'basic', text: 'Missing Properties in Model or Schema'}, 
   { value: 'typehandling', text: `Handling special Schema-Key 'type' occuring in Model-Data `}, 
   { value: 'dynamic', text: 'Work with Dynamic Attributes Schema, Model and Grid' }, 
-  { value: 'grouping', text: 'Group Controls'}, 
+  { value: 'grouping', text: 'Group Controls based on Model-Structure'}, 
+  { value: 'groupingExternal', text: 'Wrap Controls to Model-Structure independent Groups'}, 
   { value: 'async', text: 'Async Loading of Form-Base Attributes'}, 
   { value: 'css', text: 'CSS, Slots, Tooltips & Buttons'}, 
   { value: 'dragdrop', text: 'Drag & Drop'}, 
@@ -89,7 +91,7 @@ const items = [
 
 export default {
   components: {
-    autogenerate, dynamic, simple, textfields, emptymodel, basic, grouping, async, grid, dragdrop, css, displayhelpers, deep, partial, multisourcedata, 
+    autogenerate, dynamic, simple, textfields, emptymodel, basic, grouping, groupingExternal, async, grid, dragdrop, css, displayhelpers, deep, partial, multisourcedata, 
     validate, treeview, arrayease, array, selection, fetchautocomplete, selectioncascading, conditional, list, pickers, images, typehandling, toctrfunction, customcomponentdemo 
   },
   data () {
