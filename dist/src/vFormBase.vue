@@ -292,6 +292,24 @@
                 />
               <!-- END MASK -->
 
+                <div
+                  v-else-if="/(select|combobox|autocomplete)/.test(obj.key)"
+                  :is="mapTypeToComponent(obj.schema.type)"
+                  v-else
+                  v-bind="bindSchema(obj)"
+                  :type="checkExtensionType(obj)"                  
+                  :value="setValue(obj)"
+                  :obj="obj"
+                  :search-input.sync="obj.schema.searchInput"       
+                  @focus="onEvent($event, obj)"
+                  @blur="onEvent($event, obj)"
+                  @click:clear="onEvent($event, obj, clear )"
+                  @click:prepend="onEvent($event, obj, prepend )"
+                  @click:prepend-inner="onEvent($event, obj, prependInner )"
+                  @input="onInput($event, obj)"
+                >
+                  {{obj.schema.textContent}}
+                </div>
               <!-- DEFAULT all other Types -> typeToComponent -->
                 <div
                   :is="mapTypeToComponent(obj.schema.type)"
