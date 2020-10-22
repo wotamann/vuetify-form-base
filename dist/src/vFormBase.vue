@@ -293,9 +293,8 @@
               <!-- END MASK -->
 
                 <div
-                  v-else-if="/(select|combobox|autocomplete)/.test(obj.key)"
+                  v-else-if="/(select|combobox|autocomplete)/.test(obj.schema.type)"
                   :is="mapTypeToComponent(obj.schema.type)"
-                  v-else
                   v-bind="bindSchema(obj)"
                   :type="checkExtensionType(obj)"                  
                   :value="setValue(obj)"
