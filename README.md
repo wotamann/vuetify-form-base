@@ -2,16 +2,6 @@
 
 Imagine you get Data as JS-Object and you have to create an editable Form.
 
-:tada: :100:
-
-::: tip
-This is a tip
-:::
-
-::: warning
-This is a warning
-:::
-
 ```javascript
 Model: {
 	name: 'Stoner',

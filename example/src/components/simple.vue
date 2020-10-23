@@ -2,6 +2,8 @@
   <v-container fluid>
     <h4>Textfields with Mask & Tooltips and Fileselector </h4>
     
+    <p>See Console Output for Input-Events  rtzhberz r zr zb4z 5  54u  5u b5 bu6b 35u6 5b u b35u6 35 u35 u 35u635 u  </p>
+    
     <v-form>
      
       <!-- FORM-BASE-COMPONENT -->    
@@ -41,11 +43,7 @@
     </v-form>
     
     <!-- Stuff  -->    
-    <infoline
-      :value="myModel"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <infoline :model="myModel" :schema="mySchema"/>
   </v-container>
 </template>
 

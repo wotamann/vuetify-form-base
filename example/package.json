@@ -1,6 +1,6 @@
 {
   "name": "vuetify-form-base-example",
-  "version": "0.2.6",
+  "version": "0.4.0",
   "private": true,
   "description": "Form Generator as Vue component based on Vuetify",
   "author": "wotamann@github",
@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@vue/compiler-sfc": "^3.0.0-rc.5",
+    "babel-runtime": "^6.26.0",
+    "core-js": "^3.6.5",
     "css-loader": "^3.5.3",
     "lodash": "^4.17.19",
     "rollup": "^2.23.0",
@@ -23,6 +25,8 @@
     "sass-loader": "^9.0.2",
     "stylus-loader": "^3.0.2",
     "vue": "^2.6.11",
+    "vue-markdown": "^2.2.4",
+    "vue-router": "^3.4.7",
     "vue-tel-input-vuetify": "^1.2.12",
     "vue-the-mask": "^0.11.1",
     "vuetify": "^2.3.4"

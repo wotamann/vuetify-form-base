@@ -1,21 +1,6 @@
 <style>
   /* INFO-SCOPED: Don't use '<style scoped>' because scoped CSS is inside a child-component not accessable */
 
-  /* CSS Component --- Container */
-  #form-base-css { background-color: #fff; }
-  #form-base-css .slot { width: 100%; padding:2px; color:#947901; background-color: #fcf3d0; border: 1px dotted #e7c320}
-
-  /* CSS Item --- set all items  */
-  #form-base-css .item { padding:0.5rem; border-bottom: 1px dotted #7f82ad}
-
-  /* CSS Type --- set all items of type ... */
-  #form-base-css .type-checkbox { background-color: #f0d3d1}
-  #form-base-css .type-slider { background-color: #46a7df73}
-  #form-base-css .type-switch { background-color: #44c45a77}
-
-  /* CSS Keys --- set item with key on focus' */
-  #form-base-css .key-email input { background-color: #cad7f077; color:#1951bb77 }
-  #form-base-css .key-email input:focus { background-color: #1951bb77; color:#FFF }
 </style>
 
 <template>

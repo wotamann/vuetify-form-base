@@ -67,8 +67,7 @@ export default {
     return {
       myModel: {
         a:{},
-         controls:{          
-         }
+        controls:{}
       },
       mySchema: { 
         a:{

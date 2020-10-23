@@ -63,7 +63,6 @@ export default {
         time:'01:15',
         date:'2020-02-25',
       },  
-     
     }
   },
   computed:{

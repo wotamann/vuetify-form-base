@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import vuetify from '@/plugins/vuetify'
+import router from '@/router'
 import App from '@/App.vue'
 
 Vue.config.warnHandler = function (err, vm, info) {
@@ -14,9 +15,11 @@ Vue.config.warnHandler = function (err, vm, info) {
 Vue.component('customBasic', () => import('@/components/customcomponent-basic.vue') )
 Vue.component('custom-object', () => import('@/components/customcomponent-object.vue') )
 
+
 /* eslint-disable no-new */
 new Vue({
   el: '#main',
   vuetify,
+  router,
   render: h => h(App)
 })
