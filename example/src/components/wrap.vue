@@ -4,7 +4,7 @@
 
 <template>
   <v-container fluid>
-    <h4>'wrap' groups a plain model without intrinsic strcuture. 'group' takes the model strcuture for grouping</h4>
+    <h4>'wrap' groups a plain model without intrinsic Structure. 'group' takes the model structure for grouping</h4>
     
     <!-- FORM-BASE-COMPONENT -->
     <!-- See for attribute 'row' handling <v-row></v-row> https://vuetifyjs.com/en/components/grids/ -->    

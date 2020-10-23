@@ -438,7 +438,7 @@
 
 <template>
   <v-app >
-      <v-navigation-drawer app permanent left width=280>
+      <v-navigation-drawer app permanent left width=300>
         <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title green--text">

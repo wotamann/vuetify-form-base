@@ -1,66 +1,19 @@
-<!DOCTYPE html>
-<html>
-	<head>
-	  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-	  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
-	  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-	  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-	</head>
-	
-	<body>
-		<div id="app">
-		<v-app>
-		  <v-main>
-			<v-container>
-				<demo :col="{cols:12, sm:6, md:3 }" :model="model" :schema="schema" @input="log" />
-			</v-container>
-		  </v-main>
-		</v-app>
-		</div>
+<meta charset="utf-8">
+<title>vFormBase demo</title>
+<script src="https://unpkg.com/vue"></script>
+<script src="./vFormBase.umd.js"></script>
 
-		<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-		<script src="https://unpkg.com/vuetify-form-base"></script>
-		<script>
-		new Vue({
-		el: '#app',
-		vuetify: new Vuetify(),
-		components: { demo:vFormBase },
-		data () {
-			return {      
-			  model: {
-				text: 'Base',
-				password: 'abcdefgh',
-				checkbox:true,
-				file: [] // array of File objects
-			  },     
-			  schema: {
-				text: 'text', // shorthand for ->  text: { type:'text', label:'text' }                   
-				password: { 
-				  type: 'password',
-				  clearable: true,
-				  solo:true,
-				  class:'mx-2 mt-2'
-				},			  
-				checkbox:'checkbox',
-				file: { 
-				  type: 'file', 
-				  label: 'Images', 
-				  showSize:true,
-				  counter:true,
-				  multiple: true,
-				}
-			  }
-			}
-		},
-		methods:{
-			log(v){ 
-				console.log(v) 
-			}
-		}
-		})
-		</script>
-	</body>
-</html>
+<link rel="stylesheet" href="./vFormBase.css">
 
 
+<div id="app">
+  <demo></demo>
+</div>
+
+<script>
+new Vue({
+  components: {
+    demo: vFormBase
+  }
+}).$mount('#app')
+</script>

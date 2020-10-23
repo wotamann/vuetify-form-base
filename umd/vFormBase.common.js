@@ -20469,16 +20469,16 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"027a2cc2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/vFormBase.vue?vue&type=template&id=24a66c36&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"462e51ca-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/vFormBase.vue?vue&type=template&id=4d7c87e2&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-row',_vm._b({directives:[{name:"resize",rawName:"v-resize.quiet",value:(_vm.onResize),expression:"onResize",modifiers:{"quiet":true}}],attrs:{"id":_vm.ref}},'v-row',_vm.getRow,false),[_vm._t(_vm.getFormTopSlot()),_vm._l((_vm.flatCombinedArraySorted),function(obj,index){return [_c('v-tooltip',_vm._b({key:index,attrs:{"disabled":!obj.schema.tooltip},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
 var on = ref.on;
 return [_c('v-col',_vm._g(_vm._b({directives:[{name:"show",rawName:"v-show",value:(!obj.schema.hidden),expression:"!obj.schema.hidden"},{name:"intersect",rawName:"v-intersect",value:(function (entries, observer) { return _vm.onIntersect(entries, observer, obj); }),expression:"(entries, observer) => onIntersect(entries, observer, obj)"},{name:"touch",rawName:"v-touch",value:({ left: function () { return _vm.onSwipe('left', obj); }, right: function () { return _vm.onSwipe('right', obj); }, up: function () { return _vm.onSwipe('up', obj); }, down: function () { return _vm.onSwipe('down', obj); } }),expression:"{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"}],key:index,class:_vm.getClassName(obj),attrs:{"draggable":obj.schema.drag},on:{"mouseenter":function($event){return _vm.onEvent($event, obj)},"mouseleave":function($event){return _vm.onEvent($event, obj)},"dragstart":function($event){return _vm.dragstart($event, obj)},"dragover":function($event){return _vm.dragover($event, obj)},"drop":function($event){return _vm.drop($event, obj)}}},'v-col',_vm.getGridAttributes(obj),false),on),[_vm._t(_vm.getTypeTopSlot(obj),null,{"obj":obj}),_vm._t(_vm.getKeyTopSlot(obj),null,{"obj":obj}),_vm._t(_vm.getTypeItemSlot(obj),[_vm._t(_vm.getKeyItemSlot(obj),[(obj.schema.type === 'radio')?_c('v-radio-group',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'v-radio-group',_vm.bindSchema(obj),false),_vm._l((obj.schema.options),function(o,idx){return _c('v-radio',_vm._b({key:idx,attrs:{"label":_vm.sanitizeOptions(o).label,"value":_vm.sanitizeOptions(o).value}},'v-radio',_vm.bindSchema(obj),false))}),1):(_vm.isDateTimeColorTypeAndExtensionText(obj))?_c('v-menu',_vm._b({scopedSlots:_vm._u([{key:"activator",fn:function(ref){
 var on = ref.on;
-return [_c('v-text-field',_vm._g(_vm._b({attrs:{"type":"text","readonly":"","value":_vm.setValue(obj)}},'v-text-field',_vm.bindSchema(obj),false),on))]}}],null,true)},'v-menu',_vm.bindPickerSchemaMenu(obj),false),[_c(_vm.mapTypeToComponent( obj.schema.type ),_vm._b({tag:"div",attrs:{"type":_vm.checkExtensionType(obj),"value":_vm.setValue(obj)},on:{"input":function($event){return _vm.onInput($event, obj)}}},'div',_vm.bindSchema(obj),false))],1):(obj.schema.type === 'array')?_vm._l((_vm.setValue(obj)),function(item,idx){return _c('div',_vm._b({key:_vm.getKeyForArray(obj, item, idx),attrs:{"value":_vm.setValue(obj)}},'div',_vm.bindSchema(obj),false),[_vm._t(_vm.getKeyArraySlot(obj),[_c('v-form-base',{class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key) + "-" + idx),"model":item,"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)}})],{"item":item})],2)}):(obj.schema.type === 'group')?[_c('div',_vm._b({on:{"click":function($event){return _vm.onEvent($event, obj)}}},'div',_vm.bindSchema(obj),false),[_c('div',{domProps:{"innerHTML":_vm._s(obj.schema.label)}}),_c('v-form-base',{class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key)),"model":_vm.setValue(obj),"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)}})],1)]:(obj.schema.type === _vm.treeview)?_c('v-treeview',_vm._b({attrs:{"items":_vm.setValue(obj),"active":obj.schema.model,"open":obj.schema.open},on:{"update:active":[function($event){return _vm.$set(obj.schema, "model", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'selected' )}],"update:open":[function($event){return _vm.$set(obj.schema, "open", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'open' )}]},model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-treeview',_vm.bindSchema(obj),false)):(obj.schema.type === _vm.list)?[(obj.schema.label)?_c('v-toolbar',_vm._b({attrs:{"dark":""}},'v-toolbar',_vm.bindSchema(obj),false),[_c('v-toolbar-title',[_vm._v(_vm._s(obj.schema.label))])],1):_vm._e(),_c('v-list',[_c('v-list-item-group',_vm._b({attrs:{"light":""},model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-list-item-group',_vm.bindSchema(obj),false),_vm._l((_vm.setValue(obj)),function(item,idx){return _c('v-list-item',{key:idx,on:{"click":function($event){return _vm.onEvent($event, obj, _vm.list )}}},[_c('v-list-item-icon',[_c('v-icon',{domProps:{"textContent":_vm._s(obj.schema.icon)}})],1),_c('v-list-item-content',[_c('v-list-item-title',{domProps:{"textContent":_vm._s(obj.schema.item ? item[obj.schema.item] : item)}})],1)],1)}),1)],1)]:(obj.schema.type === 'switch' || obj.schema.type === 'checkbox')?_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b({tag:"div",attrs:{"input-value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'div',_vm.bindSchema(obj),false)):(obj.schema.type === 'file' )?_c('v-file-input',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"change":function($event){return _vm.onInput($event, obj)}}},'v-file-input',_vm.bindSchema(obj),false)):(obj.schema.type === 'icon')?_c('v-icon',_vm._b({domProps:{"textContent":_vm._s(_vm.getIconValue(obj))},on:{"click":function($event){return _vm.onEvent($event, obj)}}},'v-icon',_vm.bindSchema(obj),false)):(obj.schema.type === 'slider')?_c('v-slider',_vm._b({on:{"input":function($event){return _vm.onInput($event, obj)}}},'v-slider',_vm.bindSchema(obj),false)):(obj.schema.type === 'img')?_c('v-img',_vm._b({attrs:{"src":_vm.getImageSource(obj)},on:{"click":function($event){return _vm.onEvent($event, obj)}}},'v-img',_vm.bindSchema(obj),false)):(obj.schema.type === 'btn-toggle')?_c('v-btn-toggle',_vm._b({attrs:{"color":"","value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'v-btn-toggle',_vm.bindSchema(obj),false),_vm._l((obj.schema.options),function(b,idx){return _c('v-btn',_vm._b({key:idx,attrs:{"value":_vm.sanitizeOptions(b).value}},'v-btn',_vm.bindSchema(obj),false),[_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(_vm.sanitizeOptions(b).icon)+" ")]),_vm._v(" "+_vm._s(_vm.sanitizeOptions(b).label)+" ")],1)}),1):(obj.schema.type === 'btn')?_c('v-btn',_vm._b({on:{"click":function($event){return _vm.onEvent($event, obj, _vm.button)}}},'v-btn',_vm.bindSchema(obj),false),[(obj.schema.iconLeft)?_c('v-icon',{attrs:{"left":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconLeft)+" ")]):_vm._e(),_vm._v(" "+_vm._s(_vm.setValue(obj))+" "),(obj.schema.iconCenter)?_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconCenter)+" ")]):_vm._e(),_vm._v(" "+_vm._s(obj.schema.label)+" "),(obj.schema.iconRight)?_c('v-icon',{attrs:{"right":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconRight)+" ")]):_vm._e()],1):(obj.schema.mask)?_c('v-text-field',_vm._b({directives:[{name:"mask",rawName:"v-mask",value:(obj.schema.mask),expression:"obj.schema.mask"}],attrs:{"value":_vm.setValue(obj)},on:{"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append":function($event){return _vm.onEvent($event, obj, _vm.append)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)},"input":function($event){return _vm.onInput($event, obj)}}},'v-text-field',_vm.bindSchema(obj),false)):_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b({tag:"div",attrs:{"type":_vm.checkExtensionType(obj),"value":_vm.setValue(obj),"obj":obj,"search-input":obj.schema.searchInput},on:{"update:searchInput":function($event){return _vm.$set(obj.schema, "searchInput", $event)},"update:search-input":function($event){return _vm.$set(obj.schema, "searchInput", $event)},"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append":function($event){return _vm.onEvent($event, obj, _vm.append)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner )},"input":function($event){return _vm.onInput($event, obj)}}},'div',_vm.bindSchema(obj),false),[_vm._v(" "+_vm._s(obj.schema.textContent)+" ")])],{"obj":obj})],{"obj":obj}),_vm._t(_vm.getTypeBottomSlot(obj),null,{"obj":obj}),_vm._t(_vm.getKeyBottomSlot(obj),null,{"obj":obj})],2),(obj.schema.spacer)?_c('v-spacer',{key:("s-" + index)}):_vm._e()]}}],null,true)},'v-tooltip',_vm.getShorthandTooltip(obj.schema.tooltip),false),[_vm._t("slot-tooltip",[_c('span',[_vm._v(_vm._s(_vm.getShorthandTooltipLabel(obj.schema.tooltip)))])],{"obj":obj})],2)]}),_vm._t(_vm.getFormBottomSlot())],2)}
+return [_c('v-text-field',_vm._g(_vm._b({attrs:{"type":"text","readonly":"","value":_vm.setValue(obj)},on:_vm._d({"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend)},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)}},[_vm.suspendClickAppend(obj),function($event){return _vm.onEvent($event, obj, _vm.append)}])},'v-text-field',_vm.bindSchema(obj),false),on))]}}],null,true)},'v-menu',_vm.bindPickerSchemaMenu(obj),false),[_c(_vm.mapTypeToComponent( obj.schema.type ),_vm._b({tag:"div",attrs:{"type":_vm.checkInternType(obj),"value":_vm.setValue(obj)},on:{"input":function($event){return _vm.onInput($event, obj)},"click:hour":function($event){return _vm.onEvent({type:'click'}, obj, _vm.hour)},"click:minute":function($event){return _vm.onEvent({type:'click'}, obj, _vm.minute)},"click:second":function($event){return _vm.onEvent({type:'click'}, obj, _vm.second)}}},'div',_vm.bindSchema(obj),false))],1):(obj.schema.type === 'array')?_vm._l((_vm.setValue(obj)),function(item,idx){return _c('div',_vm._b({key:_vm.getKeyForArray(obj, item, idx),attrs:{"value":_vm.setValue(obj)}},'div',_vm.bindSchema(obj),false),[_vm._t(_vm.getKeyArraySlot(obj),[_c('v-form-base',{class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key) + "-" + idx),"model":item,"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)}})],{"item":item})],2)}):(obj.schema.type === 'group')?[_c('div',_vm._b({on:{"click":function($event){return _vm.onEvent($event, obj)}}},'div',_vm.bindSchema(obj),false),[_vm._t(_vm.getKeyLabelSlot(obj),[_c('span',{domProps:{"innerHTML":_vm._s(obj.schema.label)}})],{"obj":obj}),_c('v-form-base',{class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key)),"model":_vm.setValue(obj),"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)}})],2)]:(obj.schema.type === 'wrap')?[_c('div',_vm._b({on:{"click":function($event){return _vm.onEvent($event, obj)}}},'div',_vm.bindSchema(obj),false),[_vm._t(_vm.getKeyLabelSlot(obj),[_c('span',{domProps:{"innerHTML":_vm._s(obj.schema.label)}})],{"obj":obj}),_c('v-form-base',{class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key)),"model":_vm.setValueWrap(obj),"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)}})],2)]:(obj.schema.type === _vm.treeview)?_c('v-treeview',_vm._b({attrs:{"items":_vm.setValue(obj),"active":obj.schema.model,"open":obj.schema.open},on:{"update:active":[function($event){return _vm.$set(obj.schema, "model", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'selected' )}],"update:open":[function($event){return _vm.$set(obj.schema, "open", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'open' )}]},model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-treeview',_vm.bindSchema(obj),false)):(obj.schema.type === _vm.list)?[_vm._t(_vm.getKeyLabelSlot(obj),[(obj.schema.label)?_c('v-toolbar',_vm._b({attrs:{"dark":""}},'v-toolbar',_vm.bindSchema(obj),false),[_c('v-toolbar-title',[_vm._v(_vm._s(obj.schema.label))])],1):_vm._e()],{"obj":obj}),_c('v-list',[_c('v-list-item-group',_vm._b({attrs:{"light":""},model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-list-item-group',_vm.bindSchema(obj),false),_vm._l((_vm.setValue(obj)),function(item,idx){return _c('v-list-item',{key:idx,on:{"click":function($event){return _vm.onEvent($event, obj, _vm.list )}}},[_c('v-list-item-icon',[_c('v-icon',{domProps:{"textContent":_vm._s(obj.schema.icon)}})],1),_c('v-list-item-content',[_c('v-list-item-title',{domProps:{"textContent":_vm._s(obj.schema.item ? item[obj.schema.item] : item)}})],1)],1)}),1)],1)]:(/(switch|checkbox)/.test(obj.schema.type))?_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b({tag:"div",attrs:{"input-value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'div',_vm.bindSchema(obj),false)):(obj.schema.type === 'file' )?_c('v-file-input',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"change":function($event){return _vm.onInput($event, obj)}}},'v-file-input',_vm.bindSchema(obj),false)):(obj.schema.type === 'icon')?_c('v-icon',_vm._b({domProps:{"textContent":_vm._s(_vm.getIconValue(obj))},on:{"click":function($event){return _vm.onEvent($event, obj)}}},'v-icon',_vm.bindSchema(obj),false)):(obj.schema.type === 'slider')?_c('v-slider',_vm._b({on:{"input":function($event){return _vm.onInput($event, obj)}}},'v-slider',_vm.bindSchema(obj),false)):(obj.schema.type === 'img')?_c('v-img',_vm._b({attrs:{"src":_vm.getImageSource(obj)},on:{"click":function($event){return _vm.onEvent($event, obj)}}},'v-img',_vm.bindSchema(obj),false)):(obj.schema.type === 'btn-toggle')?_c('v-btn-toggle',_vm._b({attrs:{"color":"","value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'v-btn-toggle',_vm.bindSchema(obj),false),_vm._l((obj.schema.options),function(b,idx){return _c('v-btn',_vm._b({key:idx,attrs:{"value":_vm.sanitizeOptions(b).value}},'v-btn',_vm.bindSchema(obj),false),[_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(_vm.sanitizeOptions(b).icon)+" ")]),_vm._v(" "+_vm._s(_vm.sanitizeOptions(b).label)+" ")],1)}),1):(obj.schema.type === 'btn')?_c('v-btn',_vm._b({on:{"click":function($event){return _vm.onEvent($event, obj, _vm.button)}}},'v-btn',_vm.bindSchema(obj),false),[(obj.schema.iconLeft)?_c('v-icon',{attrs:{"left":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconLeft)+" ")]):_vm._e(),_vm._v(" "+_vm._s(_vm.setValue(obj))+" "),(obj.schema.iconCenter)?_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconCenter)+" ")]):_vm._e(),_vm._v(" "+_vm._s(obj.schema.label)+" "),(obj.schema.iconRight)?_c('v-icon',{attrs:{"right":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconRight)+" ")]):_vm._e()],1):(obj.schema.mask)?_c('v-text-field',_vm._b({directives:[{name:"mask",rawName:"v-mask",value:(obj.schema.mask),expression:"obj.schema.mask"}],attrs:{"type":_vm.checkExtensionType(obj),"value":_vm.setValue(obj)},on:_vm._d({"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"input":function($event){return _vm.onInput($event, obj)}},[_vm.suspendClickAppend(obj),function($event){return _vm.onEvent($event, obj, _vm.append)}])},'v-text-field',_vm.bindSchema(obj),false)):_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b({tag:"div",attrs:{"type":_vm.checkExtensionType(obj),"value":_vm.setValue(obj),"obj":obj,"search-input":obj.schema.searchInput},on:_vm._d({"update:searchInput":function($event){return _vm.$set(obj.schema, "searchInput", $event)},"update:search-input":function($event){return _vm.$set(obj.schema, "searchInput", $event)},"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"click:hour":function($event){return _vm.onEvent({type:'click'}, obj, _vm.hour)},"click:minute":function($event){return _vm.onEvent({type:'click'}, obj, _vm.minute)},"click:second":function($event){return _vm.onEvent({type:'click'}, obj, _vm.second)},"input":function($event){return _vm.onInput($event, obj)}},[_vm.suspendClickAppend(obj),function($event){return _vm.onEvent($event, obj, _vm.append)}])},'div',_vm.bindSchema(obj),false),[_vm._v(" "+_vm._s(obj.schema.textContent)+" ")])],{"obj":obj})],{"obj":obj}),_vm._t(_vm.getTypeBottomSlot(obj),null,{"obj":obj}),_vm._t(_vm.getKeyBottomSlot(obj),null,{"obj":obj})],2),(obj.schema.spacer)?_c('v-spacer',{key:("s-" + index)}):_vm._e()]}}],null,true)},'v-tooltip',_vm.getShorthandTooltip(obj.schema.tooltip),false),[_vm._t("slot-tooltip",[_c('span',[_vm._v(_vm._s(_vm.getShorthandTooltipLabel(obj.schema.tooltip)))])],{"obj":obj})],2)]}),_vm._t(_vm.getFormBottomSlot())],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/vFormBase.vue?vue&type=template&id=24a66c36&
+// CONCATENATED MODULE: ./src/components/vFormBase.vue?vue&type=template&id=4d7c87e2&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
 var es_array_concat = __webpack_require__("99af");
@@ -20955,6 +20955,43 @@ var vue_the_mask = __webpack_require__("3a60");
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // import & declarations
 
 
@@ -21000,7 +21037,7 @@ var typeToComponent = {
     2)  
       use it in Schema 
         mySchema: { myCustom: { type: 'custom-component' }
-      3)  
+      3) // custom-component.vue 
       <template>
         <v-text-field v-model="inp"  label="Basic"></v-text-field>
       </template>
@@ -21040,6 +21077,7 @@ var propertyClassAppendix = 'prop';
 var arraySlotAppendix = 'slot-array';
 var topSlotAppendix = 'slot-top';
 var itemSlotAppendix = 'slot-item';
+var labelSlotAppendix = 'slot-label';
 var bottomSlotAppendix = 'slot-bottom';
 var clear = 'clear';
 var vFormBasevue_type_script_lang_js_button = 'button';
@@ -21048,7 +21086,10 @@ var list = 'list';
 var append = 'append';
 var appendOuter = 'append-outer';
 var prepend = 'prepend';
-var prependInner = 'prepend-inner'; // symbol on drop
+var prependInner = 'prepend-inner';
+var hour = 'hour';
+var minute = 'minute';
+var second = 'second'; // symbol on drop
 
 var dropEffect = 'move'; // 'copy, link, move      
 // Default row setting if no row-attribute defined  
@@ -21150,7 +21191,10 @@ var defaultPickerMenu = {
       append: append,
       appendOuter: appendOuter,
       prepend: prepend,
-      prependInner: prependInner
+      prependInner: prependInner,
+      hour: hour,
+      minute: minute,
+      second: second
     };
   },
   computed: {
@@ -21224,11 +21268,22 @@ var defaultPickerMenu = {
     bindSchema: function bindSchema(obj) {
       return obj.schema;
     },
+    suspendClickAppend: function suspendClickAppend(obj) {
+      // select|combobox|autocomplete -> suspend 'click:append' for working down arrow
+      return /(select|combobox|autocomplete)/.test(obj.schema.type) ? '' : 'click:append';
+    },
     // EXT TYPE
     checkExtensionType: function checkExtensionType(obj) {
-      // For native <INPUT> type use ext or typeInt
-      // { type:'date', ext:'text', typeInt:'month' ...} -> use native Input Type 'Date' instead of Date-Picker
-      return obj.schema.typeInt || obj.schema.ext || obj.schema.type;
+      // For native <INPUT> type use prop 'ext'
+      // { type:'text', ext:'range', ... } -> use native Input Type 'range' instead of slider
+      // { type:'text', ext:'number', ...} -> use native Input Type 'number' 
+      return obj.schema.ext || obj.schema.type;
+    },
+    // V-INTERN TYPE
+    checkInternType: function checkInternType(obj) {
+      // If vuetify component needs a 'type' prop for working  - ie. datepicker uses type:'month'
+      // { type:'date', ext:'text', typeInt:'month' ...} -> use v-date-picker menu with intern Type 'month'
+      return obj.schema.typeInt || obj.schema.type;
     },
     // GET ITERATION KEY FOR TYPE ARRAY
     getKeyForArray: function getKeyForArray(obj, item, index) {
@@ -21292,6 +21347,11 @@ var defaultPickerMenu = {
     getKeyItemSlot: function getKeyItemSlot(obj) {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-address-city'
       return this.getKeyClassNameWithAppendix(obj, itemSlotAppendix + '-key');
+    },
+    getKeyLabelSlot: function getKeyLabelSlot(obj) {
+      // used from GROUP, WRAP
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-label'  -> 'slot-label-key-address-city'
+      return this.getKeyClassNameWithAppendix(obj, labelSlotAppendix + '-key');
     },
     getKeyTopSlot: function getKeyTopSlot(obj) {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-top'  -> 'slot-top-key-address-city'
@@ -21423,7 +21483,7 @@ var defaultPickerMenu = {
       //
       // manipulate value going to control, function must return a (modified) value
       // schema:{ name: { type:'text', toCtrl: ( {value} ) => value && value.toUpperCase, ... }, ... }
-      return Object(lodash["isFunction"])(params.obj.schema.toCtrl) ? params.obj.schema.toCtrl(params) : params.value;
+      return Object(lodash["isFunction"])(params.obj.schema && params.obj.schema.toCtrl) ? params.obj.schema.toCtrl(params) : params.value;
     },
     fromCtrl: function fromCtrl(params) {
       // signature params { value, obj, data, schema }
@@ -21477,6 +21537,15 @@ var defaultPickerMenu = {
       // Use 'schema.toCtrl' Function for setting a modified Value  
       return this.toCtrl({
         value: obj.value,
+        obj: obj,
+        data: this.storeStateData,
+        schema: this.storeStateSchema
+      });
+    },
+    setValueWrap: function setValueWrap(obj) {
+      // Use 'schema.toCtrl' Function for setting a modified Value  
+      return this.toCtrl({
+        value: this.storeStateData,
         obj: obj,
         data: this.storeStateData,
         schema: this.storeStateSchema

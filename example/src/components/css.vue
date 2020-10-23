@@ -15,7 +15,7 @@
 
   /* CSS Keys --- set item with key on focus' */
   #form-base-css .key-email input { background-color: #cad7f077; color:#1951bb77 }
-  #form-base-css .key-email input:focus { background-color: #1951bb77; color:#FFF }
+  #form-base-css .key-email input:focus { background-color: #1949a1b9; color:#FFF }
 </style>
 
 <template>
@@ -28,59 +28,8 @@
       :model="myValue"
       :schema="mySchema"
       @change:form-base-css="log"
-    >
-      <!-- FORM SLOT -->
-      <template #form-base-css-top>
-        <h4 class="slot">
-          Top Slot of 'Form'
-        </h4>
-      </template>
-      <template #form-base-css-bottom>
-        <h4 class="slot">
-          Bottom Slot of 'Form'
-        </h4>  
-      </template>
-      
-      <!-- KEY SLOTS -->
-      <template #slot-top-key-name="{obj}">
-        <h4 class="slot">
-          Slot at Top of Key 'Name' - {{obj.value}}
-        </h4>
-      </template>
-      <template #slot-item-key-password="{obj}">
-        <div class="slot caption">
-          Slot replaces Key 'Password'<hr/>Object:<br/>{{obj}}
-        </div>
-      </template>
-      <template #slot-bottom-key-email="{obj}">
-        <h4 class="slot">
-          Slot at Bottom of Key 'Email' - {{obj.value}}
-        </h4>
-      </template>
-
-      <!-- TYPE SLOTS -->
-      <template #slot-top-type-btn-toggle="{obj}">
-        <h4 class="slot">
-          Slot at Top of Type 'Btn-Toggle' - {{obj.value}}
-        </h4>
-      </template>
-      <template #slot-bottom-type-btn="{obj}">
-        <h4 class="slot">
-          Slot at Bottom of Type 'Btn' - {{obj.value}}
-        </h4>
-      </template>
-      <template #slot-top-type-radio="{obj}">
-        <h4 class="slot">
-          Slot at Top of Type 'Radio' - {{obj.value}}
-        </h4>
-      </template>
+    />
      
-      <!-- TOOLTIP SLOT -  New Syntax VUE 2.6.0 -->
-      <template #slot-tooltip="{obj}">
-         {{ obj.schema.tooltip }} with Value: {{ obj.value }}
-      </template>
-    </v-form-base>
-
     <!-- Stuff   -->
     <infoline
       :value="myValue"

@@ -1,6 +1,7 @@
 <template>
   <v-container fluid>
-    <h4>Resize Window to change Layout, Offset and Order of Controls. Computed Schema for dynamic 'row' Attribute</h4>
+    <h4>Use computed Schema for responsible Layout with dynamic 'row' Attribute</h4>
+    <p>Resize Window to change Layout, Offset and Order of Controls. </p>
     <v-form-base
       :model="myModel"
       :schema="mySchema"

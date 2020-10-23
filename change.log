@@ -107,3 +107,16 @@ bug fix error using v-file-input
   0.2.7 -17.9.2020
   issue #58 and #52  add: control <menu> in text-picker  
   schema:{ ..., menu:{ closeOnContentClick:true, nudgeRight:96 } }   
+
+  0.3.0 - 23.10
+  rewrite example by using router / it is also planned to revise the documentation
+  
+  issue #59  -  
+  grouping not based on model structure  
+  -> see Example https://github.com/wotamann/vuetify-form-base/blob/master/example/src/components/wrap.vue 
+  grouping based on model structure 
+  -> see Example https://github.com/wotamann/vuetify-form-base/blob/master/example/src/components/grouping.vue 
+  
+  issue #66  -  added click event for click:hour, :minute, :second  
+  
+  issue #68  -  fixed bug with down-arrow in select|combo|autocomplete  

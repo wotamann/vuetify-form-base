@@ -29,31 +29,25 @@ Clone or download this Project, change current directory to **./vuetify-form-bas
 
 or 
 
-Download and open this [File](https://github.com/wotamann/vuetify-form-base/blob/master/umd/demo.html) in your Browser
+Download and open this [HTML-File](https://github.com/wotamann/vuetify-form-base/blob/master/umd/demo.html) in your Browser
 
 ---
 
 ### Installation
 
-For proper working you need a Vue.js Project with Vuetify 2.0 installed. Get started with **Vuetify**, the world’s most popular Vue.js framework for building feature rich, blazing fast application [here](https://vuetifyjs.com/en/getting-started/quick-start/).
-
-**INFORMATION:** 
-Vuetify-Form-Base works with dynamic bind components, but the Vue-Loader can't autoload dynamic components   
-
-\`<component is="my-component" />\`
-
-and therefore Vuetify-Components must be [manually imported](https://vuetifyjs.com/en/customization/a-la-carte/). Find more Information about dynamic Components in the official [Vue documentation](https://vuejs.org/v2/guide/components.html#Dynamic-Components)
-
-
-After successful installation of a Vue 2.6 Project with Vuetify 2.0  
-
-\`npm install vuetify-form-base --save\`
+For proper working you need a Vue.js Project with Vuetify 2.0 installed. After successful installation of a [Vue 2.6 Project](https://vuejs.org/v2/guide/installation.html) you have to install [Vuetify 2.0](https://vuetifyjs.com/en/getting-started/quick-start/), the world’s most popular Vue.js framework for building feature rich, blazing fast applications.
 
 **vuetify-form-base** is a [Vue.js single-file component](https://vuejs.org/v2/guide/single-file-components.html) with a .vue extension and you can use it like any other Vue-Component. 
 
-In order for your application to work properly, you must wrap it in a [v-app](https://next.vuetifyjs.com/en-US/framework/default-markup) component. This component is required and can exist anywhere inside the body, but must be the parent of ALL Vuetify components. **v-main** needs to be a direct descendant of **v-app**. 
+\`npm install vuetify-form-base --save\`
 
-### How to manually import components and directives
+**INFORMATION:** The vuetify-loader will also make code-splitting more effective, as webpack will only load the components required for that chunk to be displayed. But there is a limitation because **Vuetify-Form-Base** works with dynamic bind components 
+
+\`<component is="my-component" />\`
+
+The Vue-Loader can't autoload dynamic components with [Treeshaking](https://vuetifyjs.com/en/features/treeshaking/#dynamic-components) and therefore Vuetify-Components must be [manually imported](https://vuetifyjs.com/en/customization/a-la-carte/). Find more Information about dynamic Components in the official [Vue documentation](https://vuejs.org/v2/guide/components.html#Dynamic-Components).
+
+### How to manually import components and directives 
 
 #### Steps to import
 1. Go to the file src/plugins/vuetify.js
@@ -69,7 +63,6 @@ In order for your application to work properly, you must wrap it in a [v-app](ht
     - Resize
 3. After this, the library will be successfully imported to your Vue file, and no errors on the console should appear.
 4. If a new error appears on the console, it means component you are using is not imported. See the name of the component on the console and add to the plugin file.
-
 
 #### Example file from src/plugins/vuetify.js
 
@@ -96,6 +89,8 @@ This example shows how to import the needed components and directives to use the
 
 ### Quickstart with VUE-File
 
+In order for your application to work correct, you must wrap it in a [v-app](https://next.vuetifyjs.com/en-US/framework/default-markup) component. This component is required and can exist anywhere inside the body, but must be the parent of ALL Vuetify components. **v-main** needs to be a direct descendant of **v-app**. 
+
     <!-- exampleFile.vue -->
     <template>
       <v-app>
@@ -118,16 +113,10 @@ This example shows how to import the needed components and directives to use the
           myModel: {
             name: 'Jumo',
             password: '123456',
-            email: 'base@mail.com',
-            checkbox: true,
-            select: 'Jobs',
           },   
           mySchema: {
             name: { type: 'text', label: 'Name' },
             password: { type: 'password', label: 'Password' },
-            email: { type: 'email', label: 'Email' },
-            checkbox: { type: 'checkbox', label: 'Checkbox' },
-            select: { type: 'select', label: 'Select', items: ['Tesla', 'Jobs', 'Taleb'] }
           }
         }
       },
@@ -137,15 +126,6 @@ This example shows how to import the needed components and directives to use the
         }
       }
     }
-
-and you will get a full editable Form based on your schema and filled with your Model-Object. 
-
-![Basic Form](./images/formbase2.PNG)
-
->INFORMATION: 
->
->Properties in 'myModel' without corresponding Prop in 'mySchema', are ignored and keep untouched, but a initial warning will be logged to console
-
 `
     }
   },
