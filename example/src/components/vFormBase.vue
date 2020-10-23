@@ -63,7 +63,7 @@
                 <v-menu
                   v-else-if="isDateTimeColorTypeAndExtensionText(obj)"
                   v-bind="bindPickerSchemaMenu(obj)"
-                >                  
+                >          
                   <template v-slot:activator="{ on }">
                     <v-text-field
                       v-on="on"
@@ -71,14 +71,18 @@
                       type="text"
                       readonly
                       :value="setValue(obj)"
+                      @[suspendClickAppend(obj)]="onEvent($event, obj, append)"                  
+                      @click:append-outer="onEvent($event, obj, appendOuter)"
+                      @click:prepend="onEvent($event, obj, prepend)"
+                      @click:prepend-inner="onEvent($event, obj, prependInner)"
                     />
                   </template>
                   <div
                     :is="mapTypeToComponent( obj.schema.type )" 
                     v-bind="bindSchema(obj)"
-                    :type="checkExtensionType(obj)"
+                    :type="checkInternType(obj)"
                     :value="setValue(obj)"
-                    @input="onInput($event, obj)"
+                    @input="onInput($event, obj)"               
                     @click:hour="onEvent({type:'click'}, obj, hour)"
                     @click:minute="onEvent({type:'click'}, obj, minute)"
                     @click:second="onEvent({type:'click'}, obj, second)"
@@ -207,7 +211,7 @@
               <!-- CHECKBOX | SWITCH -->
                 <div
                   :is="mapTypeToComponent(obj.schema.type)"
-                  v-else-if="obj.schema.type === 'switch' || obj.schema.type === 'checkbox'"
+                  v-else-if="/(switch|checkbox)/.test(obj.schema.type)"
                   :input-value="setValue(obj)"
                   v-bind="bindSchema(obj)"
                   @change="onInput($event, obj)"
@@ -309,14 +313,15 @@
                   v-else-if="obj.schema.mask"
                   v-mask="obj.schema.mask"
                   v-bind="bindSchema(obj)"
+                  :type="checkExtensionType(obj)"                  
                   :value="setValue(obj)"
                   @focus="onEvent($event, obj)"
                   @blur="onEvent($event, obj)"
-                  @click:append="onEvent($event, obj, append)"
+                  @[suspendClickAppend(obj)]="onEvent($event, obj, append)"
                   @click:append-outer="onEvent($event, obj, appendOuter)"
-                  @click:clear="onEvent($event, obj, clear )"
                   @click:prepend="onEvent($event, obj, prepend )"
                   @click:prepend-inner="onEvent($event, obj, prependInner)"
+                  @click:clear="onEvent($event, obj, clear )"
                   @input="onInput($event, obj)"
                 />
               <!-- END MASK -->
@@ -329,14 +334,14 @@
                   :type="checkExtensionType(obj)"                  
                   :value="setValue(obj)"
                   :obj="obj"
-                  :search-input.sync="obj.schema.searchInput"       
+                  :search-input.sync="obj.schema.searchInput"    
                   @focus="onEvent($event, obj)"
-                  @blur="onEvent($event, obj)"
-                  @click:append="onEvent($event, obj, append)"
+                  @blur="onEvent($event, obj)"                  
+                  @[suspendClickAppend(obj)]="onEvent($event, obj, append)"
                   @click:append-outer="onEvent($event, obj, appendOuter)"
-                  @click:clear="onEvent($event, obj, clear )"
                   @click:prepend="onEvent($event, obj, prepend )"
                   @click:prepend-inner="onEvent($event, obj, prependInner)"
+                  @click:clear="onEvent($event, obj, clear )"
                   @click:hour="onEvent({type:'click'}, obj, hour)"
                   @click:minute="onEvent({type:'click'}, obj, minute)"
                   @click:second="onEvent({type:'click'}, obj, second)"
@@ -536,7 +541,10 @@ export default {
       append,
       appendOuter,
       prepend,
-      prependInner
+      prependInner,
+      hour,
+      minute,
+      second
     }
   },
   computed: {    
@@ -606,12 +614,23 @@ export default {
     },      
     bindSchema(obj) {     
       return obj.schema
+    },          
+    suspendClickAppend(obj){
+      // select|combobox|autocomplete -> suspend 'click:append' for working down arrow
+      return /(select|combobox|autocomplete)/.test(obj.schema.type) ? '' : 'click:append'
     },      
     // EXT TYPE
     checkExtensionType(obj) {
-      // For native <INPUT> type use ext or typeInt
-      // { type:'date', ext:'text', typeInt:'month' ...} -> use native Input Type 'Date' instead of Date-Picker
-      return obj.schema.typeInt || obj.schema.ext || obj.schema.type
+      // For native <INPUT> type use prop 'ext'
+      // { type:'text', ext:'range', ... } -> use native Input Type 'range' instead of slider
+      // { type:'text', ext:'number', ...} -> use native Input Type 'number' 
+      return obj.schema.ext || obj.schema.type
+    },
+    // V-INTERN TYPE
+    checkInternType(obj) {
+      // If vuetify component needs a 'type' prop for working  - ie. datepicker uses type:'month'
+      // { type:'date', ext:'text', typeInt:'month' ...} -> use v-date-picker menu with intern Type 'month'
+      return obj.schema.typeInt || obj.schema.type
     },
   // GET ITERATION KEY FOR TYPE ARRAY
     getKeyForArray(obj, item, index){

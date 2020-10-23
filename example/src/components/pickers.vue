@@ -8,6 +8,7 @@
         :schema="mySchema"
         :col="4"
         @input:form-base-pickers="update"
+        @click:form-base-pickers="update"
       />
     </v-form>
     
@@ -24,6 +25,8 @@
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
 import update from '@/lib'
+
+const allowedDates = val => ['2019-02','2019-07','2019-10'].indexOf(val) !== -1 
 
 export default {
   name: 'Pickers',
@@ -55,8 +58,8 @@ export default {
         // DATE / TIME / COLOR  use ext:'text' to bind Date-Picker to Textfield - schema:{ type:'date, ext:'text', ...}
         timeText: { type: 'time', ext: 'text', color: 'blue', format: '24hr', locale: 'de', prependIcon: 'timer', label: 'Time' },
         // use typeInt: 'month'   -> https://vuetifyjs.com/en/components/date-pickers/
-        monthText: { type: 'date', ext: 'text', typeInt: 'month', color: 'green', menu:{ closeOnContentClick:true, nudgeRight:200 }, locale: 'de', prependIcon: 'event', label: 'Month' },
-        colorText: { type: 'color', ext: 'text', label: 'Color' },
+        monthText: { type: 'date', ext: 'text', typeInt: 'month', color: 'green', allowedDates, menu:{ closeOnContentClick:true, nudgeRight:200 }, locale: 'de', prependIcon: 'event', label: 'Month' },
+        colorText: { type: 'color', ext: 'text', label: 'Color', prependIcon: 'palette' },
 
         divider3: { type: 'sheet', textContent: 'PICKERS', class: 'pa-4 my-4', color: 'white--text blue lighten-2', col: 12 },
         // DATE / TIME / COLOR  Vuetify Date-Picker - schema:{ type:'date', ...}

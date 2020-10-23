@@ -2,8 +2,6 @@
   <v-container fluid>
     <h4>Textfields with Mask & Tooltips and Fileselector </h4>
     
-    <p>See Console Output for Input-Events  rtzhberz r zr zb4z 5  54u  5u b5 bu6b 35u6 5b u b35u6 35 u35 u 35u635 u  </p>
-    
     <v-form>
      
       <!-- FORM-BASE-COMPONENT -->    
@@ -84,7 +82,7 @@ export default {
         creditcard: { 
           type: 'text', 
           label: 'Creditcard', 
-          prependInnerIcon: 'credit_card', 
+          prependInnerIcon: 'credit_card',         
           hint: mask, 
           mask,
         },        
