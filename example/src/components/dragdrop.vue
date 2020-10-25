@@ -14,11 +14,8 @@
     
     
     <!-- Stuff  -->    
-    <infoline
-      :value="myModel"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <infoline :model="myModel" :schema="mySchema"/>
+    
   </v-container>
 </template>
 

@@ -4,14 +4,14 @@
 
     <!-- 
       If your model/value is an array you can wrap it into an Object like this. But this doesn't work with primitive datatypes 
-      :model="{t: myValue.tasks}"
+      :model="{t: myModel.tasks}"
       :schema="{t: mySchema.tasks}"
     -->
     
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       id="array-ease"
-      :model="myValue"
+      :model="myModel"
       :schema="mySchema" 
       @change:array-ease="log"
       @intersect:array-ease="intersect"
@@ -37,7 +37,7 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {      
-      myValue: {
+      myModel: {
         tasks:[
           getOuterTask(),
           getOuterTask(),

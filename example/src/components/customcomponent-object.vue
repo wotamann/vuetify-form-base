@@ -4,8 +4,8 @@
     <h4>{{obj.schema.label}}</h4>    
     <v-text-field v-model="value.a" @input="$emit('input', value)" label="A"></v-text-field>
     <v-text-field v-model="value.b" @input="$emit('input', value)" label="B"></v-text-field>
-    <v-btn small color="grey" dark  @click="clear">Clear both</v-btn>    
-    <br>
+    <v-btn small color="green lighten-2" dark  @click="clear">Clear Component</v-btn>    
+    <hr>
     type: {{type}}
     <br>
     value: {{value}}    

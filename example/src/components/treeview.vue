@@ -3,17 +3,14 @@
     <h4>Expand/Select Treeview get Result '.open' and '.model' in Schema or in Event</h4>
     <v-form-base
       id="treeview-demo"
-      :value="myValue"
+      :model="myModel"
       :schema="mySchema"
       @change:treeview-demo="change"
     />
     
     <!-- Stuff  -->    
-    <infoline
-      :value="myValue"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <infoline :model="myModel" :schema="mySchema"/>
+   
   </v-container>
 </template>
 
@@ -58,7 +55,7 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {
+      myModel: {
         treeview_1: treeview,
         treeview_2: treeview
       },

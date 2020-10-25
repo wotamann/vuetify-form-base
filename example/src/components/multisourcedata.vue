@@ -1,6 +1,6 @@
 <style>
   #form-base-container { background-color: #fdcfcf56;; border: 1px solid #f71a1a56  }
-  #form-base-slot  { background-color: #cee4f756; border: 1px dotted #78b5eb56; margin:1rem }
+  #form-base-box  { background-color: #d5e8f856; border: 1px dotted #78b5eb56; margin:1rem }
   .form-base-title { width: 100%; color: rgb(248, 247, 244); background-color: rgb(236, 122, 122); padding:6px }
 </style>
 
@@ -11,49 +11,40 @@
     <!-- BASE -->
     <v-form-base
       id="form-base-container"
-      :model="myValue"
+      :model="myModel"
       :schema="mySchema"
       @input:form-base-container="change"
     >
-      <!-- TOP SLOT  -->
-      <div slot="form-base-container-top" class="form-base-title">This is 'form-base-container' with data 'myValue'</div>
+      <!-- TOP SLOT Container  -->
+      <template #form-base-container-top >
+        <span class="form-base-title">This is 'form-base-container' with data 'myModel'</span>
+      </template>
 
-        <!-- SLOT (replaces schema key 'SlotPlaceholder' )  slot="slot-item-key-SlotPlaceholder"  -->
+      <!-- this SLOT replaces key 'SlotPlaceholder' ) -->
+      <template #slot-item-key-SlotPlaceholder >
         <v-form-base
-          id="form-base-slot"
-          slot="slot-item-key-SlotPlaceholder"
-          :model="myValueSlot"
+          id="form-base-box"
+          :model="myModelSlot"
           :schema="mySchemaSlot"
-          @input:form-base-slot="changepartial"
+          @input:form-base-box="changepartial"
         >
-        <!-- TOP SLOT in SlotPlaceholder -->
-        <div slot="form-base-slot-top" class="form-base-title">This is 'Form-base-slot' with data 'myValueSlot'</div> 
-      
-      </v-form-base>      
-      <!-- SLOT END -->
+          <!-- TOP SLOT SlotPlaceholder -->
+          <template #form-base-box-top >
+            <span class="form-base-title">This is 'Form-base-box' with data 'myModelSlot'</span>
+          </template>
+        </v-form-base>      
+      </template>
+      <!-- SLOT END 'SlotPlaceholder' -->
 
     </v-form-base>
     
-    <!-- Stuff  -->
-    <h4 >
-      See Console for Events and <a
-        target="_blank"
-        :href="`${url}${$options._componentTag}.vue`"
-      >inspect the Code at '{{$options._componentTag}}.vue' in Directory Example</a>
-    </h4>
+    <!-- Stuff  -->    
     <v-layout>
       <v-flex xs6>
-        <infoline
-          :value="myValue"
-          :schema="mySchema"
-
-        />
+        <infoline :model="myModel" :schema="mySchema"/>
       </v-flex>
       <v-flex xs6>
-        <infoline
-          :value="myValueSlot"
-          :schema="mySchemaSlot"
-        />
+        <infoline :model="myModelSlot" :schema="mySchemaSlot"/>
       </v-flex>
     </v-layout>
 
@@ -65,16 +56,12 @@ import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
 import change from '@/lib'
 
-const url = 'https://github.com/wotamann/vuetify-form-base/blob/master/example/src/components/'
-
 export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      url,
-
-      // BASE
-      myValue: {
+      // CONTAINER
+      myModel: {
         checkbox: true,
         switch:true
       },
@@ -85,7 +72,7 @@ export default {
       },
 
       // SLOT 
-      myValueSlot: {
+      myModelSlot: {
         slot: [
           { check: false, switch:true},
           { check: true, switch:false},

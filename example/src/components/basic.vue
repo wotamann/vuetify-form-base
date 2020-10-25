@@ -10,12 +10,9 @@
       @change="log"
     />     
 
-    <!-- Stuff   -->
-    <infoline
-      :value="myModel"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="mySchema"/>
+    
   </v-container>
 </template>
 

@@ -5,7 +5,7 @@
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       id="form-base-conditional"
-      :value="myValue"
+      :value="myModel"
       :schema="mySchema"
       @change:form-base-conditional="log"
     />
@@ -18,12 +18,9 @@
       Click or Type 'Show'
     </v-btn>
     
-    <!-- Stuff   -->  
-    <infoline
-      :value="myValue"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="mySchema"/>
+    
   </v-container>
 </template>
 
@@ -41,7 +38,7 @@ export default {
   data () {
     return {
       hidden: true,
-      myValue: {
+      myModel: {
         conditional: '',
         tasks: [
           getTask(),
@@ -81,7 +78,7 @@ export default {
       if (key === 'conditional') this.hidden = value !== 'show'
       // add  
       if (key === 'done' && value === true) {
-        setTimeout(() => this.myValue.tasks.splice(index, 1), 333)
+        setTimeout(() => this.myModel.tasks.splice(index, 1), 333)
       }      
     }
   }

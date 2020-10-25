@@ -1,16 +1,14 @@
 <template>
   <v-container fluid>
-    <h4>Autogenerate Form from Model, if Schema Object doesn't exist</h4>
-    <!-- Works only if Model-Data is String, Number or Array  -->
-
+    <h4>Autogenerate Form from Model on missing Schema</h4>
+    <p>Working only if Model-Data is Type of String, Number or Array</p>
+    
     <!-- FORM-BASE-COMPONENT -->
-    <v-form-base :model="myModel" :col="{xs:12,sm:6}" @input="log"/>
+    <v-form-base :model="myModel" :col="{xs:12,sm:6, lg:4}" @input="log" class="border-frame"/>
 
-    <!-- Stuff   -->
-    <infoline
-      :value="myModel"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="{}"/>
+
   </v-container>
 </template>
 

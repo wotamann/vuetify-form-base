@@ -2,8 +2,9 @@
   /* INFO-SCOPED: Don't use '<style scoped>' because scoped CSS is inside a child-component not accessable */
 
   /* CSS Component --- Container */
-  #form-base-css { background-color: #fff; }
-  #form-base-css .slot { width: 100%; padding:2px; color:#947901; background-color: #fcf3d0; border: 1px dotted #e7c320}
+  #form-base-css { background-color: #fff9e6; }
+  #form-base-css input { background-color: #f3dbe1b9; color:#920f30b9 }
+  #form-base-css input:focus { background-color: #df446bb9; color:#FFF }
 
   /* CSS Item --- set all items  */
   #form-base-css .item { padding:0.5rem; border-bottom: 1px dotted #7f82ad}
@@ -14,28 +15,31 @@
   #form-base-css .type-switch { background-color: #44c45a77}
 
   /* CSS Keys --- set item with key on focus' */
-  #form-base-css .key-email input { background-color: #cad7f077; color:#1951bb77 }
-  #form-base-css .key-email input:focus { background-color: #1949a1b9; color:#FFF }
+  #form-base-css .key-name input { background-color: #cad7f077; color:#1951bb77 }
+  #form-base-css .key-name input:focus { background-color: #1949a1b9; color:#FFF }
+
 </style>
 
 <template>
   <v-container fluid>
-    <h4>Play around and resize with predefined CSS, Buttons, Icons, Slots and individual Tooltips</h4>
+    <h4>Play around with predefined CSS, Buttons, Icons and Tooltips</h4>
     
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       id="form-base-css"
-      :model="myValue"
+      :model="myModel"
       :schema="mySchema"
       @change:form-base-css="log"
-    />
+    >
+      <!-- TOOLTIP SLOT -->
+      <template #slot-tooltip="{obj}">
+        {{ obj.schema.tooltip }} has Value: {{ obj.value }}
+      </template>    
+    </v-form-base>
      
-    <!-- Stuff   -->
-    <infoline
-      :value="myValue"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="mySchema"/>
+    
   </v-container>
 </template>
 
@@ -55,24 +59,18 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {
+      myModel: {
         name: 'Base',
         password: '123456',
         email: 'base@mail.com',
         controls: {
           checkbox: true,
           switch: true,
-          
           slider: 33,
-          
           btnToggleSingle: ['B'],
           btnToggleMulti: 1,          
-          
           btn: 'A', // is ident to schema { label:'A', ... }
-          
-          // iconLabel: 'ignored',
-          iconValue: 'print',
-          
+          iconValue: 'print',          
           radio: 'A',
         }
       },
@@ -81,21 +79,19 @@ export default {
         password: { type: 'password', label: 'Password', col: 4, tooltip: 'Password' },
         email: { type: 'email', label: 'Email', col: 4, spacer: true, tooltip: 'Email' },
         controls: {
-          checkbox: { type: 'checkbox', label: 'CSS-Red', color: 'red', col: 4, tooltip: 'Checkbox' },
-          switch: { type: 'switch', label: 'CSS-Green', color: 'green', col: 4, tooltip: 'Switch' },
+          checkbox: { type: 'checkbox', label: 'Red', color: 'red', col: 4, tooltip: 'Checkbox' },
+          switch: { type: 'switch', label: 'Green', color: 'green', col: 4, tooltip: 'Switch' },
           
-          // v-slider doesn't work with col { cols='auto' }
-          slider: { type: 'slider', label: 'CSS-Blue', color: 'blue', col: 4, tooltip: 'Slider' },
+          // v-slider doesn't work with col:{ cols='auto' }
+          slider: { type: 'slider', label: 'Blue', color: 'blue', col: 4, tooltip: 'Slider' },
 
           btnToggleSingle: { type: 'btn-toggle', options, color:'red', multiple: true, tooltip: 'Multiple Button', col: 6 },
           btnToggleMulti: { type: 'btn-toggle', options: optionsObj, color: 'blue', tooltip: 'Button', col: 6 },
 
-          btn: { type: 'btn', iconRight: 'print', color:'red', tooltip: 'Button', col: 5 },
-          
-          // icon try label 
-          iconLabel: { type: 'icon', label:'print', large: true, color: 'blue', tooltip: 'Icon Label', col: 1 },
-          // or if undefined use value
-          iconValue: { type: 'icon', color: 'red', tooltip: 'Icon Value', col: 1 }, 
+          btn: { type: 'btn', iconRight: 'print', color:'green', tooltip: 'Button', col: 3 },          
+          iconLabel: { type: 'icon', label:'print', large: true, color: 'blue', tooltip: 'Icon Label', col: 2 },
+          // if label undefined use value
+          iconValue: { type: 'icon', color: 'red', tooltip: 'Icon Value', col: 2 }, 
           
           radio: { type: 'radio', label: 'Radio', options, row:true,  col: 5 },
         }

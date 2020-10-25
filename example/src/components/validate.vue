@@ -20,7 +20,7 @@
       <!-- FORM-BASE-COMPONENT -->
       <v-form-base
         id="form-base-complete"
-        :model="myValue"
+        :model="myModel"
         :schema="mySchema"
         @change:form-base-complete="change"
       />
@@ -34,12 +34,9 @@
       Reset Validate
     </v-btn>
     
-    <!-- Stuff   -->
-    <infoline
-      :value="myValue"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="mySchema"/>
+   
   </v-container>
 </template>
 
@@ -71,7 +68,7 @@ export default {
   data () {
     return {
       formValid: true,
-      myValue: {
+      myModel: {
         email: 'base@',
         password: 'abc',
         subgroups: {

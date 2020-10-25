@@ -1,4 +1,5 @@
 <style>
+  .border-frame {border: 1px solid #ccc; padding: 8px;}
   /*   
   This document has been created with Marked.app <http://marked2app.com>, Copyright 2013 Brett Terpstra
   Content is property of the document author
@@ -438,8 +439,8 @@
 
 <template>
   <v-app >
-      <v-navigation-drawer app permanent left width=300>
-        <v-list-item>
+    <v-navigation-drawer app left :permanent="$vuetify.breakpoint.mdAndUp" width=360>
+      <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title green--text">
             <h4>Vuetify-Form-Base</h4>
@@ -449,23 +450,23 @@
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
-
       <v-divider></v-divider>
-        <v-list nav dense>
-          <v-list-item
-            v-for="item in $router.options.routes.slice(1)"
-            :key="item.name"
-            :href="item.name"
-            :class="$router.currentRoute.name === item.name ? 'green lighten-5' : ''"
-          >
-            <v-list-item-content class="grey--text" >   
-              <v-list-item-title class="subtitle font-weight-regular" :class="$router.currentRoute.name === item.name ? 'green--text' : ''">{{ item.text }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-navigation-drawer>
-    <v-main app >
-       <router-view></router-view>
+      <v-list nav dense>
+        <v-list-item
+          v-for="item in $router.options.routes.slice(1)"
+          :key="item.name"
+          :href="item.name"
+          :class="$router.currentRoute.name === item.name ? 'green lighten-5' : ''"            
+        > 
+          <v-list-item-content class="grey--text" >   
+            <v-list-item-title class="subtitle font-weight-regular" :class="$router.currentRoute.name === item.name ? 'green--text' : ''">{{ item.text }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+    
+    <v-main app>
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
@@ -474,6 +475,7 @@
 export default {  
   data () {
     return {
+      side:320
     }
   }
 }

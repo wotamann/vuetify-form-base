@@ -1,28 +1,24 @@
 <template>
   <v-container fluid>
-    <h4>Vuetify display helpers, allow to control the  
-      <a target="_blank" href="https://vuetifyjs.com/en/styles/display">display</a>
-      or 
+    <h4>Control   
+      <a target="_blank" href="https://vuetifyjs.com/en/styles/display">display</a>, 
       <a target="_blank" href="https://vuetifyjs.com/en/styles/typography">typography</a>
       or
       <a target="_blank" href="https://vuetifyjs.com/en/styles/spacing">spacing</a>
-      of content
+      of Content with Vuetify Display Helpers
     </h4>
 
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
-      :value="myValue"
+      :value="myModel"
       :schema="mySchema"
       :col="6"
       @input="log"
     />
     
-    <!-- Stuff   -->   
-    <infoline
-      :value="myValue"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="mySchema"/>
+    
   </v-container>
 </template>
 
@@ -36,17 +32,17 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {
+      myModel: {
         name1: 'Float left & Margin-Top',
-        name2: 'Typographie & Pad X-Axis',
+        name2: 'Typographie & Padding X-Axis',
         name3: 'Visible on sm',
         name4: 'Visible on xs, Margin-Bottom',
       },
       mySchema: {
-        name1: { type: 'text', title:'grey lighten-3 float-left mt-6', class:'grey lighten-3 float-left mt-6' },
-        name2: { type: 'text', title:'title px-4 blue lighten-5', class:'title px-4 blue lighten-5' },
-        name3: { type: 'text', title:'d-none d-sm-flex d-md-none red lighten-4', class:'d-none d-sm-flex d-md-none red lighten-4' },
-        name4: { type: 'text', title:'caption d-flex d-sm-none green lighten-4 mb-2', class:'caption d-flex d-sm-none green lighten-4 mb-2' },
+        name1: { type: 'text', label:'grey lighten-3 float-left mt-6', class:'grey lighten-3 float-left mt-6' },
+        name2: { type: 'text', label:'title px-4 blue lighten-5', class:'title px-4 blue lighten-5' },
+        name3: { type: 'text', label:'d-none d-sm-flex d-md-none red lighten-4', class:'d-none d-sm-flex d-md-none red lighten-4' },
+        name4: { type: 'text', label:'caption d-flex d-sm-none green lighten-4 mb-2', class:'caption d-flex d-sm-none green lighten-4 mb-2' },
       }
     }
   },

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Async loading of Model, Schema and Grid</h4>
+    <h4>Async loading of Model, Schema and at last Grid-Layout</h4>
 
     <!-- FORM-BASE-COMPONENT -->    
     <v-form-base 
@@ -10,12 +10,9 @@
       @change="log"
     />
     
-    <!-- Stuff   -->
-    <infoline
-      :value="myModel"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="mySchema"/>
+    
   </v-container>
 </template>
 
@@ -63,7 +60,7 @@ export default {
     log,
     delay (obj) { 
       return new Promise((resolve, reject) => {
-        setTimeout(() => resolve(obj), 1000)
+        setTimeout(() => resolve(obj), 1200)
       })
     }
   }

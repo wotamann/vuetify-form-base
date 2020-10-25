@@ -20,11 +20,8 @@
     <v-btn class="ma-2" @click="col++; col = Math.min(col, 12)">+</v-btn>  
     
     <!-- Stuff  -->    
-    <infoline
-      :value="myModel[modelIndex]"
-      :schema="mySchema[schemaIndex]"
-      :path="$options._componentTag"
-    />
+    <infoline :model="myModel[modelIndex]" :schema="mySchema[modelIndex]"/>
+    
   </v-container>
 </template>
 

@@ -4,19 +4,16 @@
     <v-form>
       <v-form-base
         id="form-base-images"
-        :value="myValue"
+        :value="myModel"
         :schema="mySchema"
         :col="6"
         @update:form-base-images="update"
       />
     </v-form>
     
-    <!-- Stuff  -->
-    <infoline
-      :value="myValue"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="mySchema"/>
+    
   </v-container>
 </template>
 
@@ -30,7 +27,7 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {
+      myModel: {
         image1:'random',
         image2:'random',
         image3:'random',

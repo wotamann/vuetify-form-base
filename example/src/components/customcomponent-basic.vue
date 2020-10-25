@@ -3,7 +3,7 @@
   <div class="ma-3 pa-4 grey lighten-3 caption">
     <h4>{{obj.schema.label}}</h4>
     <v-text-field v-model="inp"  label="Basic"></v-text-field>
-    <br>
+    <hr>
       type: {{type}}
     <br>
     value: {{value}}

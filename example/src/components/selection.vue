@@ -3,17 +3,14 @@
     <h4>Select Items defined in Schema-Array</h4>
     <v-form-base
       id="form-base-selection"
-      :model="myValue"
+      :model="myModel"
       :schema="mySchema"
       @input:form-base-selection="update"
     />
     
-    <!-- Stuff  -->
-    <infoline
-      :value="myValue"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="mySchema"/>
+   
   </v-container>
 </template>
 
@@ -29,7 +26,7 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {
+      myModel: {
         selectSingle: 'Musk',
         selectObject: itemsObj[2],
         selectMultiple: ['Musk', 'Taleb'],

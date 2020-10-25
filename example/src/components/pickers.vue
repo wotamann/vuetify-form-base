@@ -4,7 +4,7 @@
     <v-form>
       <v-form-base
         id="form-base-pickers"
-        :value="myValue"
+        :value="myModel"
         :schema="mySchema"
         :col="4"
         @input:form-base-pickers="update"
@@ -12,12 +12,9 @@
       />
     </v-form>
     
-    <!-- Stuff  -->
-    <infoline
-      :value="myValue"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="mySchema"/>
+   
   </v-container>
 </template>
 
@@ -33,7 +30,7 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {
+      myModel: {
         timeExt: '10:15',
         dateExt: '2019-03-10', 
         colorExt: '#a2f822',

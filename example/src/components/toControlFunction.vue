@@ -4,18 +4,15 @@
 
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
-      :value="myValue"
+      :model="myModel"
       :schema="mySchema"
       :col=4
       @input="log"
     />
     
-    <!-- Stuff   -->   
-    <infoline
-      :value="myValue"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="mySchema"/>
+   
   </v-container>
 </template>
 
@@ -33,7 +30,7 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {
+      myModel: {
         name1: 'UPPER',
         name2: 'lower',
         joined:''

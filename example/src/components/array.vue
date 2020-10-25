@@ -11,7 +11,7 @@
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
       id="array"
-      :model="myValue"
+      :model="myModel"
       :schema="mySchema"
       @change:array="log"
       @drop:array="log"
@@ -33,7 +33,7 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {
+      myModel: {
         tasks: [
           {
             nr: 1,
@@ -88,13 +88,13 @@ export default {
   },
   methods: {  
     getTask(){ return { done: false, title: 'Task ' + Math.floor(Math.random() * 1000) } },
-    addTask(index){ this.myValue.tasks[index[0]].task.push(this.getTask()) },
-    removeTask(index){ this.myValue.tasks[index[0]].task.splice(index[1], 1) },
+    addTask(index){ this.myModel.tasks[index[0]].task.push(this.getTask()) },
+    removeTask(index){ this.myModel.tasks[index[0]].task.splice(index[1], 1) },
 
     addItem () {
-      this.myValue.tasks.push({
-        nr: this.myValue.tasks.length + 1,
-        title: 'Item ' + (this.myValue.tasks.length + 1),
+      this.myModel.tasks.push({
+        nr: this.myModel.tasks.length + 1,
+        title: 'Item ' + (this.myModel.tasks.length + 1),
         task: [ this.getTask() ]
       })
     },

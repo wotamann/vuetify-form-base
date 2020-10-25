@@ -1,23 +1,21 @@
 <template>
   <v-container fluid>
     <h4>Use Components as Custom Controls</h4>
+    <p>For proper work register <a href="https://vuejs.org/v2/guide/components-registration.html#Global-Registration">Custom-Control Components</a> globally in 'main.js'Vue.component('custom-object'</p>
     
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
+      class="border-frame"
       id="form-base-cc"
-      :value="myValue"
+      :value="myModel"
       :schema="mySchema"
       :col=4
       @input:form-base-cc="log"
     />
     
-    <h4>For proper work register Custom-Control Components globally in 'main.js'</h4>
-    <!-- Stuff   -->
-    <infoline
-      :value="myValue"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="mySchema"/>
+    
   </v-container>
 </template>
 
@@ -43,15 +41,17 @@ export default {
   name:'CustomComponentDemo',
   data () {
     return {
-      myValue: {
-        name: 'Base',
+      myModel: {
+        // name: 'Base',
         custom1: 'Textfield',
-        custom2: { a:'A-Textfield', b:'B-Textfield' }
+        custom2: { a:'A-Textfield', b:'B-Textfield' },
+        custom3: { a:'#FFBBBB', b:'#DDEEFF' }
       },
       mySchema: {
-        name: { type: 'text', label: 'Name' },
-        custom1: { type: 'customBasic', label:'Component - Basic' },
-        custom2: { type: 'custom-object', label:'Component - Object' },
+        // name: { type: 'text', label: 'Name' },
+        custom1: { type: 'customBasic', label:'Basic - Component' },
+        custom2: { type: 'custom-object', label:'Object - Component' },
+        custom3: { type: 'custom-color', label:'Color - Component' },
       }
     }
   },

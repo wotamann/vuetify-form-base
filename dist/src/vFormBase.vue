@@ -40,10 +40,8 @@
             <slot :name="getKeyTopSlot(obj)" :obj= "obj"/>          
             <!-- slot replaces complete item of defined TYPE -> <v-btn slot="slot-item-type-[propertyName]">-->
             <slot :name="getTypeItemSlot(obj)" :obj= "obj">
-
               <!-- slot replaces complete item of defined KEY -> <div slot="slot-item-key-[propertyName]">-->
               <slot :name="getKeyItemSlot(obj)" :obj= "obj" >
-
               <!-- RADIO -->
                 <v-radio-group
                   v-if="obj.schema.type === 'radio'"
@@ -76,7 +74,7 @@
                       @click:prepend="onEvent($event, obj, prepend)"
                       @click:prepend-inner="onEvent($event, obj, prependInner)"                      
                     />
-                    <!-- SLOTS append|prepend|message not avilable -->
+                    <!-- SLOTS append|prepend|message for picker not avilable, try custom component -->
                   </template>
                   <v-input
                     :is="mapTypeToComponent( obj.schema.type )" 
@@ -365,8 +363,7 @@
                   </template>
 
                 </v-input>
-              <!-- END DEFAULT -->
-              
+              <!-- END DEFAULT -->     
               </slot>
             </slot>
 
@@ -399,20 +396,24 @@
   import { mask } from 'vue-the-mask'
   
   const typeToComponent = {
+    // maps schema.type to prop 'type' in v-text-field  - https://www.wufoo.com/html5/
     text: 'v-text-field',
+    /*
+      { type:'text, ext:'typeOfTextField', ...} 
+      For native <INPUT> type use alternative schema prop ext  -> schema:{ type:'text, ext:'date', ...} 
+      correspond to <input type="number" >
+      number: 'v-text-field',   //  { type:'text, ext:'number', ...}    
+      range: 'v-text-field',   //  { type:'text, ext:'range', ...}    
+      date: 'v-text-field',    //  { type:'text, ext:'date', ...}       
+      time: 'v-text-field',    //  { type:'text, ext:'time', ...}      
+      color: 'v-text-field',   //  { type:'text, ext:'color', ...}      
+    */
     password: 'v-text-field',
     email: 'v-text-field',
     tel: 'v-text-field',
     url: 'v-text-field',
     search: 'v-text-field',
     number: 'v-text-field', 
-    
-    // map schema.type to type in v-text-field  - https://www.wufoo.com/html5/
-    // For native <INPUT> type use alternative schema prop ext  -> schema:{ type:'text, ext:'date', ...} 
-    // range: 'v-text-field',   //  { type:'text, ext:'range', ...}    
-    // date: 'v-text-field',    //  { type:'text, ext:'date', ...}       
-    // time: 'v-text-field',    //  { type:'text, ext:'time', ...}      
-    // color: 'v-text-field',   //  { type:'text, ext:'color', ...}      
     
     // INFO: 3 Types of PICKER DATE / TIME / COLOR
     // Date-Native Input    - schema:{ type:'text, ext:'date', ...}       
@@ -515,8 +516,8 @@
   const defaultSchemaIfValueIsNumber = key => ({ type:'number', label: key })
   const defaultSchemaIfValueIsBoolean = key => ({ type:'checkbox', label: key })
   // Menu triggered DateTimePicker Default 
-  const defaultSchemaText = { type:'text', readonly:true }
-  const defaultSchemaMenu = { closeOnContentClick:false, transition:"scale-transition", nudgeRight:32, maxWidth:'290px', minWidth:'290px' }
+  const defaultPickerSchemaText = { type:'text', readonly:true }
+  const defaultPickerSchemaMenu = { closeOnContentClick:false, transition:"scale-transition", nudgeRight:32, maxWidth:'290px', minWidth:'290px' }
 //
 export default {
   name: 'VFormBase',
@@ -629,15 +630,14 @@ export default {
     },
     // BIND SCHEMA FN
     bindSchemaText(obj ) {           
-      return { ...defaultSchemaText, ...obj.schema.text}
+      return { ...defaultPickerSchemaText, ...obj.schema.text}
     },          
     bindSchemaMenu(obj ) {           
-      return { ...defaultSchemaMenu, ...obj.schema.menu}
+      return { ...defaultPickerSchemaMenu, ...obj.schema.menu}
     },          
     bindSchema(obj) {     
       return obj.schema
-    },  
-            
+    },              
     suspendClickAppend(obj){
       // select|combobox|autocomplete -> suspend 'click:append' for working down arrow
       return /(select|combobox|autocomplete)/.test(obj.schema.type) ? '' : 'click:append'

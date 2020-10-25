@@ -3,17 +3,14 @@
     <h4>Select Items in Base and then select Item of Base Selection</h4>
     <v-form-base
       id="form-base-selection"
-      :value="myValue"
+      :model="myModel"
       :schema="mySchema"
       @input:form-base-selection="log"
     />
     
     <!-- Stuff  -->    
-    <infoline
-      :value="myValue"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <infoline :model="myModel" :schema="mySchema"/>
+   
   </v-container>
 </template>
 
@@ -29,7 +26,7 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {
+      myModel: {
         selection1: ['Musk', 'Taleb'],
         selection2: 'Taleb',
       },
@@ -40,7 +37,7 @@ export default {
     mySchema() {
       return {
         selection1: { type: 'select', label: 'Base', items, multiple: true },
-        selection2: { type: 'select', label: 'Select Item of Base Selection', items: this.myValue.selection1, clearable:true, noDataText:'First select Base Items' },
+        selection2: { type: 'select', label: 'Select Item of Base Selection', items: this.myModel.selection1, clearable:true, noDataText:'First select Base Items' },
       }
     }
   },
@@ -50,9 +47,9 @@ export default {
       log(val)
       
       // set null or delete selection2 if its value doesn't match with new Base Selection
-      if ( this.myValue.selection1.indexOf(this.myValue.selection2) === -1 ) {        
-        // this.myValue.selection2 = null
-        delete this.myValue.selection2
+      if ( this.myModel.selection1.indexOf(this.myModel.selection2) === -1 ) {        
+        // this.myModel.selection2 = null
+        delete this.myModel.selection2
       }        
     }
   }

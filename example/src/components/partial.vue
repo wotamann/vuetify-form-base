@@ -12,7 +12,7 @@
       col=3
       @input="change"
     />
-    <h4>Partial Formbase from 'myModel.radios' linked with 'myModel' Object</h4>
+    <h4>Partial Formbase from 'myModel.radios'</h4>
     <v-form-base
       id="form-base-partial"
       :model="myModel.radios"

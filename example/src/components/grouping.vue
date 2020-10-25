@@ -1,10 +1,6 @@
-<style>
-  .br-8 { border-radius: 8px;}
-</style>
-
 <template>
   <v-container fluid>
-    <h4>Use Type 'group' for wrapping content into Groups and center all with 'row' Attribute</h4>
+    <h4>Use Type 'group' for wrapping content into Groups and control Display with 'row' Attribute</h4>
     
     <!-- FORM-BASE-COMPONENT -->    
     <!-- See for attribute 'row' handling <v-row></v-row> https://vuetifyjs.com/en/components/grids/ -->
@@ -25,7 +21,8 @@
     
     
     <!-- Stuff  -->    
-    <infoline :value="myModel" :schema="mySchema" :path="$options._componentTag"/>
+    <infoline :model="myModel" :schema="mySchema"/>
+    
   </v-container>
 </template>
 
@@ -39,7 +36,6 @@
     components: { VFormBase, Infoline },
     data () {
       return {
-
          myModel: {
           group1:{ 
             name1:'Taleb', 
@@ -50,15 +46,14 @@
             check2:false
           } 
         },  
-         
         mySchema: {
-          group1: { type:'group', label:'Group 1', col:6, class:'title pa-2 elevation-4', 
+          group1: { type:'group', label:'Group 1', col:6, class:'title pa-2 rounded elevation-4', 
             schema:{
               name1: { type: 'text', label:'Name 1' },    
               check1: { type: 'checkbox', label: 'Checkbox 1', color: 'red' },          
             }
           },
-          group2: { type:'wrap', label:'Group 2', col:6, class:'title pa-2 elevation-4', 
+          group2: { type:'wrap', label:'Group 2', col:6, class:'title pa-2 rounded elevation-4', 
             schema:{
               name2: { type: 'text', label:'Name 2' },    
               check2: { type: 'checkbox', label: 'Checkbox 2', color: 'blue'  }

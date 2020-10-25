@@ -1,7 +1,7 @@
 <style>
   /* INFO-SCOPED: don't use '<style scoped>' because scoped CSS is inside a child-component not accessable */
 
-  /* CSS for property from myValue object */
+  /* CSS for property from myModel object */
   #form-base-nested .prop-controls  { margin: 0 0  -2px -2px;  background-color: #f0f0f0;  border: solid 2px #636363 }
   #form-base-nested .prop-switch  { padding:3px; border: solid 2px #cf0520 }
   #form-base-nested .prop-checkbox  { padding:6px; border: solid 2px #1a54d1 }
@@ -10,7 +10,7 @@
 
 <template>
   <v-container fluid>
-    <h4>Deep nested Data including Arrays and Objects mapped to Form</h4>
+    <h4>Deep nested Model including Arrays and Objects mapped to Form</h4>
 
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
@@ -21,12 +21,9 @@
       @change:form-base-nested="change"
     />
     
-    <!-- Stuff   -->    
-    <infoline
-      :value="myModel"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="mySchema"/>
+    
   </v-container>
 </template>
 

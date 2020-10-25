@@ -3,7 +3,7 @@
     <h4>Add or Select Item from List (Array in Value) with Result '.model' in Schema and Event </h4>
     <v-form-base
       id="form-base-list"
-      :value="myValue"
+      :model="myModel"
       :schema="mySchema"
       @change:form-base-list="change"
     >
@@ -15,12 +15,9 @@
       </template>
     </v-form-base>
     
-    <!-- Stuff   -->
-    <infoline
-      :value="myValue"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="mySchema"/>
+    
   </v-container>
 </template>
 
@@ -34,7 +31,7 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myValue: {
+      myModel: {
         listObject: [
           { line: 1, name: 'Jobs' },
           { line: 2, name: 'Taleb' },
@@ -79,11 +76,11 @@ export default {
 
       let { key } = val
 
-      if (key === 'btn1') this.myValue.listObject.push({ 
-        line: this.myValue.listObject.length + 1, name: 'Musk ' + Math.floor(Math.random() * 1000)
+      if (key === 'btn1') this.myModel.listObject.push({ 
+        line: this.myModel.listObject.length + 1, name: 'Musk ' + Math.floor(Math.random() * 1000)
       })
       
-      if (key === 'btn2') this.myValue.listString.push( 'Musk ' + Math.floor(Math.random() * 1000))
+      if (key === 'btn2') this.myModel.listString.push( 'Musk ' + Math.floor(Math.random() * 1000))
     
     }
   }

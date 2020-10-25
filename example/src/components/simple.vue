@@ -42,6 +42,7 @@
     
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>
+    
   </v-container>
 </template>
 

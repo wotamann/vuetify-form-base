@@ -6,11 +6,8 @@
     <v-form-base :model="myModel" :schema="mySchema" col=6 @input="log"/>
     
     <!-- Stuff  -->    
-    <infoline
-      :value="myModel"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <infoline :model="myModel" :schema="mySchema"/>
+    
   </v-container>
 </template>
 

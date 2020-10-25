@@ -10,7 +10,7 @@ import Router from 'vue-router'
   import emptymodel from '@/components/emptymodel.vue'
   import basic from '@/components/basic.vue'
   import grouping from '@/components/grouping.vue'
-  import wrap from '@/components/wrap.vue'
+  import wrapping from '@/components/wrapping.vue'
   import async from '@/components/async.vue'
   import grid from '@/components/grid.vue'
   import dragdrop from '@/components/dragdrop.vue'
@@ -55,7 +55,7 @@ const router = new Router({
     { path: '/emptymodel', name: 'emptymodel', component: emptymodel, text:'Empty Model Object'  },    
     { path: '/basic', name: 'basic', component: basic, text:'Missing Properties in Model or Schema'  },    
     { path: '/grouping', name: 'grouping', component: grouping, text:'Group Controls based on Model-Structure'  },    
-    { path: '/wrap', name: 'wrap', component: wrap, text:'Wrap Controls to Model-Structure independent Groups'  },    
+    { path: '/wrapping', name: 'wrapping', component: wrapping, text:'Wrap Controls to Group without Model-Structure'  },    
     { path: '/async', name: 'async', component: async, text:'Async Loading of Form-Base Attributes'  },    
     
     { path: '/grid', name: 'grid', component: grid, text:`Responsive Grid using Flex, Order and Offset`  },    

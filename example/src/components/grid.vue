@@ -5,7 +5,7 @@
     <v-form-base
       :model="myModel"
       :schema="mySchema"
-      :class="layout"    
+      :class="layout + ' lighten-5'"    
       :col=12  
       :row="rowAttribute"      
       @change="change"
@@ -18,12 +18,9 @@
       screen sizes or orientations, xs, sm, md, lg and xl. 
     -->
     
-    <!-- Stuff   -->    
-    <infoline
-      :value="myModel"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="mySchema"/>
+    
   </v-container>
 </template>
 
@@ -39,28 +36,24 @@ export default {
       rowAttribute:{align:'center', justify:'center', noGutters:true },
       
       myModel: {
-        name: 'Grid',
-        radio1: 'A',
-        radio2: '1'
+        name: 'Responsive Grid',
       }
     }
   },
   computed: {
-    // Dynamic Schema must be Computed
+    // Dynamic Schema 
     mySchema () {
       return {
-        name: { type: 'text', col: { cols: 12, sm: 6 }, order: this.order, offset: { sm: 1 } },
+        name: { type: 'text', col: { cols: 12, sm: 8, md:6, lg:4 }, order: this.order, offset: { sm: 4, md:6, lg:8 } },
         group: {
           type:'group',
           label:'Group with dynamic row-attributes',
-          class:'grey lighten-3 pa-3',
+          class:this.layout + ' lighten-2 pa-3',
           row: this.rowGutter, 
-          col: 6,
+          col: { cols: 12, sm: 8, md:6, lg:4 },
           schema: {      
-            text1:'text',      
-            text2:'text',      
-            radio1: { type: 'radio', row: !this.row, options: ['A', 'B', 'C'] },
-            radio2: { type: 'radio', row: !this.row, options: ['1', '2', '3'] }
+            radio1: { type: 'radio', row: !this.row, options: ['A', 'B'],order: this.order },
+            radio2: { type: 'radio', row: !this.row, options: ['1', '2'] }
           }  
         }
       }
@@ -78,9 +71,9 @@ export default {
       return smAndDown ?  { order: 'last' } : { order: 'first' } 
     },
     // Change Class for Layout on resize
-    layout () {
+    layout() {
       const { lgAndUp, lg, md, sm } = this.$vuetify.breakpoint      
-      return md ? 'blue lighten-4' : sm ? 'blue lighten-3' : lgAndUp ? 'blue lighten-5' : 'blue lighten-2'
+      return md ? 'red' : sm ? 'green' : lgAndUp ? 'blue' : 'darkgrey'
     }
   },
   methods: {
