@@ -46,6 +46,9 @@ const router = new Router({
     { path: '*', redirect: '/introduction' },
     { path: '/introduction', name: 'introduction', component: introduction, text:'Introduction' },    
     { path: '/installation', name: 'installation', component: installation, text:'Installation' },    
+    
+    { path: '*', name: 'divider', component: introduction, text:'------ List of Examples ------'  },    
+    
     { path: '/simple', name: 'simple', component: simple, text:'Textfields' },    
     { path: '/textfields', name: 'textfields', component: textfields, text:'Textfields with HTML Type Attribute'  },    
     { path: '/autogenerate', name: 'autogenerate', component: autogenerate, text:'Missing Schema Definition' },    

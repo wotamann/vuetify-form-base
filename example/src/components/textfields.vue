@@ -73,7 +73,7 @@ export default {
         range:{ 
           type:'text', 
           ext:'range', 
-          label: this.myModel.range,    // computed schema updates with range value
+          label: 'Range:' + this.myModel.range,    // computed schema updates with range value
         },        
         color:{ 
           type:'text', 

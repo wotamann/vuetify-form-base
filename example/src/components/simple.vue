@@ -84,7 +84,7 @@ export default {
           label: 'Creditcard', 
           prependInnerIcon: 'credit_card',         
           hint: mask, 
-          mask,
+          mask          
         },        
         file: { 
           type: 'file', 
