@@ -17,12 +17,8 @@
       @drop:array="log"
     />
     
-    <!-- Stuff   -->
-    <infoline 
-      :value="myValue"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <!-- Stuff  -->    
+    <infoline :model="myModel" :schema="mySchema"/>
 
   </v-container>
 </template>

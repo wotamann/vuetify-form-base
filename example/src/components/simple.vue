@@ -1,16 +1,16 @@
 <template>
   <v-container fluid>
-    <h4>Textfields with Mask & Tooltips and Fileselector </h4>
+    <h4>Textfields with Mask & Tooltips and Fileselector</h4>
     
     <v-form>
-     
       <!-- FORM-BASE-COMPONENT -->    
       <v-form-base 
         :model="myModel"
         :schema="mySchema"
         :col=6
         @input="log"
-      />
+      />      
+
       <!--
         // compose listener to one or more of following Events:
         @click= "log"
@@ -71,13 +71,13 @@ export default {
       // Schema-Order defines Order of Controls in Form    
       mySchema: {
         name: { 
-          type:'text',           
+          type:'text', 
         },         
         password: { 
           type: 'password',
           clearable: true,
           solo:true,
-          class:'mx-2 mt-2'
+          class:'mx-1 mt-1'
         },
         creditcard: { 
           type: 'text', 

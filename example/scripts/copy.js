@@ -10,3 +10,8 @@ fs.copyFile('./src/components/vFormBase.vue', '../dist/src/vFormBase.vue', (err)
   if (err) throw err;
   console.log('vFormBase.vue was copied to /src/vFormBase.vue');
 });
+// destination.txt will be created or overwritten by default.
+fs.copyFile('../../../../../wotamann.github.io/static/index.html', '../../../../../wotamann.github.io/static/404.html', (err) => {
+  if (err) throw err;
+  console.log('vFormBase.vue was copied to /src/vFormBase.vue');
+});

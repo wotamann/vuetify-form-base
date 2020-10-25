@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 //
   import introduction from '@/components/introduction.vue'
   import installation from '@/components/installation.vue'
@@ -35,11 +36,12 @@ import Router from 'vue-router'
   import customcomponentdemo from '@/components/customcomponentdemo.vue'
   import fetchautocomplete from '@/components/fetchautocomplete.vue'
  // 
-Vue.use(Router)
+
+ Vue.use(Router)
+
 
 const router = new Router({
   mode: 'history',
-  base: process.env.BASE_URL,
   routes: [
     { path: '*', redirect: '/introduction' },
     { path: '/introduction', name: 'introduction', component: introduction, text:'Introduction' },    
@@ -80,19 +82,17 @@ const router = new Router({
     { path: '/typehandling', name: 'typehandling', component: typehandling, text:`Handling special Schema-Key 'type' occuring in Model-Data`  },    
     { path: '/toctrfunction', name: 'toctrfunction', component: toctrfunction, text:`Manipulate Data incoming/outgoing to Control`  },    
     { path: '/conditional', name: 'conditional', component: conditional, text:`Conditional Form`  },    
-  ],
+  ]
 
 })
 
-// const moon = () => ['🌑', '🌒', '🌓', '🌔', '🌝', '🌖', '🌗', '🌘'][Math.floor((Date.now()/100)%8)];
-// location.hash = moon()
-router.beforeEach((to, from, next) => {  
-  return next(true)
-  //   // is pathTo ident with new current state, then next(true) otherwise cancel with next(false)
-  //   console.log('beforeEach', to, from, store.state.user);
-  //   return next( to.name=== 'login' || (store.state.user && store.state.user.token) ? true: '/login' )
-  //   return next(getStateFromRoute(to) === stateMachine.current.state.toLowerCase())
-})
+// router.beforeEach((to, from, next) => {  
+//   return next(true)
+//   //   // is pathTo ident with new current state, then next(true) otherwise cancel with next(false)
+//   //   console.log('beforeEach', to, from, store.state.user);
+//   //   return next( to.name=== 'login' || (store.state.user && store.state.user.token) ? true: '/login' )
+//   //   return next(getStateFromRoute(to) === stateMachine.current.state.toLowerCase())
+// })
 
 export default router
 

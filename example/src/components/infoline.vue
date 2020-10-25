@@ -6,11 +6,11 @@
   <v-layout wrap>
     <v-flex xs12>
       <h5 id="path" >
-        Inspect Example-Code at <a
+        Inspect Example-Code <a
           target="_blank"
           :href="`${url}${path}.vue`"
-        >'{{path}}.vue'</a>
-        or see Console for Events. 
+        >'{{path.replace('/','')}}.vue'</a>
+        or watch logged Events at Console. 
       </h5>
     </v-flex>    
     <v-flex xs6 >

@@ -62,22 +62,21 @@
               <!-- DATE, TIME, COLOR TEXT-MENU -->   
                 <v-menu
                   v-else-if="isDateTimeColorTypeAndExtensionText(obj)"
-                  v-bind="bindPickerSchemaMenu(obj)"
-                >          
+                  v-bind="bindSchemaMenu(obj)"
+                >   
                   <template v-slot:activator="{ on }">
                     <v-text-field
                       v-on="on"
-                      v-bind="bindSchema(obj)"
-                      type="text"
-                      readonly
+                      v-bind="bindSchemaText(obj)"                      
                       :value="setValue(obj)"
                       @[suspendClickAppend(obj)]="onEvent($event, obj, append)"                  
                       @click:append-outer="onEvent($event, obj, appendOuter)"
                       @click:prepend="onEvent($event, obj, prepend)"
-                      @click:prepend-inner="onEvent($event, obj, prependInner)"
+                      @click:prepend-inner="onEvent($event, obj, prependInner)"                      
                     />
+                    <!-- SLOTS append|prepend|message for picker not avilable, try custom component -->
                   </template>
-                  <div
+                  <v-input
                     :is="mapTypeToComponent( obj.schema.type )" 
                     v-bind="bindSchema(obj)"
                     :type="checkInternType(obj)"
@@ -309,25 +308,37 @@
               <!-- END BTN -->
 
               <!-- MASK v-text-field use this Section - https://vuejs-tips.github.io/vue-the-mask/  -->
-                <v-text-field
+                <v-input
+                  :is="mapTypeToComponent(obj.schema.type)"
                   v-else-if="obj.schema.mask"
-                  v-mask="obj.schema.mask"
                   v-bind="bindSchema(obj)"
+                  v-mask="obj.schema.mask"
+                  :tokens="obj.schema.tokens"
                   :type="checkExtensionType(obj)"                  
                   :value="setValue(obj)"
+                  :obj="obj"
+                  :search-input.sync="obj.schema.searchInput"    
                   @focus="onEvent($event, obj)"
-                  @blur="onEvent($event, obj)"
+                  @blur="onEvent($event, obj)"                  
                   @[suspendClickAppend(obj)]="onEvent($event, obj, append)"
                   @click:append-outer="onEvent($event, obj, appendOuter)"
                   @click:prepend="onEvent($event, obj, prepend )"
                   @click:prepend-inner="onEvent($event, obj, prependInner)"
                   @click:clear="onEvent($event, obj, clear )"
+                  @click:hour="onEvent({type:'click'}, obj, hour)"
+                  @click:minute="onEvent({type:'click'}, obj, minute)"
+                  @click:second="onEvent({type:'click'}, obj, second)"
                   @input="onInput($event, obj)"
-                />
+                >
+                  <template #[obj.schema.slot]>
+                    <slot :name="getKeySlot(obj)" :obj="obj"/>
+                  </template>
+
+                </v-input>
               <!-- END MASK -->
 
               <!-- DEFAULT all other Types -> typeToComponent -->
-                <div
+                <v-input
                   :is="mapTypeToComponent(obj.schema.type)"
                   v-else
                   v-bind="bindSchema(obj)"
@@ -347,10 +358,12 @@
                   @click:second="onEvent({type:'click'}, obj, second)"
                   @input="onInput($event, obj)"
                 >
-                  {{obj.schema.textContent}}
-                </div>
+                  <template #[obj.schema.slot]>
+                    <slot :name="getKeySlot(obj)" :obj="obj"/>
+                  </template>
 
-              <!-- END DEFAULT -->
+                </v-input>
+              <!-- END DEFAULT -->     
               </slot>
             </slot>
 
@@ -383,7 +396,18 @@
   import { mask } from 'vue-the-mask'
   
   const typeToComponent = {
+    // maps schema.type to prop 'type' in v-text-field  - https://www.wufoo.com/html5/
     text: 'v-text-field',
+    /*
+      { type:'text, ext:'typeOfTextField', ...} 
+      For native <INPUT> type use alternative schema prop ext  -> schema:{ type:'text, ext:'date', ...} 
+      correspond to <input type="number" >
+      number: 'v-text-field',   //  { type:'text, ext:'number', ...}    
+      range: 'v-text-field',   //  { type:'text, ext:'range', ...}    
+      date: 'v-text-field',    //  { type:'text, ext:'date', ...}       
+      time: 'v-text-field',    //  { type:'text, ext:'time', ...}      
+      color: 'v-text-field',   //  { type:'text, ext:'color', ...}      
+    */
     password: 'v-text-field',
     email: 'v-text-field',
     tel: 'v-text-field',
@@ -391,17 +415,10 @@
     search: 'v-text-field',
     number: 'v-text-field', 
     
-    // map schema.type to type in v-text-field  - https://www.wufoo.com/html5/
-    // For native <INPUT> type use alternative schema prop ext  -> schema:{ type:'text, ext:'date', ...} 
-    // range: 'v-text-field',   //  { type:'text, ext:'range', ...}    
-    // date: 'v-text-field',    //  { type:'text, ext:'date', ...}       
-    // time: 'v-text-field',    //  { type:'text, ext:'time', ...}      
-    // color: 'v-text-field',   //  { type:'text, ext:'color', ...}      
-    
-    // INFO: 3 Types of DATE / TIME / COLOR
-    // Date-Input           - schema:{ type:'text, ext:'date', ...}       
+    // INFO: 3 Types of PICKER DATE / TIME / COLOR
+    // Date-Native Input    - schema:{ type:'text, ext:'date', ...}       
     // Date-Picker          - schema:{ type:'date', ...}         
-    // Date-Picker-Text     - schema:{ type:'date', ext:'text'...}         
+    // Date-Picker-Textmenu     - schema:{ type:'date', ext:'text'...}
 
     // map schema.type to vuetify-control (vuetify 2.0)
     date: 'v-date-picker',   
@@ -413,7 +430,7 @@
     file: 'v-file-input',
     switch: 'v-switch',
     checkbox: 'v-checkbox',
-    card: 'v-card'
+    card: 'v-card'    
     /*
       HOW TO USE CUSTOM Components
       1)  
@@ -446,7 +463,7 @@
     */
     
     }
-  // Declaration
+// Declaration
   const orderDirection = 'ASC'
   const pathDelimiter = '.'
   const classKeyDelimiter = '-'
@@ -464,6 +481,7 @@
   const keyClassAppendix = 'key'
   const propertyClassAppendix = 'prop'
 
+  const slotAppendix = 'slot'
   const arraySlotAppendix = 'slot-array'
   const topSlotAppendix = 'slot-top'
   const itemSlotAppendix = 'slot-item'
@@ -498,13 +516,15 @@
   const defaultSchemaIfValueIsNumber = key => ({ type:'number', label: key })
   const defaultSchemaIfValueIsBoolean = key => ({ type:'checkbox', label: key })
   // Menu triggered DateTimePicker Default 
-  const defaultPickerMenu = { closeOnContentClick:false, transition:"scale-transition", nudgeRight:32, maxWidth:'290px', minWidth:'290px' }
+  const defaultPickerSchemaText = { type:'text', readonly:true }
+  const defaultPickerSchemaMenu = { closeOnContentClick:false, transition:"scale-transition", nudgeRight:32, maxWidth:'290px', minWidth:'290px' }
 //
 export default {
   name: 'VFormBase',
   // Info Mask https://vuejs-tips.github.io/vue-the-mask/
   directives: { mask },
-  props: {    
+  
+  props: {   
     id: {
       type: String,
       default: defaultID
@@ -532,7 +552,7 @@ export default {
     }
   },
   data () {
-    return {    
+    return {  
       flatCombinedArray: [],
       clear,
       button,
@@ -609,12 +629,15 @@ export default {
       return isPicker.includes(obj.schema.ext)
     },
     // BIND SCHEMA FN
-    bindPickerSchemaMenu(obj, schemaProp ) {           
-      return { ...defaultPickerMenu, ...obj.schema.menu}
-    },      
+    bindSchemaText(obj ) {           
+      return { ...defaultPickerSchemaText, ...obj.schema.text}
+    },          
+    bindSchemaMenu(obj ) {           
+      return { ...defaultPickerSchemaMenu, ...obj.schema.menu}
+    },          
     bindSchema(obj) {     
       return obj.schema
-    },          
+    },              
     suspendClickAppend(obj){
       // select|combobox|autocomplete -> suspend 'click:append' for working down arrow
       return /(select|combobox|autocomplete)/.test(obj.schema.type) ? '' : 'click:append'
@@ -684,7 +707,11 @@ export default {
       return this.id + '-bottom'
     },
   //
-  // KEY SLOTS
+  // KEY 
+    getKeySlot(obj) {
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-key-address-city'
+      return this.getKeyClassNameWithAppendix(obj, slotAppendix + '-key')
+    },
     getKeyArraySlot (obj) {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-ARRAY-key-address-city'
       return this.getKeyClassNameWithAppendix(obj, arraySlotAppendix + '-key')

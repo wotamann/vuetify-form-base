@@ -1,30 +1,25 @@
 <template>
   <v-container fluid>
-    <h4>Textfields Extension for native HTML-Input Type-Attribute and computed Schema (Color)</h4>
+    <h4>Textfields Extension for native HTML-Input Type-Attribute</h4>
       <!-- 
-        Most controls are based on vuetify and therefore 
-        the properties of these controls can be used 
-        
-        schema:{ type:'text',hint:'ABC', persistentHint:true, ... } 
-        
+        1) Most controls are based on vuetify and therefore 
+          the properties of these controls can be used 
+          
+          schema:{ type:'text',hint:'ABC', persistentHint:true, ... } 
+          
           maps to 
+          
+          <v-text-fields hint="ABC" persistent-hint > 
+          see more -> https://vuetifyjs.com/en/components/text-fields/
         
-        <v-text-fields hint="ABC" persistent-hint > 
-        see more -> https://vuetifyjs.com/en/components/text-fields/
-        
-        Prop 'ext' in combination with schema:{ type:'text', ext:'color', ...} makes native Type of HTML INPUT-TAG available 
+        2)  Use Native HTML Input Type with Prop 'ext'
+          Prop 'ext' in schema:{ type:'text', ext:'color', ...} makes native HTML-INPUT Type available 
       
-        Attribute COL ( FLEX is deprecated) for global GRID-Setting: 
-          
-          DEPRECATED VUETIFY 1.5 
-          string shorthand                     :flex:"6"  
-          object to make it responsible :flex="{ xs:12, sm:6, md:4 }"
-          
-          GRID VUETIFY 2.0 
-          string shorthand                     :col:"6"  
-          object to make it responsible :col="{ cols:12, sm:6, md:4 }" 
+        3) Use <v-form-base> attribute 'col' for global GRID-Setting: 
+          string   :col:"6"  
+          object   :col="{ cols:12, sm:6, md:4 }" 
 
-        COMPUTED SCHEMA updates Layout (see color)    
+        4) COMPUTED SCHEMA updates Layout (see color, range)    
       -->
    
       <!-- FORM-BASE-COMPONENT -->   
@@ -36,11 +31,7 @@
       />
     
     <!-- Stuff  -->    
-    <infoline
-      :value="myModel"
-      :schema="mySchema"
-      :path="$options._componentTag"
-    />
+    <infoline :model="myModel" :schema="mySchema"/>
   </v-container>
 </template>
 
@@ -54,15 +45,14 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-
       myModel: {
         password: 'abcdefgh',
         count:100,
         range:50,
         color:'#6666FF',
         time:'01:15',
-        date:'2020-02-25',
-      },  
+        date:'2020-02-25'
+      }
     }
   },
   computed:{
@@ -83,8 +73,7 @@ export default {
         range:{ 
           type:'text', 
           ext:'range', 
-          title: this.myModel.range,    // computed schema updates with range value
-          label:'Range'
+          label: this.myModel.range,    // computed schema updates with range value
         },        
         color:{ 
           type:'text', 
