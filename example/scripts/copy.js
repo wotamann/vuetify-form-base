@@ -1,25 +1,33 @@
-const fs = require('fs');
+const fse = require('fs-extra');
 
-let dir
+const doTheJob = async() => {
 
-dir = '../dist/src';
-if (!fs.existsSync(dir)){ fs.mkdirSync(dir) }
+  let dir
+  let a 
+  dir = '../dist/src';
+  await fse.ensureDir(dir)
 
-dir = '../../../../../wotamann.github.io/static';
-if (!fs.existsSync(dir)){ fs.mkdirSync(dir) }
+  dir = '../../../../../wotamann.github.io/static';
+  await fse.ensureDir(dir)
+  console.log(`fse.ensureDir(dir) ### finished ###`);
 
+  await fse.copy('./public/index-cdn.html', '../dist/index-cdn.html');
+  console.log(`fse.copy(./public/index-cdn.html, ../dist/index-cdn.html) ### finished ###`);
+  
+  await fse.copy('./src/components/vFormBase.vue', '../dist/src/vFormBase.vue');
+  console.log(`fse.copy('./src/components/vFormBase.vue', '../dist/src/vFormBase.vue') ### finished ###`);
+  
+  await fse.copy('../../../../../wotamann.github.io/static/index.html', '../../../../../wotamann.github.io/static/404.html');
+  console.log(`fse.copy('../../../../../wotamann.github.io/static/index.html', '../../../../../wotamann.github.io/static/404.html') ### finished ###`);
+  
+  dir = `../../../../../wotamann.github.io/static`;
+  const destDir = `../../../../../wotamann.github.io`;
+  // copy static folder to root
+  await fse.copy(dir, destDir);
+  console.log(`fse.copy(srcDir/static, destDir) ### finished ###`);
+  // remove STATIC FOLDER!!!!
+  await fse.remove(dir);
+  console.log(`fse.remove(srcDir) ### finished ###`);
+}
 
-// destination.txt will be created or overwritten by default.
-fs.copyFile('./public/index-cdn.html', '../dist/index-cdn.html', (err) => {
-  if (err) console.warn(err);;
-  console.log('SUCESS COPY - ./public/index-cdn.html was copied to /dist/');
-});
-fs.copyFile('./src/components/vFormBase.vue', '../dist/src/vFormBase.vue', (err) => {
-  if (err) console.warn(err);;
-  console.log('SUCESS COPY - vFormBase.vue was copied to /src/vFormBase.vue');
-});
-//  destination.txt will be created or overwritten by default.
-fs.copyFile('../../../../../wotamann.github.io/static/index.html', '../../../../../wotamann.github.io/static/404.html', (err) => {
-  if (err) return console.warn('ERROR COPY - ' + err)
-  console.log('SUCESS COPY - /wotamann.github.io/static/index.html  was copied to 404.html');
-});
+doTheJob().then( text => console.log('SUCCESS - ALL DONE'), err => console.log('ERROR - ALL DONE', err))

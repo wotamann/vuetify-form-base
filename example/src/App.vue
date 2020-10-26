@@ -439,26 +439,48 @@
 
 <template>
   <v-app >
-    <v-navigation-drawer app left :permanent="$vuetify.breakpoint.mdAndUp" width=360>
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="title green--text">
+
+    <v-app-bar
+      app
+      dense
+      color="green lighten-1"
+      dark
+      hide-on-scroll
+    >
+      <v-app-bar-nav-icon @click="drawer=!drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>Vuetify-Form-Base</v-toolbar-title>
+    </v-app-bar>
+
+    <v-navigation-drawer 
+      app
+      v-model="drawer" 
+      width=360  
+    >
+       <!--   <v-list-item-title class="title green--text">
             <h4>Vuetify-Form-Base</h4>
           </v-list-item-title>
           <v-list-item-subtitle>
             The Model based Form-Generator
           </v-list-item-subtitle>
-        </v-list-item-content>
       </v-list-item>
-      <v-divider></v-divider>
+      <v-divider></v-divider> -->
       <v-list nav dense>
+        
+        <v-list-item>
+          <v-list-item-content class="grey--text text--darken-2">
+            <v-list-item-title class="title">
+              The Model based Form-Generator
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
         <v-list-item
           v-for="item in $router.options.routes.slice(1)"
           :key="item.name"
           :href="item.name"
           :class="$router.currentRoute.name === item.name ? 'green lighten-5' : ''"            
         > 
-          <v-list-item-content class="grey--text" >   
+          <v-list-item-content class="grey--text text--darken-2" >   
             <v-list-item-title class="subtitle font-weight-regular" :class="$router.currentRoute.name === item.name ? 'green--text' : ''">{{ item.text }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -466,7 +488,7 @@
     </v-navigation-drawer>
     
     <v-main app>
-      <router-view></router-view>
+      <router-view ></router-view>
     </v-main>
   </v-app>
 </template>
@@ -475,7 +497,7 @@
 export default {  
   data () {
     return {
-      side:320
+      drawer:true
     }
   }
 }

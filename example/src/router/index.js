@@ -30,7 +30,7 @@ import Router from 'vue-router'
   import list from '@/components/list.vue'
   import pickers from '@/components/pickers.vue'
   import images from '@/components/images.vue'
-  import dynamic from '@/components/dynamicattributes.vue'
+  import dynamicattributes from '@/components/dynamicattributes.vue'
   import typehandling from '@/components/typehandling.vue'
   import toctrfunction from '@/components/tocontrolfunction.vue'
   import customcomponentdemo from '@/components/customcomponentdemo.vue'
@@ -81,7 +81,7 @@ const router = new Router({
     { path: '/pickers', name: 'pickers', component: pickers, text:`Date, Time, Color as native HTML-Type, Menu and Pickers`  },    
     { path: '/images', name: 'images', component: images, text:`Images`  },    
     { path: '/dragdrop', name: 'dragdrop', component: dragdrop, text:`Drag & Drop`  },    
-    { path: '/dynamic', name: 'dynamic', component: dynamic, text:'Work with Dynamic Attributes Schema, Model and Grid'  },    
+    { path: '/dynamicattributes', name: 'dynamicattributes', component: dynamicattributes, text:'Dynamic Attributes Schema, Model and Grid'  },    
     { path: '/typehandling', name: 'typehandling', component: typehandling, text:`Handling special Schema-Key 'type' occuring in Model-Data`  },    
     { path: '/toctrfunction', name: 'toctrfunction', component: toctrfunction, text:`Manipulate Data incoming/outgoing to Control`  },    
     { path: '/conditional', name: 'conditional', component: conditional, text:`Conditional Form`  },    

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Change Attributes Model, Schema or Col of 'vuetify-form-base'</h4>
+    <h4>Change Attributes Model, Schema or Col</h4>
     
       <!-- FORM-BASE-COMPONENT -->    
       <v-form-base 
@@ -9,15 +9,15 @@
         :col="col"
         @input="log"
       />
-    <v-btn class="ma-2" @click="modelIndex--; modelIndex = Math.max(modelIndex, 0)">-</v-btn> 
+    <v-btn class="mx-2" @click="modelIndex--; modelIndex = Math.max(modelIndex, 0)">-</v-btn> 
      Model-{{modelIndex}}       
-    <v-btn class="ma-2" @click="modelIndex++; modelIndex = Math.min(modelIndex, 3)">+</v-btn>  
-    <v-btn class="ma-2" @click="schemaIndex--; schemaIndex = Math.max(schemaIndex, 0)">-</v-btn> 
+    <v-btn class="mx-2" @click="modelIndex++; modelIndex = Math.min(modelIndex, 3)">+</v-btn>  
+    <v-btn class="mx-2" @click="schemaIndex--; schemaIndex = Math.max(schemaIndex, 0)">-</v-btn> 
      Schema-{{schemaIndex}}       
-    <v-btn class="ma-2" @click="schemaIndex++; schemaIndex = Math.min(schemaIndex, 3)">+</v-btn>  
+    <v-btn class="mx-2" @click="schemaIndex++; schemaIndex = Math.min(schemaIndex, 3)">+</v-btn>  
     <v-btn @click="col--; col = Math.max(col, 0)">-</v-btn> 
      Grid-{{col}}/12       
-    <v-btn class="ma-2" @click="col++; col = Math.min(col, 12)">+</v-btn>  
+    <v-btn class="mx-2" @click="col++; col = Math.min(col, 12)">+</v-btn>  
     
     <!-- Stuff  -->    
     <infoline :model="myModel[modelIndex]" :schema="mySchema[modelIndex]"/>

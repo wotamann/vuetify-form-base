@@ -35,18 +35,20 @@ export default {
       myModel: {
         name1: 'Drag Only',
         name2: 'Drop Only with Copy',
-        name3: 'Drag, Drop with FN',
-        name4: 'Drop Only with no Action',
-        name5: 'No Drag, No Drop',
+        name3: 'Drag & Drop with Copy',
+        name4: 'Drop with Action',
+        name5: 'Drop Only but no +Action',
+        name6: 'No Drag, No Drop',
       },     
 
       // Schema-Order defines Order of Controls in Form    
       mySchema: {
-        name1: {  type:'text', drag:true },                 
-        name2: {  type:'text', drop:({value}) => value },                 
-        name3: {  type:'text', drag:true, drop:addDragValue },                 
-        name4: {  type:'text', drop:true },                 
-        name5: {  type:'text'  },                 
+        name1: {  type:'text', drag:true, class:'red lighten-5' },                 
+        name2: {  type:'text', drop:({value}) => value, class:'green lighten-5' },                 
+        name3: {  type:'text', drag:true, drop:({value}) => value,  class:'yellow lighten-5' },                 
+        name4: {  type:'text', drag:false, drop:addDragValue,  class:'green lighten-5' },                 
+        name6: {  type:'text', class:'grey lighten-3'  },                 
+        name5: {  type:'text', drop:true, class:'green lighten-5'  },                 
       }
     }
   },

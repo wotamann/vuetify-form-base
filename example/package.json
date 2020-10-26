@@ -19,6 +19,7 @@
     "babel-runtime": "^6.26.0",
     "core-js": "^3.6.5",
     "css-loader": "^3.5.3",
+    "fs-extra": "^9.0.1",
     "lodash": "^4.17.19",
     "rollup": "^2.23.0",
     "rollup-plugin-vue": "^6.0.0-beta.10",
