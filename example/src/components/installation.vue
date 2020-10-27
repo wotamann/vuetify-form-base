@@ -30,6 +30,7 @@ Clone or download this Project, change current directory to **./vuetify-form-bas
 or 
 
 Download and open this [HTML-File](https://github.com/wotamann/vuetify-form-base/blob/master/dist/index-cdn.html) in your Browser
+
 ---
 
 ### Installation
