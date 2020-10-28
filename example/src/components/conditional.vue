@@ -51,14 +51,14 @@ export default {
   computed: {
     mySchema () {
       return {
-        conditional: { type: 'text', placeholder: `Type 'show'`, hint: `Try typing 'show'`, flex: 12 },
+        conditional: { type: 'text', placeholder: `Type 'show'`, hint: `Try typing 'show'`, col: 12 },
         tasks: {
           type: 'array',
           hidden: this.hidden,
-          flex: 12,
+          col: 12,
           schema: {
-            done: { type: 'checkbox', label: 'Done', color: 'red', flex: 2 },
-            title: { type: 'text', placeholder: '...', flex: 8 }
+            done: { type: 'checkbox', label: 'Done', color: 'red', col: 2 },
+            title: { type: 'text', placeholder: '...', col: 8 }
           }
         }
       }

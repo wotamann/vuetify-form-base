@@ -62,7 +62,7 @@ export default {
       mySchema: {
         treeview_1: {
           type: 'treeview',
-          flex: 6,
+          col: 6,
           open: [],
           model: [],
           activatable: true,
@@ -73,7 +73,7 @@ export default {
         },
         treeview_2: {
           type: 'treeview',
-          flex: 6,
+          col: 6,
           open: [],
           model: [],
           activatable: true,

@@ -52,7 +52,7 @@ export default {
           item: 'name', // display name from object in array
           model: 2,
           color: 'blue',
-          flex: 5
+          col: 5
         },
         listString: {
           type: 'list',
@@ -61,10 +61,10 @@ export default {
           model: [1, 2],
           color: 'red',
           offset: 1,
-          flex: 5
+          col: 5
         },
-        btn1: { type: 'btn', label:'Add', dark:true, color: 'blue', class:'mb-1',flex: 2 },
-        btn2: { type: 'btn', label:'Add', dark:true, color: 'red', class:'mb-1', flex: 2, offset: 4 },
+        btn1: { type: 'btn', label:'Add', dark:true, color: 'blue', class:'mb-1',col: 2 },
+        btn2: { type: 'btn', label:'Add', dark:true, color: 'red', class:'mb-1', col: 2, offset: 4 },
       }
     }
   },

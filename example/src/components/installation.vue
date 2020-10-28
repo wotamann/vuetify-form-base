@@ -1,8 +1,6 @@
 <template>
-  <v-container fluid>
-    
+  <v-container fluid>    
    <vue-markdown :source="md"/>
-    
   </v-container>
 </template>
 
@@ -30,6 +28,10 @@ Clone or download this Project, change current directory to **./vuetify-form-bas
 or 
 
 Download and open this [HTML-File](https://github.com/wotamann/vuetify-form-base/blob/master/dist/index-cdn.html) in your Browser
+
+or 
+
+Play with [Fiddle](https://jsfiddle.net/wotamann/204z6vpq/13/)
 
 ---
 

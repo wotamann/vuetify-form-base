@@ -55,7 +55,7 @@ export default {
       mySchema: {
         tasks: {
           type: 'array',
-          flex: 12,
+          col: 12,
           schema: {
             // Add Task Button in Schema only 
             add: { type: 'btn', iconLeft: 'add', label:'Task', dark: true, color: 'blue lighten-2' },
@@ -73,9 +73,9 @@ export default {
             task: {
               type: 'array',
               offset:3,
-              flex:9,              
+              col:9,              
               schema: {
-                done: { type: 'checkbox', label: 'Done', color: 'red', offset: 1, flex: 2 },
+                done: { type: 'checkbox', label: 'Done', color: 'red', offset: 1, col: 2 },
                   title: { type: 'text', color: 'red', label:'Drag Title', drag:true },
               }
             }

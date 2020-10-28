@@ -47,16 +47,16 @@ export default {
       mySchema: {
         tasks: {
           type: 'array',
-          flex: 8,
+          col: 8,
           schema: {
-            out: { type: 'checkbox', label: 'Out', color: 'blue', flex: 2 },
-            title: { type: 'text', color: 'blue', flex:6 },
+            out: { type: 'checkbox', label: 'Out', color: 'blue', col: 2 },
+            title: { type: 'text', color: 'blue', col:6 },
             tasks: {
               type: 'array',
-              flex: 12,
+              col: 12,
               schema: {
-                in: { type: 'checkbox', label: 'In', color: 'red', flex: 2, offset:2 },
-                title: { type: 'text', color: 'red', flex:4 }          
+                in: { type: 'checkbox', label: 'In', color: 'red', col: 2, offset:2 },
+                title: { type: 'text', color: 'red', col:4 }          
               }
             }          
           }

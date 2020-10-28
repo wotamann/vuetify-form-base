@@ -14,7 +14,8 @@ Vue.config.warnHandler = function (err, vm, info) {
 // schema: { custom1: { type: 'custom-basic' }, custom2: { type: 'custom-object' } }
 Vue.component('customBasic', () => import('@/components/customcomponent-basic.vue') )
 Vue.component('custom-object', () => import('@/components/customcomponent-object.vue') )
-Vue.component('custom-color', () => import('@/components/customcomponent-object-color.vue') )
+Vue.component('custom-extern', () => import('@/components/customcomponent-extern.vue') )
+Vue.component('custom-color', () => import('@/components/customcomponent-color.vue') )
 
 
 /* eslint-disable no-new */

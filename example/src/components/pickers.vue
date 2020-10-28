@@ -62,7 +62,7 @@ export default {
         // DATE / TIME / COLOR  Vuetify Date-Picker - schema:{ type:'date', ...}
         time: { type: 'time', color: 'blue', format: '24hr', locale: 'de', prependIcon: 'event', label: 'Time' },
         date: { type: 'date', color: 'green', locale: 'de', prependIcon: 'event', multiple:true, label: 'Date' },
-        color: { type: 'color', flex: 4 }
+        color: { type: 'color' }
       }
     }
   },
