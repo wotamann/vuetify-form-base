@@ -66,7 +66,11 @@ Clone or download this Project, change current directory to **./vuetify-form-bas
 
 or 
 
-[Download this HTML File with CDN](https://github.com/wotamann/vuetify-form-base/blob/master/umd/demo.html)
+Download and open this [HTML-File](https://github.com/wotamann/vuetify-form-base/blob/master/dist/index-cdn.html) in your Browser
+
+or 
+
+Play with [Fiddle](https://jsfiddle.net/wotamann/204z6vpq/13/)
 
 or 
 
