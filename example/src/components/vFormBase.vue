@@ -306,13 +306,41 @@
                   </v-icon>
                 </v-btn>
               <!-- END BTN -->
+              
+              <!-- MASK  -->
+                <v-input
+                  :is="mapTypeToComponent(obj.schema.type)"
+                  v-else-if="obj.schema.mask" 
+                  v-bind="bindSchema(obj)"
+                  v-mask="obj.schema.mask"                  
+                  :type="checkExtensionType(obj)"                  
+                  :value="setValue(obj)"
+                  :obj="obj"
+                  :[searchInputSync(obj)].sync="obj.schema.searchInput"                     
+                  @focus="onEvent($event, obj)"
+                  @blur="onEvent($event, obj)"                  
+                  @[suspendClickAppend(obj)]="onEvent($event, obj, append)"
+                  @click:append-outer="onEvent($event, obj, appendOuter)"
+                  @click:prepend="onEvent($event, obj, prepend )"
+                  @click:prepend-inner="onEvent($event, obj, prependInner)"
+                  @click:clear="onEvent($event, obj, clear )"
+                  @click:hour="onEvent({type:'click'}, obj, hour)"
+                  @click:minute="onEvent({type:'click'}, obj, minute)"
+                  @click:second="onEvent({type:'click'}, obj, second)"
+                  @input="onInput($event, obj)"
+                >
+                  <template #[obj.schema.slot]>
+                    <slot :name="getKeySlot(obj)" :obj="obj"/>
+                  </template>
+
+                </v-input> 
+              <!-- END MASK --
 
               <!-- DEFAULT all other Types -> typeToComponent -->
                 <v-input
                   :is="mapTypeToComponent(obj.schema.type)"
                   v-else
                   v-bind="bindSchema(obj)"
-                  v-mask="obj.schema.mask"                  
                   :type="checkExtensionType(obj)"                  
                   :value="setValue(obj)"
                   :obj="obj"
@@ -530,6 +558,7 @@ export default {
   },
   data () {
     return {  
+      m: 'v-mask',
       flatCombinedArray: [],
       clear,
       button,
