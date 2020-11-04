@@ -27,7 +27,7 @@
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
 import log from '@/lib'
-
+const items = [1, 2, 3, 4, 5, 6, 7, 8 ,9]
 export default {
   name: 'Array',
   components: { VFormBase, Infoline },
@@ -36,15 +36,13 @@ export default {
       myModel: {
         tasks: [
           {
-            nr: 1,
-            title: 'Item 1',
+            title: 1,
             task: [
               this.getTask(),
             ]
           },
           {
-            nr: 2,
-            title: 'Item 2',
+            title: 2,
             task: [
               this.getTask(),
               this.getTask(),
@@ -58,17 +56,13 @@ export default {
           col: 12,
           schema: {
             // Add Task Button in Schema only 
-            add: { type: 'btn', iconLeft: 'add', label:'Task', dark: true, color: 'blue lighten-2' },
-            delete: { type: 'btn', iconRight: 'remove', label:'Drop', dark: true, color: 'blue lighten-2', class:'mx-1', drop:true, tooltip:'Drop Task to remove' },
-            nr: {
-              type: 'text',
-              disabled: true,
-              color: 'blue',     
-              offset:1         
-            },
+            add: { type: 'btn', col:3, iconLeft: 'add', label:'Task', dark: true, color: 'blue lighten-2' },
+            delete: { type: 'btn', col:3, iconRight: 'remove', label:'Drop', dark: true, color: 'blue lighten-2', class:'mx-1', drop:true, tooltip:'Drop Task to remove' },
             title: {
-              type: 'text',
-              color: 'blue',
+              type: 'select',
+              col:6,
+              items,
+              color: 'blue'         
             },
             task: {
               type: 'array',
@@ -76,7 +70,7 @@ export default {
               col:9,              
               schema: {
                 done: { type: 'checkbox', label: 'Done', color: 'red', offset: 1, col: 2 },
-                  title: { type: 'text', color: 'red', label:'Drag Title', drag:true },
+                title: { type: 'combobox', color: 'red', label:'Drag Title', drag:true, items },
               }
             }
           }
@@ -87,14 +81,13 @@ export default {
     }
   },
   methods: {  
-    getTask(){ return { done: false, title: 'Task ' + Math.floor(Math.random() * 1000) } },
+    getTask(){ return { done: false, title: Math.floor(Math.random() * 10) } },
     addTask(index){ this.myModel.tasks[index[0]].task.push(this.getTask()) },
     removeTask(index){ this.myModel.tasks[index[0]].task.splice(index[1], 1) },
 
     addItem () {
       this.myModel.tasks.push({
-        nr: this.myModel.tasks.length + 1,
-        title: 'Item ' + (this.myModel.tasks.length + 1),
+        title: this.myModel.tasks.length + 1,
         task: [ this.getTask() ]
       })
     },

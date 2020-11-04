@@ -109,14 +109,21 @@ bug fix error using v-file-input
   schema:{ ..., menu:{ closeOnContentClick:true, nudgeRight:96 } }   
 
   0.3.0 - 23.10
-  rewrite example by using router / it is also planned to revise the documentation
-  
-  issue #59  -  
-  grouping not based on model structure  
+  rewrite example using router / it is also planned to revise the documentation
+  issue #59  - grouping not based on model structure  
   -> see Example https://github.com/wotamann/vuetify-form-base/blob/master/example/src/components/wrap.vue 
   grouping based on model structure 
   -> see Example https://github.com/wotamann/vuetify-form-base/blob/master/example/src/components/grouping.vue 
-  
-  issue #66  -  added click event for click:hour, :minute, :second  
-  
+  issue #66  -  added click event for click:hour, :minute, :second   
   issue #68  -  fixed bug with down-arrow in select|combo|autocomplete  
+
+  0.3.1
+  add external custom component example
+  new slot for prepend/append in v-text-field 
+  
+  0.3.2
+  issue #71 - Fix BUG: Select|Combo|autocomplete dont display items in type 'array' -> fixed generating default key 
+  BREAKING: changed directive for masking from 'vue-the-mask' to 'v-mask'   - v-mask https://github.com/probil/v-mask 
+  Refactor: remove mask as special case in vFormBase.vue
+
+

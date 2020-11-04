@@ -95,7 +95,7 @@
                 >
                   <div
                     v-for="(item, idx) in setValue(obj)"
-                    :key="getKeyForArray(obj, item, idx)"
+                    :key="getKeyForArray(id, obj, item, idx)"
                     v-bind="bindSchema(obj)"
                     :value="setValue(obj)"
                   >
@@ -307,45 +307,16 @@
                 </v-btn>
               <!-- END BTN -->
 
-              <!-- MASK v-text-field use this Section - https://vuejs-tips.github.io/vue-the-mask/  -->
-                <v-input
-                  :is="mapTypeToComponent(obj.schema.type)"
-                  v-else-if="obj.schema.mask"
-                  v-bind="bindSchema(obj)"
-                  v-mask="obj.schema.mask"
-                  :tokens="obj.schema.tokens"
-                  :type="checkExtensionType(obj)"                  
-                  :value="setValue(obj)"
-                  :obj="obj"
-                  :search-input.sync="obj.schema.searchInput"    
-                  @focus="onEvent($event, obj)"
-                  @blur="onEvent($event, obj)"                  
-                  @[suspendClickAppend(obj)]="onEvent($event, obj, append)"
-                  @click:append-outer="onEvent($event, obj, appendOuter)"
-                  @click:prepend="onEvent($event, obj, prepend )"
-                  @click:prepend-inner="onEvent($event, obj, prependInner)"
-                  @click:clear="onEvent($event, obj, clear )"
-                  @click:hour="onEvent({type:'click'}, obj, hour)"
-                  @click:minute="onEvent({type:'click'}, obj, minute)"
-                  @click:second="onEvent({type:'click'}, obj, second)"
-                  @input="onInput($event, obj)"
-                >
-                  <template #[obj.schema.slot]>
-                    <slot :name="getKeySlot(obj)" :obj="obj"/>
-                  </template>
-
-                </v-input>
-              <!-- END MASK -->
-
               <!-- DEFAULT all other Types -> typeToComponent -->
                 <v-input
                   :is="mapTypeToComponent(obj.schema.type)"
                   v-else
                   v-bind="bindSchema(obj)"
+                  v-mask="obj.schema.mask"                  
                   :type="checkExtensionType(obj)"                  
                   :value="setValue(obj)"
                   :obj="obj"
-                  :search-input.sync="obj.schema.searchInput"    
+                  :[searchInputSync(obj)].sync="obj.schema.searchInput"                     
                   @focus="onEvent($event, obj)"
                   @blur="onEvent($event, obj)"                  
                   @[suspendClickAppend(obj)]="onEvent($event, obj, append)"
@@ -362,7 +333,7 @@
                     <slot :name="getKeySlot(obj)" :obj="obj"/>
                   </template>
 
-                </v-input>
+                </v-input> 
               <!-- END DEFAULT -->     
               </slot>
             </slot>
@@ -393,8 +364,16 @@
 // import & declarations
   import Vue from 'vue'
   import { get, isPlainObject, isFunction, isString, isNumber, isEmpty, orderBy, delay } from 'lodash'
-  import { mask } from 'vue-the-mask'
-  
+  // Info Mask https://github.com/probil/v-mask  
+  import VueMask from 'v-mask'
+  Vue.use(VueMask, {
+    placeholders: {
+      // '#': null,       // passing `null` removes default placeholder, so `#` is treated as character
+      // D: /\d/,         // define new placeholder
+      // Я: /[\wа-яА-Я]/, // cyrillic letter as a placeholder
+    }
+  })
+
   const typeToComponent = {
     // maps schema.type to prop 'type' in v-text-field  - https://www.wufoo.com/html5/
     text: 'v-text-field',
@@ -521,8 +500,6 @@
 //
 export default {
   name: 'VFormBase',
-  // Info Mask https://vuejs-tips.github.io/vue-the-mask/
-  directives: { mask },
   
   props: {   
     id: {
@@ -549,7 +526,7 @@ export default {
     schema: {
       type: [Object, Array],
       default: () => ({})
-    }
+    }   
   },
   data () {
     return {  
@@ -635,13 +612,18 @@ export default {
     bindSchemaMenu(obj ) {           
       return { ...defaultPickerSchemaMenu, ...obj.schema.menu}
     },          
-    bindSchema(obj) {     
+    bindSchema(obj) {   
       return obj.schema
     },              
     suspendClickAppend(obj){
       // select|combobox|autocomplete -> suspend 'click:append' for working down arrow
       return /(select|combobox|autocomplete)/.test(obj.schema.type) ? '' : 'click:append'
-    },      
+    },                     
+    searchInputSync(obj){
+      // schema.searchInput ->   bind 'search-input'
+      return (typeof obj.schema.searchInput !== 'undefined') ? 'search-input' : ''
+    },   
+
     // EXT TYPE
     checkExtensionType(obj) {
       // For native <INPUT> type use prop 'ext'
@@ -656,7 +638,7 @@ export default {
       return obj.schema.typeInt || obj.schema.type
     },
   // GET ITERATION KEY FOR TYPE ARRAY
-    getKeyForArray(obj, item, index){
+    getKeyForArray(id, obj, item, index){
       // IMPORTANT if you want to add or remove items in type:'array' 
       // more Info -> 
       // https://forum.vuejs.org/t/after-splicing-an-object-wrong-item-disappears-from-view/9247/4
@@ -665,16 +647,16 @@ export default {
       // create for iteration v-for an uniqe key from each object in array using index and time.hash 
       // or define your key index by defining a key property
       // MODEL
-      // arrayTasks: { trace:'100', label:'A', ... }
+      // arrayTasks: [{ trace:'100', label:'A'}, ...  ]
       // SCHEMA
-      // arrayTasks: { type:'array', schema:{ ... } }                           -> KEY index_time.hash  0_1587498241149
-      // arrayTasks: { type:'array', key:'trace', schema:{ ... } }              -> KEY trace            100
-      // arrayTasks: { type:'array', key:['trace','label'], schema:{ ... } }    -> KEY trace_label      100_A
+      // arrayTasks: { type:'array', schema:{ ... } }                                                      DEFAULT KEY -> KEY id-key-index   'arrayTasks-0'
+      // arrayTasks: { type:'array', key:'trace', schema:{ trace: { type:'text'}, ... } }                              -> KEY trace            100
+      // arrayTasks: { type:'array', key:['trace','label'], schema:{ trace: { type:'text'}, label: { type:'text'} } }  -> KEY trace_label      100_A
       
-      // IMPORTANT! Key should not contain an editable prop, because of new iteration on any change
+      // IMPORTANT! Key should not contain an EDITABLE prop, because of re-iteration on any change
 
-        const k= obj.schema.key 
-        return k ? Array.isArray(k) ? k.map(i => item[i]).join('_') : item[k] : (!isNaN(index)) ? `${index}_${Date.now()}` : index 
+      const k= obj.schema.key 
+      return k ? Array.isArray(k) ? k.map(i => item[i]).join('_') : item[k] : (!isNaN(index)) ? `${id}-${obj.key}-${index}` : index 
     },
   //
   // GET IMG SOURCE
@@ -842,21 +824,22 @@ export default {
       //
       // manipulate value going to control, function must return a (modified) value
       // schema:{ name: { type:'text', toCtrl: ( {value} ) => value && value.toUpperCase, ... }, ... }
-      return isFunction(params.obj.schema && params.obj.schema.toCtrl) ? params.obj.schema.toCtrl(params) : params.value
+      // return isFunction(params.obj.schema && params.obj.schema.toCtrl) ? params.obj.schema.toCtrl(params) : params.value
+      return params.obj.schema && isFunction(params.obj.schema.toCtrl) ? params.obj.schema.toCtrl(params) : params.value
     },
     fromCtrl (params) {
       // signature params { value, obj, data, schema }
       //
       // manipulate updated value from control, function must return a (modified) value
       // schema:{ name: { type:'text', fromCtrl: ( {value} ) => value && value.toUpperCase, ... }, ... }
-      return isFunction(params.obj.schema.fromCtrl) ? params.obj.schema.fromCtrl(params) : params.value
+      return params.obj.schema && isFunction(params.obj.schema.fromCtrl) ? params.obj.schema.fromCtrl(params) : params.value
     },
     dropCtrl (params) {
       // signature params { value, obj, dragObject, dragEvent, event,data, schema }
       //
       // manipulate dropped value from control, function must return a (modified) value
       // schema:{ name: { type:'text', drop: ( {value} ) => value && value.toUpperCase, ... }, ... }
-      return isFunction(params.obj.schema.drop) ? params.obj.schema.drop(params) : params.value
+      return params.obj.schema && isFunction(params.obj.schema.drop) ? params.obj.schema.drop(params) : params.value
     },
   // 
   // Drag / Drop / DropValue
@@ -1024,7 +1007,7 @@ export default {
           schema[key] = sch[key]
         }
       }) 
-      return { data, schema }
+     return { data, schema }
     },
     combineObjectsToArray ({ data, schema }) {
       let arr = []
@@ -1059,7 +1042,7 @@ export default {
 
     tryAutogenerateModelStructure (model, schema) {
       // generate or complete an empty model based on schema structure
-      
+
       Object.keys(schema).forEach(key => {
         
         // model must be at least an empty Object. It doesn't work with 'null', 'undefined' or any 'primitive value' 
@@ -1071,11 +1054,11 @@ export default {
         if (val.type === 'group') {
           this.$set(model, key, {})
           this.tryAutogenerateModelStructure(model[key], val.schema)
-        } else
+        } else 
         if (val.type === 'array') {
           this.$set(model, key, [])
           this.tryAutogenerateModelStructure(model[key], val.schema)
-        } else
+        } else        
         if (val.type === 'list') {
           this.$set(model, key, [])
         } else
@@ -1103,11 +1086,11 @@ export default {
       
       // no schema defined or empty -> autogenerate basic schema
       if (isEmpty(schema)) this.autogenerateSchema(model)
-
+     
       // create flatted working array from schema and value
-      this.flatCombinedArray = this.flattenAndCombineToArray(this.storeStateData, this.storeStateSchema)
+      this.flatCombinedArray = this.flattenAndCombineToArray(this.storeStateData, this.storeStateSchema)     
     }
-  //  
+  //   
   },
   created () {
     this.rebuildArrays(this.valueIntern, this.schema)

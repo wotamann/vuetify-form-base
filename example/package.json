@@ -26,11 +26,11 @@
     "rollup-plugin-vue": "^6.0.0-beta.10",
     "sass-loader": "^9.0.2",
     "stylus-loader": "^3.0.2",
+    "v-mask": "^2.2.3",
     "vue": "^2.6.11",
     "vue-markdown": "^2.2.4",
     "vue-router": "^3.4.7",
     "vue-tel-input-vuetify": "^1.2.12",
-    "vue-the-mask": "^0.11.1",
     "vuetify": "^2.3.4"
   },
   "devDependencies": {
