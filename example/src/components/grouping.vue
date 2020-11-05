@@ -2,24 +2,24 @@
   <v-container fluid>
     <h4>Use Type 'group' for wrapping content into Groups and control Display with 'row' Attribute</h4>
     
-    <!-- FORM-BASE-COMPONENT -->    
-    <!-- See for attribute 'row' handling <v-row></v-row> https://vuetifyjs.com/en/components/grids/ -->
-    <v-form-base 
-      id="group"  
-      :model="myModel" 
-      :schema="mySchema" 
-      :col=4
-      :row="{align:'center', justify:'center', noGutters:false}" 
-      @input:group="log"
-    >
-      <!-- Label Slot -->
-      <template #slot-label-key-group1="{obj}">
-        Slot-Label '{{obj.key}}'
-      </template>
-    </v-form-base>
-    
-    
-    
+    <v-form class="border-frame">
+      <!-- FORM-BASE-COMPONENT -->    
+      <!-- See for attribute 'row' handling <v-row></v-row> https://vuetifyjs.com/en/components/grids/ -->
+      <v-form-base 
+        id="group"  
+        :model="myModel" 
+        :schema="mySchema" 
+        :col=4
+        :row="{align:'center', justify:'center', noGutters:false}" 
+        @input:group="log"
+      >
+        <!-- Label Slot -->
+        <template #slot-label-key-group1="{obj}">
+          Slot-Label '{{obj.key}}'
+        </template>
+      </v-form-base>
+    </v-form>
+        
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>
     

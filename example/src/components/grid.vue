@@ -1,22 +1,25 @@
 <template>
   <v-container fluid>
-    <h4>Use computed Schema for responsible Layout with dynamic 'row' Attribute</h4>
+    <h4>Computed Schema for responsible Layout and dynamic 'row' Attribute</h4>
     <p>Resize Window to change Layout, Offset and Order of Controls. </p>
-    <v-form-base
-      :model="myModel"
-      :schema="mySchema"
-      :class="layout + ' lighten-5'"    
-      :col=12  
-      :row="rowAttribute"      
-      @change="change"
-    />
-    <!--
-      VUETIFY 2.0 NEW GRID SYSTEM - https://vuetifyjs.com/en/components/grids/
-      Vuetify comes with a 12 point grid system built using flex-box. 
-      The grid is used to create specific layouts within an application's content. 
-      It contains 5 types of media breakpoints that are used for targeting specific 
-      screen sizes or orientations, xs, sm, md, lg and xl. 
-    -->
+    
+    <v-form class="border-frame">
+      <v-form-base
+        :model="myModel"
+        :schema="mySchema"
+        :class="layout + ' lighten-5'"    
+        :col=12  
+        :row="rowAttribute"      
+        @change="change"
+      />
+      <!--
+        VUETIFY 2.0 NEW GRID SYSTEM - https://vuetifyjs.com/en/components/grids/
+        Vuetify comes with a 12 point grid system built using flex-box. 
+        The grid is used to create specific layouts within an application's content. 
+        It contains 5 types of media breakpoints that are used for targeting specific 
+        screen sizes or orientations, xs, sm, md, lg and xl. 
+      -->
+    </v-form>
     
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>

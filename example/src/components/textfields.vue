@@ -21,15 +21,15 @@
 
         4) COMPUTED SCHEMA updates Layout (see color, range)    
       -->
-   
-      <!-- FORM-BASE-COMPONENT -->   
-      <v-form-base 
-        :model="myModel"
-        :schema="mySchema"
-        :col="{ cols:12, sm:6, md:4 }"
-        @input="log"
-      />
-    
+      <v-form class="border-frame">
+        <!-- FORM-BASE-COMPONENT -->   
+        <v-form-base 
+          :model="myModel"
+          :schema="mySchema"
+          :col="{ cols:12, sm:6, md:4 }"
+          @input="log"
+        />
+      </v-form>
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>
     

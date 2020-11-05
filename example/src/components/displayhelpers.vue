@@ -34,13 +34,13 @@ export default {
     return {
       myModel: {
         name1: 'Float left & Margin-Top',
-        name2: 'Typographie & Padding X-Axis',
+        name2: 'Typographie & Padding',
         name3: 'Visible on sm',
         name4: 'Visible on xs, Margin-Bottom',
       },
       mySchema: {
         name1: { type: 'text', label:'grey lighten-3 float-left mt-6', class:'grey lighten-3 float-left mt-6' },
-        name2: { type: 'text', label:'title px-4 blue lighten-5', class:'title px-4 blue lighten-5' },
+        name2: { type: 'text', label:'title pa-6 blue lighten-5', class:'title pa-6 blue lighten-5' },
         name3: { type: 'text', label:'d-none d-sm-flex d-md-none red lighten-4', class:'d-none d-sm-flex d-md-none red lighten-4' },
         name4: { type: 'text', label:'caption d-flex d-sm-none green lighten-4 mb-2', class:'caption d-flex d-sm-none green lighten-4 mb-2' },
       }

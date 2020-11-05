@@ -334,7 +334,7 @@
                   </template>
 
                 </v-input> 
-              <!-- END MASK --
+              <!-- END MASK -->
 
               <!-- DEFAULT all other Types -> typeToComponent -->
                 <v-input

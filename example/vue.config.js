@@ -6,8 +6,4 @@ module.exports = {
   },  
   lintOnSave: false,
 
-  // transpileDependencies: [
-  //   "vuetify",
-  //   "vue-tel-input-vuetify"
-  // ]
 }

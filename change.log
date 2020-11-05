@@ -120,10 +120,12 @@ bug fix error using v-file-input
   0.3.1
   add external custom component example
   new slot for prepend/append in v-text-field 
-  
+
   0.3.2
   issue #71 - Fix BUG: Select|Combo|autocomplete dont display items in type 'array' -> fixed generating default key 
-  BREAKING: changed directive for masking from 'vue-the-mask' to 'v-mask'   - v-mask https://github.com/probil/v-mask 
-  Refactor: remove mask as special case in vFormBase.vue
+  BREAKING: changed mask-directive from 'vue-the-mask' to 'v-mask'   - v-mask https://github.com/probil/v-mask 
+  Refactor: removing 'schema.mask' as special case in vFormBase.vue not possible (doesn't work with v-textarea) 
+  add custom-component example with external component
+    
 
 

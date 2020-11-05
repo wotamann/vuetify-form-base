@@ -31,7 +31,7 @@ Download and open this [HTML-File](https://github.com/wotamann/vuetify-form-base
 
 or 
 
-Play with [Fiddle](https://jsfiddle.net/wotamann/204z6vpq/13/)
+Play with [Fiddle](https://jsfiddle.net/wotamann/204z6vpq/19/)
 
 ---
 

@@ -477,11 +477,11 @@
         <v-list-item
           v-for="item in $router.options.routes.slice(1)"
           :key="item.name"
-          :href="item.name"
-          :class="$router.currentRoute.name === item.name ? 'green lighten-5' : ''"            
+          :class="isCurrentPageClass(item)"            
+          @click="goto(item)"
         > 
           <v-list-item-content class="grey--text text--darken-2" >   
-            <v-list-item-title class="subtitle font-weight-regular" :class="$router.currentRoute.name === item.name ? 'green--text' : ''">{{ item.text }}</v-list-item-title>
+            <v-list-item-title class="subtitle font-weight-regular" :class="isCurrentPageClass(item)">{{ item.text }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -498,6 +498,16 @@ export default {
   data () {
     return {
       drawer:true
+    }
+  }, 
+  methods:{
+    isCurrentPageClass(item){ 
+      return this.$router.currentRoute.name === item.name ? 'green lighten-5 green--text' : null 
+    },
+    goto(item){
+      this.drawer = this.$vuetify.breakpoint.smAndUp
+      if (!this.isCurrentPageClass(item) ) this.$router.push(item.name)
+      
     }
   }
 }

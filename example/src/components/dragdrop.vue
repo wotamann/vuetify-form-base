@@ -1,17 +1,18 @@
 <template>
   <v-container fluid>
     <h4>Try to Drag & Drop </h4>
-    
-      <!-- FORM-BASE-COMPONENT -->    
-      <v-form-base 
-        :model="myModel"
-        :schema="mySchema"
-        col=6
-        @input="log"
-        @dragstart="dragstart"
-        @drop="drop"
-      />
-    
+
+       <v-form class="border-frame">
+        <!-- FORM-BASE-COMPONENT -->    
+        <v-form-base 
+          :model="myModel"
+          :schema="mySchema"
+          col=6
+          @input="log"
+          @dragstart="dragstart"
+          @drop="drop"
+        />
+       </v-form>
     
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>

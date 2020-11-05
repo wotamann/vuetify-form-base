@@ -24,19 +24,20 @@
   <v-container fluid>
     <h4>Play around with predefined CSS, Buttons, Icons and Tooltips</h4>
     
-    <!-- FORM-BASE-COMPONENT -->
-    <v-form-base
-      id="form-base-css"
-      :model="myModel"
-      :schema="mySchema"
-      @change:form-base-css="log"
-    >
-      <!-- TOOLTIP SLOT -->
-      <template #slot-tooltip="{obj}">
-        {{ obj.schema.tooltip }} has Value: {{ obj.value }}
-      </template>    
-    </v-form-base>
-     
+     <v-form class="border-frame" @submit.prevent>
+      <!-- FORM-BASE-COMPONENT -->
+      <v-form-base
+        id="form-base-css"
+        :model="myModel"
+        :schema="mySchema"
+        @change:form-base-css="log"
+      >
+        <!-- TOOLTIP SLOT -->
+        <template #slot-tooltip="{obj}">
+          {{ obj.schema.tooltip }} has Value: {{ obj.value }}
+        </template>    
+      </v-form-base>
+     </v-form> 
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>
     
@@ -61,7 +62,7 @@ export default {
     return {
       myModel: {
         name: 'Base',
-        password: '123456',
+        password: '123456#',
         email: 'base@mail.com',
         controls: {
           checkbox: true,

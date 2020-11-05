@@ -7,10 +7,10 @@ import Router from 'vue-router'
   import simple from '@/components/simple.vue'
   import autogenerate from '@/components/autogenerate.vue'
   import textfields from '@/components/textfields.vue'
-  import emptymodel from '@/components/emptymodel.vue'
   import basic from '@/components/basic.vue'
   import grouping from '@/components/grouping.vue'
   import wrapping from '@/components/wrapping.vue'
+  import emptymodel from '@/components/emptymodel.vue'
   import async from '@/components/async.vue'
   import grid from '@/components/grid.vue'
   import dragdrop from '@/components/dragdrop.vue'
@@ -35,6 +35,10 @@ import Router from 'vue-router'
   import toctrfunction from '@/components/tocontrolfunction.vue'
   import customcomponentdemo from '@/components/customcomponentdemo.vue'
   import fetchautocomplete from '@/components/fetchautocomplete.vue'
+  //
+  import buildmodel from '@/components/buildmodel.vue'
+
+
  // 
 
  Vue.use(Router)
@@ -50,9 +54,10 @@ const router = new Router({
     { path: '*', name: 'divider', component: introduction, text:'------ List of Examples ------'  },    
     
     { path: '/simple', name: 'simple', component: simple, text:'Textfields' },    
-    { path: '/textfields', name: 'textfields', component: textfields, text:'Textfields with HTML Type Attribute'  },    
-    { path: '/autogenerate', name: 'autogenerate', component: autogenerate, text:'Missing Schema Definition' },    
-    { path: '/emptymodel', name: 'emptymodel', component: emptymodel, text:'Empty Model Object'  },    
+    { path: '/textfields', name: 'textfields', component: textfields, text:'Textfields with HTML-Input Type'  },    
+    { path: '/autogenerate', name: 'autogenerate', component: autogenerate, text:'Model builds Structure for missing Schema' },    
+    // { path: '/emptymodel', name: 'emptymodel', component: emptymodel, text:'Empty Model Object'  },    
+    { path: '/buildmodel', name: 'buildmodel', component: buildmodel, text:'Schema builds Structure from empty Model' },    
     { path: '/basic', name: 'basic', component: basic, text:'Missing Properties in Model or Schema'  },    
     { path: '/grouping', name: 'grouping', component: grouping, text:'Group Controls based on Model-Structure'  },    
     { path: '/wrapping', name: 'wrapping', component: wrapping, text:'Wrap Controls to Group without Model-Structure'  },    

@@ -9,74 +9,77 @@
 <template>
   <v-container fluid>
     <h4>Slots for Form, Keys, Items, Types and Tooltips</h4>
-    <!-- FORM-BASE-COMPONENT -->
-    <v-form-base
-      id="form-base-slot"
-      class="border-frame"
-      :model="myModel"
-      :schema="mySchema"
-      @change:form-base-slot="log"
-    >
-    <!-- FORM SLOTS -->
-      <template #form-base-slot-top>
-        <h4 class="slot">
-          Top Slot of 'Form'
-        </h4>
-      </template>
-      <template #form-base-slot-bottom>
-        <h4 class="slot">
-          Bottom Slot of 'Form'
-        </h4>  
-      </template>
-      
-    <!-- KEY SLOTS -->
-      <!-- TOP of KEY -->
-      <template #slot-top-key-nameSlot="{obj}">
-        <h4 class="slot">
-          Slot at Top of Key - {{obj.key}}
-        </h4>
-      </template>
-      <!-- ITEM of KEY -->
-      <template #slot-item-key-emailSlot="{obj}">
-        <h4 class="slot">
-          Slot replaces Item with Key - {{obj.key}}
-        </h4>
-      </template>
-      <!-- BOTTOM of KEY -->
-      <template #slot-bottom-key-colorSlot="{obj}">
-        <h4 class="slot">
-          Slot replaces Bottom with Key - {{obj.key}}
-        </h4>
-      </template>      
-      <!-- SLOT of KEY  prepend|append|message ->schema: { color:{ type: 'color', slot:'prepend' }  see https://vuetifyjs.com/en/api/v-input/#slots    -->      
-      <template #slot-key-colorSlot="{obj}" >
-        <h4 class="slot"><v-icon :color="obj.value">palette</v-icon>Key-Slot</h4>
-      </template>
-      
-    <!-- TYPE SLOTS -->
-      <template #slot-top-type-btn-toggle="{obj}">
-        <h4 class="slot">
-          Slot at Top of Type 'Btn-Toggle' - {{obj.value}}
-        </h4>
-      </template>
-      <template #slot-bottom-type-btn="{obj}">
-        <h4 class="slot">
-          Slot at Bottom of Type 'Btn' - {{obj.value}}
-        </h4>
-      </template>
-      <template #slot-top-type-radio="{obj}">
-        <h4 class="slot">
-          Slot at Top of Type 'Radio' - {{obj.value}}
-        </h4>
-      </template>
+    
+    <v-form class="border-frame" @submit.prevent>
      
-    <!-- TOOLTIP SLOT -->
-      <template #slot-tooltip="{obj}">
-         {{ obj.schema.tooltip }} with Value: {{ obj.value }}
-      </template>
+      <!-- FORM-BASE-COMPONENT -->
+      <v-form-base
+        id="form-base-slot"
+        :model="myModel"
+        :schema="mySchema"
+        @change:form-base-slot="log"
+      >
+      <!-- FORM SLOTS -->
+        <template #form-base-slot-top>
+          <h4 class="slot">
+            Top Slot of 'Form'
+          </h4>
+        </template>
+        <template #form-base-slot-bottom>
+          <h4 class="slot">
+            Bottom Slot of 'Form'
+          </h4>  
+        </template>
+        
+      <!-- KEY SLOTS -->
+        <!-- TOP of KEY -->
+        <template #slot-top-key-nameSlot="{obj}">
+          <h4 class="slot">
+            Slot at Top of Key - {{obj.key}}
+          </h4>
+        </template>
+        <!-- ITEM of KEY -->
+        <template #slot-item-key-emailSlot="{obj}">
+          <h4 class="slot">
+            Slot replaces Item with Key - {{obj.key}}
+          </h4>
+        </template>
+        <!-- BOTTOM of KEY -->
+        <template #slot-bottom-key-colorSlot="{obj}">
+          <h4 class="slot">
+            Slot replaces Bottom with Key - {{obj.key}}
+          </h4>
+        </template>      
+        <!-- SLOT of KEY  prepend|append|message ->schema: { color:{ type: 'color', slot:'prepend' }  see https://vuetifyjs.com/en/api/v-input/#slots    -->      
+        <template #slot-key-colorSlot="{obj}" >
+          <h4 class="slot"><v-icon :color="obj.value">palette</v-icon>Key-Slot</h4>
+        </template>
+        
+      <!-- TYPE SLOTS -->
+        <template #slot-top-type-btn-toggle="{obj}">
+          <h4 class="slot">
+            Slot at Top of Type 'Btn-Toggle' - {{obj.value}}
+          </h4>
+        </template>
+        <template #slot-bottom-type-btn="{obj}">
+          <h4 class="slot">
+            Slot at Bottom of Type 'Btn' - {{obj.value}}
+          </h4>
+        </template>
+        <template #slot-top-type-radio="{obj}">
+          <h4 class="slot">
+            Slot at Top of Type 'Radio' - {{obj.value}}
+          </h4>
+        </template>
+      
+      <!-- TOOLTIP SLOT -->
+        <template #slot-tooltip="{obj}">
+          {{ obj.schema.tooltip }} with Value: {{ obj.value }}
+        </template>
 
-    </v-form-base>
+      </v-form-base>
 
+    </v-form>
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>
    

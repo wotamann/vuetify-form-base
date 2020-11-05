@@ -1,16 +1,15 @@
 <template>
   <v-container fluid>
-    <h4>Textfields with Mask & Tooltips and Fileselector</h4>
+    <h4>Textfields with Attributes, Masked Input and Fileselector</h4>
     
-    <v-form>
+    <v-form class="border-frame">
       <!-- FORM-BASE-COMPONENT -->    
       <v-form-base 
         :model="myModel"
         :schema="mySchema"
         :col=6
         @input="log"
-      />      
-
+      />  
       <!--
         // compose listener to one or more of following Events:
         @click= "log"
@@ -29,7 +28,6 @@
         // if 'id' available append 'id' at event -  
         id="form-base-list"
         @change:form-base-list="log"
-
 
         schema prop:'text' is shorthand for key: { type: 'text', label:key }
 
@@ -68,12 +66,12 @@ export default {
         password: 'abcdefgh',
         file: [] // array of File objects
       },     
-
-      // Schema-Order defines Order of Controls in Form    
+      // Order of Props in Schema defines Order of Controls in Form    
       mySchema: {
-        name: { 
-          type:'text', 
-        },         
+        name: {   // shorthand definition name:'text' 
+          type: 'text', 
+          label:'name' 
+        },     
         password: { 
           type: 'password',
           clearable: true,
@@ -85,7 +83,7 @@ export default {
           label: 'Creditcard', 
           prependInnerIcon: 'credit_card',         
           hint: mask, 
-          mask          
+          mask 
         },        
         file: { 
           type: 'file', 
@@ -97,7 +95,7 @@ export default {
         }
       }
     }
-  },
+  },  
   methods: {
     log
   }

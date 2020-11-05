@@ -5,14 +5,17 @@
       <!-- Inspired from Issue55
       https://github.com/wotamann/vuetify-form-base/issues/55 -->
 
-      <!-- FORM-BASE-COMPONENT -->    
-      <v-form-base 
-        :model="myModel"
-        :schema="mySchema"
-        :col=6
-        @input="log"
-      />
-  
+      <v-form class="border-frame">
+
+        <!-- FORM-BASE-COMPONENT -->    
+        <v-form-base 
+          :model="myModel"
+          :schema="mySchema"
+          :col=6
+          @input="log"
+        />
+        
+      </v-form>
     
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>

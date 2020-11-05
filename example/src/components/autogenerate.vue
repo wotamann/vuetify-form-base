@@ -18,7 +18,7 @@ import Infoline from '@/components/infoline'
 import log from '@/lib'
 
 export default {
-  name: 'Autogenerate',
+  name: 'AutogenerateSchema',
   components: { VFormBase, Infoline },
   data () {
     return {
@@ -28,7 +28,7 @@ export default {
             prename:'Samuel',         
             surname: 'Stoner'
           },          
-          email: 'Stoner@mail.com',          
+          email: 'stoner@mail.com',          
           age:37         
         },  
         todo: [

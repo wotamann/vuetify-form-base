@@ -2,14 +2,16 @@
   <v-container fluid>
     <h4>Handling of undefined Properties in Model or in Schema</h4>
     
-    <!-- FORM-BASE-COMPONENT -->
-    <v-form-base 
-      :model="myModel" 
-      :schema="mySchema"
-      col=6 
-      @change="log"
-    />     
-
+    <v-form class="border-frame">
+      <!-- FORM-BASE-COMPONENT -->
+      <v-form-base 
+        :model="myModel" 
+        :schema="mySchema"
+        col=6 
+        @change="log"
+      />     
+    </v-form>
+    
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>
     
@@ -22,19 +24,19 @@ import Infoline from '@/components/infoline'
 import log from '@/lib'
 
 export default {
-  name: 'Textfields',
+  name: 'undefinedProperties',
   components: { VFormBase, Infoline },
   data () {
     return {
       myModel: {
-        name: 'Defined in Model & Schema',
+        InModelAndSchema: 'Defined in Model & Schema',
         // no definition in mySchema - property value remains untouched  
-        undefinedSchema: 'Value keeps untouched',  
+        undefinedInSchema: 'Undefined in Schema - Value keeps untouched',  
       },
       mySchema: {
-       name: 'text', 
+       InModelAndSchema: 'text', 
         // no definition in myModel - property will be added & edited
-        undefinedModel: { type:'text', label: 'Undefined in Model' }  
+        undefinedInModel: { type:'text', label: 'Undefined in Model' }  
       }
     }
   },
