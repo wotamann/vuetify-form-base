@@ -20,13 +20,14 @@
           <v-col
             v-show="!obj.schema.hidden"
             :key="index"
-            v-bind="getGridAttributes(obj)"
-            v-intersect="(entries, observer) => onIntersect(entries, observer, obj)"
-            v-touch="{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"
-            :class="getClassName(obj)"
-            :draggable="obj.schema.drag" 
-            @mouseenter="onEvent($event, obj)"
-            @mouseleave="onEvent($event, obj)"
+            v-bind= "getGridAttributes(obj)"
+            v-intersect= "(entries, observer) => onIntersect(entries, observer, obj)"
+            v-touch= "{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"
+            v-click-outside= "(event) => onClickOutside(event, obj)"
+            :class ="getClassName(obj)"
+            :draggable ="obj.schema.drag" 
+            @mouseenter ="onEvent($event, obj)"
+            @mouseleave ="onEvent($event, obj)"
 
             v-on="on"
             @dragstart="dragstart($event, obj)"
@@ -966,6 +967,9 @@ export default {
 
       return emitObj
     },
+    onClickOutside (event, obj) {
+      this.emitValue('clickOutside', { on: 'clickOutside', id: this.ref, key: obj.key, value: obj.value, obj, params: { x: event.clientX, y: event.clientY }, event, data: this.storeStateData, schema: this.storeStateSchema })
+    },
     onIntersect (entries, observer, obj) {
       const isIntersecting = entries[0].isIntersecting
       const index = this.index
@@ -980,7 +984,6 @@ export default {
   //
   // Emit Event Base
     emitValue (emit, val) {
-     
       this.parent.$emit(this.getEventName(emit), val) // listen to specific event only
       if (change.indexOf(emit) > -1) this.parent.$emit(this.getEventName('change'), val)    // listen to 'input|click'
       if (watch.indexOf(emit) > -1) this.parent.$emit(this.getEventName('watch'), val)      // listen to 'focus|input|click|blur'
