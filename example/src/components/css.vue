@@ -56,9 +56,9 @@ import log from '@/lib'
 // String
 const options = ['A', 'B', 'C']
 const optionsObject = [
-  { icon: 'format_align_left', value: 1 }, 
+  { icon: 'format_align_left', value: 1, color:'blue' }, 
   { icon: 'format_align_justify', value: 2, color:'red' },
-  { icon:  'format_align_right', value: 3, color:'green' }
+  { icon:  'format_align_right', value: 3, color:'green', elevation:4, class:'ml-4' }
 ]
 const optionsRadio = [
   { value: 'B', color:'blue', label: 'Blue' }, 
@@ -98,7 +98,7 @@ export default {
           slider: { type: 'slider', label: 'Blue', color: 'blue', col: 4, tooltip: 'Slider' },
 
           btnToggleSingle: { type: 'btn-toggle', options, color:'red', multiple: true, tooltip: 'Multi Button', col: 6 },
-          btnToggleMulti: { type: 'btn-toggle', options: optionsObject, color: 'blue', tooltip: 'Button', col: 6 },
+          btnToggleMulti: { type: 'btn-toggle', options: optionsObject, backgroundColor: 'blue lighten-5', class:'pa-3', tooltip: 'Button', col: 6 },
 
           btn: { type: 'btn', iconRight: 'print', color:'green', tooltip: 'Button', col: 2 },          
           iconLabel: { type: 'icon', label:'print', large: true, color: 'blue', tooltip: 'Icon has Label but not', col: 2 },

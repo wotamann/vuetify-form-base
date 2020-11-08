@@ -33,7 +33,7 @@ import Router from 'vue-router'
   import dynamicattributes from '@/components/dynamicattributes.vue'
   import typehandling from '@/components/typehandling.vue'
   import toctrfunction from '@/components/tocontrolfunction.vue'
-  import customcomponentdemo from '@/components/customcomponentdemo.vue'
+  import customcomponents from '@/components/customcomponents.vue'
   import fetchautocomplete from '@/components/fetchautocomplete.vue'
   //
   import buildmodel from '@/components/buildmodel.vue'
@@ -68,7 +68,7 @@ const router = new Router({
     { path: '/slots', name: 'slots', component: slots, text:`Slots`  },    
     { path: '/displayhelpers', name: 'displayhelpers', component: displayhelpers, text:`Display, Typo & Layout control with Vuetify display helpers`  },    
     
-    { path: '/customcomponentdemo', name: 'customcomponentdemo', component: customcomponentdemo, text:'Custom Component'  },    
+    { path: '/customcomponents', name: 'customcomponents', component: customcomponents, text:'Custom Components'  },    
     { path: '/deep', name: 'deep', component: deep, text:`Deep nested Model-Data including Objects & Arrays`  },    
     { path: '/partial', name: 'partial', component: partial, text:`Partial & Linked Model-Data Object`  },    
     { path: '/multisourcedata', name: 'multisourcedata', component: multisourcedata, text:`Integrate Multi-Source Data by using Form-Base as Slot in Form-Base`  },    

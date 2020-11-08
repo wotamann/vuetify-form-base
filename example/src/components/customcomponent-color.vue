@@ -10,15 +10,25 @@
       <v-text-field type="color" v-model="value.b" @input="$emit('input', value)"/> 
     </div>
     <hr>
-      type: {{type}}
+    <a target="_blank" :href="url">
+      See Component Code
+    </a>
+    <br>
+    type: {{type}}
     <br>
     value: {{value}}    
   </div>
 </template>
 
 <script>
+const url = 'https://github.com/wotamann/vuetify-form-base/blob/master/example/src/components/customcomponent-color.vue'
 
 export default {
-  props: ['type','value','obj']
+  props: ['type','value', 'obj'],  
+  data () {
+    return {
+      url
+    }
+  },
 }
 </script>

@@ -127,5 +127,19 @@ bug fix error using v-file-input
   Refactor: removing 'schema.mask' as special case in vFormBase.vue not possible (doesn't work with v-textarea) 
   add custom-component example with external component
     
-
+0.3.3
+revision of radio-group and button toggle - using for prop:options an 
+array of strings 
+  const options = ['A', 'B', 'C']
+or array of objects
+  const optionsObject = [
+    { icon: 'format_align_left', value: 1 }, 
+    { icon: 'format_align_justify', value: 2, color:'red' },
+    { icon:  'format_align_right', value: 3, color:'green', class:'ma-2' }
+  ]
+  const optionsRadio = [
+    { value: 'B', color:'blue', label: 'Blue' }, 
+    { value: 'R', color:'red', label:'Red' },
+    { value: 'G', color:'green', label:'Green' },
+  ] 
 

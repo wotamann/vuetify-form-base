@@ -29,18 +29,20 @@ import log from '@/lib'
   // You have to register your Custom-Control Component globally in 'main.js'
   // See: https://vuejs.org/v2/guide/components-registration.html
   
+  // main.js
   Vue.component('customBasic', () => import('@/components/customcomponent-basic.vue') )
   Vue.component('custom-object', () => import('@/components/customcomponent-object.vue') )
   Vue.component('custom-extern', () => import('@/components/customcomponent-extern.vue') )
   Vue.component('custom-color', () => import('@/components/customcomponent-color.vue') )
-  // customBasic splits to custom-basic 
+  
+  // type:'customBasic' splits to custom-basic 
   // Case-sensitive attribute names don't work with v-bind 
   // https://github.com/vuejs/vue/issues/4212
 */
 
 export default {
   components: { VFormBase, Infoline },
-  name:'CustomComponentDemo',
+  name:'CustomComponents',
   data () {
     return {
       myModel: {

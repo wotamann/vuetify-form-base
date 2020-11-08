@@ -1,3 +1,54 @@
+<template>
+  <div :class= "obj.schema.class" >
+    <h4>{{obj.schema.label}} <a href="https://github.com/Pikaday/Pikaday">(Pikaday)</a></h4>    
+     <input type="text" id="datepicker" :value="value.date" >
+    <hr>
+    <a target="_blank" :href="url">
+    See Component Code
+    </a>  
+    <br>
+    type: {{type}}
+    <br>
+    value: {{value}}    
+  </div>
+</template>
+
+<script>
+// IMPORT EXTERN COMPONENT
+import Pikaday from 'pikaday'
+
+const url = 'https://github.com/wotamann/vuetify-form-base/blob/master/example/src/components/customcomponent-extern.vue'
+
+export default {
+  props: ['type','value','obj'],
+  data () {
+    return {
+      url
+    }
+  },     
+  methods:{
+    emit(val){
+      this.value.date = this.picker.toString(val)
+      this.$emit('input', this.value)
+    }
+  },
+  mounted(){
+    this.picker = new Pikaday({
+      field: document.getElementById('datepicker'),
+        format: 'D/M/YYYY',
+        onSelect: this.emit,
+        toString(date, format) {
+          // you should do formatting based on the passed format,
+          // but we will just return 'D/M/YYYY' for simplicity
+          const day = date.getDate();
+          const month = date.getMonth() + 1;
+          const year = date.getFullYear();
+          return `${day}/${month}/${year}`;
+      },
+    });
+  }
+}
+</script>
 
 <style>
   @charset "UTF-8";
@@ -234,43 +285,3 @@ http://nicolasgallagher.com/micro-clearfix-hack/
 
 
 </style>
-<template>
-  <div :class= "obj.schema.class" >
-    <h4>{{obj.schema.label}} <a href="https://github.com/Pikaday/Pikaday">(Pikaday)</a></h4>    
-     <input type="text" id="datepicker" :value="value.date" >
-    <hr>
-    type: {{type}}
-    <br>
-    value: {{value}}    
-  </div>
-</template>
-
-<script>
-// EXTERN DEMO COMPONENT
-import Pikaday from 'pikaday'
-
-export default {
-  props: ['type','value','obj'],    
-  methods:{
-    emit(val){
-      this.value.date = this.picker.toString(val)
-      this.$emit('input', this.value)
-    }
-  },
-  mounted(){
-    this.picker = new Pikaday({
-      field: document.getElementById('datepicker'),
-        format: 'D/M/YYYY',
-        onSelect: this.emit,
-        toString(date, format) {
-          // you should do formatting based on the passed format,
-          // but we will just return 'D/M/YYYY' for simplicity
-          const day = date.getDate();
-          const month = date.getMonth() + 1;
-          const year = date.getFullYear();
-          return `${day}/${month}/${year}`;
-      },
-    });
-  }
-}
-</script>
