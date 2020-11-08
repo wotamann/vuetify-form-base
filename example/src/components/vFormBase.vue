@@ -51,12 +51,14 @@
                   @change="onInput($event, obj)"
                 >
                   <v-radio
-                    v-for="(o,idx) in obj.schema.options"
+                    v-for="(option,idx) in obj.schema.options"
                     :key="idx"
-                    v-bind="bindSchema(obj)"
-                    :label="sanitizeOptions(o).label"
-                    :value="sanitizeOptions(o).value"
-                  />
+                    v-bind="sanitizeOptions(option)"
+                  >
+                    <template #[obj.schema.slot]>
+                      <slot :name="getKeySlot(obj)" :obj="obj"/>
+                    </template>
+                  </v-radio>
                 </v-radio-group>
               <!-- END RADIO -->
 
@@ -259,20 +261,19 @@
                 <v-btn-toggle
                   v-else-if="obj.schema.type === 'btn-toggle'"
                   v-bind="bindSchema(obj)"
-                  color=""
                   :value="setValue(obj)"
                   @change="onInput($event, obj)"
                 >
                   <v-btn
-                    v-for="(b, idx) in obj.schema.options"
+                    v-for="(option,idx) in obj.schema.options"
                     :key="idx"
-                    v-bind="bindSchema(obj)"
-                    :value="sanitizeOptions(b).value"
+                    v-bind="sanitizeOptions(option)"
+                    :icon="option.icon ? true :false"
                   >
                     <v-icon :dark="obj.schema.dark">
-                      {{ sanitizeOptions(b).icon }}
+                      {{ sanitizeOptions(option).icon }}
                     </v-icon>
-                    {{ sanitizeOptions(b).label }}
+                    {{ sanitizeOptions(option).label }}
                   </v-btn>
                 </v-btn-toggle>
               <!-- END BTN-TOGGLE -->
@@ -968,6 +969,10 @@ export default {
       return emitObj
     },
     onClickOutside (event, obj) {
+      if (!obj.schema || !obj.schema.clickOutside) return
+      if (!obj.schema || !obj.schema.clickOutside) return
+      if (isFunction(obj.schema.clickOutside) ) return obj.schema.clickOutside(obj, event) 
+    
       this.emitValue('clickOutside', { on: 'clickOutside', id: this.ref, key: obj.key, value: obj.value, obj, params: { x: event.clientX, y: event.clientY }, event, data: this.storeStateData, schema: this.storeStateSchema })
     },
     onIntersect (entries, observer, obj) {

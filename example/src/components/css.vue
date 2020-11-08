@@ -32,11 +32,15 @@
         :schema="mySchema"
         @change:form-base-css="log"
       >
+        <!-- @clickOutside:form-base-css="log" -->
+
         <!-- TOOLTIP SLOT -->
         <template #slot-tooltip="{obj}">
           {{ obj.schema.tooltip }} has Value: {{ obj.value }}
         </template>    
+
       </v-form-base>
+      {{myModel}}
      </v-form> 
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>
@@ -49,18 +53,24 @@ import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
 import log from '@/lib'
 
+// String
 const options = ['A', 'B', 'C']
-const optionsObj = [
+const optionsObject = [
   { icon: 'format_align_left', value: 1 }, 
-  { icon: 'format_align_justify', value: 2 },
-  { icon: 'format_align_right', value: 3 }
+  { icon: 'format_align_justify', value: 2, color:'red' },
+  { icon:  'format_align_right', value: 3, color:'green' }
+]
+const optionsRadio = [
+  { value: 'B', color:'blue', label: 'Blue' }, 
+  { value: 'R', color:'red', label:'Red' },
+  { value: 'G', color:'green', label:'Green' },
 ]
 
 export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      myModel: {
+      myModel: {        
         name: 'Base',
         password: '123456#',
         email: 'base@mail.com',
@@ -72,7 +82,8 @@ export default {
           btnToggleMulti: 1,          
           btn: 'A', // is ident to schema { label:'A', ... }
           iconValue: 'print',          
-          radio: 'A',
+          radio1: 'B',
+          radio2: ['G', 'R'],
         }
       },
       mySchema: {
@@ -86,21 +97,27 @@ export default {
           // v-slider doesn't work with col:{ cols='auto' }
           slider: { type: 'slider', label: 'Blue', color: 'blue', col: 4, tooltip: 'Slider' },
 
-          btnToggleSingle: { type: 'btn-toggle', options, color:'red', multiple: true, tooltip: 'Multiple Button', col: 6 },
-          btnToggleMulti: { type: 'btn-toggle', options: optionsObj, color: 'blue', tooltip: 'Button', col: 6 },
+          btnToggleSingle: { type: 'btn-toggle', options, color:'red', multiple: true, tooltip: 'Multi Button', col: 6 },
+          btnToggleMulti: { type: 'btn-toggle', options: optionsObject, color: 'blue', tooltip: 'Button', col: 6 },
 
-          btn: { type: 'btn', iconRight: 'print', color:'green', tooltip: 'Button', col: 3 },          
-          iconLabel: { type: 'icon', label:'print', large: true, color: 'blue', tooltip: 'Icon Label', col: 2 },
+          btn: { type: 'btn', iconRight: 'print', color:'green', tooltip: 'Button', col: 2 },          
+          iconLabel: { type: 'icon', label:'print', large: true, color: 'blue', tooltip: 'Icon has Label but not', col: 2 },
           // if label undefined use value
-          iconValue: { type: 'icon', color: 'red', tooltip: 'Icon Value', col: 2 }, 
+          iconValue: { type: 'icon', color: 'red', tooltip: 'Icon with Value', col: 2 }, 
           
-          radio: { type: 'radio', label: 'Radio', options, row:true,  col: 5 },
+          radio1: { type: 'radio', label: 'Radio', options, row:false, tooltip: 'Radio', col: 2 },
+          radio2: { type: 'radio', label: 'Radio', options: optionsRadio, row:true, tooltip: 'Color & Multi Radio', col: 4, multiple:true, clickOutside:this.clickOutside },
         }
       }
     }
-  },
+  },  
   methods: {
-    log
+    log,
+
+    clickOutside(obj, event){ 
+      this.myModel.controls.radio2=[]; 
+      console.warn('handled click outside of colored radio', obj, event) 
+    },
   }
 }
 </script>
