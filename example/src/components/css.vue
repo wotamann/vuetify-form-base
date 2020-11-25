@@ -17,6 +17,10 @@
   /* CSS Keys --- set item with key on focus' */
   #form-base-css .key-name input { background-color: #cad7f077; color:#1951bb77 }
   #form-base-css .key-name input:focus { background-color: #1949a1b9; color:#FFF }
+  
+  /* CSS Keys --- set CSS for Label */
+  #form-base-css .key-controls-switch .v-input__slot .v-label{ font-weight:bolder; font-size: 1.2rem; color: rgb(11, 167, 24)!important}
+
 
 </style>
 
@@ -40,7 +44,6 @@
         </template>    
 
       </v-form-base>
-      {{myModel}}
      </v-form> 
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>
@@ -100,7 +103,7 @@ export default {
           btnToggleSingle: { type: 'btn-toggle', options, color:'red', multiple: true, tooltip: 'Multi Button', col: 6 },
           btnToggleMulti: { type: 'btn-toggle', options: optionsObject, backgroundColor: 'blue lighten-5', class:'pa-3', tooltip: 'Button', col: 6 },
 
-          btn: { type: 'btn', iconRight: 'print', color:'green', tooltip: 'Button', col: 2 },          
+          btn: { type: 'btn', iconRight: 'print', color:'white', block:true, tooltip: 'Block Button', col: 2, ripple:{ center:true, class: 'item blue--text' } },          
           iconLabel: { type: 'icon', label:'print', large: true, color: 'blue', tooltip: 'Icon has Label but not', col: 2 },
           // if label undefined use value
           iconValue: { type: 'icon', color: 'red', tooltip: 'Icon with Value', col: 2 }, 

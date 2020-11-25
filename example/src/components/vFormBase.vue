@@ -9,7 +9,7 @@
 
     <!-- main loop over components/controls -->
     <template v-for="(obj, index) in flatCombinedArraySorted">
-      
+
       <!-- Tooltip Wrapper -->
       <v-tooltip
         :key="index"
@@ -36,13 +36,13 @@
           >      
 
             <!-- slot on top of type  -> <div slot="slot-bottom-type-[propertyName]"> -->
-            <slot :name="getTypeTopSlot(obj)" :obj= "obj"/>
+            <slot :name="getTypeTopSlot(obj)" :obj= "obj" :index= "index"/>
             <!-- slot on top of key  -> <v-btn slot="slot-bottom-key-[propertyName]"> -->
-            <slot :name="getKeyTopSlot(obj)" :obj= "obj"/>          
+            <slot :name="getKeyTopSlot(obj)" :obj= "obj" :index= "index"/>          
             <!-- slot replaces complete item of defined TYPE -> <v-btn slot="slot-item-type-[propertyName]">-->
-            <slot :name="getTypeItemSlot(obj)" :obj= "obj">
+            <slot :name="getTypeItemSlot(obj)" :obj= "obj" :index= "index">
               <!-- slot replaces complete item of defined KEY -> <div slot="slot-item-key-[propertyName]">-->
-              <slot :name="getKeyItemSlot(obj)" :obj= "obj" >
+              <slot :name="getKeyItemSlot(obj)" :obj= "obj" :index= "index">
               <!-- RADIO -->
                 <v-radio-group
                   v-if="obj.schema.type === 'radio'"
@@ -56,7 +56,7 @@
                     v-bind="sanitizeOptions(option)"
                   >
                     <template #[obj.schema.slot]>
-                      <slot :name="getKeySlot(obj)" :obj="obj"/>
+                      <slot :name="getKeySlot(obj)" :option= "option" :idx= "idx" :obj= "obj" :index= "index"/>
                     </template>
                   </v-radio>
                 </v-radio-group>
@@ -102,10 +102,10 @@
                     v-bind="bindSchema(obj)"
                     :value="setValue(obj)"
                   >
-                    <slot
-                      :name="getKeyArraySlot(obj)"
-                      :item="item"
-                    >
+                    <slot :name="getKeyLabelSlot(obj)" :item="item" :idx= "idx" :obj= "obj" :index= "index">
+                      <span v-html="obj.schema.label" />
+                    </slot>
+                    <slot :name="getKeyArraySlot(obj)" :item="item" :idx= "idx" :obj= "obj" :index= "index" >
                       <v-form-base
                         :id="`${id}-${obj.key}-${idx}`"
                         :model="item"
@@ -125,7 +125,7 @@
                     v-bind="bindSchema(obj)" 
                     @click="onEvent($event, obj)"
                   >
-                    <slot :name="getKeyLabelSlot(obj)" :obj= "obj">
+                    <slot :name="getKeyLabelSlot(obj)" :obj= "obj" :index= "index">
                       <span v-html="obj.schema.label" />
                     </slot>
                     <v-form-base
@@ -178,7 +178,7 @@
                 <template
                   v-else-if="obj.schema.type === list"
                 >
-                  <slot :name="getKeyLabelSlot(obj)" :obj= "obj">
+                  <slot :name="getKeyLabelSlot(obj)" :obj= "obj" :index= "index">
                     <v-toolbar
                       v-if="obj.schema.label"
                       v-bind="bindSchema(obj)"
@@ -211,13 +211,15 @@
               <!-- END LIST -->
               
               <!-- CHECKBOX | SWITCH -->
-                <div
+                <v-input
                   :is="mapTypeToComponent(obj.schema.type)"
                   v-else-if="/(switch|checkbox)/.test(obj.schema.type)"
                   :input-value="setValue(obj)"
                   v-bind="bindSchema(obj)"
                   @change="onInput($event, obj)"
-                />
+                >
+                  <template #[obj.schema.slot]><slot :name="getKeySlot(obj)" :obj= "obj" :index= "index"/></template>
+                </v-input>
               <!-- END CHECKBOX | SWITCH -->
 
               <!-- FILE -->
@@ -228,7 +230,9 @@
                   @focus="onEvent($event, obj)"
                   @blur="onEvent($event, obj)"
                   @change="onInput($event, obj)"
-                />
+                >
+                  <template #[obj.schema.slot]><slot :name="getKeySlot(obj)" :obj= "obj" :index= "index"/></template>
+                </v-file-input>
               <!-- END FILE -->
 
               <!-- ICON -->
@@ -245,7 +249,10 @@
                   v-else-if="obj.schema.type === 'slider'"
                   v-bind="bindSchema(obj)"
                   @input="onInput($event, obj)"
-                />
+                >
+                  <slot :name="getKeyLabelSlot(obj)" :obj= "obj"  :index= "index"></slot>
+                  <template #[obj.schema.slot]><slot :name="getKeySlot(obj)" :obj= "obj" :index= "index"/></template>
+                </v-slider>
               <!-- END SLIDER -->
 
               <!-- IMG -->
@@ -254,7 +261,9 @@
                   :src="getImageSource(obj)"
                   v-bind="bindSchema(obj)"
                   @click="onEvent($event, obj)"
-                />
+                >
+                  <template #[obj.schema.slot]><slot :name="getKeySlot(obj)" :obj= "obj" :index= "index"/></template>
+                </v-img>
               <!-- END IMG -->
                 
               <!-- BTN-TOGGLE -->
@@ -556,11 +565,10 @@ export default {
     schema: {
       type: [Object, Array],
       default: () => ({})
-    }   
+    }
   },
   data () {
     return {  
-      m: 'v-mask',
       flatCombinedArray: [],
       clear,
       button,
@@ -906,13 +914,13 @@ export default {
     },    
   //
   // Set Value
-    setValue (obj) {
+    setValue (obj, index) {
       // Use 'schema.toCtrl' Function for setting a modified Value  
-      return this.toCtrl({ value: obj.value, obj, data: this.storeStateData, schema: this.storeStateSchema })
+      return this.toCtrl({ index, value: obj.value, obj, data: this.storeStateData, schema: this.storeStateSchema })
     },
-    setValueWrap (obj) {
+    setValueWrap (obj, index) {
       // Use 'schema.toCtrl' Function for setting a modified Value  
-      return this.toCtrl({ value: this.storeStateData, obj, data: this.storeStateData, schema: this.storeStateSchema })
+      return this.toCtrl({ index, value: this.storeStateData, obj, data: this.storeStateData, schema: this.storeStateSchema })
     },
   //
   // EVENTS Get Value from Input & other Events

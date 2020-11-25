@@ -15,8 +15,15 @@
       :schema="mySchema" 
       @change:array-ease="log"
       @intersect:array-ease="intersect"
-    />
+    >
+      <!-- LABEL SLOT  -->
+      <template #slot-label-key-tasks="{item}" >
+        <hr/>        
+        <p class="ma-2 v-chip theme--light orange white--text">{{item.label}}</p>
+      </template>
     
+    </v-form-base>
+
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>
     
@@ -30,7 +37,7 @@ import log from '@/lib'
 
 const getRandomBool = () => Math.random() >= 0.5
 const getInnerTask= () => { return { in: getRandomBool(), title: 'Inner Task ' + Math.floor(Math.random() * 1000) } }
-const getOuterTask= () => { return { out: getRandomBool(), title: 'Outer Task ' + Math.floor(Math.random() * 1000), tasks:[{...getInnerTask()}, {...getInnerTask()} ] } }
+const getOuterTask= () => { return { out: getRandomBool(), label: 'Label ' + Math.floor(Math.random() * 1000), title: 'Outer Task ' + Math.floor(Math.random() * 1000), tasks:[{...getInnerTask()}, {...getInnerTask()} ] } }
 
 export default {
   name: 'arrayease',

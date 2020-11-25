@@ -3,7 +3,7 @@
   /* CSS Item --- set all items  */
   #form-base-slot .item { padding:0.5rem; border: 1px dotted #e7c320}
   #form-base-slot .slot { width: 100%; padding:2px;font-size: 0.9rem;font-weight: 400; color:#aa8d09; background-color: #fffacd; border: 1px dotted #e7c320}
-
+  #form-base-slot .slot-label { color:#1976d2; }
 </style>
 
 <template>
@@ -71,7 +71,24 @@
             Slot at Top of Type 'Radio' - {{obj.value}}
           </h4>
         </template>
-      
+
+      <!-- 
+        USE AVAILABEL VUETIFY SLOT of KEY  
+        schema:{ switch: { type:'switch', slot:'label'}  use Vuetify Label-Slot 
+        schema:{ text: { type:'text', slot:'progress'}  use Vuetify Label-Slot  https://vuetifyjs.com/en/components/text-fields/#slots
+      -->
+        <template #slot-key-controls-switch="{obj}">
+          <span class="slot-label">Label <b>Slot of Key</b> - {{obj.key}}</span>
+        </template>
+        <template #slot-key-nameSlot="{obj}">
+          <v-progress-linear
+            :value="progress"
+            :color="color"
+            absolute
+            height="7"
+          />
+        </template>
+
       <!-- TOOLTIP SLOT -->
         <template #slot-tooltip="{obj}">
           {{ obj.schema.tooltip }} with Value: {{ obj.value }}
@@ -111,20 +128,29 @@ export default {
           btnToggleSingle: ['B'],
           btnToggleMulti: 1,                    
           radio: 'A',
+          switch: true
         }
       }
     }
   },
-  computed:{    
+  computed:{
+    progress () {
+      let len = this.myModel.nameSlot ? this.myModel.nameSlot.length : 0;
+      return Math.min(100, ( len * 10) )
+    },
+    color () {
+      return ['error', 'warning', 'success'][Math.floor(this.progress / 40)]
+    },
     mySchema() { 
       return {       
-        nameSlot: { type: 'text', label: 'Name', col: 4, message:true, appendIcon: 'more_vert', tooltip: 'Name' },
+        nameSlot: { type: 'text', label: 'Name with Progress Slot', col: 4, message:true, loading:true, slot:'progress', appendIcon: 'more_vert', tooltip: 'Name' },
         colorSlot: { type: 'text', ext:'color', label: 'Color', slot:'append', col: 4, tooltip:{ label: 'Color', color:this.myModel.colorSlot } },
         emailSlot: { type: 'email', label: 'Email', col: 4, spacer: true, tooltip: 'Email' },
         controls: {
           btnToggleSingle: { type: 'btn-toggle', options, color:'red', multiple: true, tooltip: 'Multiple Button', col: 6 },
           btnToggleMulti: { type: 'btn-toggle', options: optionsObj, color: 'blue', tooltip: 'Button', col: 6 },          
-          radio: { type: 'radio', label: 'Radio', options, row:true,  col: 5 },
+          radio: { type: 'radio', label: 'Radio', options, row:true,  col: 6 },
+          switch: { type:'switch', label:'Switch',slot:'label', col:6}
         }
       }
     }
