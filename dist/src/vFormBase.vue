@@ -998,6 +998,7 @@ export default {
       let pathArray = path.split(pathDelimiter)
       pathArray.forEach((p, ix) => {
         if (ix === pathArray.length - 1) this.$set(object, p, value)
+        if (!Object.hasOwnProperty.call(object, p)) this.$set(object, p, {})
         object = object[p]
       })
     },
