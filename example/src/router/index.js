@@ -22,8 +22,10 @@ import Router from 'vue-router'
   import multisourcedata from '@/components/multisourcedata.vue'
   import validate from '@/components/validate.vue'
   import arrayease from '@/components/arrayease.vue'
+  import arrayslot from '@/components/arrayslot.vue'
   import array from '@/components/array.vue'
   import selection from '@/components/selection.vue'
+  import selectiondynamic from '@/components/selectiondynamic.vue'
   import selectioncascading from '@/components/selectioncascading.vue'
   import treeview from '@/components/treeview.vue'
   import conditional from '@/components/conditional.vue'
@@ -57,7 +59,7 @@ const router = new Router({
     { path: '/textfields', name: 'textfields', component: textfields, text:'Textfields with HTML-Input Type'  },    
     { path: '/autogenerate', name: 'autogenerate', component: autogenerate, text:'Model builds Structure for missing Schema' },    
     // { path: '/emptymodel', name: 'emptymodel', component: emptymodel, text:'Empty Model Object'  },    
-    { path: '/buildmodel', name: 'buildmodel', component: buildmodel, text:'Schema builds Structure from empty Model' },    
+    { path: '/buildmodel', name: 'buildmodel', component: buildmodel, text:'Schema builds Structure for empty Model-Object' },    
     { path: '/basic', name: 'basic', component: basic, text:'Missing Properties in Model or Schema'  },    
     { path: '/grouping', name: 'grouping', component: grouping, text:'Group Controls based on Model-Structure'  },    
     { path: '/wrapping', name: 'wrapping', component: wrapping, text:'Wrap Controls to Group without Model-Structure'  },    
@@ -76,18 +78,20 @@ const router = new Router({
     
     { path: '/list', name: 'list', component: list, text:`List from Model-Data`  },    
     { path: '/treeview', name: 'treeview', component: treeview, text:`Treeviews from Model-Data`  },    
-    { path: '/arrayease', name: 'arrayease', component: arrayease, text:`Array from Model-Data`  },    
+    { path: '/arrayease', name: 'arrayease', component: arrayease, text:`Array from Model`  },    
+    { path: '/arrayslot', name: 'arrayslot', component: arrayslot, text:`Array from Model-Data using Slots `  },    
     { path: '/array', name: 'array', component: array, text:`Array - Add, Edit and Drag to Remove Items in Model-Data`  },    
     
     { path: '/selection', name: 'selection', component: selection, text:`Selection, Combobox, Autocomplete from Schema-Array`  },    
     { path: '/selectioncascading', name: 'selectioncascading', component: selectioncascading, text:`Cascading Selection using computed Schema-Array`  },    
+    { path: '/selectiondynamic', name: 'selectiondynamic', component: selectiondynamic, text:`Dynamic Length of Items Selection`  },    
     { path: '/fetchautocomplete', name: 'fetchautocomplete', component: fetchautocomplete, text:`Fetch Data on Search Input with Autocomplete or Combobox` },
     
     { path: '/pickers', name: 'pickers', component: pickers, text:`Date, Time, Color as native HTML-Type, Menu and Pickers`  },    
-    { path: '/images', name: 'images', component: images, text:`Images`  },    
+    // { path: '/images', name: 'images', component: images, text:`Images`  },    
     { path: '/dragdrop', name: 'dragdrop', component: dragdrop, text:`Drag & Drop`  },    
     { path: '/dynamicattributes', name: 'dynamicattributes', component: dynamicattributes, text:'Dynamic Attributes Schema, Model and Grid'  },    
-    { path: '/typehandling', name: 'typehandling', component: typehandling, text:`Handling special Schema-Key 'type' occuring in Model-Data`  },    
+    // { path: '/typehandling', name: 'typehandling', component: typehandling, text:`Handling special Schema-Key 'type' occuring in Model-Data`  },    
     { path: '/toctrfunction', name: 'toctrfunction', component: toctrfunction, text:`Manipulate Data incoming/outgoing to Control`  },    
     { path: '/conditional', name: 'conditional', component: conditional, text:`Conditional Form`  },    
   ]

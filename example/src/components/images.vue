@@ -7,7 +7,7 @@
         :value="myModel"
         :schema="mySchema"
         :col="6"
-        @update:form-base-images="update"
+        @update="update"
       />
     </v-form>
     

@@ -13,8 +13,8 @@
       id="array"
       :model="myModel"
       :schema="mySchema"
-      @change:array="log"
-      @drop:array="log"
+      @change="log"
+      @drop="log"
     />
     
     <!-- Stuff  -->    

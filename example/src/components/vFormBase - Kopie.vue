@@ -1,13 +1,15 @@
 <template>
   <v-row
-    :id="id"
+    :id="ref"
     v-bind="getRow"
     v-resize.quiet="onResize"
   >   
     <!-- FORM-BASE TOP SLOT -->
-    <slot :name="getFormTopSlot()" :id= "id"/>
+    <slot :name="getFormTopSlot()"/>  
+
     <!-- main loop over components/controls -->
     <template v-for="(obj, index) in flatCombinedArraySorted">
+
       <!-- Tooltip Wrapper -->
       <v-tooltip
         :key="index"
@@ -33,34 +35,13 @@
             @drop="drop($event, obj)"
           >      
             <!-- slot on top of type  -> <div slot="slot-bottom-type-[propertyName]"> -->
-            <slot :name="getTypeTopSlot(obj)" v-bind= "{ obj, index, id }"/>
+            <slot :name="getTypeTopSlot(obj)" :obj= "obj" :index= "index"/>
             <!-- slot on top of key  -> <v-btn slot="slot-bottom-key-[propertyName]"> -->
-            <slot :name="getKeyTopSlot(obj)" v-bind= "{ obj, index, id }"/>          
+            <slot :name="getKeyTopSlot(obj)" :obj= "obj" :index= "index"/>          
             <!-- slot replaces complete item of defined TYPE -> <v-btn slot="slot-item-type-[propertyName]">-->
-            <slot :name="getTypeItemSlot(obj)" v-bind= "{ obj, index, id }">
+            <slot :name="getTypeItemSlot(obj)" :obj= "obj" :index= "index">
               <!-- slot replaces complete item of defined KEY -> <div slot="slot-item-key-[propertyName]">-->
-              <slot :name="getKeyItemSlot(obj)" v-bind= "{ obj, index, id }">
-                  
-                  <!-- <div class="caption">
-                    OBJ:{{obj}}
-                    <br>
-                    FORM:{{getFormTopSlot()}}
-                    <br>
-                    LABEL:{{getKeyLabelSlot(obj)}}
-                    <br>
-                    ARRAY:{{getArrayItemSlot(obj)}}
-                    <br>
-                    TYPE:{{getTypeItemSlot(obj)}}
-                    <br>
-                    KEY:{{getKeyItemSlot(obj)}}
-                    <br>
-                    CLASS:{{getClassName(obj)}}
-                    <br>
-                    Slots: {{getInjectedScopedSlots(id, obj)}}
-                    <br>
-                    VAL:{{setValue(obj)}}
-                  </div> -->
-
+              <slot :name="getKeyItemSlot(obj)" :obj= "obj" :index= "index">
               <!-- RADIO -->
                 <v-radio-group
                   v-if="obj.schema.type === 'radio'"
@@ -69,12 +50,13 @@
                   @change="onInput($event, obj)"
                 >
                   <v-radio
-                    v-for="(option, idx) in obj.schema.options"
+                    v-for="(option,idx) in obj.schema.options"
                     :key="idx"
                     v-bind="sanitizeOptions(option)"
                   >
-                    <!-- component doesn't work with #[s]="slotData" " -->
-                    <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name= "getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index, idx, option }"/></template>                    
+                    <template #[obj.schema.slot]>
+                      <slot :name="getKeySlot(obj)" :option= "option" :idx= "idx" :obj= "obj" :index= "index"/>
+                    </template>
                   </v-radio>
                 </v-radio-group>
               <!-- END RADIO -->
@@ -96,7 +78,7 @@
                     />
                     <!-- SLOTS append|prepend|message for picker not avilable, try custom component -->
                   </template>
-                  <component
+                  <v-input
                     :is="mapTypeToComponent( obj.schema.type )" 
                     v-bind="bindSchema(obj)"
                     :type="checkInternType(obj)"
@@ -119,8 +101,15 @@
                     v-bind="bindSchema(obj)"
                     :value="setValue(obj)"
                   >
-                    <slot :name="getArrayTopSlot(obj)" v-bind= "{ obj, id, index, idx, item}"/>
-                    <slot :name="getArrayItemSlot(obj)" v-bind= "{ obj, id, index, idx, item}">
+                    <slot :name="getKeyLabelSlot(obj)" :obj= "item" :index= "idx"/>
+                    <slot :name="getKeyArraySlot(obj)" :obj= "item" :index= "idx">
+
+                      <!-- {{id}} ||| {{`${id}-${obj.key}-${idx}`}} -->
+                        <!-- 
+                      {{$scopedSlots}}
+                      {{$slots}}
+                      :id="`${id ? id + '-' : ''}${obj.key}-${idx}`" 
+                      -->
                       <v-form-base
                         :id="`${id}-${obj.key}-${idx}`"
                         :model="item"
@@ -130,25 +119,29 @@
                         :class="`${id}-${obj.key}`"
                         v-on="$listeners"
                       >
+
                         <!-- Based on https://gist.github.com/loilo/73c55ed04917ecf5d682ec70a2a1b8e2 -->
-                        <template v-for="(_, name) in $scopedSlots" #[name]="slotData"><slot :name="name" v-bind= "{ id, obj, index, idx, item, ...slotData}" /></template>                        
+                        <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+                          <slot :name="name" v-bind="slotData" />
+                        </template>
                       </v-form-base>
                     </slot>
-                    <slot :name="getArrayBottomSlot(obj)" v-bind= "{ obj, id, index, idx, item}"/>
                   </div>
                 </template>
               <!-- END ARRAY -->
 
               <!-- GROUP | WRAP-->
                 <template v-else-if="/(wrap|group)/.test(obj.schema.type)">
-                  <component
+                  <v-input
                     :is="checkInternGroupType(obj)"
                     v-bind="bindSchema(obj)"
                     @click="onEvent($event, obj)"
                   >
+
                     <v-card-title v-if="obj.schema.title">{{obj.schema.title}}</v-card-title>
                     <v-card-subtitle v-if="obj.schema.subtitle">{{obj.schema.subtitle}}</v-card-subtitle>
 
+                    <!-- <template #[obj.schema.slot]><slot :name="getKeySlot(obj)" :obj= "obj" :index= "index"/></template> -->
                     <v-form-base
                       :id="`${id}-${obj.key}`"
                       :model="setValue(obj)"
@@ -158,11 +151,10 @@
                       :class="`${id}-${obj.key}`"
                       v-on="$listeners"
                     >
-                      <!-- Based on https://gist.github.com/loilo/73c55ed04917ecf5d682ec70a2a1b8e2 -->
-                      <template v-for="(_, name) in $scopedSlots" #[name]="slotData"><slot :name="name" v-bind= "{ id, obj, index,  ...slotData}" /></template>  
-                    
+                      <!-- THX to https://gist.github.com/loilo/73c55ed04917ecf5d682ec70a2a1b8e2 -->
+                      <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData"><slot :name="name" v-bind="slotData" /></template>
                     </v-form-base>
-                  </component>
+                  </v-input>
                 </template>
               <!-- END GROUP | WRAP -->
 
@@ -176,76 +168,68 @@
                   v-bind="bindSchema(obj)"
                   @update:open="onEvent({type:'click'}, obj, 'open' )"
                   @update:active="onEvent({type:'click'}, obj, 'selected' )"
-                >  
-                  <!-- works with #[s]="slotData" " -->
-                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]="slotData"><slot :name="getKeyInjectSlot(obj, s)" :obj= "obj" :id= "id" :index= "index" v-bind= "slotData" /></template>
-                </v-treeview>
+                />
               <!-- END TREEVIEW -->
               
               <!-- LIST -->
                 <template
                   v-else-if="obj.schema.type === list"
                 >
+                  <slot :name="getKeyLabelSlot(obj)" :obj= "obj" :index= "index">
+                    <v-toolbar
+                      v-if="obj.schema.label"
+                      v-bind="bindSchema(obj)"
+                      dark
+                    >
+                      <v-toolbar-title>{{ obj.schema.label }}</v-toolbar-title>
+                    </v-toolbar>
+                  </slot>
                   <v-list>
-                    <slot :name="getKeyInjectSlot(obj, 'label')" v-bind= "{ id, obj, index }" >
-                      <v-toolbar 
-                        v-if="obj.schema.label"
-                        v-bind="bindSchema(obj)"
-                        dark
-                      >
-                        <v-toolbar-title>{{ obj.schema.label }}</v-toolbar-title>
-                      </v-toolbar>
-                    </slot>
                     <v-list-item-group
                       v-model="obj.schema.model"
                       v-bind="bindSchema(obj)"
                       light
-                    > 
-                      <template v-for="(item, idx) in setValue(obj)" >
-                        <v-list-item
-                          :key="idx"
-                          @click="onEvent($event, obj, list )"
-                        >
-                        <slot :name="getArrayItemSlot(obj)" v-bind= "{ obj, id, index, idx, item}">
-                            <v-list-item-icon>
-                              <v-icon v-text="obj.schema.icon" />
-                            </v-list-item-icon>
-                            <v-list-item-content>
-                              <v-list-item-title v-text="obj.schema.item ? item[obj.schema.item] : item" />
-                            </v-list-item-content>
-                        </slot>
-                        </v-list-item>
-                      </template>
+                    >
+                      <v-list-item
+                        v-for="(item, idx) in setValue(obj)"
+                        :key="idx"
+                        @click="onEvent($event, obj, list )"
+                      >
+                        <v-list-item-icon>
+                          <v-icon v-text="obj.schema.icon" />
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          <v-list-item-title v-text="obj.schema.item ? item[obj.schema.item] : item" />
+                        </v-list-item-content>
+                      </v-list-item>
                     </v-list-item-group>
                   </v-list>
                 </template>
               <!-- END LIST -->
               
               <!-- CHECKBOX | SWITCH -->
-                <component
-                  v-else-if="/(switch|checkbox)/.test(obj.schema.type)"
+                <v-input
                   :is="mapTypeToComponent(obj.schema.type)"
+                  v-else-if="/(switch|checkbox)/.test(obj.schema.type)"
                   :input-value="setValue(obj)"
                   v-bind="bindSchema(obj)"
                   @change="onInput($event, obj)"
                 >
-                  <!-- component doesn't work with #[s]="slotData" " -->
-                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index }"/></template>
-                </component>
+                  <template #[obj.schema.slot]><slot :name="getKeySlot(obj)" :obj= "obj" :index= "index"/></template>
+                </v-input>
               <!-- END CHECKBOX | SWITCH -->
 
               <!-- FILE -->
                 <v-file-input
                   v-else-if="obj.schema.type === 'file' "
-                  v-bind="bindSchema(obj)"
                   :value="setValue(obj)"
+                  v-bind="bindSchema(obj)"
                   @focus="onEvent($event, obj)"
                   @blur="onEvent($event, obj)"
                   @change="onInput($event, obj)"
-                > 
-                  <!-- <template v-for="s in Object.keys($scopedSlots).filter( s => s.includes('-inject-') )" #[s.split(`-`)[2]]="ss"><slot v-if="s" :name="s" v-bind= "{ id, obj, index, ...ss}"/></template> -->
-                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]="scopeData"><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index, ...scopeData}" /></template>
-                </v-file-input>                
+                >
+                  <template #[obj.schema.slot]><slot :name="getKeySlot(obj)" :obj= "obj" :index= "index"/></template>
+                </v-file-input>
               <!-- END FILE -->
 
               <!-- ICON -->
@@ -263,8 +247,8 @@
                   v-bind="bindSchema(obj)"
                   @input="onInput($event, obj)"
                 >
-                  <!-- component doesn't work with #[s]="slotData" " -->
-                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index }"/></template>
+                  <slot :name="getKeyLabelSlot(obj)" :obj= "obj"  :index= "index"></slot>
+                  <template #[obj.schema.slot]><slot :name="getKeySlot(obj)" :obj= "obj" :index= "index"/></template>
                 </v-slider>
               <!-- END SLIDER -->
 
@@ -275,8 +259,7 @@
                   v-bind="bindSchema(obj)"
                   @click="onEvent($event, obj)"
                 >
-                  <!-- component doesn't work with #[s]="slotData" " -->
-                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index }"/></template>
+                  <template #[obj.schema.slot]><slot :name="getKeySlot(obj)" :obj= "obj" :index= "index"/></template>
                 </v-img>
               <!-- END IMG -->
                 
@@ -333,7 +316,7 @@
               <!-- END BTN -->
               
               <!-- MASK  -->
-                <component
+                <v-input
                   :is="mapTypeToComponent(obj.schema.type)"
                   v-else-if="obj.schema.mask" 
                   v-bind="bindSchema(obj)"
@@ -354,15 +337,17 @@
                   @click:second="onEvent({type:'click'}, obj, second)"
                   @input="onInput($event, obj)"
                 >
-                  <!-- component doesn't work with #[s]="slotData" " -->
-                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index }"/></template>
-                </component> 
+                  <template #[obj.schema.slot]>
+                    <slot :name="getKeySlot(obj)" :obj="obj"/>
+                  </template>
+
+                </v-input> 
               <!-- END MASK -->
 
               <!-- DEFAULT all other Types -> typeToComponent -->
-                <component
-                  v-else
+                <v-input
                   :is="mapTypeToComponent(obj.schema.type)"
+                  v-else
                   v-bind="bindSchema(obj)"
                   :type="checkExtensionType(obj)"                  
                   :value="setValue(obj)"
@@ -371,18 +356,20 @@
                   @focus="onEvent($event, obj)"
                   @blur="onEvent($event, obj)"                  
                   @[suspendClickAppend(obj)]="onEvent($event, obj, append)"
-                  @click:append-outer= "onEvent($event, obj, appendOuter)"
-                  @click:prepend= "onEvent($event, obj, prepend )"
-                  @click:prepend-inner= "onEvent($event, obj, prependInner)"
-                  @click:clear= "onEvent($event, obj, clear )"
-                  @click:hour= "onEvent({type:'click'}, obj, hour)"
-                  @click:minute= "onEvent({type:'click'}, obj, minute)"
-                  @click:second= "onEvent({type:'click'}, obj, second)"
-                  @input= "onInput($event, obj)"
+                  @click:append-outer="onEvent($event, obj, appendOuter)"
+                  @click:prepend="onEvent($event, obj, prepend )"
+                  @click:prepend-inner="onEvent($event, obj, prependInner)"
+                  @click:clear="onEvent($event, obj, clear )"
+                  @click:hour="onEvent({type:'click'}, obj, hour)"
+                  @click:minute="onEvent({type:'click'}, obj, minute)"
+                  @click:second="onEvent({type:'click'}, obj, second)"
+                  @input="onInput($event, obj)"
                 >
-                  <!-- component doesn't work with #[s]="slotData" " -->
-                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name= "getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index }"/></template>
-                </component> 
+                  <template #[obj.schema.slot]>
+                    <slot :name="getKeySlot(obj)" :obj="obj"/>
+                  </template>
+
+                </v-input> 
               <!-- END DEFAULT -->     
               </slot>
             </slot>
@@ -405,7 +392,7 @@
       </v-tooltip>
     </template>
     <!-- FORM-BASE BOTTOM SLOT -->
-    <slot :name="getFormBottomSlot()" :id= "id"/>   
+    <slot :name="getFormBottomSlot()"/>   
   </v-row>
 </template>
 
@@ -510,7 +497,6 @@
   const propertyClassAppendix = 'prop'
 
   const slotAppendix = 'slot'
-  const injectSlotAppendix = 'slot-inject'
   const arraySlotAppendix = 'slot-array'
   const topSlotAppendix = 'slot-top'
   const itemSlotAppendix = 'slot-item'
@@ -558,10 +544,6 @@ export default {
       type: String,
       default: defaultID
     },
-    rootId: {
-      type: String,
-      default: defaultID
-    },
     row: {
       type: [Object]
     },
@@ -600,12 +582,15 @@ export default {
       second
     }
   },
-  computed: {      
+  computed: {    
     valueIntern() { 
       // use <formbase :model="myData" />  ->  legacy code <formbase :value="myData" />  
       let model = this.model || this.value 
       this.updateArrayFromState(model, this.schema)
       return model 
+    },
+    ref () {
+      return this.id
     },
     parent () {
       let p = this
@@ -617,12 +602,12 @@ export default {
       return p
     },
     index () {
-      const m = this.id && this.id.match(/\d+/g)
+      const m = this.ref && this.ref.match(/\d+/g)
       return m ? m.map(Number) : []
     },
     getRow(){
       return this.row || rowDefault
-    },     
+    },   
     flatCombinedArraySorted () {
       return orderBy(this.flatCombinedArray, ['schema.sort'], [orderDirection])
     },
@@ -641,7 +626,7 @@ export default {
       this.schema = newSchema 
     }
   }, 
-  methods: {    
+  methods: {
     // MAP TYPE
     mapTypeToComponent(type) {
       // merge global registered components into typeToComponent Object
@@ -750,12 +735,12 @@ export default {
   // KEY 
     getKeySlot(obj) {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, slotAppendix + '-key') + inject
+      return this.getKeyClassNameWithAppendix(obj, slotAppendix + '-key')
     },
-    getKeyInjectSlot(obj, inject) {
-      // prepending 'slot-inject' and append inject verb 'label'   -> 'slot-inject-label-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, `${injectSlotAppendix}-${inject}-key`) 
-    },    
+    getKeyArraySlot (obj) {
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-ARRAY-key-address-city'
+      return this.getKeyClassNameWithAppendix(obj, arraySlotAppendix + '-key')
+    },
     getKeyItemSlot (obj) {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-address-city'
       return this.getKeyClassNameWithAppendix(obj, itemSlotAppendix + '-key')
@@ -772,18 +757,6 @@ export default {
     getKeyBottomSlot (obj) {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-bottom-key-address-city'
       return this.getKeyClassNameWithAppendix(obj, bottomSlotAppendix + '-key')
-    },
-    getArrayTopSlot (obj) {
-      // slot each item from array  -> 'slot-top-array-address-city'
-      return this.getKeyClassNameWithAppendix(obj, topSlotAppendix + '-array')
-    },
-    getArrayItemSlot (obj) {
-      // slot each item from array  -> 'slot-top-array-address-city'
-      return this.getKeyClassNameWithAppendix(obj, itemSlotAppendix + '-array')
-    },
-    getArrayBottomSlot (obj) {
-      // slot each item from array   -> 'slot-bottom-array-address-city'
-      return this.getKeyClassNameWithAppendix(obj, bottomSlotAppendix + '-array')
     },
   //
   // TYPE SLOTS
@@ -810,6 +783,7 @@ export default {
     },
     getKeyClassNameWithAppendix (obj, appendix) {
       // get KEY specific name by app-/prepending 'appendix-' and replacing '.' with '-' in nested key path  -> 'top-slot-address-city'
+      // ID  .......... XXX
       return `${appendix ? appendix + classKeyDelimiter : ''}${this.id ? this.id + classKeyDelimiter: ''}${obj.key.replace(/\./g, '-')}`
       // return `${appendix ? appendix + classKeyDelimiter : ''}${obj.key.replace(/\./g, '-')}`
     },
@@ -884,16 +858,6 @@ export default {
     getColGroupOrArray(obj) {
       return obj.schema.col || this.col || colDefault
     },   
-  //
-  // SLOTS SANITIZE schema.slot  to array
-    getInjectedScopedSlots(id, obj){
-    // extract the verb 'label' from Slots containing 'slot-inject' and matching formbase-id and key  
-      return Object.keys(this.$scopedSlots).filter( s => (s.includes(`${id}${classKeyDelimiter}${obj.key.replace(/\./g, '-')}`) && s.includes(injectSlotAppendix)) ).map( i => i.split('-')[2]) 
-    },   
-    // getSchemaSlot(obj){ 
-    // // sanitize schema.slot  to array
-    //   return Array.isArray(obj.schema.slot) ? obj.schema.slot : [obj.schema.slot] 
-    // },
   //
   // SANITIZE BUTTON - Toggle sanitize item from array schema.options
     sanitizeOptions (b) {
@@ -989,7 +953,7 @@ export default {
 
       const emitObj = {
         on: type,
-        id: this.id,
+        id: this.ref,
         index: this.index, 
         params: { index: this.index, lastValue:obj.value },
         key: obj.key,
@@ -1012,7 +976,7 @@ export default {
       
       const emitObj = {
         on: event.type,
-        id: this.id,
+        id: this.ref,
         index,
         params: { text, tag, model, open, index },
         key: obj.key,
@@ -1030,25 +994,26 @@ export default {
     },
     onClickOutside (event, obj) {
       if (!obj.schema || !obj.schema.clickOutside) return
+      if (!obj.schema || !obj.schema.clickOutside) return
       if (isFunction(obj.schema.clickOutside) ) return obj.schema.clickOutside(obj, event) 
     
-      this.emitValue('clickOutside', { on: 'clickOutside', id: this.id, key: obj.key, value: obj.value, obj, params: { x: event.clientX, y: event.clientY }, event, data: this.storeStateData, schema: this.storeStateSchema })
+      this.emitValue('clickOutside', { on: 'clickOutside', id: this.ref, key: obj.key, value: obj.value, obj, params: { x: event.clientX, y: event.clientY }, event, data: this.storeStateData, schema: this.storeStateSchema })
     },
     onIntersect (entries, observer, obj) {
       const isIntersecting = entries[0].isIntersecting
       const index = this.index
-      this.emitValue('intersect', { on: 'intersect', id: this.id, index, key: obj.key, value: obj.value, obj, params: { isIntersecting, entries, observer }, data: this.storeStateData, schema: this.storeStateSchema })
+      this.emitValue('intersect', { on: 'intersect', id: this.ref, index, key: obj.key, value: obj.value, obj, params: { isIntersecting, entries, observer }, data: this.storeStateData, schema: this.storeStateSchema })
     },
     onSwipe (tag, obj) {
-      this.emitValue('swipe', { on: 'swipe', id: this.id, key: obj.key, value: obj.value, obj, params: { tag }, data: this.storeStateData, schema: this.storeStateSchema })
+      this.emitValue('swipe', { on: 'swipe', id: this.ref, key: obj.key, value: obj.value, obj, params: { tag }, data: this.storeStateData, schema: this.storeStateSchema })
     },
     onResize (event) {
-      this.emitValue('resize', { on: 'resize', id: this.id, params: { x: window.innerWidth, y: window.innerHeight }, event, data: this.storeStateData, schema: this.storeStateSchema })
+      this.emitValue('resize', { on: 'resize', id: this.ref, params: { x: window.innerWidth, y: window.innerHeight }, event, data: this.storeStateData, schema: this.storeStateSchema })
     },
   //
   // Emit Event Base
-    emitValue(emit, val) {
-      // console.warn(emit, `${emit}:${this.parent.id}`);
+    emitValuexx (emit, val) {
+      console.warn(emit, `${emit}:${this.parent.id}`);
       // this.$emit('deep', val)
       // this.$emit('deep1', val)
       this.$emit(emit, val) // listen to specific event only
@@ -1058,18 +1023,20 @@ export default {
       if (display.indexOf(emit) > -1) this.$emit('display', val)  // listen to 'resize|swipe|intersect'
       this.$emit('update', val) // listen to all events
     },
-    // emitValuexxxx (emit, val) {
-    //   // console.warn(emit, this.getEventName(emit), `ID ${emit}:${this.id}`, `PARENT: ${emit}:${this.parent.id}`);
-    //   this.parent.$emit(this.getEventName(emit), val)                                // emit to emit event only
-    //   if (change.indexOf(emit) > -1) this.$emit(this.getEventName('change'), val)    // emit to 'input|click'
-    //   if (watch.indexOf(emit) > -1) this.$emit(this.getEventName('watch'), val)      // emit to 'focus|input|click|blur'
-    //   if (mouse.indexOf(emit) > -1) this.$emit(this.getEventName('mouse'), val)      // emit to 'mouseenter|mouseleave  '
-    //   if (display.indexOf(emit) > -1) this.$emit(this.getEventName('display'), val)  // emit to 'resize|swipe|intersect'
-    //   this.parent.$emit(this.getEventName('update'), val)                            // emit to all events
-    // },
+    emitValue (emit, val) {
+      // console.warn(emit, this.getEventName(emit), `ID ${emit}:${this.id}`, `PARENT: ${emit}:${this.parent.id}`);
+      this.parent.$emit(this.getEventName(emit), val)                                // emit to emit event only
+      if (change.indexOf(emit) > -1) this.$emit(this.getEventName('change'), val)    // emit to 'input|click'
+      if (watch.indexOf(emit) > -1) this.$emit(this.getEventName('watch'), val)      // emit to 'focus|input|click|blur'
+      if (mouse.indexOf(emit) > -1) this.$emit(this.getEventName('mouse'), val)      // emit to 'mouseenter|mouseleave  '
+      if (display.indexOf(emit) > -1) this.$emit(this.getEventName('display'), val)  // emit to 'resize|swipe|intersect'
+      this.parent.$emit(this.getEventName('update'), val)                            // emit to all events
+    },
     getEventName (eventName) {
       return eventName
-      // return this.id !== defaultID ? `${eventName}:${this.parent.id}` : eventName
+      // return this.id !== defaultID ? `${eventName}:${this.id}` : eventName
+       return this.id !== defaultID ? `${eventName}:${this.parent.id}` : eventName
+      // return this.parent.id !== defaultID ? `${eventName}:${this.parent.id}` : eventName
     },
   //
   // PREPARE ARRAYS DATA & SCHEMA
@@ -1077,7 +1044,10 @@ export default {
       // resolves chained keys (like 'user.address.street') on an object and set the value
       let pathArray = path.split(pathDelimiter)
       pathArray.forEach((p, ix) => {
+        
+        //console.log('###', object, 'path:', path, pathArray, ix, pathArray.length - 1, 'p', p,'value', value);
         if (ix === pathArray.length - 1) this.$set(object, p, value)
+        // if (!Object.hasOwnProperty.call(object, p)) this.$set(object, p, {})
         object = object[p]
       })
     },

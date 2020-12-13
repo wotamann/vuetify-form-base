@@ -3,7 +3,12 @@
     <h4>Generate/complete Model-Structure from nested Schema, works only if Model is an empty Object</h4>
 
     <!-- FORM-BASE-COMPONENT -->    
-    <v-form-base :model="myModel" :schema="mySchema" col=6 @input="log"/>
+    <v-form-base 
+      :model="myModel" 
+      :schema="mySchema" 
+       col=6 
+       @input="log"
+    />
     
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>

@@ -22,7 +22,7 @@
         id="form-base-complete"
         :model="myModel"
         :schema="mySchema"
-        @change:form-base-complete="change"
+        @change="change"
       />
     </v-form>
 

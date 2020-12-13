@@ -7,8 +7,8 @@
         :value="myModel"
         :schema="mySchema"
         :col="4"
-        @input:form-base-pickers="update"
-        @click:form-base-pickers="update"
+        @input="update"
+        @click="update"
       />
     </v-form>
     

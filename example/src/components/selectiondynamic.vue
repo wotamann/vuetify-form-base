@@ -28,7 +28,7 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      items: [1,2,3,4],
+      items: [10,20,30],
       myModel: {
         select: null       
       }
@@ -47,7 +47,7 @@ export default {
   methods: {
     log(v){
       log(v)
-      this.items.push( parseInt( Math.random()*10) )
+      this.items.push( parseInt( Math.random()*100) )
     }
   }
 }

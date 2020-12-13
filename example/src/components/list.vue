@@ -5,14 +5,33 @@
       id="form-base-list"
       :model="myModel"
       :schema="mySchema"
-      @change:form-base-list="change"
+      @change="log"
     >
-     <!-- Label Slot -->
-      <template #slot-label-key-listString="{obj}">
-        <v-toolbar dark color="red lighten-2" >
-          <v-toolbar-title>{{ obj.schema.label }} (SLOT)</v-toolbar-title>
-        </v-toolbar>        
-      </template>
+
+      <!-- 
+        <template #slot-top-key-form-base-list-listString="{obj}">
+          <v-toolbar dark color="red lighten-1" class="elevation-12"  >
+            <v-toolbar-title>Top of List</v-toolbar-title>
+          </v-toolbar>        
+        </template>
+        
+        <template #slot-inject-label-key-form-base-list-listString="{ idx, item}">
+          <v-toolbar dark color="red lighten-3" >
+            <v-toolbar-title>Label of List</v-toolbar-title>
+          </v-toolbar>
+        </template>
+        
+        <template #slot-item-array-form-base-list-listString="{ idx, item}">
+          <div class="caption">{{idx}} - {{item}} </div>
+        </template>
+        
+        <template #slot-bottom-key-form-base-list-listString="{obj}">
+          <v-toolbar dark color="red lighten-1" class="elevation-12"  >
+            <v-toolbar-title>Bottom of List</v-toolbar-title>
+          </v-toolbar>        
+        </template> 
+      -->
+        
     </v-form-base>
     
     <!-- Stuff  -->    
@@ -24,7 +43,7 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import change from '@/lib'
+import log from '@/lib'
 
 export default {
   name: 'Lists',
@@ -43,8 +62,7 @@ export default {
           'Harari'
         ]
       },
-      mySchema: {
-        
+      mySchema: {        
         listObject: {
           type: 'list',
           label: 'List Single',
@@ -70,9 +88,8 @@ export default {
   },
   methods: {
     
-    change (val) {
-
-      change(val)
+    log (val) {
+      log(val)
 
       let { key } = val
 

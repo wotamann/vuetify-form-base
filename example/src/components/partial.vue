@@ -17,7 +17,7 @@
       id="form-base-partial"
       :model="myModel.radios"
       :schema="mySchema.radios"
-      @input:form-base-partial="changepartial"
+      @input="changepartial"
     />
     
     <!-- Stuff  -->    

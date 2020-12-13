@@ -10,13 +10,9 @@
         :schema="mySchema" 
         :row="{align:'center', justify:'center', noGutters:false}" 
         @input="log"
-      >
-        <!-- Label Slot for Group1-->
-        <template #slot-label-key-group1="{obj}">
-          <span class="blue--text">{{obj.schema.label}} (Slot-Label)</span>
-        </template>
-      </v-form-base>
+      />
     </v-form>
+
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>
    
@@ -45,13 +41,19 @@
           check2:false, 
         },           
         mySchema: {
-          group1: { type:'wrap', label:'Group 1', col:6, class:'title pa-2 elevation-4', 
+          group1: { type:'wrap', color:'red lighten-4', elevation:0, col:6, class:'title pa-2 elevation-4', ripple:false, 
             schema:{
               name1,    
-              check1          
+              check1,
+              group2: { type:'wrap', color:'blue  lighten-4', title:'Nested Group', subtitle:'Names', ripple:false, tile:true, label:'Group 2',elevation:8, col:12, class:'title pa-2', 
+                schema:{
+                  name1,    
+                  name2          
+                }
+              },          
             }
           },
-          group2: { type:'wrap', label:'Group 2', col:6, class:'title pa-2 elevation-4', 
+          group2: { type:'wrap', col:6, class:'title pa-2 elevation-4', 
             schema:{
               name2,    
               check2

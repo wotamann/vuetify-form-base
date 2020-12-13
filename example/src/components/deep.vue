@@ -18,7 +18,7 @@
       :model="myModel"
       :schema="mySchema"
       :col="{ cols:6, sm:4, md:3, lg:2,xl:1 }"
-      @change:form-base-nested="change"
+      @change="change"
     />
     
     <!-- Stuff  -->    

@@ -5,8 +5,26 @@
       id="treeview-demo"
       :model="myModel"
       :schema="mySchema"
-      @change:treeview-demo="change"
-    />
+      @change="change"
+    >
+      <!-- // INJECT SLOT into KEY       -->
+      <template #slot-inject-prepend-key-treeview-demo-treeview_1="{open}" >  
+        <v-icon>
+          {{open ? 'mdi-folder-open' : 'mdi-folder'}}
+        </v-icon>
+      </template>
+
+      <template #slot-inject-label-key-treeview-demo-treeview_1="{item}" >  
+        <span>{{item.name}}</span>
+      </template>
+
+      <template #slot-inject-prepend-key-treeview-demo-treeview_2="{item}" >  
+        <v-icon >
+          {{item.children ? 'add' : 'stop'}}
+        </v-icon>       
+      </template>
+
+    </v-form-base>
     
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>
@@ -69,7 +87,8 @@ export default {
           selectable: true,
           multipleActive: true,
           activeClass: 'blue lighten-3 blue--text',
-          selectedColor: 'blue'
+          selectedColor: 'blue',
+          slot:['prepend','label']   // inject this named-slots into the treeview control - see vuetify treeview slots       
         },
         treeview_2: {
           type: 'treeview',
@@ -79,7 +98,8 @@ export default {
           activatable: true,
           activeClass: 'red lighten-4 red--text',
           selectedColor: 'red',
-          openOnClick: true
+          openOnClick: true,
+          slot:'prepend' // inject this named-slots into the treeview control - see vuetify treeview slots    
           // onIcon: 'bookmark',
           // offIcon: 'bookmark_border'
           // https://vuetifyjs.com/en/components/treeview#treeview

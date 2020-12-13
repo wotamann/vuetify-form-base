@@ -10,7 +10,7 @@
       :model="myModel"
       :schema="mySchema"
       :col=6
-      @input:form-base-cc="log"
+      @input="log"
     />
     
     <!-- Stuff  -->    

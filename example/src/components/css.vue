@@ -7,19 +7,20 @@
   #form-base-css input:focus { background-color: #df446bb9; color:#FFF }
 
   /* CSS Item --- set all items  */
-  #form-base-css .item { padding:0.5rem; border-bottom: 1px dotted #7f82ad}
+  #form-base-css .item { padding:0.5rem; border: 1px dotted #eedf9b}
 
   /* CSS Type --- set all items of type ... */
-  #form-base-css .type-checkbox { background-color: #f0d3d1}
-  #form-base-css .type-slider { background-color: #46a7df73}
-  #form-base-css .type-switch { background-color: #44c45a77}
+  #form-base-css .type-form-base-css-slider { background-color: #c5e9fd73!important; border-radius: 32px; }
+ 
+   /* CSS for all nested properties in controls */
+  #form-base-css .prop-controls { background-color: #fcf2d2e0; border:1px solid #f0dc9a }
 
   /* CSS Keys --- set item with key on focus' */
-  #form-base-css .key-name input { background-color: #cad7f077; color:#1951bb77 }
-  #form-base-css .key-name input:focus { background-color: #1949a1b9; color:#FFF }
+  #form-base-css .key-form-base-css-name input { background-color: #cad7f077; color:#103c8f77 }
+  #form-base-css .key-form-base-css-name input:focus { background-color: #1949a1b9; color:#FFF }
   
   /* CSS Keys --- set CSS for Label */
-  #form-base-css .key-controls-switch .v-input__slot .v-label{ font-weight:bolder; font-size: 1.2rem; color: rgb(11, 167, 24)!important}
+  #form-base-css .key-form-base-css-controls-switch .v-input__slot .v-label{ font-weight:bolder; font-size: 1.2rem; color: rgb(11, 167, 24)!important}
 
 
 </style>
@@ -28,23 +29,17 @@
   <v-container fluid>
     <h4>Play around with predefined CSS, Buttons, Icons and Tooltips</h4>
     
-     <v-form class="border-frame" @submit.prevent>
+    <v-form class="border-frame" @submit.prevent>
       <!-- FORM-BASE-COMPONENT -->
       <v-form-base
         id="form-base-css"
         :model="myModel"
         :schema="mySchema"
-        @change:form-base-css="log"
-      >
-        <!-- @clickOutside:form-base-css="log" -->
+        @change="log"
+        @clickOutside="log"
+      />    
+    </v-form> 
 
-        <!-- TOOLTIP SLOT -->
-        <template #slot-tooltip="{obj}">
-          {{ obj.schema.tooltip }} has Value: {{ obj.value }}
-        </template>    
-
-      </v-form-base>
-     </v-form> 
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>
     
@@ -98,7 +93,7 @@ export default {
           switch: { type: 'switch', label: 'Green', color: 'green', col: 4, tooltip: 'Switch' },
           
           // v-slider doesn't work with col:{ cols='auto' }
-          slider: { type: 'slider', label: 'Blue', color: 'blue', col: 4, tooltip: 'Slider' },
+          slider: { type: 'slider',  color: 'blue', col: 4, tooltip: 'Slider' },
 
           btnToggleSingle: { type: 'btn-toggle', options, color:'red', multiple: true, tooltip: 'Multi Button', col: 6 },
           btnToggleMulti: { type: 'btn-toggle', options: optionsObject, backgroundColor: 'blue lighten-5', class:'pa-3', tooltip: 'Button', col: 6 },

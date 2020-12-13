@@ -11,13 +11,8 @@
         :schema="mySchema" 
         :col=4
         :row="{align:'center', justify:'center', noGutters:false}" 
-        @input:group="log"
-      >
-        <!-- Label Slot -->
-        <template #slot-label-key-group1="{obj}">
-          Slot-Label '{{obj.key}}'
-        </template>
-      </v-form-base>
+        @input="log"       
+      />
     </v-form>
         
     <!-- Stuff  -->    
@@ -53,7 +48,7 @@
               check1: { type: 'checkbox', label: 'Checkbox 1', color: 'red' },          
             }
           },
-          group2: { type:'wrap', label:'Group 2', col:6, class:'title pa-2 rounded elevation-4', 
+          group2: { type:'group', label:'Group 2', col:6, class:'title pa-2 rounded elevation-4', 
             schema:{
               name2: { type: 'text', label:'Name 2' },    
               check2: { type: 'checkbox', label: 'Checkbox 2', color: 'blue'  }

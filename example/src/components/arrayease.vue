@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Edit Data in nested Array by using one Schema for all Items. Scroll for Intersections in Log</h4>
+    <h4>Edit Data in nested Array by using one Schema for all Items</h4>
 
     <!-- 
       If your model/value is an array you can wrap it into an Object like this. But this doesn't work with primitive datatypes 
@@ -10,20 +10,11 @@
     
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base
-      id="array-ease"
       :model="myModel"
       :schema="mySchema" 
-      @change:array-ease="log"
-      @intersect:array-ease="intersect"
-    >
-      <!-- LABEL SLOT  -->
-      <template #slot-label-key-tasks="{item}" >
-        <hr/>        
-        <p class="ma-2 v-chip theme--light orange white--text">{{item.label}}</p>
-      </template>
+      @change="log"
+    />
     
-    </v-form-base>
-
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>
     
@@ -36,8 +27,9 @@ import Infoline from '@/components/infoline'
 import log from '@/lib'
 
 const getRandomBool = () => Math.random() >= 0.5
-const getInnerTask= () => { return { in: getRandomBool(), title: 'Inner Task ' + Math.floor(Math.random() * 1000) } }
-const getOuterTask= () => { return { out: getRandomBool(), label: 'Label ' + Math.floor(Math.random() * 1000), title: 'Outer Task ' + Math.floor(Math.random() * 1000), tasks:[{...getInnerTask()}, {...getInnerTask()} ] } }
+const getRandomInt = () => Math.floor(Math.random() * 1000)
+const getInnerTask= () => { return { in: getRandomBool(), title: 'Inner Task ' + getRandomInt() } }
+const getOuterTask= () => { return { out: getRandomBool(), title: 'Outer Task ' + getRandomInt(), tasksIn:[{...getInnerTask()}, {...getInnerTask()} ] } }
 
 export default {
   name: 'arrayease',
@@ -48,21 +40,20 @@ export default {
         tasks:[
           getOuterTask(),
           getOuterTask(),
-          getOuterTask(),
         ]        
       },
       mySchema: {
         tasks: {
           type: 'array',
-          col: 8,
+          col:12,
           schema: {
             out: { type: 'checkbox', label: 'Out', color: 'blue', col: 2 },
-            title: { type: 'text', color: 'blue', col:6 },
-            tasks: {
+            title: { type: 'text', color: 'blue', col:4 },
+            tasksIn: {
               type: 'array',
-              col: 12,
+              col: 6,
               schema: {
-                in: { type: 'checkbox', label: 'In', color: 'red', col: 2, offset:2 },
+                in: { type: 'checkbox', label: 'In', color: 'red', col: 2  },
                 title: { type: 'text', color: 'red', col:4 }          
               }
             }          
@@ -72,16 +63,7 @@ export default {
     }
   },  
   methods: {
-    
-    log,
-
-    // log intersection
-    intersect ({ id, key, value, index, params }) {  
-      if (key === 'title') {
-        console.log( `INTERSECTION: '${value}' ${params.isIntersecting ?  ' entry intersection':  ' leave intersection'} `);
-      }      
-    }
+    log
   }
-
 }
 </script>

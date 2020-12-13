@@ -5,7 +5,7 @@
       id="form-base-selection"
       :model="myModel"
       :schema="mySchema"
-      @input:form-base-selection="log"
+      @input="log"
     />
     
     <!-- Stuff  -->    
