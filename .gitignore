@@ -11,6 +11,9 @@ yarn-error.log*
 # link
 *.lnk 
 
+# Anything directories
+not_public/
+
 # Runtime data
 pids
 *.pid

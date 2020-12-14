@@ -2,8 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 //
-  import introduction from '@/components/introduction.vue'
-  import installation from '@/components/installation.vue'
+  // doc
+  import introduction from '@/doc/introduction.vue'
+  import installation from '@/doc/installation.vue'
+  //components
   import simple from '@/components/simple.vue'
   import autogenerate from '@/components/autogenerate.vue'
   import textfields from '@/components/textfields.vue'

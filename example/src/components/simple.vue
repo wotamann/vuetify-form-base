@@ -14,16 +14,17 @@
         // compose listener to one or more of following Events:
         @click= "log"
         @input= "log"
-        @change="log"    // input|click
-        @watch= "log"    // focus|input|click|blur
         @focus= "log"
         @blur=  "log"        
-        @mouse= "log"    // mouseenter|mouseleave  
-        @display= "log"  // resize|swipe|intersect 
-        @intersect="log" // intersect - https://vuetifyjs.com/en/directives/intersect
         @resize= "log"
-        @swipe=  "log"   // touch events        
-        @update= "log"   // catch all events
+        @intersect="log"      // intersect - https://vuetifyjs.com/en/directives/intersect
+        @clickOutside= "log"  // clickOutside - https://vuetifyjs.com/en/directives/click-outside/
+        @swipe=  "log"        // touch events        
+        @change="log"         // input|click
+        @watch= "log"         // focus|input|click|blur
+        @mouse= "log"         // mouseenter|mouseleave  
+        @display= "log"       // resize|swipe|intersect 
+        @update= "log"        // catch all events
      
         // if 'id' available append 'id' at event -  
         id="form-base-list"

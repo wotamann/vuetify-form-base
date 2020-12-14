@@ -43,6 +43,8 @@ Schema: {
 
 and you will get a working Form. 
 
+
+
 ![Form](./images/array-schema.PNG)
 
 If you have to generate Forms or you have to edit Data presented as JSON- or JS-Objects, then take a closer look at **Vuetify-Form-Base** and try it. It can make your work much easier and save your time. This Form Generator works as [Vue.js 2.0 Component](https://vuejs.org/) and can simplify your Work by automatically creating Forms, based on your Schema-Definition. 
