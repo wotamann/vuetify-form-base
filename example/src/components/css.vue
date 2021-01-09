@@ -6,22 +6,24 @@
   #form-base-css input { background-color: #f3dbe1b9; color:#920f30b9 }
   #form-base-css input:focus { background-color: #df446bb9; color:#FFF }
 
-  /* CSS Item --- set all items  */
+  /* CSS Item --- add CSS to every item in formbase  */
   #form-base-css .item { padding:0.5rem; border: 1px dotted #eedf9b}
 
-  /* CSS Type --- set all items of type ... */
-  #form-base-css .type-form-base-css-slider { background-color: #c5e9fd73!important; border-radius: 32px; }
+  /* CSS Type --- type-component_id-[control-type] */
+  #form-base-css .type-form-base-css-checkbox { border-radius: 16px; }
  
-   /* CSS for all nested properties in controls */
-  #form-base-css .prop-controls { background-color: #fcf2d2e0; border:1px solid #f0dc9a }
+   /* CSS Props   prop-[(sub)prop of schema]  */
+  #form-base-css .prop-bool { background-color: #f1ede0e0; border:1px solid #f0dc9a }
+  #form-base-css .prop-radios { background-color: #e5eff7e0; border:1px solid #f0dc9a }
 
-  /* CSS Keys --- set item with key on focus' */
-  #form-base-css .key-form-base-css-name input { background-color: #cad7f077; color:#103c8f77 }
+  /* CSS Keys     key-component_id-[key inclusive path to key] */
+  /*             .key - form-base-css - controls-btn-btn-toggle-multi  */
+  #form-base-css .key-form-base-css-controls-btn-btn-toggle-multi  { background-color: #c5e6fd;  }
+  #form-base-css .key-form-base-css-name input { background-color: #cad7f077; color:#8f106577 }
   #form-base-css .key-form-base-css-name input:focus { background-color: #1949a1b9; color:#FFF }
   
-  /* CSS Keys --- set CSS for Label */
-  #form-base-css .key-form-base-css-controls-switch .v-input__slot .v-label{ font-weight:bolder; font-size: 1.2rem; color: rgb(11, 167, 24)!important}
-
+  /* CSS Keys     set CSS to label on key */
+  #form-base-css .key-form-base-css-controls-bool-switch .v-input__slot .v-label{ font-weight:bolder; font-size: 1.2rem; color: rgb(11, 167, 24)!important}
 
 </style>
 
@@ -70,18 +72,25 @@ export default {
     return {
       myModel: {        
         name: 'Base',
-        password: '123456#',
+        password: '123456',
         email: 'base@mail.com',
         controls: {
-          checkbox: true,
-          switch: true,
+          bool:{
+            checkbox: true,
+            switch: true,
+          },
           slider: 33,
-          btnToggleSingle: ['B'],
-          btnToggleMulti: 1,          
-          btn: 'A', // is ident to schema { label:'A', ... }
+          btn:{
+            ['btn-toggle-single']: ['B'],
+            ['btn-toggle-multi']: 1,          
+            btn: 'A', // is ident to schema { label:'A', ... }
+          },
+          iconLabel:null,
           iconValue: 'print',          
-          radio1: 'B',
-          radio2: ['G', 'R'],
+          radios: {
+            radio1: 'B',
+            radio2: ['G', 'R'],
+          }
         }
       },
       mySchema: {
@@ -89,22 +98,24 @@ export default {
         password: { type: 'password', label: 'Password', col: 4, tooltip: 'Password' },
         email: { type: 'email', label: 'Email', col: 4, spacer: true, tooltip: 'Email' },
         controls: {
-          checkbox: { type: 'checkbox', label: 'Red', color: 'red', col: 4, tooltip: 'Checkbox' },
-          switch: { type: 'switch', label: 'Green', color: 'green', col: 4, tooltip: 'Switch' },
-          
-          // v-slider doesn't work with col:{ cols='auto' }
-          slider: { type: 'slider',  color: 'blue', col: 4, tooltip: 'Slider' },
-
-          btnToggleSingle: { type: 'btn-toggle', options, color:'red', multiple: true, tooltip: 'Multi Button', col: 6 },
-          btnToggleMulti: { type: 'btn-toggle', options: optionsObject, backgroundColor: 'blue lighten-5', class:'pa-3', tooltip: 'Button', col: 6 },
-
-          btn: { type: 'btn', iconRight: 'print', color:'white', block:true, tooltip: 'Block Button', col: 2, ripple:{ center:true, class: 'item blue--text' } },          
+          bool:{
+            checkbox: { type: 'checkbox', label: 'Red', color: 'red', col: 4, tooltip: 'Checkbox' },
+            switch: { type: 'switch', label: 'Green', color: 'green', col: 4, tooltip: 'Switch' },
+            // v-slider doesn't work with col:{ cols='auto' }
+            slider: { type: 'slider',  color: 'blue', col: 4, tooltip: 'Slider' }
+          },
+          btn:{
+            ['btn-toggle-single']: { type: 'btn-toggle', options, color:'red', multiple: true, tooltip: 'Multi Button', col: 6 },
+            ['btn-toggle-multi']: { type: 'btn-toggle', options: optionsObject, backgroundColor: 'blue lighten-5', class:'pa-3', tooltip: 'Button', col: 6 },
+            btn: { type: 'btn', iconRight: 'print', color:'white', block:true, tooltip: 'Block Button', col: 2, ripple:{ center:true, class: 'item blue--text' } },          
+          },
           iconLabel: { type: 'icon', label:'print', large: true, color: 'blue', tooltip: 'Icon has Label but not', col: 2 },
           // if label undefined use value
           iconValue: { type: 'icon', color: 'red', tooltip: 'Icon with Value', col: 2 }, 
-          
-          radio1: { type: 'radio', label: 'Radio', options, row:false, tooltip: 'Radio', col: 2 },
-          radio2: { type: 'radio', label: 'Radio', options: optionsRadio, row:true, tooltip: 'Color & Multi Radio', col: 4, multiple:true, clickOutside:this.clickOutside },
+          radios:{
+            radio1: { type: 'radio', label: 'Radio', options, row:false, tooltip: 'Radio', col: 2 },
+            radio2: { type: 'radio', label: 'Radio', options: optionsRadio, row:true, tooltip: 'Color & Multi Radio', col: 4, multiple:true, clickOutside:this.clickOutside },
+          }
         }
       }
     }

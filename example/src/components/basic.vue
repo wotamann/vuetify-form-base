@@ -26,8 +26,7 @@ import log from '@/lib'
 export default {
   name: 'undefinedProperties',
   components: { VFormBase, Infoline },
-  data () {
-    return {
+  data: () => ({
       myModel: {
         InModelAndSchema: 'Defined in Model & Schema',
         // no definition in mySchema - property value remains untouched  
@@ -38,8 +37,7 @@ export default {
         // no definition in myModel - property will be added & edited
         undefinedInModel: { type:'text', label: 'Undefined in Model' }  
       }
-    }
-  },
+  }),
   methods: {
     log
   }

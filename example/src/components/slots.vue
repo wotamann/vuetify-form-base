@@ -1,9 +1,9 @@
 <style>
   /* INFO-SCOPED: Don't use '<style scoped>' because scoped CSS is inside a child-component not accessable */
   /* CSS Item --- set all items  */
-  #form-base-slot .item { padding:0.5rem; border: 1px dotted #e7c320}
-  #form-base-slot .slot { width: 100%; padding:2px;font-size: 0.9rem;font-weight: 400; color:#9e7506; background-color: #fffacd; border: 1px dotted #e7c320}
-  #form-base-slot .slot-label { color:#064d9e; }
+  #form-base .item { padding:0.5rem; border: 1px dotted #e7c320}
+  #form-base .slot { width: 100%; padding:2px;font-size: 0.9rem;font-weight: 400; color:#9e7506; background-color: #fffacd; border: 1px dotted #e7c320}
+  #form-base .slot-label { color:#064d9e; }
 </style>
 
 <template>
@@ -14,19 +14,19 @@
      
       <!-- FORM-BASE-COMPONENT -->
       <v-form-base
-        id="form-base-slot"
+        id="form-base"
         :model="myModel"
         :schema="mySchema"
         :col=6
         @change="log"
       >
       <!-- FORM SLOTS -->
-        <template #form-base-slot-top>
+        <template #form-base-top>
           <h4 class="slot">
             Top Slot of 'Form'
           </h4>
         </template>
-        <template #form-base-slot-bottom>
+        <template #form-base-bottom>
           <h4 class="slot">
             Bottom Slot of 'Form'
           </h4>  
@@ -34,13 +34,13 @@
         
       <!-- KEY SLOTS -->
         <!-- TOP of KEY -->
-        <template #slot-top-key-form-base-slot-nameSlot="{obj}">
+        <template #slot-top-key-form-base-nameSlot="{obj}">
           <h4 class="slot">
             Slot at Top of Key '{{obj.key}}'
           </h4>
         </template>
         <!-- ITEM of KEY -->
-        <template #slot-item-key-form-base-slot-emailSlot="{obj, id, index}">
+        <template #slot-item-key-form-base-emailSlot="{obj, id, index}">
           <h4 class="slot">
             Slot replaces Item with Key '{{obj.key}}'
             <div>Formbase: {{id}}</div>
@@ -49,27 +49,27 @@
           </h4>
         </template>
         <!-- BOTTOM of KEY -->
-        <template #slot-bottom-key-form-base-slot-colorSlot="{obj}">
+        <template #slot-bottom-key-form-base-colorSlot="{obj}">
           <h4 class="slot">
             Slot replaces Bottom with Key '{{obj.key}}'
           </h4>
         </template>      
         
       <!-- TYPE SLOTS -->
-        <template #slot-top-type-form-base-slot-btn-toggle="{obj}">
+        <template #slot-top-type-form-base-btn-toggle="{obj}">
           <h4 class="slot">
             Slot at Top of Type 'Btn-Toggle' - {{obj.value}}
           </h4>
         </template>
-        <template #slot-bottom-type-form-base-slot-btn-toggle="{obj}">
+        <template #slot-bottom-type-form-base-btn-toggle="{obj}">
           <h4 class="slot">
             Slot at Bottom of Type 'Btn' - {{obj.value}}
           </h4>
         </template>
         
       <!-- INJECT SLOTS INTO KEY  -->  
-        <!-- INJECT progress -->
-        <template #slot-inject-progress-key-form-base-slot-nameSlot="">
+        <!-- INJECT progress into key [component_id]-->
+        <template #slot-inject-progress-key-form-base-nameSlot="">
           <v-progress-linear
             :value="progress"
             :color="color"
@@ -78,31 +78,34 @@
           />
         </template>
         <!-- INJECT selection -->
-        <template #slot-inject-selection-key-form-base-slot-fileSlot="{text}">
+        <template #slot-inject-selection-key-form-base-fileSlot="{text}">
           <v-chip small label color="blue">
             {{ text }}
           </v-chip>
         </template>
         <!-- INJECT append -->
-        <template #slot-inject-append-key-form-base-slot-colorSlot="{obj}" >
+        <template #slot-inject-append-key-form-base-colorSlot="{obj}" >
           <h4 class="slot"><v-icon :color="obj.value">palette</v-icon>Key-Slot</h4>
         </template>
         <!-- INJECT label -->
-        <template #slot-inject-label-key-form-base-slot-controls-switch="{obj}">
+        <template #slot-inject-label-key-form-base-controls-switch="{obj}">
           <span class="slot-label">Label <b>Slot of Key</b> '{{obj.key}}'</span>
         </template>
         <!-- INJECT label -->
-        <template #slot-inject-label-key-form-base-slot-controls-radio="{option}">
+        <template #slot-inject-label-key-form-base-controls-radio="{option}">
            <v-chip small label color="blue">
              Slot-{{option}}
            </v-chip>
         </template>
-        <template #slot-inject-label-key-form-base-slot-controls-slider="{obj}">
-          <strong class="blue--text">Range</strong>
-        </template> 
 
-        <!--INJECT prepend -->
-        <template #slot-inject-prepend-key-form-base-slot-controls-slider="{obj}">
+        <!-- inject 3 SLOTS into key controls-slider -->
+        <template #slot-inject-label-key-form-base-controls-slider>
+          <strong class="blue--text">Slot</strong>
+        </template> 
+        <template #slot-inject-thumb-label-key-form-base-controls-slider= "{ value }">
+            {{ satisfactionEmojis[Math.min(Math.floor(value / 10), 9)] }}
+        </template>
+        <template #slot-inject-prepend-key-form-base-controls-slider>
           <v-icon color="blue">menu</v-icon>
         </template> 
 
@@ -135,7 +138,9 @@ const optionsObj = [
 export default {
   components: { VFormBase, Infoline },
   data () {
-    return {    
+    return {
+      satisfactionEmojis: ['😭', '😢', '☹️', '🙁', '😐', '🙂', '😊', '😁', '😄', '😍'],
+           
       myModel: {
         nameSlot: 'Base',
         fileSlot: null,
@@ -167,7 +172,7 @@ export default {
         controls: {
           btnToggleSingle: { type: 'btn-toggle', options, color:'red', multiple: true, tooltip: 'Multiple Button' },
            // v-slider doesn't work with col:{ cols='auto' }
-          slider: { type: 'slider',  color: 'blue',  tooltip: 'Slider' },
+          slider: { type: 'slider',  color: 'blue',  tooltip: 'Slider', thumbSize:32, thumbLabel:'always' },
           radio: { type: 'radio', label: 'Radio', options, row:true },
           switch: { type:'switch', label:'Switch'}
         }

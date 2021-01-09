@@ -46,7 +46,7 @@
                     <br>
                     FORM:{{getFormTopSlot()}}
                     <br>
-                    LABEL:{{getKeyLabelSlot(obj)}}
+                    INJECT:{{getKeyInjectSlot(obj)}}
                     <br>
                     ARRAY:{{getArrayItemSlot(obj)}}
                     <br>
@@ -243,7 +243,6 @@
                   @blur="onEvent($event, obj)"
                   @change="onInput($event, obj)"
                 > 
-                  <!-- <template v-for="s in Object.keys($scopedSlots).filter( s => s.includes('-inject-') )" #[s.split(`-`)[2]]="ss"><slot v-if="s" :name="s" v-bind= "{ id, obj, index, ...ss}"/></template> -->
                   <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]="scopeData"><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index, ...scopeData}" /></template>
                 </v-file-input>                
               <!-- END FILE -->
@@ -263,8 +262,9 @@
                   v-bind="bindSchema(obj)"
                   @input="onInput($event, obj)"
                 >
-                  <!-- component doesn't work with #[s]="slotData" " -->
-                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index }"/></template>
+                  <!-- some component works with #[s]="slotData"  some doesn't work with slot data ie: 'label'  / but 'thumb-label' works only with scopeData -->
+                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index }" /></template>
+                  <!-- <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]="scopeData"><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index, ...scopeData}" /></template> -->
                 </v-slider>
               <!-- END SLIDER -->
 
@@ -504,19 +504,23 @@
   const watch = 'focus|input|click|blur'    // event watch collects events 'focus|input|click|blur'
   const display = 'resize|swipe|intersect'  // event watch collects events 'resize|swipe|intersect'
 
+
+  const topAppendix = 'top'
+  const bottomAppendix = 'bottom'
+  const slotAppendix = 'slot'
+  const injectAppendix = 'inject'
   const itemClassAppendix = 'item'
   const typeClassAppendix = 'type'
   const keyClassAppendix = 'key'
+  const arrayClassAppendix = 'array'
   const propertyClassAppendix = 'prop'
 
-  const slotAppendix = 'slot'
-  const injectSlotAppendix = 'slot-inject'
-  const arraySlotAppendix = 'slot-array'
-  const topSlotAppendix = 'slot-top'
-  const itemSlotAppendix = 'slot-item'
-  const labelSlotAppendix = 'slot-label'
-  const bottomSlotAppendix = 'slot-bottom'
-
+  const injectSlotAppendix = `${slotAppendix}-${injectAppendix}`
+  const arraySlotAppendix = `${slotAppendix}-${arrayClassAppendix}`
+  const topSlotAppendix = `${slotAppendix}-${topAppendix}`
+  const itemSlotAppendix = `${slotAppendix}-${itemClassAppendix}`
+  const bottomSlotAppendix = `${slotAppendix}-${bottomAppendix}`
+  
   const clear = 'clear'
   const button = 'button'
   const treeview = 'treeview'
@@ -739,65 +743,58 @@ export default {
       return isString(schemaTooltip) ? schemaTooltip : schemaTooltip && schemaTooltip.label
     },
   //
-  // FORM SLOT
+  // FORM SLOTS
     getFormTopSlot () {
       return this.id + '-top'
     },
     getFormBottomSlot () {
       return this.id + '-bottom'
     },
-  //
-  // KEY 
-    getKeySlot(obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, slotAppendix + '-key') + inject
-    },
+  //  
+  // KEY SLOTS
     getKeyInjectSlot(obj, inject) {
-      // prepending 'slot-inject' and append inject verb 'label'   -> 'slot-inject-label-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, `${injectSlotAppendix}-${inject}-key`) 
-    },    
-    getKeyItemSlot (obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, itemSlotAppendix + '-key')
-    },
-    getKeyLabelSlot (obj) {
-      // used from GROUP, WRAP
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-label'  -> 'slot-label-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, labelSlotAppendix + '-key')
-    },
+      // get slot starting with 'slot-inject' and inject verb 'thumb-label'   -> 'slot-inject-thumb-label-key-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${injectSlotAppendix}-${inject}-${keyClassAppendix}`) 
+    },        
     getKeyTopSlot (obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-top'  -> 'slot-top-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, topSlotAppendix + '-key')
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-top'  -> 'slot-top-key-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${topSlotAppendix}-${keyClassAppendix}`)
+    },
+    getKeyItemSlot (obj) {
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${itemSlotAppendix}-${keyClassAppendix}`)
     },
     getKeyBottomSlot (obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-bottom-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, bottomSlotAppendix + '-key')
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-bottom-key-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${bottomSlotAppendix}-${keyClassAppendix}`)
     },
+  //
+  // ARRAY SLOTS  
     getArrayTopSlot (obj) {
-      // slot each item from array  -> 'slot-top-array-address-city'
-      return this.getKeyClassNameWithAppendix(obj, topSlotAppendix + '-array')
+      // slot each item from array  -> 'slot-top-array-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${topSlotAppendix}-${arrayClassAppendix}`)
     },
     getArrayItemSlot (obj) {
-      // slot each item from array  -> 'slot-top-array-address-city'
-      return this.getKeyClassNameWithAppendix(obj, itemSlotAppendix + '-array')
+      // slot each item from array  -> 'slot-top-array-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${itemSlotAppendix}-${arrayClassAppendix}`)
     },
     getArrayBottomSlot (obj) {
-      // slot each item from array   -> 'slot-bottom-array-address-city'
-      return this.getKeyClassNameWithAppendix(obj, bottomSlotAppendix + '-array')
+      // slot each item from array   -> 'slot-bottom-array-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${bottomSlotAppendix}-${arrayClassAppendix}`)
     },
   //
   // TYPE SLOTS
-    getTypeItemSlot (obj) {
-      // get Type specific slot name  -> 'slot-item-type-radio'
-      return this.getTypeClassNameWithAppendix(obj, itemSlotAppendix + '-type')
-    },
     getTypeTopSlot (obj) {
       // get Type specific slot name  -> 'slot-top-type-radio'
-      return this.getTypeClassNameWithAppendix(obj, topSlotAppendix + '-type')
+      return this.getTypeClassNameWithAppendix(obj, `${topSlotAppendix}-${typeClassAppendix}`)
+    },
+    getTypeItemSlot (obj) {
+      // get Type specific slot name  -> 'slot-item-type-radio'
+      return this.getTypeClassNameWithAppendix(obj, `${itemSlotAppendix}-${typeClassAppendix}`)
     },
     getTypeBottomSlot (obj) {
       // get Type specific slot name  -> 'slot-bottom-type-radio'
-      return this.getTypeClassNameWithAppendix(obj, bottomSlotAppendix + '-type')
+      return this.getTypeClassNameWithAppendix(obj, `${bottomSlotAppendix}-${typeClassAppendix}`)
     },
   //
   // CLASS Names
@@ -885,15 +882,15 @@ export default {
       return obj.schema.col || this.col || colDefault
     },   
   //
-  // SLOTS SANITIZE schema.slot  to array
+  // SANITIZE SLOTS
     getInjectedScopedSlots(id, obj){
-    // extract the verb 'label' from Slots containing 'slot-inject' and matching formbase-id and key  
-      return Object.keys(this.$scopedSlots).filter( s => (s.includes(`${id}${classKeyDelimiter}${obj.key.replace(/\./g, '-')}`) && s.includes(injectSlotAppendix)) ).map( i => i.split('-')[2]) 
+      // <template #slot-inject-thumb-label-key-formbase-path-to-mykey />
+      // extract the verb 'thumb-label' from Slots starting with 'slot-inject' and matching [component-id] and [key]
+      const rx = new RegExp(`${injectSlotAppendix}-(.*?)-${keyClassAppendix}`)        
+      return Object.keys(this.$scopedSlots)
+        .filter( s => (s.includes(`${id}${classKeyDelimiter}${obj.key.replace(/\./g, '-')}`) && s.includes(injectSlotAppendix)) )
+        .map( i => i.match(rx)[1])
     },   
-    // getSchemaSlot(obj){ 
-    // // sanitize schema.slot  to array
-    //   return Array.isArray(obj.schema.slot) ? obj.schema.slot : [obj.schema.slot] 
-    // },
   //
   // SANITIZE BUTTON - Toggle sanitize item from array schema.options
     sanitizeOptions (b) {

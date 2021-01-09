@@ -59,44 +59,42 @@ const accept = 'image/*'
 export default {
   name: 'Textfields',
   components: { VFormBase, Infoline },
-  data () {
-    return {
-      myModel: {
-        name: 'Base',
-        creditcard: '12345678',
-        password: 'abcdefgh',
-        file: [] // array of File objects
+  data: ()=>({
+    myModel: {
+      name: 'Base',
+      creditcard: '12345678',
+      password: 'abcdefgh',
+      file: [] // array of File objects
+    },     
+    // Order of Props in Schema defines Order of Controls in Form    
+    mySchema: {
+      name: {   // shorthand definition name:'text' 
+        type: 'text', 
+        label:'name' 
       },     
-      // Order of Props in Schema defines Order of Controls in Form    
-      mySchema: {
-        name: {   // shorthand definition name:'text' 
-          type: 'text', 
-          label:'name' 
-        },     
-        password: { 
-          type: 'password',
-          clearable: true,
-          solo:true,
-          class:'mx-1 mt-1'
-        },
-        creditcard: { 
-          type: 'text', 
-          label: 'Creditcard', 
-          prependInnerIcon: 'credit_card',         
-          hint: mask, 
-          mask 
-        },        
-        file: { 
-          type: 'file', 
-          label: 'Images', 
-          showSize:true,
-          counter:true,
-          accept, 
-          multiple: true,
-        }
+      password: { 
+        type: 'password',
+        clearable: true,
+        solo:true,
+        class:'mx-1 mt-1'
+      },
+      creditcard: { 
+        type: 'text', 
+        label: 'Creditcard', 
+        prependInnerIcon: 'credit_card',         
+        hint: mask, 
+        mask 
+      },        
+      file: { 
+        type: 'file', 
+        label: 'Images', 
+        showSize:true,
+        counter:true,
+        accept, 
+        multiple: true,
       }
     }
-  },  
+  }),  
   methods: {
     log
   }
