@@ -52,6 +52,10 @@ Furthermore if you don't define a Schema, then **Vuetify-Form-Base** tries to ge
 **Vuetify-Form-Base** uses the well known and excellent [Component Framework Vuetify 2.0](https://vuetifyjs.com/) to style and layout your Form. Vuetify Controls have a clear, minimalistic design and support responsive Design. If necessary add specific layouts by using the implemented Vuetify [Grid System](https://vuetifyjs.com/en/components/grids/).
 
 ---
+## Doc
+
+[Documentation](https://wotamann.gitbook.io/vuetify-form-base/)
+
 ## Demo
 
 [Here you can see a Demo with Key-Examples](https://wotamann.github.io/)
