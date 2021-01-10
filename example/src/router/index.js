@@ -2,9 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 //
-  // doc
-  import introduction from '@/doc/introduction.vue'
-  import installation from '@/doc/installation.vue'
   //components
   import simple from '@/components/simple.vue'
   import autogenerate from '@/components/autogenerate.vue'
@@ -50,13 +47,8 @@ import Router from 'vue-router'
 
 const router = new Router({
   mode: 'history',
-  routes: [
-    { path: '*', redirect: '/introduction' },
-    { path: '/introduction', name: 'introduction', component: introduction, text:'Introduction' },    
-    { path: '/installation', name: 'installation', component: installation, text:'Installation' },    
-    
-    { path: '*', name: 'divider', component: introduction, text:'------ List of Examples ------'  },    
-    
+  routes: [ 
+    { path: '*', redirect: '/simple' },
     { path: '/simple', name: 'simple', component: simple, text:'Textfields' },    
     { path: '/textfields', name: 'textfields', component: textfields, text:'Textfields with HTML-Input Type'  },    
     { path: '/autogenerate', name: 'autogenerate', component: autogenerate, text:'Model builds Structure for missing Schema' },    
