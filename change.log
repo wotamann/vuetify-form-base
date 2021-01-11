@@ -143,3 +143,5 @@ or array of objects
     { value: 'G', color:'green', label:'Green' },
   ] 
 
+0.3.4
+revision of Slots

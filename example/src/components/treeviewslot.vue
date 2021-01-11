@@ -1,12 +1,32 @@
 <template>
   <v-container fluid>
-    <h4>Select Model-Data in Treeview and get Result in 'schema.open' and 'schema.model'</h4>
+    <h4>Modify Treeview with injected Slots</h4>
     <v-form-base
-      id="treeview-demo"
+      id="treeview-slot"
       :model="myModel"
       :schema="mySchema"
       @change="change"
-    />
+    >
+      <!-- // Inject SLOT 'prepend' into treeview component using 'key' with id:'treeview-slot' and key:'treeview_1'  -->
+      <template #slot-inject-prepend-key-treeview-slot-treeview_1="{open}" >  
+        <v-icon color="blue">
+          {{open ? 'mdi-folder-open' : 'mdi-folder'}}
+        </v-icon>
+      </template>
+
+      <!-- // Inject SLOT 'label' into treeview component using 'key' with id:'treeview-slot' and key:'treeview_1'  -->
+      <template #slot-inject-label-key-treeview-slot-treeview_1="{item}" >  
+        <span class="caption" >{{item.name.toUpperCase()}}</span>
+      </template>
+
+      <!-- // Inject SLOT 'prepend' into treeview component using 'key' with id:'treeview-slot' and key:'treeview_2'  -->
+      <template #slot-inject-prepend-key-treeview-slot-treeview_2="{item}" >  
+        <v-icon >
+          {{item.children ? 'mdi-paperclip' : 'mdi-email-open-outline'}}
+        </v-icon>      
+      </template>
+
+    </v-form-base>
     
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>
@@ -68,8 +88,7 @@ export default {
           activatable: true,
           selectable: true,
           multipleActive: true,
-          activeClass: 'blue lighten-3 blue--text',
-          selectedColor: 'blue',
+          slot:['prepend','label']   // inject this named-slots into the treeview control - see vuetify treeview slots       
         },
         treeview_2: {
           type: 'treeview',
@@ -80,8 +99,9 @@ export default {
           activeClass: 'red lighten-4 red--text',
           selectedColor: 'red',
           openOnClick: true,
-          onIcon: 'bookmark',
-          offIcon: 'bookmark_border'
+          // inject this named-slots into the treeview control - see vuetify treeview slots    
+          // https://vuetifyjs.com/en/components/treeview#treeview
+          slot:'prepend' 
         }
       }
     }

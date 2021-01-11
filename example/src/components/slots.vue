@@ -3,7 +3,7 @@
   /* CSS Item --- set all items  */
   #form-base .item { padding:0.5rem; border: 1px dotted #e7c320}
   #form-base .slot { width: 100%; padding:2px;font-size: 0.9rem;font-weight: 400; color:#9e7506; background-color: #fffacd; border: 1px dotted #e7c320}
-  #form-base .slot-label { color:#064d9e; }
+  #form-base .slot-label { color:#1976d2; }
 </style>
 
 <template>
@@ -21,12 +21,12 @@
         @change="log"
       >
       <!-- FORM SLOTS -->
-        <template #form-base-top>
+        <template #slot-top-form-base>
           <h4 class="slot">
             Top Slot of 'Form'
           </h4>
         </template>
-        <template #form-base-bottom>
+        <template #slot-bottom-form-base>
           <h4 class="slot">
             Bottom Slot of 'Form'
           </h4>  
@@ -49,9 +49,14 @@
           </h4>
         </template>
         <!-- BOTTOM of KEY -->
-        <template #slot-bottom-key-form-base-colorSlot="{obj}">
+        <template #slot-bottom-key-form-base-colorSlot="{obj, index, id}">
           <h4 class="slot">
-            Slot replaces Bottom with Key '{{obj.key}}'
+            Slot replaces Bottom with Key '{{obj.key}}'  
+            {{JSON.stringify(obj)}}
+            ||
+            {{index}}
+            ||
+            {{id}} id
           </h4>
         </template>      
         
@@ -101,18 +106,21 @@
         <!-- inject 3 SLOTS into key controls-slider -->
         <template #slot-inject-label-key-form-base-controls-slider>
           <strong class="blue--text">Slot</strong>
-        </template> 
-        <template #slot-inject-thumb-label-key-form-base-controls-slider= "{ value }">
-            {{ satisfactionEmojis[Math.min(Math.floor(value / 10), 9)] }}
-        </template>
+        </template>         
         <template #slot-inject-prepend-key-form-base-controls-slider>
           <v-icon color="blue">menu</v-icon>
         </template> 
 
         <!-- TOOLTIP SLOT -->
-        <template #slot-tooltip="{obj}">
-          {{ obj.schema.tooltip }} with Value: {{ obj.value }}
-        </template>
+        <!-- <template #slot-tooltip="{obj}">
+          {{ obj.schema.tooltip }} with Value: {{ JSON.stringify(obj.value, replacer, 3) }}
+        </template> -->
+        <!-- TOOLTIP SLOT of KEY-->
+        <!-- <template #slot-tooltip-key-form-base-nameSlot="{obj}">
+          <div class="green">
+          KEY-TOOLTIP for '{{obj.key}}''
+          </div>
+        </template> -->
 
       </v-form-base>
 
@@ -128,6 +136,7 @@ import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
 import log from '@/lib'
 
+const fileObjectToString = (val) => `${val.name} - (File Object)` 
 const options = ['A', 'B', 'C']
 const optionsObj = [
   { icon: 'format_align_left', value: 1 }, 
@@ -139,11 +148,9 @@ export default {
   components: { VFormBase, Infoline },
   data () {
     return {
-      satisfactionEmojis: ['😭', '😢', '☹️', '🙁', '😐', '🙂', '😊', '😁', '😄', '😍'],
-           
       myModel: {
         nameSlot: 'Base',
-        fileSlot: null,
+        fileSlot: [],
         colorSlot: '#AA2244',
         emailSlot: 'base@mail.com',
         controls: {
@@ -165,8 +172,8 @@ export default {
     },
     mySchema() { 
       return {       
-        nameSlot: { type: 'text', label: 'Name with Progress Slot', message:true, loading:true, appendIcon: 'more_vert', tooltip: 'Name' },
-        fileSlot: { type: 'file', label: 'Name with Progress Slot', appendIcon: 'more_vert', tooltip: 'Name'  },
+        nameSlot: { type: 'text', label: 'Name with Progress Slot', message:true, loading:true, appendIcon: 'more_vert', tooltip:'Name'},
+        fileSlot: { type: 'file', label: 'File with Chips', appendIcon: 'more_vert', multiple:true, tooltip: 'File'  },
         colorSlot: { type: 'text', ext:'color', label: 'Color', tooltip:{ label: 'Color', color:this.myModel.colorSlot } },
         emailSlot: { type: 'email', label: 'Email', spacer: true, tooltip: 'Email' },
         controls: {
@@ -186,7 +193,22 @@ export default {
         this.dynamicColor = v.value
         console.warn('Colours changed!', v.value)
       }
+    },
+
+    replacer (key, value) {
+      if (typeof value === 'function') {
+        return 'Function' 
+      }
+      if (Array.isArray(value) && value[0] instanceof File) {
+        // map Fileobject to Filename
+        return value.map(i => fileObjectToString(i) )
+      }
+      if (value instanceof File) {
+        return fileObjectToString(value)
+      }
+      return value
     }
+      
   }
 }
 </script>

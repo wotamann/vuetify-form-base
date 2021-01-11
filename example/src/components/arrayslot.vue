@@ -4,7 +4,7 @@
   .slotOUTARR { background-color: #a3c8f8; margin: 0 0 4px 8px; padding: 4px;}
   .slotIN { background-color: #f55066; margin: 0 0 4px 0px; padding: 4px;}
   .slotINARR { background-color: #fab0ba; margin: 0 0 4px 8px; padding: 4px;}
-  .slotKEY { background-color: #fde5e5; margin: 0 0 4px 16px; padding: 4px;}
+  .slotKEY { background-color: #e3dbff; margin: 0 0 4px 16px; padding: 4px;}
 </style>
 <template>
   <v-container fluid>
@@ -22,10 +22,10 @@
       @change="log"
     >
 
-        <template #form-base-top={id}>
+        <template #slot-top-form-base={id}>
           <h4 class="slotFORM">Slot at Top of Form '{{id}}'</h4>
         </template>        
-        <template #form-base-bottom={id}>
+        <template #slot-bottom-form-base={id}>
           <h4 class="slotFORM">Slot at Bottom of Form '{{id}}'</h4>
         </template>
         <!-- SLOT TASKS -->
@@ -43,6 +43,10 @@
         <template #slot-top-key-form-base-tasks-0-tasksIn="{obj}">
           <div class="slotIN">Slot at Top of Key '{{obj.key}}'</div>
         </template>
+        <template #slot-bottom-key-form-base-tasks-0-tasksIn="{obj}">
+          <div class="slotIN">Slot at Bottom of Key '{{obj.key}}'</div>
+        </template>
+        <!-- SLOT ITEM in TASKS ARRAY-->
         <template #slot-top-array-form-base-tasks-0-tasksIn="{obj, idx, item}">
           <div class="slotINARR">{{idx}} - Slot at Top of each Item in Array '{{obj.key}}'</div>
         </template>
@@ -50,6 +54,7 @@
           <div class="slotINARR">Slot at Bottom of each Item in Array '{{obj.key}}'</div>
         </template>
 
+        <!-- SLOT ITEM IN TASKS-IN ARRAY-->
         <template #slot-top-key-form-base-tasks-0-tasksIn-1-in="{obj}">
           <div class="slotKEY caption">Slot at Top of Key '{{obj.key}}'</div>
         </template>
@@ -100,13 +105,13 @@ export default {
           type: 'array',
           col:12,
           schema: {
-            out: { type: 'checkbox', slot:'label', label: 'Out', color: 'blue', col: 2 },
+            out: { type: 'checkbox', label: 'Out', color: 'blue', col: 2 },
             title: { type: 'text', color: 'blue', col:4 },
             tasksIn: {
               type: 'array',
               col: 6,
               schema: {
-                in: { type: 'checkbox', slot:'label', label: 'In', color: 'red', col: 4 },
+                in: { type: 'checkbox', label: 'In', color: 'red', col: 4 },
                 title: { type: 'text', color: 'red', col:8 }          
               }
             }          

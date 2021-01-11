@@ -17,7 +17,7 @@
       @input="log"
     >
       <!-- TOP SLOT Container  -->
-      <template #form-base-container-top >
+      <template #slot-top-form-base-container >
         <span class="form-base-title">This is 'form-base-container' with data 'myModel'</span>
       </template>
 
@@ -31,11 +31,11 @@
           @input="log"
         >
           <!-- TOP SLOT SlotPlaceholder -->
-          <template #form-base-box-top >
+          <template #slot-top-form-base-box >
             <span class="form-base-title">This is 'form-base-box' with data 'myModelBox'</span>
           </template>
 
-              <!-- this SLOT replaces key 'slotplaceholder' ) -->
+              <!-- this SLOT replaces key 'slotplaceholder' with another <v-form-base> component -->
           <template #slot-item-key-form-base-box-slotplaceholder >
             <!-- FORM-BASE -->
             <v-form-base
@@ -45,7 +45,7 @@
               @input="log"
             >
               <!-- TOP SLOT SlotPlaceholder -->
-              <template #form-base-inbox-top >
+              <template #slot-top-form-base-inbox >
                 <span class="form-base-title">This is 'form-base-inbox' with data 'myModelInBox'</span>
               </template>
             </v-form-base>      

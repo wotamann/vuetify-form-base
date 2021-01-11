@@ -27,6 +27,7 @@ import Router from 'vue-router'
   import selectiondynamic from '@/components/selectiondynamic.vue'
   import selectioncascading from '@/components/selectioncascading.vue'
   import treeview from '@/components/treeview.vue'
+  import treeviewslot from '@/components/treeviewslot.vue'
   import conditional from '@/components/conditional.vue'
   import list from '@/components/list.vue'
   import pickers from '@/components/pickers.vue'
@@ -71,7 +72,8 @@ const router = new Router({
     { path: '/validate', name: 'validate', component: validate, text:`Form-Base with Rules and Validation`  },    
     
     { path: '/list', name: 'list', component: list, text:`List from Model-Data`  },    
-    { path: '/treeview', name: 'treeview', component: treeview, text:`Treeviews from Model-Data`  },    
+    { path: '/treeview', name: 'treeview', component: treeview, text:`Treeview from Model-Data`  },    
+    { path: '/treeviewslot', name: 'treeviewslot', component: treeviewslot, text:`Treeview using Slots`  },    
     { path: '/arrayease', name: 'arrayease', component: arrayease, text:`Array from Model`  },    
     { path: '/arrayslot', name: 'arrayslot', component: arrayslot, text:`Array from Model-Data using Slots `  },    
     { path: '/array', name: 'array', component: array, text:`Array - Add, Edit and Drag to Remove Items in Model-Data`  },    

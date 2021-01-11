@@ -40,7 +40,7 @@
             <slot :name="getTypeItemSlot(obj)" v-bind= "{ obj, index, id }">
               <!-- slot replaces complete item of defined KEY -> <div slot="slot-item-key-[propertyName]">-->
               <slot :name="getKeyItemSlot(obj)" v-bind= "{ obj, index, id }">
-                  
+                 
                   <!-- <div class="caption">
                     OBJ:{{obj}}
                     <br>
@@ -178,7 +178,7 @@
                   @update:active="onEvent({type:'click'}, obj, 'selected' )"
                 >  
                   <!-- works with #[s]="slotData" " -->
-                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]="slotData"><slot :name="getKeyInjectSlot(obj, s)" :obj= "obj" :id= "id" :index= "index" v-bind= "slotData" /></template>
+                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]="slotData"><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index,  ...slotData}" /></template>
                 </v-treeview>
               <!-- END TREEVIEW -->
               
@@ -388,8 +388,8 @@
             </slot>
 
             <!-- slot at bottom of item  -> <div slot="slot-bottom-key-[deep-nested-key-name]"> -->
-            <slot :name="getTypeBottomSlot(obj)" :obj="obj"/>
-            <slot :name="getKeyBottomSlot(obj)" :obj="obj"/>
+            <slot :name="getTypeBottomSlot(obj)" v-bind= "{ obj, index, id }"/>
+            <slot :name="getKeyBottomSlot(obj)" v-bind= "{ obj, index, id }"/>
           </v-col>
 
           <!-- schema.spacer:true - push next item to the right and fill space between items -->
@@ -398,10 +398,11 @@
             :key="`s-${index}`"
           />
         </template>
-        <!-- slot for TOOLTIP - inspect css.vue for details -->
-        <slot name="slot-tooltip" :obj="obj">
+        <!-- slot for Tooltip or use shorthand schema.tooltip:'myTooltip' | any tooltip activated by schema:{ key:{ tooltip:'myTooltip', ...} -->
+        <slot :name="getTooltipSlot(obj)" v-bind= "{ obj, index, id }" >
           <span>{{getShorthandTooltipLabel(obj.schema.tooltip)}}</span>
         </slot>
+        <slot :name="getKeyTooltipSlot(obj)" v-bind= "{ obj, index, id }" />
       </v-tooltip>
     </template>
     <!-- FORM-BASE BOTTOM SLOT -->
@@ -508,6 +509,7 @@
   const topAppendix = 'top'
   const bottomAppendix = 'bottom'
   const slotAppendix = 'slot'
+  const tooltipAppendix = 'tooltip'
   const injectAppendix = 'inject'
   const itemClassAppendix = 'item'
   const typeClassAppendix = 'type'
@@ -520,6 +522,7 @@
   const topSlotAppendix = `${slotAppendix}-${topAppendix}`
   const itemSlotAppendix = `${slotAppendix}-${itemClassAppendix}`
   const bottomSlotAppendix = `${slotAppendix}-${bottomAppendix}`
+  const tooltipSlotAppendix = `${slotAppendix}-${tooltipAppendix}`
   
   const clear = 'clear'
   const button = 'button'
@@ -745,10 +748,12 @@ export default {
   //
   // FORM SLOTS
     getFormTopSlot () {
-      return this.id + '-top'
+      // Slot for Top Line in Formbase -> 'slot-formbase-top'
+      return `${topSlotAppendix}-${this.id}`
     },
     getFormBottomSlot () {
-      return this.id + '-bottom'
+      // Slot for Bottom Line in Formbase -> 'slot-formbase-bottom'
+      return `${bottomSlotAppendix}-${this.id}`
     },
   //  
   // KEY SLOTS
@@ -767,6 +772,14 @@ export default {
     getKeyBottomSlot (obj) {
       // get Key specific name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-bottom-key-formbase-address-city'
       return this.getKeyClassNameWithAppendix(obj, `${bottomSlotAppendix}-${keyClassAppendix}`)
+    },
+    getKeyTooltipSlot (obj) {
+      // matches Key specific Tooltip | name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-tooltip-key-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${tooltipSlotAppendix}-${keyClassAppendix}`)
+    },
+    getTooltipSlot (obj) {
+      // default tooltip slot matches all keys
+      return `${tooltipSlotAppendix}`
     },
   //
   // ARRAY SLOTS  
