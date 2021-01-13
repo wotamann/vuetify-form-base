@@ -618,15 +618,15 @@ export default {
       this.updateArrayFromState(model, this.schema)
       return model 
     },
-    parent () {
-      let p = this
-      if (p.$parent && p.$parent.$parent) {
-        while (p.id.startsWith(p.$parent.$parent.id + '-')) {
-          p = p.$parent.$parent
-        }
-       }
-      return p
-    },
+    // parent () {
+    //   let p = this
+    //   if (p.$parent && p.$parent.$parent) {
+    //     while (p.id.startsWith(p.$parent.$parent.id + '-')) {
+    //       p = p.$parent.$parent
+    //     }
+    //    }
+    //   return p
+    // },
     index () {
       const m = this.id && this.id.match(/\d+/g)
       return m ? m.map(Number) : null
@@ -1000,7 +1000,7 @@ export default {
         obj,
         data: this.storeStateData,
         schema: this.storeStateSchema,
-        parent:this.parent
+        // parent:this.parent
       }
       this.emitValue(type, emitObj)
       return emitObj
@@ -1012,7 +1012,7 @@ export default {
       const open = obj.schema.open
       const index = this.index
       // avoid circular JSON in dragstart
-      const parent = event.type !== 'dragstart' ? this.parent : undefined
+      // const parent = event.type !== 'dragstart' ? this.parent : undefined
       
       const emitObj = {
         on: event.type,
@@ -1025,7 +1025,7 @@ export default {
         event,
         data: this.storeStateData,
         schema: this.storeStateSchema,
-        parent
+        // parent
       }
       
       delay(() => { this.emitValue(event.type, emitObj), onEventDelay })  
