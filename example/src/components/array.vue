@@ -13,7 +13,8 @@
       id="array"
       :model="myModel"
       :schema="mySchema"
-      @change="log"
+      @input="log"
+      @click="log"
       @drop="log"
     />
     

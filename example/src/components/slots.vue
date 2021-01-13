@@ -18,7 +18,8 @@
         :model="myModel"
         :schema="mySchema"
         :col=6
-        @change="log"
+        @input="log"
+        @click="log"
       >
       <!-- FORM SLOTS -->
         <template #slot-top-form-base>

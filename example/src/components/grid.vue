@@ -10,7 +10,8 @@
         :class="layout + ' lighten-5'"    
         :col=12  
         :row="rowAttribute"      
-        @change="change"
+        @input="change"
+        @click="change"
       />
       <!--
         VUETIFY 2.0 NEW GRID SYSTEM - https://vuetifyjs.com/en/components/grids/

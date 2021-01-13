@@ -5,38 +5,27 @@
     <v-form class="border-frame">
       <!-- FORM-BASE-COMPONENT -->    
       <v-form-base 
-        id="test"
         :model="myModel"
         :schema="mySchema"
         :col=6
-        @change="log"
+        @input="log"
+        @click="log"
       />  
       <!--
         // compose listener to one or more of following Events:
-        @click= "log"
-        @input= "log"
         @focus= "log"
+        @input= "log"
+        @click= "log"
         @blur=  "log"        
         @resize= "log"
         @intersect="log"      // intersect - https://vuetifyjs.com/en/directives/intersect
         @clickOutside= "log"  // clickOutside - https://vuetifyjs.com/en/directives/click-outside/
         @swipe=  "log"        // touch events        
-        @change="log"         // input|click
-        @watch= "log"         // focus|input|click|blur
-        @mouse= "log"         // mouseenter|mouseleave  
-        @display= "log"       // resize|swipe|intersect 
-        @update= "log"        // catch all events
-     
-        // if 'id' available append 'id' at event -  
-        id="form-base-list"
-        @change:form-base-list="log"
-
-        schema prop:'text' is shorthand for key: { type: 'text', label:key }
-
-        Most controls are based on vuetify and therefore 
-        the properties of these controls can be used in 
-        schema:{ type:'text', hint:'myHint', ... } maps to <v-text-fields>
-        -> https://vuetifyjs.com/en/components/text-fields/
+        @mouseleave="log"
+        @mouseenter="log"
+        @dragstart="dragstart"
+        @dragover="dragover"
+        @drop="drop"
       -->
     </v-form>
     
@@ -67,11 +56,18 @@ export default {
       password: 'abcdefgh',
       file: [] // array of File objects
     },     
-    // Order of Props in Schema defines Order of Controls in Form    
+    /*
+      SCHEMA
+      Order of Props in Schema defines Order of Controls in Form 
+      Most controls are based on vuetify and therefore the properties of these controls can be used in 
+      schema:{ type:'text', hint:'myHint', ... } maps to <v-text-fields> -> https://vuetifyjs.com/en/components/text-fields/   
+    */
     mySchema: {
-      name: {   // shorthand definition name:'text' 
+      // name:'text' // shorthand definition 
+      name: {   
         type: 'text', 
-        label:'name' 
+        label:'name',
+        drag:true 
       },     
       password: { 
         type: 'password',

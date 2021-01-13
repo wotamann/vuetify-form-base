@@ -30,6 +30,7 @@ import Router from 'vue-router'
   import treeviewslot from '@/components/treeviewslot.vue'
   import conditional from '@/components/conditional.vue'
   import list from '@/components/list.vue'
+  import listslot from '@/components/listslot.vue'
   import pickers from '@/components/pickers.vue'
   import images from '@/components/images.vue'
   import dynamicattributes from '@/components/dynamicattributes.vue'
@@ -72,6 +73,7 @@ const router = new Router({
     { path: '/validate', name: 'validate', component: validate, text:`Form-Base with Rules and Validation`  },    
     
     { path: '/list', name: 'list', component: list, text:`List from Model-Data`  },    
+    { path: '/listslot', name: 'listslot', component: listslot, text:`List from Model-Data decorated with Slots`  },    
     { path: '/treeview', name: 'treeview', component: treeview, text:`Treeview from Model-Data`  },    
     { path: '/treeviewslot', name: 'treeviewslot', component: treeviewslot, text:`Treeview using Slots`  },    
     { path: '/arrayease', name: 'arrayease', component: arrayease, text:`Array from Model`  },    

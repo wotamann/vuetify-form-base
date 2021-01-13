@@ -12,7 +12,8 @@
     <v-form-base
       :model="myModel"
       :schema="mySchema" 
-      @change="log"
+      @input="log"
+      @click="log"
     />
     
     <!-- Stuff  -->    

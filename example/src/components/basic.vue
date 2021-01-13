@@ -8,7 +8,7 @@
         :model="myModel" 
         :schema="mySchema"
         col=6 
-        @change="log"
+        @input="log"
       />     
     </v-form>
     

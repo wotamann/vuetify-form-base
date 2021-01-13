@@ -342,8 +342,8 @@
                   :value="setValue(obj)"
                   :obj="obj"
                   :[searchInputSync(obj)].sync="obj.schema.searchInput"                     
-                  @focus="onEvent($event, obj)"
-                  @blur="onEvent($event, obj)"                  
+                  @focus= "onEvent($event, obj)"
+                  @blur= "onEvent($event, obj)"                  
                   @[suspendClickAppend(obj)]="onEvent($event, obj, append)"
                   @click:append-outer="onEvent($event, obj, appendOuter)"
                   @click:prepend="onEvent($event, obj, prepend )"
@@ -368,8 +368,8 @@
                   :value="setValue(obj)"
                   :obj="obj"
                   :[searchInputSync(obj)].sync="obj.schema.searchInput"                     
-                  @focus="onEvent($event, obj)"
-                  @blur="onEvent($event, obj)"                  
+                  @focus= "onEvent($event, obj)"
+                  @blur= "onEvent($event, obj)"                  
                   @[suspendClickAppend(obj)]="onEvent($event, obj, append)"
                   @click:append-outer= "onEvent($event, obj, appendOuter)"
                   @click:prepend= "onEvent($event, obj, prepend )"
@@ -528,6 +528,8 @@
   const button = 'button'
   const treeview = 'treeview'
   const list = 'list'
+  const focus = 'focus'
+  const blur = 'blur'
   const append = 'append'
   const appendOuter = 'append-outer'
   const prepend = 'prepend'
@@ -598,6 +600,8 @@ export default {
       button,
       treeview,
       list,
+      focus,
+      blur,
       append,
       appendOuter,
       prepend,
@@ -625,7 +629,7 @@ export default {
     },
     index () {
       const m = this.id && this.id.match(/\d+/g)
-      return m ? m.map(Number) : []
+      return m ? m.map(Number) : null
     },
     getRow(){
       return this.row || rowDefault
@@ -968,8 +972,7 @@ export default {
   //
   // Set Value
     setValue (obj, type ) {
-      // Use 'schema.toCtrl' Function for setting a modified Value  
-    
+      // Use 'schema.toCtrl' Function for setting a modified Value   
       return obj.schema.type === 'wrap' ? 
         this.toCtrl({ value: this.storeStateData, obj, data: this.storeStateData, schema: this.storeStateSchema }) :
         this.toCtrl({ value: obj.value, obj, data: this.storeStateData, schema: this.storeStateSchema })
@@ -996,7 +999,8 @@ export default {
         value,
         obj,
         data: this.storeStateData,
-        schema: this.storeStateSchema
+        schema: this.storeStateSchema,
+        parent:this.parent
       }
       this.emitValue(type, emitObj)
       return emitObj
@@ -1031,7 +1035,6 @@ export default {
     onClickOutside (event, obj) {
       if (!obj.schema || !obj.schema.clickOutside) return
       if (isFunction(obj.schema.clickOutside) ) return obj.schema.clickOutside(obj, event) 
-    
       this.emitValue('clickOutside', { on: 'clickOutside', id: this.id, key: obj.key, value: obj.value, obj, params: { x: event.clientX, y: event.clientY }, event, data: this.storeStateData, schema: this.storeStateSchema })
     },
     onIntersect (entries, observer, obj) {
@@ -1049,7 +1052,7 @@ export default {
   // EMIT EVENT
     emitValue(event, val) {
 
-      // DEPRECATION WARNING 
+      // DEPRECATION WARNING START
       const c = change.indexOf(event) > -1 && (this.$listeners[`change:${this.id}`] || this.$listeners[`change`])
       const w = watch.indexOf(event) > -1 && (this.$listeners[`watch:${this.id}`] || this.$listeners[`watch`])
       const m = mouse.indexOf(event) > -1 && (this.$listeners[`mouse:${this.id}`] || this.$listeners[`mouse`])

@@ -9,7 +9,7 @@
       :model= "myModel"
       :schema= "mySchema"
       :col= "col"
-      @change="log"
+      @input="log"
     />
     <p class="title">{{msg}}</p>
     </v-form>

@@ -7,8 +7,34 @@
       :schema="mySchema"
       @input="log"
       @click="log"
-    />
-
+    >
+      
+        <template #slot-top-key-form-base-list-listString>
+          <v-toolbar dark color="red lighten-1" class="elevation-12 my-3"  >
+            <v-toolbar-title>Top of List</v-toolbar-title>
+          </v-toolbar>        
+        </template>
+        
+        <template #slot-inject-label-key-form-base-list-listString="{ obj, idx, item}">
+          <v-toolbar dark color="red lighten-3" >
+            <v-toolbar-title>{{obj.schema.model.map( i => myModel.listObject[i].name)}}</v-toolbar-title>
+          </v-toolbar>
+        </template>
+        
+        <template #slot-item-array-form-base-list-listString="{ idx, item}">
+          <div class="caption">{{idx}} - {{item}} </div>
+        </template>
+        
+        <template #slot-bottom-key-form-base-list-listString>
+          <v-toolbar dark color="red lighten-1" class="elevation-12 my-3"  >
+            <v-toolbar-title>
+              Bottom of List</span>
+            </v-toolbar-title>
+          </v-toolbar>        
+        </template> 
+        
+    </v-form-base>
+    
     <!-- Stuff  -->    
     <infoline :model="myModel" :schema="mySchema"/>
     

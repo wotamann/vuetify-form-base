@@ -22,7 +22,8 @@
         id="form-base-complete"
         :model="myModel"
         :schema="mySchema"
-        @change="change"
+        @input="log"
+        @click="log"
       />
     </v-form>
 
@@ -43,7 +44,7 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import change from '@/lib'
+import log from '@/lib'
 
 const items = ['Tesla', 'Jobs', 'Taleb', 'Harari']
 
@@ -97,8 +98,8 @@ export default {
     resetValidation () {
       this.$refs.myForm.resetValidation()
     },
-    change (val) {
-      change(val)
+    log (val) {
+      log(val)
 
       let { on, key, obj, params } = val
       // check 'click' is from prependInner Icon (Print) at key 'subgroups.content'  

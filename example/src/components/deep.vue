@@ -18,7 +18,8 @@
       :model="myModel"
       :schema="mySchema"
       :col="{ cols:6, sm:4, md:3, lg:2,xl:1 }"
-      @change="change"
+      @input="log"
+      @click="log"
     />
     
     <!-- Stuff  -->    
@@ -30,7 +31,7 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import change from '@/lib'
+import log from '@/lib'
 
 export default {
   components: { VFormBase, Infoline },
@@ -84,7 +85,7 @@ export default {
     }
   },
   methods: {
-    change
+    log
   }
 }
 </script>

@@ -5,7 +5,7 @@
       id="treeview-slot"
       :model="myModel"
       :schema="mySchema"
-      @change="change"
+      @click="change"
     >
       <!-- // Inject SLOT 'prepend' into treeview component using 'key' with id:'treeview-slot' and key:'treeview_1'  -->
       <template #slot-inject-prepend-key-treeview-slot-treeview_1="{open}" >  

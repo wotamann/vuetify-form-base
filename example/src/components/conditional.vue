@@ -7,7 +7,8 @@
       id="form-base-conditional"
       :value="myModel"
       :schema="mySchema"
-      @change="log"
+      @input="log"
+      @click="log"
     />
     
     <v-btn

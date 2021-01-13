@@ -37,7 +37,8 @@
         id="form-base-css"
         :model="myModel"
         :schema="mySchema"
-        @change="log"
+        @input="log"
+        @click="log"
         @clickOutside="log"
       />    
     </v-form> 
@@ -113,7 +114,7 @@ export default {
           // if label undefined use value
           iconValue: { type: 'icon', color: 'red', tooltip: 'Icon with Value', col: 2 }, 
           radios:{
-            radio1: { type: 'radio', label: 'Radio', options, row:false, tooltip: 'Radio', col: 2 },
+            radio1: { type: 'radio', label: 'Radio', options, row:false, tooltip: 'Radio', col: 2, clickOutside:true },
             radio2: { type: 'radio', label: 'Radio', options: optionsRadio, row:true, tooltip: 'Color & Multi Radio', col: 4, multiple:true, clickOutside:this.clickOutside },
           }
         }

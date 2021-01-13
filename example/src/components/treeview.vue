@@ -5,7 +5,8 @@
       id="treeview-demo"
       :model="myModel"
       :schema="mySchema"
-      @change="change"
+      @input="log"
+      @click="log"
     />
     
     <!-- Stuff  -->    
@@ -17,7 +18,7 @@
 <script>
 import VFormBase from '@/components/vFormBase'
 import Infoline from '@/components/infoline'
-import change from '@/lib'
+import log from '@/lib'
 
 const treeview = [
   {
@@ -87,7 +88,7 @@ export default {
     }
   },
   methods: {
-    change
+    log
   }
 }
 </script>
