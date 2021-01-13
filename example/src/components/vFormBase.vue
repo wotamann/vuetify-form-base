@@ -969,21 +969,11 @@ export default {
   // Set Value
     setValue (obj, type ) {
       // Use 'schema.toCtrl' Function for setting a modified Value  
-      
-      // let a = obj.schema.type === 'wrap' ? 
-      //   this.toCtrl({ value: this.storeStateData, obj, data: this.storeStateData, schema: this.storeStateSchema }) :
-      //   this.toCtrl({ value: obj.value, obj, data: this.storeStateData, schema: this.storeStateSchema })
-      //   console.log(obj.schema.type, a);
-
+    
       return obj.schema.type === 'wrap' ? 
         this.toCtrl({ value: this.storeStateData, obj, data: this.storeStateData, schema: this.storeStateSchema }) :
         this.toCtrl({ value: obj.value, obj, data: this.storeStateData, schema: this.storeStateSchema })
-    },
-    // setValueWrap (obj) {
-    //   // Use 'schema.toCtrl' Function for setting a modified Value  
-    //   console.log('***WRAP', obj.schema);
-    //   return this.toCtrl({ value: this.storeStateData, obj, data: this.storeStateData, schema: this.storeStateSchema })
-    // },
+    },   
   //
   // EVENTS Get Value from Input & other Events
     onInput (value, obj, type = 'input') {
@@ -1056,30 +1046,30 @@ export default {
       this.emitValue('resize', { on: 'resize', id: this.id, params: { x: window.innerWidth, y: window.innerHeight }, event, data: this.storeStateData, schema: this.storeStateSchema })
     },
   //
-  // Emit Event Base
-    emitValue(emit, val) {
-      // console.warn(emit, `${emit}:${this.parent.id}`);
-      // this.$emit('deep', val)
-      // this.$emit('deep1', val)
-      this.$emit(emit, val) // listen to specific event only
-      if (change.indexOf(emit) > -1) this.$emit('change', val)    // listen to 'input|click'
-      if (watch.indexOf(emit) > -1) this.$emit('watch', val)      // listen to 'focus|input|click|blur'
-      if (mouse.indexOf(emit) > -1) this.$emit('mouse', val)      // listen to 'mouseenter|mouseleave  '
-      if (display.indexOf(emit) > -1) this.$emit('display', val)  // listen to 'resize|swipe|intersect'
-      this.$emit('update', val) // listen to all events
-    },
-    // emitValuexxxx (emit, val) {
-    //   // console.warn(emit, this.getEventName(emit), `ID ${emit}:${this.id}`, `PARENT: ${emit}:${this.parent.id}`);
-    //   this.parent.$emit(this.getEventName(emit), val)                                // emit to emit event only
-    //   if (change.indexOf(emit) > -1) this.$emit(this.getEventName('change'), val)    // emit to 'input|click'
-    //   if (watch.indexOf(emit) > -1) this.$emit(this.getEventName('watch'), val)      // emit to 'focus|input|click|blur'
-    //   if (mouse.indexOf(emit) > -1) this.$emit(this.getEventName('mouse'), val)      // emit to 'mouseenter|mouseleave  '
-    //   if (display.indexOf(emit) > -1) this.$emit(this.getEventName('display'), val)  // emit to 'resize|swipe|intersect'
-    //   this.parent.$emit(this.getEventName('update'), val)                            // emit to all events
-    // },
-    getEventName (eventName) {
-      return eventName
-      // return this.id !== defaultID ? `${eventName}:${this.parent.id}` : eventName
+  // EMIT EVENT
+    emitValue(event, val) {
+
+      // DEPRECATION WARNING 
+      const c = change.indexOf(event) > -1 && (this.$listeners[`change:${this.id}`] || this.$listeners[`change`])
+      const w = watch.indexOf(event) > -1 && (this.$listeners[`watch:${this.id}`] || this.$listeners[`watch`])
+      const m = mouse.indexOf(event) > -1 && (this.$listeners[`mouse:${this.id}`] || this.$listeners[`mouse`])
+      const d = display.indexOf(event) > -1 && (this.$listeners[`display:${this.id}`] || this.$listeners[`display`])
+      if ( c || w || m || d ) {
+        console.warn(`--- BREAKING CHANGE ON EVENT DECLARATION ------------------------------------------`)
+        console.warn(`Combined Event-Listener 'change', 'watch', 'mouse', 'display' and 'update' have been removed for better comprehensibility and simplification`)
+        console.warn(`Please use separate listener for each event like <v-form-base  @focus="handler" @input="handler" @blur="handler"/>`)
+        console.warn(`---------------------------------------------`)
+        console.warn(`IMPORTANT: <v-form-base id="form-id" @[event]:[form-id]="handler" /> is deprecated use simplified version <v-form-base id="form-id" @[event]="handler" />` )
+        console.warn(`-----------------------------------------------------------------------------------`)
+      }
+      // DEPRECATION WARNING END
+
+      if (this.$listeners[`${event}:${this.id}`] ) {
+        console.warn(`IMPORTANT: <v-form-base  @${event}:${this.id}="handler" /> is deprecated use simplified version <v-form-base  @${event}="handler" />`)
+        this.$emit(`${event}:${this.id}`, val) // listen to specific event only
+      } else {
+        this.$emit(event, val) // listen to specific event only
+      }      
     },
   //
   // PREPARE ARRAYS DATA & SCHEMA

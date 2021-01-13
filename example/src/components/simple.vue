@@ -5,10 +5,11 @@
     <v-form class="border-frame">
       <!-- FORM-BASE-COMPONENT -->    
       <v-form-base 
+        id="test"
         :model="myModel"
         :schema="mySchema"
         :col=6
-        @input="log"
+        @change="log"
       />  
       <!--
         // compose listener to one or more of following Events:
