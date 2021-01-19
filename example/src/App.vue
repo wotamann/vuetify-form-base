@@ -48,14 +48,14 @@
     #wrapper { box-shadow: 0 0 0 1px #cacaca, 0 0 0 4px #eee; } 
   }
   h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
+    font-weight: 600;
     line-height: 1.7;
     cursor: text;
     position: relative;
     margin: 1em 0 15px;
     padding: 4px;
-    background-color: rgba(153, 241, 153, 0.199); 
-    color: #444;
+    background-color: #e3f2fd; 
+    color: #666;
     }
 
   h1 {
@@ -443,7 +443,7 @@
     <v-app-bar
       app
       dense
-      color="green lighten-1"
+      color="blue lighten-1"
       dark
       hide-on-scroll
     >
@@ -456,7 +456,7 @@
       v-model="drawer" 
       width=360  
     >
-       <!--   <v-list-item-title class="title green--text">
+       <!--   <v-list-item-title class="title blue--text">
             <h4>Vuetify-Form-Base</h4>
           </v-list-item-title>
           <v-list-item-subtitle>
@@ -502,7 +502,7 @@ export default {
   }, 
   methods:{
     isCurrentPageClass(item){ 
-      return this.$router.currentRoute.name === item.name ? 'green lighten-5 green--text' : null 
+      return this.$router.currentRoute.name === item.name ? 'blue lighten-5 blue--text' : null 
     },
     goto(item){
       this.drawer = this.$vuetify.breakpoint.smAndUp
