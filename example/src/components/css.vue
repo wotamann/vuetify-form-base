@@ -57,12 +57,12 @@ import log from '@/lib'
 // String
 const options = ['A', 'B', 'C']
 const optionsObject = [
-  { icon: 'format_align_left', value: 1, color:'blue' }, 
-  { icon: 'format_align_justify', value: 2, color:'red' },
-  { icon:  'format_align_right', value: 3, color:'green', elevation:4, class:'ml-4' }
+  { icon: 'format_align_left', value: 1, color:'blue', small:true }, 
+  { icon: 'format_align_justify', value: 2, color:'red', medium:true },
+  { icon:  'format_align_right', value: 3, color:'green', xLarge:true,  elevation:4, class:'ml-4' }
 ]
 const optionsRadio = [
-  { value: 'B', color:'blue', label: 'Blue' }, 
+  { value: 'B', color:'blue', label: 'Blue', offIcon:'add', onIcon:'check' }, 
   { value: 'R', color:'red', label:'Red' },
   { value: 'G', color:'green', label:'Green' },
 ]
@@ -84,7 +84,7 @@ export default {
           btn:{
             ['btn-toggle-single']: ['B'],
             ['btn-toggle-multi']: 1,          
-            btn: 'A', // is ident to schema { label:'A', ... }
+            btn: 'A', // is ident to schema { label:'A', value:'A' }
           },
           iconLabel:null,
           iconValue: 'print',          
@@ -105,17 +105,20 @@ export default {
             // v-slider doesn't work with col:{ cols='auto' }
             slider: { type: 'slider',  color: 'blue', col: 4, tooltip: 'Slider' }
           },
+          // Buttons
           btn:{
             ['btn-toggle-single']: { type: 'btn-toggle', options, color:'red', multiple: true, tooltip: 'Multi Button', col: 6 },
-            ['btn-toggle-multi']: { type: 'btn-toggle', options: optionsObject, backgroundColor: 'blue lighten-5', class:'pa-3', tooltip: 'Button', col: 6 },
+            ['btn-toggle-multi']: { type: 'btn-toggle', options: optionsObject, backgroundColor: 'blue lighten-4', class:'pa-3', tooltip: 'Button', col: 6 },
             btn: { type: 'btn', iconRight: 'print', color:'white', block:true, tooltip: 'Block Button', col: 2, ripple:{ center:true, class: 'item blue--text' } },          
           },
+          // Icons
           iconLabel: { type: 'icon', label:'print', large: true, color: 'blue', tooltip: 'Icon has Label but not', col: 2 },
           // if label undefined use value
           iconValue: { type: 'icon', color: 'red', tooltip: 'Icon with Value', col: 2 }, 
+          // Radios
           radios:{
             radio1: { type: 'radio', label: 'Radio', options, row:false, tooltip: 'Radio', col: 2, clickOutside:true },
-            radio2: { type: 'radio', label: 'Radio', options: optionsRadio, row:true, tooltip: 'Color & Multi Radio', col: 4, multiple:true, clickOutside:this.clickOutside },
+            radio2: { type: 'radio', label: 'Radio', options: optionsRadio, row:true, tooltip: 'Color & Multi Radio', col: 4, multiple:false, clickOutside:this.clickOutside },
           }
         }
       }

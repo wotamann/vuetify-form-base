@@ -71,7 +71,7 @@
                   <v-radio
                     v-for="(option, idx) in obj.schema.options"
                     :key="idx"
-                    v-bind="sanitizeOptions(option)"
+                    v-bind="bindOptions(option)"
                   >
                     <!-- component doesn't work with #[s]="slotData" " -->
                     <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name= "getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index, idx, option }"/></template>                    
@@ -290,13 +290,13 @@
                   <v-btn
                     v-for="(option,idx) in obj.schema.options"
                     :key="idx"
-                    v-bind="sanitizeOptions(option)"
+                    v-bind="bindOptions(option)"
                     :icon="option.icon ? true :false"
                   >
                     <v-icon :dark="obj.schema.dark">
-                      {{ sanitizeOptions(option).icon }}
+                      {{ bindOptions(option).icon }}
                     </v-icon>
-                    {{ sanitizeOptions(option).label }}
+                    {{ bindOptions(option).label }}
                   </v-btn>
                 </v-btn-toggle>
               <!-- END BTN-TOGGLE -->
@@ -669,7 +669,11 @@ export default {
     isDateTimeColorExtension (obj){
       return isPicker.includes(obj.schema.ext)
     },
-    // BIND SCHEMA FN
+    // BIND SCHEMA TEXT OPTIONS
+    bindOptions (b) {
+      // schema.options in RADIO/BUTTON 
+      return isString(b) ? { value: b, label: b } : b
+    },
     bindSchemaText(obj ) {           
       return { ...defaultPickerSchemaText, ...obj.schema.text}
     },          
@@ -908,11 +912,6 @@ export default {
         .filter( s => (s.includes(`${id}${classKeyDelimiter}${obj.key.replace(/\./g, '-')}`) && s.includes(injectSlotAppendix)) )
         .map( i => i.match(rx)[1])
     },   
-  //
-  // SANITIZE BUTTON - Toggle sanitize item from array schema.options
-    sanitizeOptions (b) {
-      return isString(b) ? { value: b, label: b } : b
-    },
   //
   // Map Values coming FROM Control, TO Control or DROP on Control
     toCtrl (params) {
