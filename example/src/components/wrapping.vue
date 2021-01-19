@@ -1,6 +1,7 @@
 <template>
   <v-container fluid>
     <h4>Group Controls independent from Model-Structure with Type 'wrap' </h4>
+    <p>Use 'group' if grouping is based on  model structure</p>
     
     <v-form class="border-frame">
       <!-- FORM-BASE-COMPONENT -->
@@ -29,6 +30,7 @@
   const check1 = { type: 'checkbox', label: 'Checkbox 1'  }
   const name2 = { type: 'text', label:'Name 2', color: 'red' }
   const check2 = { type: 'checkbox', label: 'Checkbox 2', color: 'red' }
+
   export default {
     name: 'Wrapper',
     components: { VFormBase, Infoline },
@@ -59,13 +61,13 @@
               check2
             }
           },
-          names: { type:'wrap', label:'Names', col:6, class:'title pa-2 elevation-4 blue lighten-5', 
+          names: { type:'wrap', label:'Names', col:6, class:'title pa-2  blue lighten-5', 
             schema:{
               name1,    
               name2,    
             }
           },
-          checkboxes: { type:'wrap', label:'Checkboxes', col:6, class:'title pa-2 elevation-4 green lighten-5', 
+          checkboxes: { type:'wrap', label:'Checkboxes', col:6, class:'title pa-2 green lighten-5', 
             schema:{
               check1,          
               check2              

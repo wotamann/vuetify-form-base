@@ -11,7 +11,7 @@ export default (eventValue) => {
   console.log('schema:', schema)
   if (params) console.log(`params:`, params)
   if (index) console.log('index:', index)
-  // if (parent) console.log('parent:', parent)
+  if (parent) console.log('parent:', parent)
   if (event) console.log('event:', event)
  
   return eventValue

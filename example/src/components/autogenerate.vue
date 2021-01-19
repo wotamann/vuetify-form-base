@@ -1,12 +1,12 @@
 <template>
   <v-container fluid>
-    <h4>Autogenerate Form from Model on missing Schema</h4>
-    <p>Working only if Model-Data is Type of String, Number or Array</p>
+    <h4>Autogenerate Form using pure Model-Data on missing Schema</h4>
+    <p>Model-Data must be of Type of 'string', 'number', 'bool' or 'array'</p>
     
     <!-- FORM-BASE-COMPONENT -->
     <v-form-base 
       :model="myModel" 
-      :col="{xs:12,sm:6, lg:4}" 
+      :col="{xs:12,sm:6}" 
       @input="log" 
       class="border-frame"
     />

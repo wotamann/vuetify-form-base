@@ -411,22 +411,28 @@
 </template>
 
 <script>
-// import & declarations
+// Import
   import Vue from 'vue'
   import { get, isPlainObject, isFunction, isString, isNumber, isEmpty, orderBy, delay } from 'lodash'
-  // Info Mask https://github.com/probil/v-mask  
   import VueMask from 'v-mask'
   Vue.use(VueMask, {
     placeholders: {
+      // Info Mask https://github.com/probil/v-mask  
       // '#': null,       // passing `null` removes default placeholder, so `#` is treated as character
       // D: /\d/,         // define new placeholder
-      // Я: /[\wа-яА-Я]/, // cyrillic letter as a placeholder
     }
   })
-
+//
+// Declaration
   const typeToComponent = {
     // maps schema.type to prop 'type' in v-text-field  - https://www.wufoo.com/html5/
     text: 'v-text-field',
+    password: 'v-text-field',
+    email: 'v-text-field',
+    tel: 'v-text-field',
+    url: 'v-text-field',
+    search: 'v-text-field',
+    number: 'v-text-field', 
     /*
       { type:'text, ext:'typeOfTextField', ...} 
       For native <INPUT> type use alternative schema prop ext  -> schema:{ type:'text, ext:'date', ...} 
@@ -437,22 +443,18 @@
       time: 'v-text-field',    //  { type:'text, ext:'time', ...}      
       color: 'v-text-field',   //  { type:'text, ext:'color', ...}      
     */
-    password: 'v-text-field',
-    email: 'v-text-field',
-    tel: 'v-text-field',
-    url: 'v-text-field',
-    search: 'v-text-field',
-    number: 'v-text-field', 
-    
-    // INFO: 3 Types of PICKER DATE / TIME / COLOR
-    // Date-Native Input    - schema:{ type:'text, ext:'date', ...}       
-    // Date-Picker          - schema:{ type:'date', ...}         
-    // Date-Picker-Textmenu     - schema:{ type:'date', ext:'text'...}
-
-    // map schema.type to vuetify-control (vuetify 2.0)
+   
     date: 'v-date-picker',   
     time: 'v-time-picker',
     color: 'v-color-picker',
+    /*
+      INFO: 3 Types of PICKER DATE / TIME / COLOR
+      Date-Native Input    - schema:{ type:'text, ext:'date', ...}       
+      Date-Picker          - schema:{ type:'date', ...}         
+      Date-Picker-Textmenu     - schema:{ type:'date', ext:'text'...}
+    */
+   
+    // map schema.type to vuetify-control (vuetify 2.0)
     img: 'v-img',
     textarea: 'v-textarea',
     range: 'v-slider',
@@ -492,7 +494,6 @@
     */
     
     }
-// Declaration
   const orderDirection = 'ASC'
   const pathDelimiter = '.'
   const classKeyDelimiter = '-'
@@ -560,8 +561,7 @@
   const defaultInternGroupType = 'v-card' 
 //
 export default {
-  name: 'VFormBase',
-  
+  name: 'VFormBase',  
   props: {   
     id: {
       type: String,
@@ -586,7 +586,7 @@ export default {
     },    
     model: {
       type: [Object, Array],
-      default: () => null
+      default: () => ({})
     },    
     schema: {
       type: [Object, Array],
@@ -618,15 +618,15 @@ export default {
       this.updateArrayFromState(model, this.schema)
       return model 
     },
-    // parent () {
-    //   let p = this
-    //   if (p.$parent && p.$parent.$parent) {
-    //     while (p.id.startsWith(p.$parent.$parent.id + '-')) {
-    //       p = p.$parent.$parent
-    //     }
-    //    }
-    //   return p
-    // },
+    parent () {
+      let p = this
+      if (p.$parent && p.$parent.$parent) {
+        while (p.id.startsWith(p.$parent.$parent.id + '-')) {
+          p = p.$parent.$parent
+        }
+       }
+      return p
+    },
     index () {
       const m = this.id && this.id.match(/\d+/g)
       return m ? m.map(Number) : null
@@ -665,7 +665,7 @@ export default {
     isDateTimeColorTypeAndExtensionText(obj){
       return isPicker.includes(obj.schema.type) && obj.schema.ext === 'text' 
     },
-    // CHECK FOR DATE, TIME OR COLOR EXT
+    // CHECK FOR EXT: DATE, TIME OR COLOR
     isDateTimeColorExtension (obj){
       return isPicker.includes(obj.schema.ext)
     },
@@ -1000,7 +1000,7 @@ export default {
         obj,
         data: this.storeStateData,
         schema: this.storeStateSchema,
-        // parent:this.parent
+        parent:this.parent
       }
       this.emitValue(type, emitObj)
       return emitObj
@@ -1012,7 +1012,7 @@ export default {
       const open = obj.schema.open
       const index = this.index
       // avoid circular JSON in dragstart
-      // const parent = event.type !== 'dragstart' ? this.parent : undefined
+      const parent = event.type !== 'dragstart' ? this.parent : undefined
       
       const emitObj = {
         on: event.type,
@@ -1025,7 +1025,7 @@ export default {
         event,
         data: this.storeStateData,
         schema: this.storeStateSchema,
-        // parent
+        parent
       }
       
       delay(() => { this.emitValue(event.type, emitObj), onEventDelay })  
@@ -1051,28 +1051,38 @@ export default {
   //
   // EMIT EVENT
     emitValue(event, val) {
+            
+      let emitEvent = change.includes(event) ? 'change' : watch.includes(event) ? 'watch' : mouse.includes(event) ? 'mouse' : display.includes(event) ? 'display' : event
 
-      // DEPRECATION WARNING START
-      const c = change.indexOf(event) > -1 && (this.$listeners[`change:${this.id}`] || this.$listeners[`change`])
-      const w = watch.indexOf(event) > -1 && (this.$listeners[`watch:${this.id}`] || this.$listeners[`watch`])
-      const m = mouse.indexOf(event) > -1 && (this.$listeners[`mouse:${this.id}`] || this.$listeners[`mouse`])
-      const d = display.indexOf(event) > -1 && (this.$listeners[`display:${this.id}`] || this.$listeners[`display`])
-      if ( c || w || m || d ) {
-        console.warn(`--- BREAKING CHANGE ON EVENT DECLARATION ------------------------------------------`)
-        console.warn(`Combined Event-Listener 'change', 'watch', 'mouse', 'display' and 'update' have been removed for better comprehensibility and simplification`)
-        console.warn(`Please use separate listener for each event like <v-form-base  @focus="handler" @input="handler" @blur="handler"/>`)
-        console.warn(`---------------------------------------------`)
-        console.warn(`IMPORTANT: <v-form-base id="form-id" @[event]:[form-id]="handler" /> is deprecated use simplified version <v-form-base id="form-id" @[event]="handler" />` )
-        console.warn(`-----------------------------------------------------------------------------------`)
-      }
-      // DEPRECATION WARNING END
-
-      if (this.$listeners[`${event}:${this.id}`] ) {
-        console.warn(`IMPORTANT: <v-form-base  @${event}:${this.id}="handler" /> is deprecated use simplified version <v-form-base  @${event}="handler" />`)
+      if (this.$listeners[`${emitEvent}:${this.id}`] ) {        
+        this.deprecateEventCustomID(emitEvent)
+        this.deprecateCombinedEvents(emitEvent, event)
+        this.$emit(`${emitEvent}:${this.id}`, val) // listen to specific event only
+      } 
+      else if (this.$listeners[`${emitEvent}`] ) {
+        this.deprecateCombinedEvents(emitEvent, event)
+        this.$emit(emitEvent, val) // listen to specific event only
+      }      
+      else if (this.$listeners[`${event}:${this.id}`] ) {
+        this.deprecateEventCustomID(event)
         this.$emit(`${event}:${this.id}`, val) // listen to specific event only
-      } else {
+      }      
+      else if (this.$listeners[`${event}`]) {
         this.$emit(event, val) // listen to specific event only
       }      
+    },
+    deprecateEventCustomID(ev){
+      console.warn(`--- DEPRECATION ${ev}:${this.id}: ----------------------------------------------------------------------------`)
+      console.warn(`<v-form-base  @${ev}:${this.id}="handler" /> is deprecated use simplified version <v-form-base  @${ev}="handler" />`)
+      console.warn(`---------------------------------------------------------------------------------------------`)        
+    },
+    deprecateCombinedEvents(emitEvent, event){
+      if ( emitEvent !== event) {
+          console.warn(`--- DEPRECATION Combined Listener:  --------------------------------------------------------------------------`)
+          console.warn(`Combined Event-Listener '${emitEvent}' have been removed for better comprehensibility and simplification`)
+          console.warn(`Please use separate listener for each event like <v-form-base  @focus="handler" @input="handler" @blur="handler"/>`)
+          console.warn(`---------------------------------------------------------------------------------------------`)
+        }
     },
   //
   // PREPARE ARRAYS DATA & SCHEMA

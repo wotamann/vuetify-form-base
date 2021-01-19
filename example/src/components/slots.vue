@@ -1,9 +1,10 @@
 <style>
   /* INFO-SCOPED: Don't use '<style scoped>' because scoped CSS is inside a child-component not accessable */
   /* CSS Item --- set all items  */
-  #form-base .item { padding:0.5rem; border: 1px dotted #e7c320}
-  #form-base .slot { width: 100%; padding:2px;font-size: 0.9rem;font-weight: 400; color:#9e7506; background-color: #fffacd; border: 1px dotted #e7c320}
-  #form-base .slot-label { color:#1976d2; }
+  #form-base-slot h4 { font-size: 0.75rem; font-weight:normal; display: inline-block; width:100%; color: #2970f5; background-color: #a2bdf062;}
+  #form-base-slot .item { padding:0.5rem; border: 1px dotted #a2bdf062}
+  #form--slot .slot { width: 100%; padding:2px;font-size: 0.9rem;font-weight: 400; color:#9e7506; background-color: #fffacd; border: 1px dotted #a2bdf062}
+  #form--slot .slot-label { color:#1976d2; }
 </style>
 
 <template>
@@ -14,20 +15,20 @@
      
       <!-- FORM-BASE-COMPONENT -->
       <v-form-base
-        id="form-base"
+        id="form-base-slot"
         :model="myModel"
         :schema="mySchema"
         :col=6
-        @input="log"
-        @click="log"
+        @input="log"       
+        @click="log"       
       >
       <!-- FORM SLOTS -->
-        <template #slot-top-form-base>
+        <template #slot-top-form-base-slot>   
           <h4 class="slot">
             Top Slot of 'Form'
           </h4>
         </template>
-        <template #slot-bottom-form-base>
+        <template #slot-bottom-form-base-slot>
           <h4 class="slot">
             Bottom Slot of 'Form'
           </h4>  
@@ -35,13 +36,13 @@
         
       <!-- KEY SLOTS -->
         <!-- TOP of KEY -->
-        <template #slot-top-key-form-base-nameSlot="{obj}">
+        <template #slot-top-key-form-base-slot-nameSlot="{obj}">
           <h4 class="slot">
             Slot at Top of Key '{{obj.key}}'
           </h4>
         </template>
         <!-- ITEM of KEY -->
-        <template #slot-item-key-form-base-emailSlot="{obj, id, index}">
+        <template #slot-item-key-form-base-slot-emailSlot="{obj, id, index}">
           <h4 class="slot">
             Slot replaces Item with Key '{{obj.key}}'
             <div>Formbase: {{id}}</div>
@@ -50,7 +51,7 @@
           </h4>
         </template>
         <!-- BOTTOM of KEY -->
-        <template #slot-bottom-key-form-base-colorSlot="{obj, index, id}">
+        <template #slot-bottom-key-form-base-slot-colorSlot="{obj, index, id}">
           <h4 class="slot">
             Slot replaces Bottom with Key '{{obj.key}}'  
             {{JSON.stringify(obj)}}
@@ -62,12 +63,12 @@
         </template>      
         
       <!-- TYPE SLOTS -->
-        <template #slot-top-type-form-base-btn-toggle="{obj}">
+        <template #slot-top-type-form-base-slot-btn-toggle="{obj}">
           <h4 class="slot">
             Slot at Top of Type 'Btn-Toggle' - {{obj.value}}
           </h4>
         </template>
-        <template #slot-bottom-type-form-base-btn-toggle="{obj}">
+        <template #slot-bottom-type-form-base-slot-btn-toggle="{obj}">
           <h4 class="slot">
             Slot at Bottom of Type 'Btn' - {{obj.value}}
           </h4>
@@ -75,7 +76,7 @@
         
       <!-- INJECT SLOTS INTO KEY  -->  
         <!-- INJECT progress into key [component_id]-->
-        <template #slot-inject-progress-key-form-base-nameSlot="">
+        <template #slot-inject-progress-key-form-base-slot-nameSlot="">
           <v-progress-linear
             :value="progress"
             :color="color"
@@ -84,31 +85,31 @@
           />
         </template>
         <!-- INJECT selection -->
-        <template #slot-inject-selection-key-form-base-fileSlot="{text}">
+        <template #slot-inject-selection-key-form-base-slot-fileSlot="{text}">
           <v-chip small label color="blue">
             {{ text }}
           </v-chip>
         </template>
         <!-- INJECT append -->
-        <template #slot-inject-append-key-form-base-colorSlot="{obj}" >
-          <h4 class="slot"><v-icon :color="obj.value">palette</v-icon>Key-Slot</h4>
+        <template #slot-inject-append-key-form-base-slot-colorSlot="{obj}" >
+          <h4 class="slot"><v-icon :color="obj.value">palette</v-icon>Inject-Slot</h4>
         </template>
         <!-- INJECT label -->
-        <template #slot-inject-label-key-form-base-controls-switch="{obj}">
+        <template #slot-inject-label-key-form-base-slot-controls-switch="{obj}">
           <span class="slot-label">Label <b>Slot of Key</b> '{{obj.key}}'</span>
         </template>
         <!-- INJECT label -->
-        <template #slot-inject-label-key-form-base-controls-radio="{option}">
+        <template #slot-inject-label-key-form-base-slot-controls-radio="{option}">
            <v-chip small label color="blue">
              Slot-{{option}}
            </v-chip>
         </template>
 
         <!-- inject 3 SLOTS into key controls-slider -->
-        <template #slot-inject-label-key-form-base-controls-slider>
+        <template #slot-inject-label-key-form-base-slot-controls-slider>
           <strong class="blue--text">Slot</strong>
         </template>         
-        <template #slot-inject-prepend-key-form-base-controls-slider>
+        <template #slot-inject-prepend-key-form-base-slot-controls-slider>
           <v-icon color="blue">menu</v-icon>
         </template> 
 
@@ -117,7 +118,7 @@
           {{ obj.schema.tooltip }} with Value: {{ JSON.stringify(obj.value, replacer, 3) }}
         </template> -->
         <!-- TOOLTIP SLOT of KEY-->
-        <!-- <template #slot-tooltip-key-form-base-nameSlot="{obj}">
+        <!-- <template #slot-tooltip-key-form-base-slot-nameSlot="{obj}">
           <div class="green">
           KEY-TOOLTIP for '{{obj.key}}''
           </div>
@@ -192,7 +193,6 @@ export default {
       log(v)
       if( v.key === 'colorSlot'){
         this.dynamicColor = v.value
-        console.warn('Colours changed!', v.value)
       }
     },
 

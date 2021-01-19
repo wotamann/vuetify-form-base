@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <h4>Use Type 'group' for wrapping content into Groups and control Display with 'row' Attribute</h4>
-    
+    <p>With 'group' model structure is used for grouping. For grouping without model structure use 'wrap' </p>
     <v-form class="border-frame">
       <!-- FORM-BASE-COMPONENT -->    
       <!-- See for attribute 'row' handling <v-row></v-row> https://vuetifyjs.com/en/components/grids/ -->

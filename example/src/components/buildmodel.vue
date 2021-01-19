@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Build Model-Structure from nested & grouped Schema, based on empty Model-Object</h4>
+    <h4>Deep nested Schema builds Structure for an empty Model-Object</h4>
       
       <v-form class="border-frame">
         <!-- FORM-BASE-COMPONENT -->    
@@ -32,24 +32,24 @@ export default {
   data () {
     return {
       myModel: {
-        // myModel must be at least an empty Object. It doesn't work with 'null', 'undefined' or any 'primitive value' 
-        // autogeneration from Schema works only if myModel is an empty Object 
-        // Warning: it could work with a NON empty 'myModel', but the behavior cannot be predicted and should be avoided
+        // Model must be at least an empty Object. It doesn't work with 'null', 'undefined' or any 'primitive value' 
+        // autogeneration from nested Schema works only if 'Model' is an empty Object 
+        // Warning: working with a NON empty 'Model', but the behavior cannot be predicted and should be avoided
       },
       mySchema: { 
+        // Nested Schema creates Structure of Model
         a:{
           type: "group",
           label: "Group",
           row:{ noGutters:false},
           col:12,
-          class: 'blue lighten-5',
+          class: 'blue lighten-4',
           schema: {
             a1: [ { type:'checkbox', label:'A-1', col:4}],
             a2: { type:'switch', label:'A-2', col:4 },
             a3: { type:'select', label:'A-3', items, col:4 }
           },
         },
-        
         b: {
           outerArray: [
             { type: 'checkbox', label: 'B-A-A' },

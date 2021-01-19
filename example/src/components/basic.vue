@@ -7,7 +7,7 @@
       <v-form-base 
         :model="myModel" 
         :schema="mySchema"
-        col=6 
+        col=4 
         @input="log"
       />     
     </v-form>
@@ -34,7 +34,7 @@ export default {
       },
       mySchema: {
        InModelAndSchema: 'text', 
-        // no definition in myModel - property will be added & edited
+        // no definition in myModel - property will be displayed & edited
         undefinedInModel: { type:'text', label: 'Undefined in Model' }  
       }
   }),

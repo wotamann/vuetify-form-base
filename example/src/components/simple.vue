@@ -54,20 +54,21 @@ export default {
       name: 'Base',
       creditcard: '12345678',
       password: 'abcdefgh',
-      file: [] // array of File objects
+      file: [], // array of File objects
     },     
     /*
       SCHEMA
       Order of Props in Schema defines Order of Controls in Form 
       Most controls are based on vuetify and therefore the properties of these controls can be used in 
-      schema:{ type:'text', hint:'myHint', ... } maps to <v-text-fields> -> https://vuetifyjs.com/en/components/text-fields/   
+      
+      schema:{ type:'text', hint:'myHint', prependIcon:'print'... } 
+      maps to <v-text-fields hint="myHint" prepend-icon="print" > 
+      -> https://vuetifyjs.com/en/components/text-fields/   
     */
-    mySchema: {
-      // name:'text' // shorthand definition 
+   mySchema: { 
       name: {   
         type: 'text', 
         label:'name',
-        drag:true 
       },     
       password: { 
         type: 'password',

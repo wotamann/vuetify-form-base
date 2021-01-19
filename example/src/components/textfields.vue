@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h4>Textfields Extension for native HTML-Input Type-Attribute</h4>
+    <h4>Textfields Extension for native HTML-Input Type</h4>
       <!-- 
         1) Most controls are based on vuetify and therefore 
           the properties of these controls can be used 
@@ -28,6 +28,7 @@
           :schema="mySchema"
           :col="{ cols:12, sm:6, md:4 }"
           @input="log"
+          @click="log"
         />
       </v-form>
     <!-- Stuff  -->    
@@ -74,7 +75,7 @@ export default {
         range:{ 
           type:'text', 
           ext:'range', 
-          label: 'Range:' + this.myModel.range,    // computed schema updates with range value
+          label: 'Range:' + this.myModel.range,    // this works only with computed schema 
         },        
         color:{ 
           type:'text', 
