@@ -1,15 +1,13 @@
 <template>
   <v-row
-    :id="ref"
+    :id="id"
     v-bind="getRow"
     v-resize.quiet="onResize"
   >   
     <!-- FORM-BASE TOP SLOT -->
-    <slot :name="getFormTopSlot()"/>  
-
+    <slot :name="getFormTopSlot()" :id= "id"/>
     <!-- main loop over components/controls -->
     <template v-for="(obj, index) in flatCombinedArraySorted">
-      
       <!-- Tooltip Wrapper -->
       <v-tooltip
         :key="index"
@@ -20,28 +18,49 @@
           <v-col
             v-show="!obj.schema.hidden"
             :key="index"
-            v-bind="getGridAttributes(obj)"
-            v-intersect="(entries, observer) => onIntersect(entries, observer, obj)"
-            v-touch="{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"
-            :class="getClassName(obj)"
-            :draggable="obj.schema.drag" 
-            @mouseenter="onEvent($event, obj)"
-            @mouseleave="onEvent($event, obj)"
+            v-bind= "getGridAttributes(obj)"
+            v-intersect= "(entries, observer) => onIntersect(entries, observer, obj)"
+            v-touch= "{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"
+            v-click-outside= "(event) => onClickOutside(event, obj)"
+            :class ="getClassName(obj)"
+            :draggable ="obj.schema.drag" 
+            @mouseenter ="onEvent($event, obj)"
+            @mouseleave ="onEvent($event, obj)"
 
             v-on="on"
             @dragstart="dragstart($event, obj)"
             @dragover="dragover($event, obj)"
             @drop="drop($event, obj)"
           >      
-
             <!-- slot on top of type  -> <div slot="slot-bottom-type-[propertyName]"> -->
-            <slot :name="getTypeTopSlot(obj)" :obj= "obj"/>
+            <slot :name="getTypeTopSlot(obj)" v-bind= "{ obj, index, id }"/>
             <!-- slot on top of key  -> <v-btn slot="slot-bottom-key-[propertyName]"> -->
-            <slot :name="getKeyTopSlot(obj)" :obj= "obj"/>          
+            <slot :name="getKeyTopSlot(obj)" v-bind= "{ obj, index, id }"/>          
             <!-- slot replaces complete item of defined TYPE -> <v-btn slot="slot-item-type-[propertyName]">-->
-            <slot :name="getTypeItemSlot(obj)" :obj= "obj">
+            <slot :name="getTypeItemSlot(obj)" v-bind= "{ obj, index, id }">
               <!-- slot replaces complete item of defined KEY -> <div slot="slot-item-key-[propertyName]">-->
-              <slot :name="getKeyItemSlot(obj)" :obj= "obj" >
+              <slot :name="getKeyItemSlot(obj)" v-bind= "{ obj, index, id }">
+                 
+                  <!-- <div class="caption">
+                    OBJ:{{obj}}
+                    <br>
+                    FORM:{{getFormTopSlot()}}
+                    <br>
+                    INJECT:{{getKeyInjectSlot(obj)}}
+                    <br>
+                    ARRAY:{{getArrayItemSlot(obj)}}
+                    <br>
+                    TYPE:{{getTypeItemSlot(obj)}}
+                    <br>
+                    KEY:{{getKeyItemSlot(obj)}}
+                    <br>
+                    CLASS:{{getClassName(obj)}}
+                    <br>
+                    Slots: {{getInjectedScopedSlots(id, obj)}}
+                    <br>
+                    VAL:{{setValue(obj)}}
+                  </div> -->
+
               <!-- RADIO -->
                 <v-radio-group
                   v-if="obj.schema.type === 'radio'"
@@ -50,12 +69,13 @@
                   @change="onInput($event, obj)"
                 >
                   <v-radio
-                    v-for="(o,idx) in obj.schema.options"
+                    v-for="(option, idx) in obj.schema.options"
                     :key="idx"
-                    v-bind="bindSchema(obj)"
-                    :label="sanitizeOptions(o).label"
-                    :value="sanitizeOptions(o).value"
-                  />
+                    v-bind="bindOptions(option)"
+                  >
+                    <!-- component doesn't work with #[s]="slotData" " -->
+                    <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name= "getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index, idx, option }"/></template>                    
+                  </v-radio>
                 </v-radio-group>
               <!-- END RADIO -->
 
@@ -76,7 +96,7 @@
                     />
                     <!-- SLOTS append|prepend|message for picker not avilable, try custom component -->
                   </template>
-                  <v-input
+                  <component
                     :is="mapTypeToComponent( obj.schema.type )" 
                     v-bind="bindSchema(obj)"
                     :type="checkInternType(obj)"
@@ -99,10 +119,8 @@
                     v-bind="bindSchema(obj)"
                     :value="setValue(obj)"
                   >
-                    <slot
-                      :name="getKeyArraySlot(obj)"
-                      :item="item"
-                    >
+                    <slot :name="getArrayTopSlot(obj)" v-bind= "{ obj, id, index, idx, item}"/>
+                    <slot :name="getArrayItemSlot(obj)" v-bind= "{ obj, id, index, idx, item}">
                       <v-form-base
                         :id="`${id}-${obj.key}-${idx}`"
                         :model="item"
@@ -110,21 +128,27 @@
                         :row="getRowGroupOrArray(obj)"
                         :col="getColGroupOrArray(obj)"
                         :class="`${id}-${obj.key}`"
-                      />
+                        v-on="$listeners"
+                      >
+                        <!-- Based on https://gist.github.com/loilo/73c55ed04917ecf5d682ec70a2a1b8e2 -->
+                        <template v-for="(_, name) in $scopedSlots" #[name]="slotData"><slot :name="name" v-bind= "{ id, obj, index, idx, item, ...slotData}" /></template>                        
+                      </v-form-base>
                     </slot>
+                    <slot :name="getArrayBottomSlot(obj)" v-bind= "{ obj, id, index, idx, item}"/>
                   </div>
                 </template>
               <!-- END ARRAY -->
 
-              <!-- GROUP -->
-                <template v-else-if="obj.schema.type === 'group'">
-                  <div 
-                    v-bind="bindSchema(obj)" 
+              <!-- GROUP | WRAP-->
+                <template v-else-if="/(wrap|group)/.test(obj.schema.type)">
+                  <component
+                    :is="checkInternGroupType(obj)"
+                    v-bind="bindSchema(obj)"
                     @click="onEvent($event, obj)"
                   >
-                    <slot :name="getKeyLabelSlot(obj)" :obj= "obj">
-                      <span v-html="obj.schema.label" />
-                    </slot>
+                    <v-card-title v-if="obj.schema.title">{{obj.schema.title}}</v-card-title>
+                    <v-card-subtitle v-if="obj.schema.subtitle">{{obj.schema.subtitle}}</v-card-subtitle>
+
                     <v-form-base
                       :id="`${id}-${obj.key}`"
                       :model="setValue(obj)"
@@ -132,31 +156,15 @@
                       :row="getRowGroupOrArray(obj)"
                       :col="getColGroupOrArray(obj)"
                       :class="`${id}-${obj.key}`"
-                    />
-                </div>
+                      v-on="$listeners"
+                    >
+                      <!-- Based on https://gist.github.com/loilo/73c55ed04917ecf5d682ec70a2a1b8e2 -->
+                      <template v-for="(_, name) in $scopedSlots" #[name]="slotData"><slot :name="name" v-bind= "{ id, obj, index,  ...slotData}" /></template>  
+                    
+                    </v-form-base>
+                  </component>
                 </template>
-              <!-- END GROUP -->
-                
-              <!-- WRAP -->
-                <template v-else-if="obj.schema.type === 'wrap'">
-                  <div
-                    v-bind="bindSchema(obj)" 
-                    @click="onEvent($event, obj)"
-                  >
-                  <slot :name="getKeyLabelSlot(obj)" :obj= "obj">
-                    <span v-html="obj.schema.label" />
-                  </slot>
-                    <v-form-base
-                      :id="`${id}-${obj.key}`"
-                      :model="setValueWrap(obj)"
-                      :schema="obj.schema.schema"
-                      :row="getRowGroupOrArray(obj)"
-                      :col="getColGroupOrArray(obj)"
-                      :class="`${id}-${obj.key}`"
-                    />
-                  </div>
-                </template>
-              <!-- END WRAP -->
+              <!-- END GROUP | WRAP -->
 
               <!-- TREEVIEW -->
                 <v-treeview
@@ -168,64 +176,75 @@
                   v-bind="bindSchema(obj)"
                   @update:open="onEvent({type:'click'}, obj, 'open' )"
                   @update:active="onEvent({type:'click'}, obj, 'selected' )"
-                />
+                >  
+                  <!-- works with #[s]="slotData" " -->
+                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]="slotData"><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index,  ...slotData}" /></template>
+                </v-treeview>
               <!-- END TREEVIEW -->
               
               <!-- LIST -->
                 <template
                   v-else-if="obj.schema.type === list"
                 >
-                  <slot :name="getKeyLabelSlot(obj)" :obj= "obj">
-                    <v-toolbar
-                      v-if="obj.schema.label"
-                      v-bind="bindSchema(obj)"
-                      dark
-                    >
-                      <v-toolbar-title>{{ obj.schema.label }}</v-toolbar-title>
-                    </v-toolbar>
-                  </slot>
                   <v-list>
+                    <slot :name="getKeyInjectSlot(obj, 'label')" v-bind= "{ id, obj, index }" >
+                      <v-toolbar 
+                        v-if="obj.schema.label"
+                        v-bind="bindSchema(obj)"
+                        dark
+                      >
+                        <v-toolbar-title>{{ obj.schema.label }}</v-toolbar-title>
+                      </v-toolbar>
+                    </slot>
                     <v-list-item-group
                       v-model="obj.schema.model"
                       v-bind="bindSchema(obj)"
                       light
-                    >
-                      <v-list-item
-                        v-for="(item, idx) in setValue(obj)"
-                        :key="idx"
-                        @click="onEvent($event, obj, list )"
-                      >
-                        <v-list-item-icon>
-                          <v-icon v-text="obj.schema.icon" />
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                          <v-list-item-title v-text="obj.schema.item ? item[obj.schema.item] : item" />
-                        </v-list-item-content>
-                      </v-list-item>
+                    > 
+                      <template v-for="(item, idx) in setValue(obj)" >
+                        <v-list-item
+                          :key="idx"
+                          @click="onEvent($event, obj, list )"
+                        >
+                        <slot :name="getArrayItemSlot(obj)" v-bind= "{ obj, id, index, idx, item}">
+                            <v-list-item-icon>
+                              <v-icon v-text="obj.schema.icon" />
+                            </v-list-item-icon>
+                            <v-list-item-content>
+                              <v-list-item-title v-text="obj.schema.item ? item[obj.schema.item] : item" />
+                            </v-list-item-content>
+                        </slot>
+                        </v-list-item>
+                      </template>
                     </v-list-item-group>
                   </v-list>
                 </template>
               <!-- END LIST -->
               
               <!-- CHECKBOX | SWITCH -->
-                <div
-                  :is="mapTypeToComponent(obj.schema.type)"
+                <component
                   v-else-if="/(switch|checkbox)/.test(obj.schema.type)"
+                  :is="mapTypeToComponent(obj.schema.type)"
                   :input-value="setValue(obj)"
                   v-bind="bindSchema(obj)"
                   @change="onInput($event, obj)"
-                />
+                >
+                  <!-- component doesn't work with #[s]="slotData" " -->
+                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index }"/></template>
+                </component>
               <!-- END CHECKBOX | SWITCH -->
 
               <!-- FILE -->
                 <v-file-input
                   v-else-if="obj.schema.type === 'file' "
-                  :value="setValue(obj)"
                   v-bind="bindSchema(obj)"
+                  :value="setValue(obj)"
                   @focus="onEvent($event, obj)"
                   @blur="onEvent($event, obj)"
                   @change="onInput($event, obj)"
-                />
+                > 
+                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]="scopeData"><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index, ...scopeData}" /></template>
+                </v-file-input>                
               <!-- END FILE -->
 
               <!-- ICON -->
@@ -242,7 +261,11 @@
                   v-else-if="obj.schema.type === 'slider'"
                   v-bind="bindSchema(obj)"
                   @input="onInput($event, obj)"
-                />
+                >
+                  <!-- some component works with #[s]="slotData"  some doesn't work with slot data ie: 'label'  / but 'thumb-label' works only with scopeData -->
+                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index }" /></template>
+                  <!-- <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]="scopeData"><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index, ...scopeData}" /></template> -->
+                </v-slider>
               <!-- END SLIDER -->
 
               <!-- IMG -->
@@ -251,27 +274,29 @@
                   :src="getImageSource(obj)"
                   v-bind="bindSchema(obj)"
                   @click="onEvent($event, obj)"
-                />
+                >
+                  <!-- component doesn't work with #[s]="slotData" " -->
+                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index }"/></template>
+                </v-img>
               <!-- END IMG -->
                 
               <!-- BTN-TOGGLE -->
                 <v-btn-toggle
                   v-else-if="obj.schema.type === 'btn-toggle'"
                   v-bind="bindSchema(obj)"
-                  color=""
                   :value="setValue(obj)"
                   @change="onInput($event, obj)"
                 >
                   <v-btn
-                    v-for="(b, idx) in obj.schema.options"
+                    v-for="(option,idx) in obj.schema.options"
                     :key="idx"
-                    v-bind="bindSchema(obj)"
-                    :value="sanitizeOptions(b).value"
+                    v-bind="bindOptions(option)"
+                    :icon="option.icon ? true :false"
                   >
                     <v-icon :dark="obj.schema.dark">
-                      {{ sanitizeOptions(b).icon }}
+                      {{ bindOptions(option).icon }}
                     </v-icon>
-                    {{ sanitizeOptions(b).label }}
+                    {{ bindOptions(option).label }}
                   </v-btn>
                 </v-btn-toggle>
               <!-- END BTN-TOGGLE -->
@@ -308,7 +333,7 @@
               <!-- END BTN -->
               
               <!-- MASK  -->
-                <v-input
+                <component
                   :is="mapTypeToComponent(obj.schema.type)"
                   v-else-if="obj.schema.mask" 
                   v-bind="bindSchema(obj)"
@@ -317,8 +342,8 @@
                   :value="setValue(obj)"
                   :obj="obj"
                   :[searchInputSync(obj)].sync="obj.schema.searchInput"                     
-                  @focus="onEvent($event, obj)"
-                  @blur="onEvent($event, obj)"                  
+                  @focus= "onEvent($event, obj)"
+                  @blur= "onEvent($event, obj)"                  
                   @[suspendClickAppend(obj)]="onEvent($event, obj, append)"
                   @click:append-outer="onEvent($event, obj, appendOuter)"
                   @click:prepend="onEvent($event, obj, prepend )"
@@ -329,46 +354,42 @@
                   @click:second="onEvent({type:'click'}, obj, second)"
                   @input="onInput($event, obj)"
                 >
-                  <template #[obj.schema.slot]>
-                    <slot :name="getKeySlot(obj)" :obj="obj"/>
-                  </template>
-
-                </v-input> 
+                  <!-- component doesn't work with #[s]="slotData" " -->
+                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name="getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index }"/></template>
+                </component> 
               <!-- END MASK -->
 
               <!-- DEFAULT all other Types -> typeToComponent -->
-                <v-input
-                  :is="mapTypeToComponent(obj.schema.type)"
+                <component
                   v-else
+                  :is="mapTypeToComponent(obj.schema.type)"
                   v-bind="bindSchema(obj)"
                   :type="checkExtensionType(obj)"                  
                   :value="setValue(obj)"
                   :obj="obj"
                   :[searchInputSync(obj)].sync="obj.schema.searchInput"                     
-                  @focus="onEvent($event, obj)"
-                  @blur="onEvent($event, obj)"                  
+                  @focus= "onEvent($event, obj)"
+                  @blur= "onEvent($event, obj)"                  
                   @[suspendClickAppend(obj)]="onEvent($event, obj, append)"
-                  @click:append-outer="onEvent($event, obj, appendOuter)"
-                  @click:prepend="onEvent($event, obj, prepend )"
-                  @click:prepend-inner="onEvent($event, obj, prependInner)"
-                  @click:clear="onEvent($event, obj, clear )"
-                  @click:hour="onEvent({type:'click'}, obj, hour)"
-                  @click:minute="onEvent({type:'click'}, obj, minute)"
-                  @click:second="onEvent({type:'click'}, obj, second)"
-                  @input="onInput($event, obj)"
+                  @click:append-outer= "onEvent($event, obj, appendOuter)"
+                  @click:prepend= "onEvent($event, obj, prepend )"
+                  @click:prepend-inner= "onEvent($event, obj, prependInner)"
+                  @click:clear= "onEvent($event, obj, clear )"
+                  @click:hour= "onEvent({type:'click'}, obj, hour)"
+                  @click:minute= "onEvent({type:'click'}, obj, minute)"
+                  @click:second= "onEvent({type:'click'}, obj, second)"
+                  @input= "onInput($event, obj)"
                 >
-                  <template #[obj.schema.slot]>
-                    <slot :name="getKeySlot(obj)" :obj="obj"/>
-                  </template>
-
-                </v-input> 
+                  <!-- component doesn't work with #[s]="slotData" " -->
+                  <template v-for="s in getInjectedScopedSlots(id, obj)" #[s]><slot :name= "getKeyInjectSlot(obj, s)" v-bind= "{ id, obj, index }"/></template>
+                </component> 
               <!-- END DEFAULT -->     
               </slot>
             </slot>
 
             <!-- slot at bottom of item  -> <div slot="slot-bottom-key-[deep-nested-key-name]"> -->
-            <slot :name="getTypeBottomSlot(obj)" :obj="obj"/>
-            <slot :name="getKeyBottomSlot(obj)" :obj="obj"/>
+            <slot :name="getTypeBottomSlot(obj)" v-bind= "{ obj, index, id }"/>
+            <slot :name="getKeyBottomSlot(obj)" v-bind= "{ obj, index, id }"/>
           </v-col>
 
           <!-- schema.spacer:true - push next item to the right and fill space between items -->
@@ -377,34 +398,41 @@
             :key="`s-${index}`"
           />
         </template>
-        <!-- slot for TOOLTIP - inspect css.vue for details -->
-        <slot name="slot-tooltip" :obj="obj">
+        <!-- slot for Tooltip or use shorthand schema.tooltip:'myTooltip' | any tooltip activated by schema:{ key:{ tooltip:'myTooltip', ...} -->
+        <slot :name="getTooltipSlot(obj)" v-bind= "{ obj, index, id }" >
           <span>{{getShorthandTooltipLabel(obj.schema.tooltip)}}</span>
         </slot>
+        <slot :name="getKeyTooltipSlot(obj)" v-bind= "{ obj, index, id }" />
       </v-tooltip>
     </template>
     <!-- FORM-BASE BOTTOM SLOT -->
-    <slot :name="getFormBottomSlot()"/>   
+    <slot :name="getFormBottomSlot()" :id= "id"/>   
   </v-row>
 </template>
 
 <script>
-// import & declarations
+// Import
   import Vue from 'vue'
   import { get, isPlainObject, isFunction, isString, isNumber, isEmpty, orderBy, delay } from 'lodash'
-  // Info Mask https://github.com/probil/v-mask  
   import VueMask from 'v-mask'
   Vue.use(VueMask, {
     placeholders: {
+      // Info Mask https://github.com/probil/v-mask  
       // '#': null,       // passing `null` removes default placeholder, so `#` is treated as character
       // D: /\d/,         // define new placeholder
-      // Я: /[\wа-яА-Я]/, // cyrillic letter as a placeholder
     }
   })
-
+//
+// Declaration
   const typeToComponent = {
     // maps schema.type to prop 'type' in v-text-field  - https://www.wufoo.com/html5/
     text: 'v-text-field',
+    password: 'v-text-field',
+    email: 'v-text-field',
+    tel: 'v-text-field',
+    url: 'v-text-field',
+    search: 'v-text-field',
+    number: 'v-text-field', 
     /*
       { type:'text, ext:'typeOfTextField', ...} 
       For native <INPUT> type use alternative schema prop ext  -> schema:{ type:'text, ext:'date', ...} 
@@ -415,22 +443,18 @@
       time: 'v-text-field',    //  { type:'text, ext:'time', ...}      
       color: 'v-text-field',   //  { type:'text, ext:'color', ...}      
     */
-    password: 'v-text-field',
-    email: 'v-text-field',
-    tel: 'v-text-field',
-    url: 'v-text-field',
-    search: 'v-text-field',
-    number: 'v-text-field', 
-    
-    // INFO: 3 Types of PICKER DATE / TIME / COLOR
-    // Date-Native Input    - schema:{ type:'text, ext:'date', ...}       
-    // Date-Picker          - schema:{ type:'date', ...}         
-    // Date-Picker-Textmenu     - schema:{ type:'date', ext:'text'...}
-
-    // map schema.type to vuetify-control (vuetify 2.0)
+   
     date: 'v-date-picker',   
     time: 'v-time-picker',
     color: 'v-color-picker',
+    /*
+      INFO: 3 Types of PICKER DATE / TIME / COLOR
+      Date-Native Input    - schema:{ type:'text, ext:'date', ...}       
+      Date-Picker          - schema:{ type:'date', ...}         
+      Date-Picker-Textmenu     - schema:{ type:'date', ext:'text'...}
+    */
+   
+    // map schema.type to vuetify-control (vuetify 2.0)
     img: 'v-img',
     textarea: 'v-textarea',
     range: 'v-slider',
@@ -470,7 +494,6 @@
     */
     
     }
-// Declaration
   const orderDirection = 'ASC'
   const pathDelimiter = '.'
   const classKeyDelimiter = '-'
@@ -483,22 +506,31 @@
   const watch = 'focus|input|click|blur'    // event watch collects events 'focus|input|click|blur'
   const display = 'resize|swipe|intersect'  // event watch collects events 'resize|swipe|intersect'
 
+
+  const topAppendix = 'top'
+  const bottomAppendix = 'bottom'
+  const slotAppendix = 'slot'
+  const tooltipAppendix = 'tooltip'
+  const injectAppendix = 'inject'
   const itemClassAppendix = 'item'
   const typeClassAppendix = 'type'
   const keyClassAppendix = 'key'
+  const arrayClassAppendix = 'array'
   const propertyClassAppendix = 'prop'
 
-  const slotAppendix = 'slot'
-  const arraySlotAppendix = 'slot-array'
-  const topSlotAppendix = 'slot-top'
-  const itemSlotAppendix = 'slot-item'
-  const labelSlotAppendix = 'slot-label'
-  const bottomSlotAppendix = 'slot-bottom'
-
+  const injectSlotAppendix = `${slotAppendix}-${injectAppendix}`
+  const arraySlotAppendix = `${slotAppendix}-${arrayClassAppendix}`
+  const topSlotAppendix = `${slotAppendix}-${topAppendix}`
+  const itemSlotAppendix = `${slotAppendix}-${itemClassAppendix}`
+  const bottomSlotAppendix = `${slotAppendix}-${bottomAppendix}`
+  const tooltipSlotAppendix = `${slotAppendix}-${tooltipAppendix}`
+  
   const clear = 'clear'
   const button = 'button'
   const treeview = 'treeview'
   const list = 'list'
+  const focus = 'focus'
+  const blur = 'blur'
   const append = 'append'
   const appendOuter = 'append-outer'
   const prepend = 'prepend'
@@ -525,12 +557,17 @@
   // Menu triggered DateTimePicker Default 
   const defaultPickerSchemaText = { type:'text', readonly:true }
   const defaultPickerSchemaMenu = { closeOnContentClick:false, transition:"scale-transition", nudgeRight:32, maxWidth:'290px', minWidth:'290px' }
+  // type wrap or group - if no typeInt defined take default  
+  const defaultInternGroupType = 'v-card' 
 //
 export default {
-  name: 'VFormBase',
-  
+  name: 'VFormBase',  
   props: {   
     id: {
+      type: String,
+      default: defaultID
+    },
+    rootId: {
       type: String,
       default: defaultID
     },
@@ -549,21 +586,22 @@ export default {
     },    
     model: {
       type: [Object, Array],
-      default: () => null
+      default: () => ({})
     },    
     schema: {
       type: [Object, Array],
       default: () => ({})
-    }   
+    }
   },
   data () {
     return {  
-      m: 'v-mask',
       flatCombinedArray: [],
       clear,
       button,
       treeview,
       list,
+      focus,
+      blur,
       append,
       appendOuter,
       prepend,
@@ -573,15 +611,12 @@ export default {
       second
     }
   },
-  computed: {    
+  computed: {      
     valueIntern() { 
       // use <formbase :model="myData" />  ->  legacy code <formbase :value="myData" />  
       let model = this.model || this.value 
       this.updateArrayFromState(model, this.schema)
       return model 
-    },
-    ref () {
-      return this.id
     },
     parent () {
       let p = this
@@ -593,12 +628,12 @@ export default {
       return p
     },
     index () {
-      const m = this.ref && this.ref.match(/\d+/g)
-      return m ? m.map(Number) : []
+      const m = this.id && this.id.match(/\d+/g)
+      return m ? m.map(Number) : null
     },
     getRow(){
       return this.row || rowDefault
-    },   
+    },     
     flatCombinedArraySorted () {
       return orderBy(this.flatCombinedArray, ['schema.sort'], [orderDirection])
     },
@@ -617,7 +652,7 @@ export default {
       this.schema = newSchema 
     }
   }, 
-  methods: {
+  methods: {    
     // MAP TYPE
     mapTypeToComponent(type) {
       // merge global registered components into typeToComponent Object
@@ -630,11 +665,15 @@ export default {
     isDateTimeColorTypeAndExtensionText(obj){
       return isPicker.includes(obj.schema.type) && obj.schema.ext === 'text' 
     },
-    // CHECK FOR DATE, TIME OR COLOR EXT
+    // CHECK FOR EXT: DATE, TIME OR COLOR
     isDateTimeColorExtension (obj){
       return isPicker.includes(obj.schema.ext)
     },
-    // BIND SCHEMA FN
+    // BIND SCHEMA TEXT OPTIONS
+    bindOptions (b) {
+      // schema.options in RADIO/BUTTON 
+      return isString(b) ? { value: b, label: b } : b
+    },
     bindSchemaText(obj ) {           
       return { ...defaultPickerSchemaText, ...obj.schema.text}
     },          
@@ -665,6 +704,11 @@ export default {
       // If vuetify component needs a 'type' prop for working  - ie. datepicker uses type:'month'
       // { type:'date', ext:'text', typeInt:'month' ...} -> use v-date-picker menu with intern Type 'month'
       return obj.schema.typeInt || obj.schema.type
+    },
+    checkInternGroupType(obj) {
+      //  in type 'wrap|group' you can define with typeInt: a component as group - schema: { group1: { type:'wrap', typeInt:'v-card', ... } ...}
+      const typeInt = obj.schema.typeInt || defaultInternGroupType
+      return typeInt.startsWith('v-') ? typeInt : `v-${typeInt}` 
     },
   // GET ITERATION KEY FOR TYPE ARRAY
     getKeyForArray(id, obj, item, index){
@@ -710,53 +754,68 @@ export default {
       return isString(schemaTooltip) ? schemaTooltip : schemaTooltip && schemaTooltip.label
     },
   //
-  // FORM SLOT
+  // FORM SLOTS
     getFormTopSlot () {
-      return this.id + '-top'
+      // Slot for Top Line in Formbase -> 'slot-formbase-top'
+      return `${topSlotAppendix}-${this.id}`
     },
     getFormBottomSlot () {
-      return this.id + '-bottom'
+      // Slot for Bottom Line in Formbase -> 'slot-formbase-bottom'
+      return `${bottomSlotAppendix}-${this.id}`
     },
-  //
-  // KEY 
-    getKeySlot(obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, slotAppendix + '-key')
-    },
-    getKeyArraySlot (obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-ARRAY-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, arraySlotAppendix + '-key')
+  //  
+  // KEY SLOTS
+    getKeyInjectSlot(obj, inject) {
+      // get slot starting with 'slot-inject' and inject verb 'thumb-label'   -> 'slot-inject-thumb-label-key-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${injectSlotAppendix}-${inject}-${keyClassAppendix}`) 
+    },        
+    getKeyTopSlot (obj) {
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-top'  -> 'slot-top-key-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${topSlotAppendix}-${keyClassAppendix}`)
     },
     getKeyItemSlot (obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, itemSlotAppendix + '-key')
-    },
-    getKeyLabelSlot (obj) {
-      // used from GROUP, WRAP
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-label'  -> 'slot-label-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, labelSlotAppendix + '-key')
-    },
-    getKeyTopSlot (obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-top'  -> 'slot-top-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, topSlotAppendix + '-key')
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${itemSlotAppendix}-${keyClassAppendix}`)
     },
     getKeyBottomSlot (obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-bottom-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, bottomSlotAppendix + '-key')
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-bottom-key-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${bottomSlotAppendix}-${keyClassAppendix}`)
+    },
+    getKeyTooltipSlot (obj) {
+      // matches Key specific Tooltip | name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-tooltip-key-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${tooltipSlotAppendix}-${keyClassAppendix}`)
+    },
+    getTooltipSlot (obj) {
+      // default tooltip slot matches all keys
+      return `${tooltipSlotAppendix}`
+    },
+  //
+  // ARRAY SLOTS  
+    getArrayTopSlot (obj) {
+      // slot each item from array  -> 'slot-top-array-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${topSlotAppendix}-${arrayClassAppendix}`)
+    },
+    getArrayItemSlot (obj) {
+      // slot each item from array  -> 'slot-top-array-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${itemSlotAppendix}-${arrayClassAppendix}`)
+    },
+    getArrayBottomSlot (obj) {
+      // slot each item from array   -> 'slot-bottom-array-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, `${bottomSlotAppendix}-${arrayClassAppendix}`)
     },
   //
   // TYPE SLOTS
-    getTypeItemSlot (obj) {
-      // get Type specific slot name  -> 'slot-item-type-radio'
-      return this.getTypeClassNameWithAppendix(obj, itemSlotAppendix + '-type')
-    },
     getTypeTopSlot (obj) {
       // get Type specific slot name  -> 'slot-top-type-radio'
-      return this.getTypeClassNameWithAppendix(obj, topSlotAppendix + '-type')
+      return this.getTypeClassNameWithAppendix(obj, `${topSlotAppendix}-${typeClassAppendix}`)
+    },
+    getTypeItemSlot (obj) {
+      // get Type specific slot name  -> 'slot-item-type-radio'
+      return this.getTypeClassNameWithAppendix(obj, `${itemSlotAppendix}-${typeClassAppendix}`)
     },
     getTypeBottomSlot (obj) {
       // get Type specific slot name  -> 'slot-bottom-type-radio'
-      return this.getTypeClassNameWithAppendix(obj, bottomSlotAppendix + '-type')
+      return this.getTypeClassNameWithAppendix(obj, `${bottomSlotAppendix}-${typeClassAppendix}`)
     },
   //
   // CLASS Names
@@ -769,14 +828,16 @@ export default {
     },
     getKeyClassNameWithAppendix (obj, appendix) {
       // get KEY specific name by app-/prepending 'appendix-' and replacing '.' with '-' in nested key path  -> 'top-slot-address-city'
-      return `${appendix ? appendix + classKeyDelimiter : ''}${obj.key.replace(/\./g, '-')}`
+      return `${appendix ? appendix + classKeyDelimiter : ''}${this.id ? this.id + classKeyDelimiter: ''}${obj.key.replace(/\./g, '-')}`
+      // return `${appendix ? appendix + classKeyDelimiter : ''}${obj.key.replace(/\./g, '-')}`
     },
     getKeyClassName (obj) {
       return this.getKeyClassNameWithAppendix(obj, keyClassAppendix)
     },
     getTypeClassNameWithAppendix (obj, appendix) {
       // get TYPE specific class name by prepending '-type' -> 'type-checkbox'
-      return `${appendix + classKeyDelimiter}${obj.schema.type}`
+      return `${appendix ? appendix + classKeyDelimiter : ''}${this.id ? this.id + classKeyDelimiter: ''}${obj.schema.type}`
+      // return `${appendix + classKeyDelimiter}${obj.schema.type}`
     },
     getTypeClassName (obj) {
       return this.getTypeClassNameWithAppendix(obj, typeClassAppendix)
@@ -842,10 +903,15 @@ export default {
       return obj.schema.col || this.col || colDefault
     },   
   //
-  // SANITIZE BUTTON - Toggle sanitize item from array schema.options
-    sanitizeOptions (b) {
-      return isString(b) ? { value: b, label: b } : b
-    },
+  // SANITIZE SLOTS
+    getInjectedScopedSlots(id, obj){
+      // <template #slot-inject-thumb-label-key-formbase-path-to-mykey />
+      // extract the verb 'thumb-label' from Slots starting with 'slot-inject' and matching [component-id] and [key]
+      const rx = new RegExp(`${injectSlotAppendix}-(.*?)-${keyClassAppendix}`)        
+      return Object.keys(this.$scopedSlots)
+        .filter( s => (s.includes(`${id}${classKeyDelimiter}${obj.key.replace(/\./g, '-')}`) && s.includes(injectSlotAppendix)) )
+        .map( i => i.match(rx)[1])
+    },   
   //
   // Map Values coming FROM Control, TO Control or DROP on Control
     toCtrl (params) {
@@ -904,14 +970,12 @@ export default {
     },    
   //
   // Set Value
-    setValue (obj) {
-      // Use 'schema.toCtrl' Function for setting a modified Value  
-      return this.toCtrl({ value: obj.value, obj, data: this.storeStateData, schema: this.storeStateSchema })
-    },
-    setValueWrap (obj) {
-      // Use 'schema.toCtrl' Function for setting a modified Value  
-      return this.toCtrl({ value: this.storeStateData, obj, data: this.storeStateData, schema: this.storeStateSchema })
-    },
+    setValue (obj, type ) {
+      // Use 'schema.toCtrl' Function for setting a modified Value   
+      return obj.schema.type === 'wrap' ? 
+        this.toCtrl({ value: this.storeStateData, obj, data: this.storeStateData, schema: this.storeStateSchema }) :
+        this.toCtrl({ value: obj.value, obj, data: this.storeStateData, schema: this.storeStateSchema })
+    },   
   //
   // EVENTS Get Value from Input & other Events
     onInput (value, obj, type = 'input') {
@@ -927,14 +991,15 @@ export default {
 
       const emitObj = {
         on: type,
-        id: this.ref,
+        id: this.id,
         index: this.index, 
         params: { index: this.index, lastValue:obj.value },
         key: obj.key,
         value,
         obj,
         data: this.storeStateData,
-        schema: this.storeStateSchema
+        schema: this.storeStateSchema,
+        parent:this.parent
       }
       this.emitValue(type, emitObj)
       return emitObj
@@ -950,7 +1015,7 @@ export default {
       
       const emitObj = {
         on: event.type,
-        id: this.ref,
+        id: this.id,
         index,
         params: { text, tag, model, open, index },
         key: obj.key,
@@ -966,30 +1031,57 @@ export default {
 
       return emitObj
     },
+    onClickOutside (event, obj) {
+      if (!obj.schema || !obj.schema.clickOutside) return
+      if (isFunction(obj.schema.clickOutside) ) return obj.schema.clickOutside(obj, event) 
+      this.emitValue('clickOutside', { on: 'clickOutside', id: this.id, key: obj.key, value: obj.value, obj, params: { x: event.clientX, y: event.clientY }, event, data: this.storeStateData, schema: this.storeStateSchema })
+    },
     onIntersect (entries, observer, obj) {
       const isIntersecting = entries[0].isIntersecting
       const index = this.index
-      this.emitValue('intersect', { on: 'intersect', id: this.ref, index, key: obj.key, value: obj.value, obj, params: { isIntersecting, entries, observer }, data: this.storeStateData, schema: this.storeStateSchema })
+      this.emitValue('intersect', { on: 'intersect', id: this.id, index, key: obj.key, value: obj.value, obj, params: { isIntersecting, entries, observer }, data: this.storeStateData, schema: this.storeStateSchema })
     },
     onSwipe (tag, obj) {
-      this.emitValue('swipe', { on: 'swipe', id: this.ref, key: obj.key, value: obj.value, obj, params: { tag }, data: this.storeStateData, schema: this.storeStateSchema })
+      this.emitValue('swipe', { on: 'swipe', id: this.id, key: obj.key, value: obj.value, obj, params: { tag }, data: this.storeStateData, schema: this.storeStateSchema })
     },
     onResize (event) {
-      this.emitValue('resize', { on: 'resize', id: this.ref, params: { x: window.innerWidth, y: window.innerHeight }, event, data: this.storeStateData, schema: this.storeStateSchema })
+      this.emitValue('resize', { on: 'resize', id: this.id, params: { x: window.innerWidth, y: window.innerHeight }, event, data: this.storeStateData, schema: this.storeStateSchema })
     },
   //
-  // Emit Event Base
-    emitValue (emit, val) {
-     
-      this.parent.$emit(this.getEventName(emit), val) // listen to specific event only
-      if (change.indexOf(emit) > -1) this.parent.$emit(this.getEventName('change'), val)    // listen to 'input|click'
-      if (watch.indexOf(emit) > -1) this.parent.$emit(this.getEventName('watch'), val)      // listen to 'focus|input|click|blur'
-      if (mouse.indexOf(emit) > -1) this.parent.$emit(this.getEventName('mouse'), val)      // listen to 'mouseenter|mouseleave  '
-      if (display.indexOf(emit) > -1) this.parent.$emit(this.getEventName('display'), val)  // listen to 'resize|swipe|intersect'
-      this.parent.$emit(this.getEventName('update'), val) // listen to all events
+  // EMIT EVENT
+    emitValue(event, val) {
+            
+      let emitEvent = change.includes(event) ? 'change' : watch.includes(event) ? 'watch' : mouse.includes(event) ? 'mouse' : display.includes(event) ? 'display' : event
+
+      if (this.$listeners[`${emitEvent}:${this.id}`] ) {        
+        this.deprecateEventCustomID(emitEvent)
+        this.deprecateCombinedEvents(emitEvent, event)
+        this.$emit(`${emitEvent}:${this.id}`, val) // listen to specific event only
+      } 
+      else if (this.$listeners[`${emitEvent}`] ) {
+        this.deprecateCombinedEvents(emitEvent, event)
+        this.$emit(emitEvent, val) // listen to specific event only
+      }      
+      else if (this.$listeners[`${event}:${this.id}`] ) {
+        this.deprecateEventCustomID(event)
+        this.$emit(`${event}:${this.id}`, val) // listen to specific event only
+      }      
+      else if (this.$listeners[`${event}`]) {
+        this.$emit(event, val) // listen to specific event only
+      }      
     },
-    getEventName (eventName) {
-      return this.parent.id !== defaultID ? `${eventName}:${this.parent.id}` : eventName
+    deprecateEventCustomID(ev){
+      console.warn(`--- DEPRECATION ${ev}:${this.id}: ----------------------------------------------------------------------------`)
+      console.warn(`<v-form-base  @${ev}:${this.id}="handler" /> is deprecated use simplified version <v-form-base  @${ev}="handler" />`)
+      console.warn(`---------------------------------------------------------------------------------------------`)        
+    },
+    deprecateCombinedEvents(emitEvent, event){
+      if ( emitEvent !== event) {
+          console.warn(`--- DEPRECATION Combined Listener:  --------------------------------------------------------------------------`)
+          console.warn(`Combined Event-Listener '${emitEvent}' have been removed for better comprehensibility and simplification`)
+          console.warn(`Please use separate listener for each event like <v-form-base  @focus="handler" @input="handler" @blur="handler"/>`)
+          console.warn(`---------------------------------------------------------------------------------------------`)
+        }
     },
   //
   // PREPARE ARRAYS DATA & SCHEMA

@@ -594,6 +594,66 @@ $({ target: 'String', proto: true, forced: !correctIsRegExpLogic('includes') }, 
 
 /***/ }),
 
+/***/ "25f0":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var redefine = __webpack_require__("6eeb");
+var anObject = __webpack_require__("825a");
+var fails = __webpack_require__("d039");
+var flags = __webpack_require__("ad6d");
+
+var TO_STRING = 'toString';
+var RegExpPrototype = RegExp.prototype;
+var nativeToString = RegExpPrototype[TO_STRING];
+
+var NOT_GENERIC = fails(function () { return nativeToString.call({ source: 'a', flags: 'b' }) != '/a/b'; });
+// FF44- RegExp#toString has a wrong name
+var INCORRECT_NAME = nativeToString.name != TO_STRING;
+
+// `RegExp.prototype.toString` method
+// https://tc39.github.io/ecma262/#sec-regexp.prototype.tostring
+if (NOT_GENERIC || INCORRECT_NAME) {
+  redefine(RegExp.prototype, TO_STRING, function toString() {
+    var R = anObject(this);
+    var p = String(R.source);
+    var rf = R.flags;
+    var f = String(rf === undefined && R instanceof RegExp && !('flags' in RegExpPrototype) ? flags.call(R) : rf);
+    return '/' + p + '/' + f;
+  }, { unsafe: true });
+}
+
+
+/***/ }),
+
+/***/ "2626":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var getBuiltIn = __webpack_require__("d066");
+var definePropertyModule = __webpack_require__("9bf2");
+var wellKnownSymbol = __webpack_require__("b622");
+var DESCRIPTORS = __webpack_require__("83ab");
+
+var SPECIES = wellKnownSymbol('species');
+
+module.exports = function (CONSTRUCTOR_NAME) {
+  var Constructor = getBuiltIn(CONSTRUCTOR_NAME);
+  var defineProperty = definePropertyModule.f;
+
+  if (DESCRIPTORS && Constructor && !Constructor[SPECIES]) {
+    defineProperty(Constructor, SPECIES, {
+      configurable: true,
+      get: function () { return this; }
+    });
+  }
+};
+
+
+/***/ }),
+
 /***/ "2ca0":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -17916,6 +17976,33 @@ module.exports = fails(function () {
 
 /***/ }),
 
+/***/ "44d2":
+/***/ (function(module, exports, __webpack_require__) {
+
+var wellKnownSymbol = __webpack_require__("b622");
+var create = __webpack_require__("7c73");
+var definePropertyModule = __webpack_require__("9bf2");
+
+var UNSCOPABLES = wellKnownSymbol('unscopables');
+var ArrayPrototype = Array.prototype;
+
+// Array.prototype[@@unscopables]
+// https://tc39.github.io/ecma262/#sec-array.prototype-@@unscopables
+if (ArrayPrototype[UNSCOPABLES] == undefined) {
+  definePropertyModule.f(ArrayPrototype, UNSCOPABLES, {
+    configurable: true,
+    value: create(null)
+  });
+}
+
+// add a key to Array.prototype[@@unscopables]
+module.exports = function (key) {
+  ArrayPrototype[UNSCOPABLES][key] = true;
+};
+
+
+/***/ }),
+
 /***/ "44e7":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18017,6 +18104,97 @@ module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
   // eslint-disable-next-line no-undef
   return !String(Symbol());
 });
+
+
+/***/ }),
+
+/***/ "4d63":
+/***/ (function(module, exports, __webpack_require__) {
+
+var DESCRIPTORS = __webpack_require__("83ab");
+var global = __webpack_require__("da84");
+var isForced = __webpack_require__("94ca");
+var inheritIfRequired = __webpack_require__("7156");
+var defineProperty = __webpack_require__("9bf2").f;
+var getOwnPropertyNames = __webpack_require__("241c").f;
+var isRegExp = __webpack_require__("44e7");
+var getFlags = __webpack_require__("ad6d");
+var stickyHelpers = __webpack_require__("9f7f");
+var redefine = __webpack_require__("6eeb");
+var fails = __webpack_require__("d039");
+var setInternalState = __webpack_require__("69f3").set;
+var setSpecies = __webpack_require__("2626");
+var wellKnownSymbol = __webpack_require__("b622");
+
+var MATCH = wellKnownSymbol('match');
+var NativeRegExp = global.RegExp;
+var RegExpPrototype = NativeRegExp.prototype;
+var re1 = /a/g;
+var re2 = /a/g;
+
+// "new" should create a new object, old webkit bug
+var CORRECT_NEW = new NativeRegExp(re1) !== re1;
+
+var UNSUPPORTED_Y = stickyHelpers.UNSUPPORTED_Y;
+
+var FORCED = DESCRIPTORS && isForced('RegExp', (!CORRECT_NEW || UNSUPPORTED_Y || fails(function () {
+  re2[MATCH] = false;
+  // RegExp constructor can alter flags and IsRegExp works correct with @@match
+  return NativeRegExp(re1) != re1 || NativeRegExp(re2) == re2 || NativeRegExp(re1, 'i') != '/a/i';
+})));
+
+// `RegExp` constructor
+// https://tc39.github.io/ecma262/#sec-regexp-constructor
+if (FORCED) {
+  var RegExpWrapper = function RegExp(pattern, flags) {
+    var thisIsRegExp = this instanceof RegExpWrapper;
+    var patternIsRegExp = isRegExp(pattern);
+    var flagsAreUndefined = flags === undefined;
+    var sticky;
+
+    if (!thisIsRegExp && patternIsRegExp && pattern.constructor === RegExpWrapper && flagsAreUndefined) {
+      return pattern;
+    }
+
+    if (CORRECT_NEW) {
+      if (patternIsRegExp && !flagsAreUndefined) pattern = pattern.source;
+    } else if (pattern instanceof RegExpWrapper) {
+      if (flagsAreUndefined) flags = getFlags.call(pattern);
+      pattern = pattern.source;
+    }
+
+    if (UNSUPPORTED_Y) {
+      sticky = !!flags && flags.indexOf('y') > -1;
+      if (sticky) flags = flags.replace(/y/g, '');
+    }
+
+    var result = inheritIfRequired(
+      CORRECT_NEW ? new NativeRegExp(pattern, flags) : NativeRegExp(pattern, flags),
+      thisIsRegExp ? this : RegExpPrototype,
+      RegExpWrapper
+    );
+
+    if (UNSUPPORTED_Y && sticky) setInternalState(result, { sticky: sticky });
+
+    return result;
+  };
+  var proxy = function (key) {
+    key in RegExpWrapper || defineProperty(RegExpWrapper, key, {
+      configurable: true,
+      get: function () { return NativeRegExp[key]; },
+      set: function (it) { NativeRegExp[key] = it; }
+    });
+  };
+  var keys = getOwnPropertyNames(NativeRegExp);
+  var index = 0;
+  while (keys.length > index) proxy(keys[index++]);
+  RegExpPrototype.constructor = RegExpWrapper;
+  RegExpWrapper.prototype = RegExpPrototype;
+  redefine(global, 'RegExp', RegExpWrapper);
+}
+
+// https://tc39.github.io/ecma262/#sec-get-regexp-@@species
+setSpecies('RegExp');
 
 
 /***/ }),
@@ -19987,6 +20165,32 @@ module.exports = function (object, names) {
 
 /***/ }),
 
+/***/ "caad":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__("23e7");
+var $includes = __webpack_require__("4d64").includes;
+var addToUnscopables = __webpack_require__("44d2");
+var arrayMethodUsesToLength = __webpack_require__("ae40");
+
+var USES_TO_LENGTH = arrayMethodUsesToLength('indexOf', { ACCESSORS: true, 1: 0 });
+
+// `Array.prototype.includes` method
+// https://tc39.github.io/ecma262/#sec-array.prototype.includes
+$({ target: 'Array', proto: true, forced: !USES_TO_LENGTH }, {
+  includes: function includes(el /* , fromIndex = 0 */) {
+    return $includes(this, el, arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+
+// https://tc39.github.io/ecma262/#sec-array.prototype-@@unscopables
+addToUnscopables('includes');
+
+
+/***/ }),
+
 /***/ "cc12":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -20471,22 +20675,28 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3dbd6cf8-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/vFormBase.vue?vue&type=template&id=529fb6ea&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-row',_vm._b({directives:[{name:"resize",rawName:"v-resize.quiet",value:(_vm.onResize),expression:"onResize",modifiers:{"quiet":true}}],attrs:{"id":_vm.ref}},'v-row',_vm.getRow,false),[_vm._t(_vm.getFormTopSlot()),_vm._l((_vm.flatCombinedArraySorted),function(obj,index){return [_c('v-tooltip',_vm._b({key:index,attrs:{"disabled":!obj.schema.tooltip},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3c325f1c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/vFormBase.vue?vue&type=template&id=93b4ca02&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-row',_vm._b({directives:[{name:"resize",rawName:"v-resize.quiet",value:(_vm.onResize),expression:"onResize",modifiers:{"quiet":true}}],attrs:{"id":_vm.id}},'v-row',_vm.getRow,false),[_vm._t(_vm.getFormTopSlot(),null,{"id":_vm.id}),_vm._l((_vm.flatCombinedArraySorted),function(obj,index){return [_c('v-tooltip',_vm._b({key:index,attrs:{"disabled":!obj.schema.tooltip},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
 var on = ref.on;
-return [_c('v-col',_vm._g(_vm._b({directives:[{name:"show",rawName:"v-show",value:(!obj.schema.hidden),expression:"!obj.schema.hidden"},{name:"intersect",rawName:"v-intersect",value:(function (entries, observer) { return _vm.onIntersect(entries, observer, obj); }),expression:"(entries, observer) => onIntersect(entries, observer, obj)"},{name:"touch",rawName:"v-touch",value:({ left: function () { return _vm.onSwipe('left', obj); }, right: function () { return _vm.onSwipe('right', obj); }, up: function () { return _vm.onSwipe('up', obj); }, down: function () { return _vm.onSwipe('down', obj); } }),expression:"{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"}],key:index,class:_vm.getClassName(obj),attrs:{"draggable":obj.schema.drag},on:{"mouseenter":function($event){return _vm.onEvent($event, obj)},"mouseleave":function($event){return _vm.onEvent($event, obj)},"dragstart":function($event){return _vm.dragstart($event, obj)},"dragover":function($event){return _vm.dragover($event, obj)},"drop":function($event){return _vm.drop($event, obj)}}},'v-col',_vm.getGridAttributes(obj),false),on),[_vm._t(_vm.getTypeTopSlot(obj),null,{"obj":obj}),_vm._t(_vm.getKeyTopSlot(obj),null,{"obj":obj}),_vm._t(_vm.getTypeItemSlot(obj),[_vm._t(_vm.getKeyItemSlot(obj),[(obj.schema.type === 'radio')?_c('v-radio-group',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'v-radio-group',_vm.bindSchema(obj),false),_vm._l((obj.schema.options),function(o,idx){return _c('v-radio',_vm._b({key:idx,attrs:{"label":_vm.sanitizeOptions(o).label,"value":_vm.sanitizeOptions(o).value}},'v-radio',_vm.bindSchema(obj),false))}),1):(_vm.isDateTimeColorTypeAndExtensionText(obj))?_c('v-menu',_vm._b({scopedSlots:_vm._u([{key:"activator",fn:function(ref){
+return [_c('v-col',_vm._g(_vm._b({directives:[{name:"show",rawName:"v-show",value:(!obj.schema.hidden),expression:"!obj.schema.hidden"},{name:"intersect",rawName:"v-intersect",value:(function (entries, observer) { return _vm.onIntersect(entries, observer, obj); }),expression:"(entries, observer) => onIntersect(entries, observer, obj)"},{name:"touch",rawName:"v-touch",value:({ left: function () { return _vm.onSwipe('left', obj); }, right: function () { return _vm.onSwipe('right', obj); }, up: function () { return _vm.onSwipe('up', obj); }, down: function () { return _vm.onSwipe('down', obj); } }),expression:"{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"},{name:"click-outside",rawName:"v-click-outside",value:(function (event) { return _vm.onClickOutside(event, obj); }),expression:"(event) => onClickOutside(event, obj)"}],key:index,class:_vm.getClassName(obj),attrs:{"draggable":obj.schema.drag},on:{"mouseenter":function($event){return _vm.onEvent($event, obj)},"mouseleave":function($event){return _vm.onEvent($event, obj)},"dragstart":function($event){return _vm.dragstart($event, obj)},"dragover":function($event){return _vm.dragover($event, obj)},"drop":function($event){return _vm.drop($event, obj)}}},'v-col',_vm.getGridAttributes(obj),false),on),[_vm._t(_vm.getTypeTopSlot(obj),null,null,{ obj: obj, index: index, id: _vm.id }),_vm._t(_vm.getKeyTopSlot(obj),null,null,{ obj: obj, index: index, id: _vm.id }),_vm._t(_vm.getTypeItemSlot(obj),[_vm._t(_vm.getKeyItemSlot(obj),[(obj.schema.type === 'radio')?_c('v-radio-group',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'v-radio-group',_vm.bindSchema(obj),false),_vm._l((obj.schema.options),function(option,idx){return _c('v-radio',_vm._b({key:idx,scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index, idx: idx, option: option })]},proxy:true}})],null,true)},'v-radio',_vm.bindOptions(option),false))}),1):(_vm.isDateTimeColorTypeAndExtensionText(obj))?_c('v-menu',_vm._b({scopedSlots:_vm._u([{key:"activator",fn:function(ref){
 var on = ref.on;
-return [_c('v-text-field',_vm._g(_vm._b({attrs:{"value":_vm.setValue(obj)},on:_vm._d({"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend)},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)}},[_vm.suspendClickAppend(obj),function($event){return _vm.onEvent($event, obj, _vm.append)}])},'v-text-field',_vm.bindSchemaText(obj),false),on))]}}],null,true)},'v-menu',_vm.bindSchemaMenu(obj),false),[_c(_vm.mapTypeToComponent( obj.schema.type ),_vm._b({tag:"v-input",attrs:{"type":_vm.checkInternType(obj),"value":_vm.setValue(obj)},on:{"input":function($event){return _vm.onInput($event, obj)},"click:hour":function($event){return _vm.onEvent({type:'click'}, obj, _vm.hour)},"click:minute":function($event){return _vm.onEvent({type:'click'}, obj, _vm.minute)},"click:second":function($event){return _vm.onEvent({type:'click'}, obj, _vm.second)}}},'v-input',_vm.bindSchema(obj),false))],1):(obj.schema.type === 'array')?_vm._l((_vm.setValue(obj)),function(item,idx){return _c('div',_vm._b({key:_vm.getKeyForArray(_vm.id, obj, item, idx),attrs:{"value":_vm.setValue(obj)}},'div',_vm.bindSchema(obj),false),[_vm._t(_vm.getKeyArraySlot(obj),[_c('v-form-base',{class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key) + "-" + idx),"model":item,"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)}})],{"item":item})],2)}):(obj.schema.type === 'group')?[_c('div',_vm._b({on:{"click":function($event){return _vm.onEvent($event, obj)}}},'div',_vm.bindSchema(obj),false),[_vm._t(_vm.getKeyLabelSlot(obj),[_c('span',{domProps:{"innerHTML":_vm._s(obj.schema.label)}})],{"obj":obj}),_c('v-form-base',{class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key)),"model":_vm.setValue(obj),"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)}})],2)]:(obj.schema.type === 'wrap')?[_c('div',_vm._b({on:{"click":function($event){return _vm.onEvent($event, obj)}}},'div',_vm.bindSchema(obj),false),[_vm._t(_vm.getKeyLabelSlot(obj),[_c('span',{domProps:{"innerHTML":_vm._s(obj.schema.label)}})],{"obj":obj}),_c('v-form-base',{class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key)),"model":_vm.setValueWrap(obj),"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)}})],2)]:(obj.schema.type === _vm.treeview)?_c('v-treeview',_vm._b({attrs:{"items":_vm.setValue(obj),"active":obj.schema.model,"open":obj.schema.open},on:{"update:active":[function($event){return _vm.$set(obj.schema, "model", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'selected' )}],"update:open":[function($event){return _vm.$set(obj.schema, "open", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'open' )}]},model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-treeview',_vm.bindSchema(obj),false)):(obj.schema.type === _vm.list)?[_vm._t(_vm.getKeyLabelSlot(obj),[(obj.schema.label)?_c('v-toolbar',_vm._b({attrs:{"dark":""}},'v-toolbar',_vm.bindSchema(obj),false),[_c('v-toolbar-title',[_vm._v(_vm._s(obj.schema.label))])],1):_vm._e()],{"obj":obj}),_c('v-list',[_c('v-list-item-group',_vm._b({attrs:{"light":""},model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-list-item-group',_vm.bindSchema(obj),false),_vm._l((_vm.setValue(obj)),function(item,idx){return _c('v-list-item',{key:idx,on:{"click":function($event){return _vm.onEvent($event, obj, _vm.list )}}},[_c('v-list-item-icon',[_c('v-icon',{domProps:{"textContent":_vm._s(obj.schema.icon)}})],1),_c('v-list-item-content',[_c('v-list-item-title',{domProps:{"textContent":_vm._s(obj.schema.item ? item[obj.schema.item] : item)}})],1)],1)}),1)],1)]:(/(switch|checkbox)/.test(obj.schema.type))?_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b({tag:"div",attrs:{"input-value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'div',_vm.bindSchema(obj),false)):(obj.schema.type === 'file' )?_c('v-file-input',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"change":function($event){return _vm.onInput($event, obj)}}},'v-file-input',_vm.bindSchema(obj),false)):(obj.schema.type === 'icon')?_c('v-icon',_vm._b({domProps:{"textContent":_vm._s(_vm.getIconValue(obj))},on:{"click":function($event){return _vm.onEvent($event, obj)}}},'v-icon',_vm.bindSchema(obj),false)):(obj.schema.type === 'slider')?_c('v-slider',_vm._b({on:{"input":function($event){return _vm.onInput($event, obj)}}},'v-slider',_vm.bindSchema(obj),false)):(obj.schema.type === 'img')?_c('v-img',_vm._b({attrs:{"src":_vm.getImageSource(obj)},on:{"click":function($event){return _vm.onEvent($event, obj)}}},'v-img',_vm.bindSchema(obj),false)):(obj.schema.type === 'btn-toggle')?_c('v-btn-toggle',_vm._b({attrs:{"color":"","value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'v-btn-toggle',_vm.bindSchema(obj),false),_vm._l((obj.schema.options),function(b,idx){return _c('v-btn',_vm._b({key:idx,attrs:{"value":_vm.sanitizeOptions(b).value}},'v-btn',_vm.bindSchema(obj),false),[_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(_vm.sanitizeOptions(b).icon)+" ")]),_vm._v(" "+_vm._s(_vm.sanitizeOptions(b).label)+" ")],1)}),1):(obj.schema.type === 'btn')?_c('v-btn',_vm._b({on:{"click":function($event){return _vm.onEvent($event, obj, _vm.button)}}},'v-btn',_vm.bindSchema(obj),false),[(obj.schema.iconLeft)?_c('v-icon',{attrs:{"left":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconLeft)+" ")]):_vm._e(),_vm._v(" "+_vm._s(_vm.setValue(obj))+" "),(obj.schema.iconCenter)?_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconCenter)+" ")]):_vm._e(),_vm._v(" "+_vm._s(obj.schema.label)+" "),(obj.schema.iconRight)?_c('v-icon',{attrs:{"right":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconRight)+" ")]):_vm._e()],1):(obj.schema.mask)?_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b(_vm._b({directives:[{name:"mask",rawName:"v-mask",value:(obj.schema.mask),expression:"obj.schema.mask"}],tag:"v-input",attrs:{"type":_vm.checkExtensionType(obj),"value":_vm.setValue(obj),"obj":obj},on:_vm._d({"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"click:hour":function($event){return _vm.onEvent({type:'click'}, obj, _vm.hour)},"click:minute":function($event){return _vm.onEvent({type:'click'}, obj, _vm.minute)},"click:second":function($event){return _vm.onEvent({type:'click'}, obj, _vm.second)},"input":function($event){return _vm.onInput($event, obj)}},["update:"+(_vm.searchInputSync(obj)),function($event){return _vm.$set(obj.schema, "searchInput", $event)},_vm.suspendClickAppend(obj),function($event){return _vm.onEvent($event, obj, _vm.append)}]),scopedSlots:_vm._u([{key:obj.schema.slot,fn:function(){return [_vm._t(_vm.getKeySlot(obj),null,{"obj":obj})]},proxy:true}],null,true)},"v-input",_vm._d({},[_vm.searchInputSync(obj),obj.schema.searchInput])),'v-input',_vm.bindSchema(obj),false)):_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b(_vm._b({tag:"v-input",attrs:{"type":_vm.checkExtensionType(obj),"value":_vm.setValue(obj),"obj":obj},on:_vm._d({"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"click:hour":function($event){return _vm.onEvent({type:'click'}, obj, _vm.hour)},"click:minute":function($event){return _vm.onEvent({type:'click'}, obj, _vm.minute)},"click:second":function($event){return _vm.onEvent({type:'click'}, obj, _vm.second)},"input":function($event){return _vm.onInput($event, obj)}},["update:"+(_vm.searchInputSync(obj)),function($event){return _vm.$set(obj.schema, "searchInput", $event)},_vm.suspendClickAppend(obj),function($event){return _vm.onEvent($event, obj, _vm.append)}]),scopedSlots:_vm._u([{key:obj.schema.slot,fn:function(){return [_vm._t(_vm.getKeySlot(obj),null,{"obj":obj})]},proxy:true}],null,true)},"v-input",_vm._d({},[_vm.searchInputSync(obj),obj.schema.searchInput])),'v-input',_vm.bindSchema(obj),false))],{"obj":obj})],{"obj":obj}),_vm._t(_vm.getTypeBottomSlot(obj),null,{"obj":obj}),_vm._t(_vm.getKeyBottomSlot(obj),null,{"obj":obj})],2),(obj.schema.spacer)?_c('v-spacer',{key:("s-" + index)}):_vm._e()]}}],null,true)},'v-tooltip',_vm.getShorthandTooltip(obj.schema.tooltip),false),[_vm._t("slot-tooltip",[_c('span',[_vm._v(_vm._s(_vm.getShorthandTooltipLabel(obj.schema.tooltip)))])],{"obj":obj})],2)]}),_vm._t(_vm.getFormBottomSlot())],2)}
+return [_c('v-text-field',_vm._g(_vm._b({attrs:{"value":_vm.setValue(obj)},on:_vm._d({"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend)},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)}},[_vm.suspendClickAppend(obj),function($event){return _vm.onEvent($event, obj, _vm.append)}])},'v-text-field',_vm.bindSchemaText(obj),false),on))]}}],null,true)},'v-menu',_vm.bindSchemaMenu(obj),false),[_c(_vm.mapTypeToComponent( obj.schema.type ),_vm._b({tag:"component",attrs:{"type":_vm.checkInternType(obj),"value":_vm.setValue(obj)},on:{"input":function($event){return _vm.onInput($event, obj)},"click:hour":function($event){return _vm.onEvent({type:'click'}, obj, _vm.hour)},"click:minute":function($event){return _vm.onEvent({type:'click'}, obj, _vm.minute)},"click:second":function($event){return _vm.onEvent({type:'click'}, obj, _vm.second)}}},'component',_vm.bindSchema(obj),false))],1):(obj.schema.type === 'array')?_vm._l((_vm.setValue(obj)),function(item,idx){return _c('div',_vm._b({key:_vm.getKeyForArray(_vm.id, obj, item, idx),attrs:{"value":_vm.setValue(obj)}},'div',_vm.bindSchema(obj),false),[_vm._t(_vm.getArrayTopSlot(obj),null,null,{ obj: obj, id: _vm.id, index: index, idx: idx, item: item}),_vm._t(_vm.getArrayItemSlot(obj),[_c('v-form-base',_vm._g({class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key) + "-" + idx),"model":item,"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)},scopedSlots:_vm._u([_vm._l((_vm.$scopedSlots),function(_,name){return {key:name,fn:function(slotData){return [_vm._t(name,null,null,Object.assign({}, {id: _vm.id, obj: obj, index: index, idx: idx, item: item}, slotData))]}}})],null,true)},_vm.$listeners))],null,{ obj: obj, id: _vm.id, index: index, idx: idx, item: item}),_vm._t(_vm.getArrayBottomSlot(obj),null,null,{ obj: obj, id: _vm.id, index: index, idx: idx, item: item})],2)}):(/(wrap|group)/.test(obj.schema.type))?[_c(_vm.checkInternGroupType(obj),_vm._b({tag:"component",on:{"click":function($event){return _vm.onEvent($event, obj)}}},'component',_vm.bindSchema(obj),false),[(obj.schema.title)?_c('v-card-title',[_vm._v(_vm._s(obj.schema.title))]):_vm._e(),(obj.schema.subtitle)?_c('v-card-subtitle',[_vm._v(_vm._s(obj.schema.subtitle))]):_vm._e(),_c('v-form-base',_vm._g({class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key)),"model":_vm.setValue(obj),"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)},scopedSlots:_vm._u([_vm._l((_vm.$scopedSlots),function(_,name){return {key:name,fn:function(slotData){return [_vm._t(name,null,null,Object.assign({}, {id: _vm.id, obj: obj, index: index},  slotData))]}}})],null,true)},_vm.$listeners))],1)]:(obj.schema.type === _vm.treeview)?_c('v-treeview',_vm._b({attrs:{"items":_vm.setValue(obj),"active":obj.schema.model,"open":obj.schema.open},on:{"update:active":[function($event){return _vm.$set(obj.schema, "model", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'selected' )}],"update:open":[function($event){return _vm.$set(obj.schema, "open", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'open' )}]},scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(slotData){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,Object.assign({}, {id: _vm.id, obj: obj, index: index},  slotData))]}}})],null,true),model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-treeview',_vm.bindSchema(obj),false)):(obj.schema.type === _vm.list)?[_c('v-list',[_vm._t(_vm.getKeyInjectSlot(obj, 'label'),[(obj.schema.label)?_c('v-toolbar',_vm._b({attrs:{"dark":""}},'v-toolbar',_vm.bindSchema(obj),false),[_c('v-toolbar-title',[_vm._v(_vm._s(obj.schema.label))])],1):_vm._e()],null,{ id: _vm.id, obj: obj, index: index }),_c('v-list-item-group',_vm._b({attrs:{"light":""},model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-list-item-group',_vm.bindSchema(obj),false),[_vm._l((_vm.setValue(obj)),function(item,idx){return [_c('v-list-item',{key:idx,on:{"click":function($event){return _vm.onEvent($event, obj, _vm.list )}}},[_vm._t(_vm.getArrayItemSlot(obj),[_c('v-list-item-icon',[_c('v-icon',{domProps:{"textContent":_vm._s(obj.schema.icon)}})],1),_c('v-list-item-content',[_c('v-list-item-title',{domProps:{"textContent":_vm._s(obj.schema.item ? item[obj.schema.item] : item)}})],1)],null,{ obj: obj, id: _vm.id, index: index, idx: idx, item: item})],2)]})],2)],2)]:(/(switch|checkbox)/.test(obj.schema.type))?_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b({tag:"component",attrs:{"input-value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}},scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index })]},proxy:true}})],null,true)},'component',_vm.bindSchema(obj),false)):(obj.schema.type === 'file' )?_c('v-file-input',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"change":function($event){return _vm.onInput($event, obj)}},scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(scopeData){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,Object.assign({}, {id: _vm.id, obj: obj, index: index}, scopeData))]}}})],null,true)},'v-file-input',_vm.bindSchema(obj),false)):(obj.schema.type === 'icon')?_c('v-icon',_vm._b({domProps:{"textContent":_vm._s(_vm.getIconValue(obj))},on:{"click":function($event){return _vm.onEvent($event, obj)}}},'v-icon',_vm.bindSchema(obj),false)):(obj.schema.type === 'slider')?_c('v-slider',_vm._b({on:{"input":function($event){return _vm.onInput($event, obj)}},scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index })]},proxy:true}})],null,true)},'v-slider',_vm.bindSchema(obj),false)):(obj.schema.type === 'img')?_c('v-img',_vm._b({attrs:{"src":_vm.getImageSource(obj)},on:{"click":function($event){return _vm.onEvent($event, obj)}},scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index })]},proxy:true}})],null,true)},'v-img',_vm.bindSchema(obj),false)):(obj.schema.type === 'btn-toggle')?_c('v-btn-toggle',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'v-btn-toggle',_vm.bindSchema(obj),false),_vm._l((obj.schema.options),function(option,idx){return _c('v-btn',_vm._b({key:idx,attrs:{"icon":option.icon ? true :false}},'v-btn',_vm.bindOptions(option),false),[_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(_vm.bindOptions(option).icon)+" ")]),_vm._v(" "+_vm._s(_vm.bindOptions(option).label)+" ")],1)}),1):(obj.schema.type === 'btn')?_c('v-btn',_vm._b({on:{"click":function($event){return _vm.onEvent($event, obj, _vm.button)}}},'v-btn',_vm.bindSchema(obj),false),[(obj.schema.iconLeft)?_c('v-icon',{attrs:{"left":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconLeft)+" ")]):_vm._e(),_vm._v(" "+_vm._s(_vm.setValue(obj))+" "),(obj.schema.iconCenter)?_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconCenter)+" ")]):_vm._e(),_vm._v(" "+_vm._s(obj.schema.label)+" "),(obj.schema.iconRight)?_c('v-icon',{attrs:{"right":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconRight)+" ")]):_vm._e()],1):(obj.schema.mask)?_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b(_vm._b({directives:[{name:"mask",rawName:"v-mask",value:(obj.schema.mask),expression:"obj.schema.mask"}],tag:"component",attrs:{"type":_vm.checkExtensionType(obj),"value":_vm.setValue(obj),"obj":obj},on:_vm._d({"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"click:hour":function($event){return _vm.onEvent({type:'click'}, obj, _vm.hour)},"click:minute":function($event){return _vm.onEvent({type:'click'}, obj, _vm.minute)},"click:second":function($event){return _vm.onEvent({type:'click'}, obj, _vm.second)},"input":function($event){return _vm.onInput($event, obj)}},["update:"+(_vm.searchInputSync(obj)),function($event){return _vm.$set(obj.schema, "searchInput", $event)},_vm.suspendClickAppend(obj),function($event){return _vm.onEvent($event, obj, _vm.append)}]),scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index })]},proxy:true}})],null,true)},"component",_vm._d({},[_vm.searchInputSync(obj),obj.schema.searchInput])),'component',_vm.bindSchema(obj),false)):_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b(_vm._b({tag:"component",attrs:{"type":_vm.checkExtensionType(obj),"value":_vm.setValue(obj),"obj":obj},on:_vm._d({"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"click:hour":function($event){return _vm.onEvent({type:'click'}, obj, _vm.hour)},"click:minute":function($event){return _vm.onEvent({type:'click'}, obj, _vm.minute)},"click:second":function($event){return _vm.onEvent({type:'click'}, obj, _vm.second)},"input":function($event){return _vm.onInput($event, obj)}},["update:"+(_vm.searchInputSync(obj)),function($event){return _vm.$set(obj.schema, "searchInput", $event)},_vm.suspendClickAppend(obj),function($event){return _vm.onEvent($event, obj, _vm.append)}]),scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index })]},proxy:true}})],null,true)},"component",_vm._d({},[_vm.searchInputSync(obj),obj.schema.searchInput])),'component',_vm.bindSchema(obj),false))],null,{ obj: obj, index: index, id: _vm.id })],null,{ obj: obj, index: index, id: _vm.id }),_vm._t(_vm.getTypeBottomSlot(obj),null,null,{ obj: obj, index: index, id: _vm.id }),_vm._t(_vm.getKeyBottomSlot(obj),null,null,{ obj: obj, index: index, id: _vm.id })],2),(obj.schema.spacer)?_c('v-spacer',{key:("s-" + index)}):_vm._e()]}}],null,true)},'v-tooltip',_vm.getShorthandTooltip(obj.schema.tooltip),false),[_vm._t(_vm.getTooltipSlot(obj),[_c('span',[_vm._v(_vm._s(_vm.getShorthandTooltipLabel(obj.schema.tooltip)))])],null,{ obj: obj, index: index, id: _vm.id }),_vm._t(_vm.getKeyTooltipSlot(obj),null,null,{ obj: obj, index: index, id: _vm.id })],2)]}),_vm._t(_vm.getFormBottomSlot(),null,{"id":_vm.id})],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/vFormBase.vue?vue&type=template&id=529fb6ea&
+// CONCATENATED MODULE: ./src/components/vFormBase.vue?vue&type=template&id=93b4ca02&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
 var es_array_concat = __webpack_require__("99af");
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.filter.js
+var es_array_filter = __webpack_require__("4de4");
+
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
 var es_array_for_each = __webpack_require__("4160");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.includes.js
+var es_array_includes = __webpack_require__("caad");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.join.js
 var es_array_join = __webpack_require__("a15b");
@@ -20500,8 +20710,14 @@ var es_number_constructor = __webpack_require__("a9e3");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
 var es_object_keys = __webpack_require__("b64b");
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.constructor.js
+var es_regexp_constructor = __webpack_require__("4d63");
+
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
 var es_regexp_exec = __webpack_require__("ac1f");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.to-string.js
+var es_regexp_to_string = __webpack_require__("25f0");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
 var es_string_includes = __webpack_require__("2532");
@@ -20523,9 +20739,6 @@ var web_dom_collections_for_each = __webpack_require__("159b");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
 var es_symbol = __webpack_require__("a4d3");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.filter.js
-var es_array_filter = __webpack_require__("4de4");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-own-property-descriptor.js
 var es_object_get_own_property_descriptor = __webpack_require__("e439");
@@ -21120,410 +21333,443 @@ var v_mask_esm_plugin = (function (Vue) {
 
 
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-// import & declarations
 
- // Info Mask https://github.com/probil/v-mask  
+
+
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+// Import
+
 
 
 external_commonjs_vue_commonjs2_vue_root_Vue_default.a.use(v_mask_esm, {
-  placeholders: {// '#': null,       // passing `null` removes default placeholder, so `#` is treated as character
+  placeholders: {// Info Mask https://github.com/probil/v-mask  
+    // '#': null,       // passing `null` removes default placeholder, so `#` is treated as character
     // D: /\d/,         // define new placeholder
-    // Я: /[\wа-яА-Я]/, // cyrillic letter as a placeholder
   }
-});
+}); //
+// Declaration
+
 var typeToComponent = {
   // maps schema.type to prop 'type' in v-text-field  - https://www.wufoo.com/html5/
   text: 'v-text-field',
+  password: 'v-text-field',
+  email: 'v-text-field',
+  tel: 'v-text-field',
+  url: 'v-text-field',
+  search: 'v-text-field',
+  number: 'v-text-field',
 
   /*
     { type:'text, ext:'typeOfTextField', ...} 
@@ -21535,20 +21781,17 @@ var typeToComponent = {
     time: 'v-text-field',    //  { type:'text, ext:'time', ...}      
     color: 'v-text-field',   //  { type:'text, ext:'color', ...}      
   */
-  password: 'v-text-field',
-  email: 'v-text-field',
-  tel: 'v-text-field',
-  url: 'v-text-field',
-  search: 'v-text-field',
-  number: 'v-text-field',
-  // INFO: 3 Types of PICKER DATE / TIME / COLOR
-  // Date-Native Input    - schema:{ type:'text, ext:'date', ...}       
-  // Date-Picker          - schema:{ type:'date', ...}         
-  // Date-Picker-Textmenu     - schema:{ type:'date', ext:'text'...}
-  // map schema.type to vuetify-control (vuetify 2.0)
   date: 'v-date-picker',
   time: 'v-time-picker',
   color: 'v-color-picker',
+
+  /*
+    INFO: 3 Types of PICKER DATE / TIME / COLOR
+    Date-Native Input    - schema:{ type:'text, ext:'date', ...}       
+    Date-Picker          - schema:{ type:'date', ...}         
+    Date-Picker-Textmenu     - schema:{ type:'date', ext:'text'...}
+  */
+  // map schema.type to vuetify-control (vuetify 2.0)
   img: 'v-img',
   textarea: 'v-textarea',
   range: 'v-slider',
@@ -21585,8 +21828,7 @@ var typeToComponent = {
       < /script>    
   */
 
-}; // Declaration
-
+};
 var orderDirection = 'ASC';
 var pathDelimiter = '.';
 var classKeyDelimiter = '-';
@@ -21601,20 +21843,28 @@ var watch = 'focus|input|click|blur'; // event watch collects events 'focus|inpu
 
 var display = 'resize|swipe|intersect'; // event watch collects events 'resize|swipe|intersect'
 
+var topAppendix = 'top';
+var bottomAppendix = 'bottom';
+var slotAppendix = 'slot';
+var tooltipAppendix = 'tooltip';
+var injectAppendix = 'inject';
 var itemClassAppendix = 'item';
 var typeClassAppendix = 'type';
 var keyClassAppendix = 'key';
+var arrayClassAppendix = 'array';
 var propertyClassAppendix = 'prop';
-var slotAppendix = 'slot';
-var arraySlotAppendix = 'slot-array';
-var topSlotAppendix = 'slot-top';
-var itemSlotAppendix = 'slot-item';
-var labelSlotAppendix = 'slot-label';
-var bottomSlotAppendix = 'slot-bottom';
+var injectSlotAppendix = "".concat(slotAppendix, "-").concat(injectAppendix);
+var arraySlotAppendix = "".concat(slotAppendix, "-").concat(arrayClassAppendix);
+var topSlotAppendix = "".concat(slotAppendix, "-").concat(topAppendix);
+var itemSlotAppendix = "".concat(slotAppendix, "-").concat(itemClassAppendix);
+var bottomSlotAppendix = "".concat(slotAppendix, "-").concat(bottomAppendix);
+var tooltipSlotAppendix = "".concat(slotAppendix, "-").concat(tooltipAppendix);
 var clear = 'clear';
 var vFormBasevue_type_script_lang_js_button = 'button';
 var treeview = 'treeview';
 var list = 'list';
+var vFormBasevue_type_script_lang_js_focus = 'focus';
+var vFormBasevue_type_script_lang_js_blur = 'blur';
 var append = 'append';
 var appendOuter = 'append-outer';
 var prepend = 'prepend';
@@ -21676,12 +21926,18 @@ var defaultPickerSchemaMenu = {
   nudgeRight: 32,
   maxWidth: '290px',
   minWidth: '290px'
-}; //
+}; // type wrap or group - if no typeInt defined take default  
+
+var defaultInternGroupType = 'v-card'; //
 
 /* harmony default export */ var vFormBasevue_type_script_lang_js_ = ({
   name: 'VFormBase',
   props: {
     id: {
+      type: String,
+      default: defaultID
+    },
+    rootId: {
       type: String,
       default: defaultID
     },
@@ -21703,7 +21959,7 @@ var defaultPickerSchemaMenu = {
     model: {
       type: [Object, Array],
       default: function _default() {
-        return null;
+        return {};
       }
     },
     schema: {
@@ -21715,12 +21971,13 @@ var defaultPickerSchemaMenu = {
   },
   data: function data() {
     return {
-      m: 'v-mask',
       flatCombinedArray: [],
       clear: clear,
       button: vFormBasevue_type_script_lang_js_button,
       treeview: treeview,
       list: list,
+      focus: vFormBasevue_type_script_lang_js_focus,
+      blur: vFormBasevue_type_script_lang_js_blur,
       append: append,
       appendOuter: appendOuter,
       prepend: prepend,
@@ -21737,9 +21994,6 @@ var defaultPickerSchemaMenu = {
       this.updateArrayFromState(model, this.schema);
       return model;
     },
-    ref: function ref() {
-      return this.id;
-    },
     parent: function parent() {
       var p = this;
 
@@ -21752,8 +22006,8 @@ var defaultPickerSchemaMenu = {
       return p;
     },
     index: function index() {
-      var m = this.ref && this.ref.match(/\d+/g);
-      return m ? m.map(Number) : [];
+      var m = this.id && this.id.match(/\d+/g);
+      return m ? m.map(Number) : null;
     },
     getRow: function getRow() {
       return this.row || rowDefault;
@@ -21790,11 +22044,18 @@ var defaultPickerSchemaMenu = {
     isDateTimeColorTypeAndExtensionText: function isDateTimeColorTypeAndExtensionText(obj) {
       return isPicker.includes(obj.schema.type) && obj.schema.ext === 'text';
     },
-    // CHECK FOR DATE, TIME OR COLOR EXT
+    // CHECK FOR EXT: DATE, TIME OR COLOR
     isDateTimeColorExtension: function isDateTimeColorExtension(obj) {
       return isPicker.includes(obj.schema.ext);
     },
-    // BIND SCHEMA FN
+    // BIND SCHEMA TEXT OPTIONS
+    bindOptions: function bindOptions(b) {
+      // schema.options in RADIO/BUTTON 
+      return Object(lodash["isString"])(b) ? {
+        value: b,
+        label: b
+      } : b;
+    },
     bindSchemaText: function bindSchemaText(obj) {
       return _objectSpread2(_objectSpread2({}, defaultPickerSchemaText), obj.schema.text);
     },
@@ -21824,6 +22085,11 @@ var defaultPickerSchemaMenu = {
       // If vuetify component needs a 'type' prop for working  - ie. datepicker uses type:'month'
       // { type:'date', ext:'text', typeInt:'month' ...} -> use v-date-picker menu with intern Type 'month'
       return obj.schema.typeInt || obj.schema.type;
+    },
+    checkInternGroupType: function checkInternGroupType(obj) {
+      //  in type 'wrap|group' you can define with typeInt: a component as group - schema: { group1: { type:'wrap', typeInt:'v-card', ... } ...}
+      var typeInt = obj.schema.typeInt || defaultInternGroupType;
+      return typeInt.startsWith('v-') ? typeInt : "v-".concat(typeInt);
     },
     // GET ITERATION KEY FOR TYPE ARRAY
     getKeyForArray: function getKeyForArray(id, obj, item, index) {
@@ -21871,53 +22137,68 @@ var defaultPickerSchemaMenu = {
       return Object(lodash["isString"])(schemaTooltip) ? schemaTooltip : schemaTooltip && schemaTooltip.label;
     },
     //
-    // FORM SLOT
+    // FORM SLOTS
     getFormTopSlot: function getFormTopSlot() {
-      return this.id + '-top';
+      // Slot for Top Line in Formbase -> 'slot-formbase-top'
+      return "".concat(topSlotAppendix, "-").concat(this.id);
     },
     getFormBottomSlot: function getFormBottomSlot() {
-      return this.id + '-bottom';
+      // Slot for Bottom Line in Formbase -> 'slot-formbase-bottom'
+      return "".concat(bottomSlotAppendix, "-").concat(this.id);
     },
-    //
-    // KEY 
-    getKeySlot: function getKeySlot(obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, slotAppendix + '-key');
-    },
-    getKeyArraySlot: function getKeyArraySlot(obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-ARRAY-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, arraySlotAppendix + '-key');
-    },
-    getKeyItemSlot: function getKeyItemSlot(obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, itemSlotAppendix + '-key');
-    },
-    getKeyLabelSlot: function getKeyLabelSlot(obj) {
-      // used from GROUP, WRAP
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-label'  -> 'slot-label-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, labelSlotAppendix + '-key');
+    //  
+    // KEY SLOTS
+    getKeyInjectSlot: function getKeyInjectSlot(obj, inject) {
+      // get slot starting with 'slot-inject' and inject verb 'thumb-label'   -> 'slot-inject-thumb-label-key-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, "".concat(injectSlotAppendix, "-").concat(inject, "-").concat(keyClassAppendix));
     },
     getKeyTopSlot: function getKeyTopSlot(obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-top'  -> 'slot-top-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, topSlotAppendix + '-key');
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-top'  -> 'slot-top-key-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, "".concat(topSlotAppendix, "-").concat(keyClassAppendix));
+    },
+    getKeyItemSlot: function getKeyItemSlot(obj) {
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-item'  -> 'slot-item-key-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, "".concat(itemSlotAppendix, "-").concat(keyClassAppendix));
     },
     getKeyBottomSlot: function getKeyBottomSlot(obj) {
-      // get Key specific name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-bottom-key-address-city'
-      return this.getKeyClassNameWithAppendix(obj, bottomSlotAppendix + '-key');
+      // get Key specific name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-bottom-key-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, "".concat(bottomSlotAppendix, "-").concat(keyClassAppendix));
+    },
+    getKeyTooltipSlot: function getKeyTooltipSlot(obj) {
+      // matches Key specific Tooltip | name by replacing '.' with '-' and prepending 'slot-bottom'  -> 'slot-tooltip-key-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, "".concat(tooltipSlotAppendix, "-").concat(keyClassAppendix));
+    },
+    getTooltipSlot: function getTooltipSlot(obj) {
+      // default tooltip slot matches all keys
+      return "".concat(tooltipSlotAppendix);
+    },
+    //
+    // ARRAY SLOTS  
+    getArrayTopSlot: function getArrayTopSlot(obj) {
+      // slot each item from array  -> 'slot-top-array-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, "".concat(topSlotAppendix, "-").concat(arrayClassAppendix));
+    },
+    getArrayItemSlot: function getArrayItemSlot(obj) {
+      // slot each item from array  -> 'slot-top-array-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, "".concat(itemSlotAppendix, "-").concat(arrayClassAppendix));
+    },
+    getArrayBottomSlot: function getArrayBottomSlot(obj) {
+      // slot each item from array   -> 'slot-bottom-array-formbase-address-city'
+      return this.getKeyClassNameWithAppendix(obj, "".concat(bottomSlotAppendix, "-").concat(arrayClassAppendix));
     },
     //
     // TYPE SLOTS
-    getTypeItemSlot: function getTypeItemSlot(obj) {
-      // get Type specific slot name  -> 'slot-item-type-radio'
-      return this.getTypeClassNameWithAppendix(obj, itemSlotAppendix + '-type');
-    },
     getTypeTopSlot: function getTypeTopSlot(obj) {
       // get Type specific slot name  -> 'slot-top-type-radio'
-      return this.getTypeClassNameWithAppendix(obj, topSlotAppendix + '-type');
+      return this.getTypeClassNameWithAppendix(obj, "".concat(topSlotAppendix, "-").concat(typeClassAppendix));
+    },
+    getTypeItemSlot: function getTypeItemSlot(obj) {
+      // get Type specific slot name  -> 'slot-item-type-radio'
+      return this.getTypeClassNameWithAppendix(obj, "".concat(itemSlotAppendix, "-").concat(typeClassAppendix));
     },
     getTypeBottomSlot: function getTypeBottomSlot(obj) {
       // get Type specific slot name  -> 'slot-bottom-type-radio'
-      return this.getTypeClassNameWithAppendix(obj, bottomSlotAppendix + '-type');
+      return this.getTypeClassNameWithAppendix(obj, "".concat(bottomSlotAppendix, "-").concat(typeClassAppendix));
     },
     //
     // CLASS Names
@@ -21932,14 +22213,14 @@ var defaultPickerSchemaMenu = {
     },
     getKeyClassNameWithAppendix: function getKeyClassNameWithAppendix(obj, appendix) {
       // get KEY specific name by app-/prepending 'appendix-' and replacing '.' with '-' in nested key path  -> 'top-slot-address-city'
-      return "".concat(appendix ? appendix + classKeyDelimiter : '').concat(obj.key.replace(/\./g, '-'));
+      return "".concat(appendix ? appendix + classKeyDelimiter : '').concat(this.id ? this.id + classKeyDelimiter : '').concat(obj.key.replace(/\./g, '-')); // return `${appendix ? appendix + classKeyDelimiter : ''}${obj.key.replace(/\./g, '-')}`
     },
     getKeyClassName: function getKeyClassName(obj) {
       return this.getKeyClassNameWithAppendix(obj, keyClassAppendix);
     },
     getTypeClassNameWithAppendix: function getTypeClassNameWithAppendix(obj, appendix) {
       // get TYPE specific class name by prepending '-type' -> 'type-checkbox'
-      return "".concat(appendix + classKeyDelimiter).concat(obj.schema.type);
+      return "".concat(appendix ? appendix + classKeyDelimiter : '').concat(this.id ? this.id + classKeyDelimiter : '').concat(obj.schema.type); // return `${appendix + classKeyDelimiter}${obj.schema.type}`
     },
     getTypeClassName: function getTypeClassName(obj) {
       return this.getTypeClassNameWithAppendix(obj, typeClassAppendix);
@@ -22013,12 +22294,16 @@ var defaultPickerSchemaMenu = {
       return obj.schema.col || this.col || colDefault;
     },
     //
-    // SANITIZE BUTTON - Toggle sanitize item from array schema.options
-    sanitizeOptions: function sanitizeOptions(b) {
-      return Object(lodash["isString"])(b) ? {
-        value: b,
-        label: b
-      } : b;
+    // SANITIZE SLOTS
+    getInjectedScopedSlots: function getInjectedScopedSlots(id, obj) {
+      // <template #slot-inject-thumb-label-key-formbase-path-to-mykey />
+      // extract the verb 'thumb-label' from Slots starting with 'slot-inject' and matching [component-id] and [key]
+      var rx = new RegExp("".concat(injectSlotAppendix, "-(.*?)-").concat(keyClassAppendix));
+      return Object.keys(this.$scopedSlots).filter(function (s) {
+        return s.includes("".concat(id).concat(classKeyDelimiter).concat(obj.key.replace(/\./g, '-'))) && s.includes(injectSlotAppendix);
+      }).map(function (i) {
+        return i.match(rx)[1];
+      });
     },
     //
     // Map Values coming FROM Control, TO Control or DROP on Control
@@ -22078,19 +22363,15 @@ var defaultPickerSchemaMenu = {
     },
     //
     // Set Value
-    setValue: function setValue(obj) {
-      // Use 'schema.toCtrl' Function for setting a modified Value  
-      return this.toCtrl({
-        value: obj.value,
+    setValue: function setValue(obj, type) {
+      // Use 'schema.toCtrl' Function for setting a modified Value   
+      return obj.schema.type === 'wrap' ? this.toCtrl({
+        value: this.storeStateData,
         obj: obj,
         data: this.storeStateData,
         schema: this.storeStateSchema
-      });
-    },
-    setValueWrap: function setValueWrap(obj) {
-      // Use 'schema.toCtrl' Function for setting a modified Value  
-      return this.toCtrl({
-        value: this.storeStateData,
+      }) : this.toCtrl({
+        value: obj.value,
         obj: obj,
         data: this.storeStateData,
         schema: this.storeStateSchema
@@ -22115,7 +22396,7 @@ var defaultPickerSchemaMenu = {
       this.setObjectByPath(this.storeStateData, obj.key, value);
       var emitObj = {
         on: type,
-        id: this.ref,
+        id: this.id,
         index: this.index,
         params: {
           index: this.index,
@@ -22125,7 +22406,8 @@ var defaultPickerSchemaMenu = {
         value: value,
         obj: obj,
         data: this.storeStateData,
-        schema: this.storeStateSchema
+        schema: this.storeStateSchema,
+        parent: this.parent
       };
       this.emitValue(type, emitObj);
       return emitObj;
@@ -22144,7 +22426,7 @@ var defaultPickerSchemaMenu = {
       var parent = event.type !== 'dragstart' ? this.parent : undefined;
       var emitObj = {
         on: event.type,
-        id: this.ref,
+        id: this.id,
         index: index,
         params: {
           text: text,
@@ -22166,12 +22448,30 @@ var defaultPickerSchemaMenu = {
       });
       return emitObj;
     },
+    onClickOutside: function onClickOutside(event, obj) {
+      if (!obj.schema || !obj.schema.clickOutside) return;
+      if (Object(lodash["isFunction"])(obj.schema.clickOutside)) return obj.schema.clickOutside(obj, event);
+      this.emitValue('clickOutside', {
+        on: 'clickOutside',
+        id: this.id,
+        key: obj.key,
+        value: obj.value,
+        obj: obj,
+        params: {
+          x: event.clientX,
+          y: event.clientY
+        },
+        event: event,
+        data: this.storeStateData,
+        schema: this.storeStateSchema
+      });
+    },
     onIntersect: function onIntersect(entries, observer, obj) {
       var isIntersecting = entries[0].isIntersecting;
       var index = this.index;
       this.emitValue('intersect', {
         on: 'intersect',
-        id: this.ref,
+        id: this.id,
         index: index,
         key: obj.key,
         value: obj.value,
@@ -22188,7 +22488,7 @@ var defaultPickerSchemaMenu = {
     onSwipe: function onSwipe(tag, obj) {
       this.emitValue('swipe', {
         on: 'swipe',
-        id: this.ref,
+        id: this.id,
         key: obj.key,
         value: obj.value,
         obj: obj,
@@ -22202,7 +22502,7 @@ var defaultPickerSchemaMenu = {
     onResize: function onResize(event) {
       this.emitValue('resize', {
         on: 'resize',
-        id: this.ref,
+        id: this.id,
         params: {
           x: window.innerWidth,
           y: window.innerHeight
@@ -22213,22 +22513,36 @@ var defaultPickerSchemaMenu = {
       });
     },
     //
-    // Emit Event Base
-    emitValue: function emitValue(emit, val) {
-      this.parent.$emit(this.getEventName(emit), val); // listen to specific event only
+    // EMIT EVENT
+    emitValue: function emitValue(event, val) {
+      var emitEvent = change.includes(event) ? 'change' : watch.includes(event) ? 'watch' : mouse.includes(event) ? 'mouse' : display.includes(event) ? 'display' : event;
 
-      if (change.indexOf(emit) > -1) this.parent.$emit(this.getEventName('change'), val); // listen to 'input|click'
-
-      if (watch.indexOf(emit) > -1) this.parent.$emit(this.getEventName('watch'), val); // listen to 'focus|input|click|blur'
-
-      if (mouse.indexOf(emit) > -1) this.parent.$emit(this.getEventName('mouse'), val); // listen to 'mouseenter|mouseleave  '
-
-      if (display.indexOf(emit) > -1) this.parent.$emit(this.getEventName('display'), val); // listen to 'resize|swipe|intersect'
-
-      this.parent.$emit(this.getEventName('update'), val); // listen to all events
+      if (this.$listeners["".concat(emitEvent, ":").concat(this.id)]) {
+        this.deprecateEventCustomID(emitEvent);
+        this.deprecateCombinedEvents(emitEvent, event);
+        this.$emit("".concat(emitEvent, ":").concat(this.id), val); // listen to specific event only
+      } else if (this.$listeners["".concat(emitEvent)]) {
+        this.deprecateCombinedEvents(emitEvent, event);
+        this.$emit(emitEvent, val); // listen to specific event only
+      } else if (this.$listeners["".concat(event, ":").concat(this.id)]) {
+        this.deprecateEventCustomID(event);
+        this.$emit("".concat(event, ":").concat(this.id), val); // listen to specific event only
+      } else if (this.$listeners["".concat(event)]) {
+        this.$emit(event, val); // listen to specific event only
+      }
     },
-    getEventName: function getEventName(eventName) {
-      return this.parent.id !== defaultID ? "".concat(eventName, ":").concat(this.parent.id) : eventName;
+    deprecateEventCustomID: function deprecateEventCustomID(ev) {
+      console.warn("--- DEPRECATION ".concat(ev, ":").concat(this.id, ": ----------------------------------------------------------------------------"));
+      console.warn("<v-form-base  @".concat(ev, ":").concat(this.id, "=\"handler\" /> is deprecated use simplified version <v-form-base  @").concat(ev, "=\"handler\" />"));
+      console.warn("---------------------------------------------------------------------------------------------");
+    },
+    deprecateCombinedEvents: function deprecateCombinedEvents(emitEvent, event) {
+      if (emitEvent !== event) {
+        console.warn("--- DEPRECATION Combined Listener:  --------------------------------------------------------------------------");
+        console.warn("Combined Event-Listener '".concat(emitEvent, "' have been removed for better comprehensibility and simplification"));
+        console.warn("Please use separate listener for each event like <v-form-base  @focus=\"handler\" @input=\"handler\" @blur=\"handler\"/>");
+        console.warn("---------------------------------------------------------------------------------------------");
+      }
     },
     //
     // PREPARE ARRAYS DATA & SCHEMA

@@ -17,6 +17,7 @@ const doTheJob = async() => {
   await fse.copy('./src/components/vFormBase.vue', '../dist/src/vFormBase.vue');
   console.log(`fse.copy('./src/components/vFormBase.vue', '../dist/src/vFormBase.vue') ### finished ###`);
   
+  /*
   await fse.copy('../../../../../wotamann.github.io/static/index.html', '../../../../../wotamann.github.io/static/404.html');
   console.log(`fse.copy('../../../../../wotamann.github.io/static/index.html', '../../../../../wotamann.github.io/static/404.html') ### finished ###`);
   
@@ -28,6 +29,9 @@ const doTheJob = async() => {
   // remove STATIC FOLDER!!!!
   await fse.remove(dir);
   console.log(`fse.remove(srcDir) ### finished ###`);
+*/
+  
+  
 }
 
 doTheJob().then( text => console.log('SUCCESS - ALL DONE'), err => console.log('ERROR - ALL DONE', err))
