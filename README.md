@@ -1,3 +1,9 @@
+# Documentation
+
+**[Updated Documentation at Gitbook](https://wotamann.gitbook.io/vuetify-form-base/)**
+
+---
+
 # Vuetify-Form-Base
 
 Imagine you get Data as JS-Object and you have to create an editable Form.
@@ -55,7 +61,13 @@ Furthermore if you don't define a Schema, then **Vuetify-Form-Base** tries to ge
 
 ---
 
+
+
 ## Demo
+
+[Read Documentation](https://wotamann.gitbook.io/vuetify-form-base/)
+
+and start here 
 
 [Here you can see a Demo with Key-Examples](https://wotamann.github.io/)
 
