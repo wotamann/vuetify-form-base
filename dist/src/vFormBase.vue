@@ -983,7 +983,7 @@ export default {
       // Value after change in Control
       value = this.fromCtrl({ value, obj, data: this.storeStateData, schema: this.storeStateSchema })
       // harmonize undefined or empty strings => null, because 'clearable' in vuetify controls resets to null and not to empty string!
-      value = !value || value === '' ? null : value
+      value = (value === undefined || value === '') ? null : value
       // if schema type is number convert to number 
       value = obj.schema.type === 'number' ? Number(value) : value
       // update deep nested prop(key) with value
