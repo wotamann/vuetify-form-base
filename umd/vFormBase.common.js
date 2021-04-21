@@ -20666,16 +20666,16 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ddc230c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/vFormBase.vue?vue&type=template&id=93b4ca02&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"a3f3f29a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/vFormBase.vue?vue&type=template&id=ed3ebbd0&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('v-row',_vm._b({directives:[{name:"resize",rawName:"v-resize.quiet",value:(_vm.onResize),expression:"onResize",modifiers:{"quiet":true}}],attrs:{"id":_vm.id}},'v-row',_vm.getRow,false),[_vm._t(_vm.getFormTopSlot(),null,{"id":_vm.id}),_vm._l((_vm.flatCombinedArraySorted),function(obj,index){return [_c('v-tooltip',_vm._b({key:index,attrs:{"disabled":!obj.schema.tooltip},scopedSlots:_vm._u([{key:"activator",fn:function(ref){
 var on = ref.on;
 return [_c('v-col',_vm._g(_vm._b({directives:[{name:"show",rawName:"v-show",value:(!obj.schema.hidden),expression:"!obj.schema.hidden"},{name:"intersect",rawName:"v-intersect",value:(function (entries, observer) { return _vm.onIntersect(entries, observer, obj); }),expression:"(entries, observer) => onIntersect(entries, observer, obj)"},{name:"touch",rawName:"v-touch",value:({ left: function () { return _vm.onSwipe('left', obj); }, right: function () { return _vm.onSwipe('right', obj); }, up: function () { return _vm.onSwipe('up', obj); }, down: function () { return _vm.onSwipe('down', obj); } }),expression:"{ left: () => onSwipe('left', obj), right: () => onSwipe('right', obj), up: () => onSwipe('up', obj), down: () => onSwipe('down', obj) }"},{name:"click-outside",rawName:"v-click-outside",value:(function (event) { return _vm.onClickOutside(event, obj); }),expression:"(event) => onClickOutside(event, obj)"}],key:index,class:_vm.getClassName(obj),attrs:{"draggable":obj.schema.drag},on:{"mouseenter":function($event){return _vm.onEvent($event, obj)},"mouseleave":function($event){return _vm.onEvent($event, obj)},"dragstart":function($event){return _vm.dragstart($event, obj)},"dragover":function($event){return _vm.dragover($event, obj)},"drop":function($event){return _vm.drop($event, obj)}}},'v-col',_vm.getGridAttributes(obj),false),on),[_vm._t(_vm.getTypeTopSlot(obj),null,null,{ obj: obj, index: index, id: _vm.id }),_vm._t(_vm.getKeyTopSlot(obj),null,null,{ obj: obj, index: index, id: _vm.id }),_vm._t(_vm.getTypeItemSlot(obj),[_vm._t(_vm.getKeyItemSlot(obj),[(obj.schema.type === 'radio')?_c('v-radio-group',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'v-radio-group',_vm.bindSchema(obj),false),_vm._l((obj.schema.options),function(option,idx){return _c('v-radio',_vm._b({key:idx,scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index, idx: idx, option: option })]},proxy:true}})],null,true)},'v-radio',_vm.bindOptions(option),false))}),1):(_vm.isDateTimeColorTypeAndExtensionText(obj))?_c('v-menu',_vm._b({scopedSlots:_vm._u([{key:"activator",fn:function(ref){
 var on = ref.on;
-return [_c('v-text-field',_vm._g(_vm._b({attrs:{"value":_vm.setValue(obj)},on:_vm._d({"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend)},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)}},[_vm.suspendClickAppend(obj),function($event){return _vm.onEvent($event, obj, _vm.append)}])},'v-text-field',_vm.bindSchemaText(obj),false),on))]}}],null,true)},'v-menu',_vm.bindSchemaMenu(obj),false),[_c(_vm.mapTypeToComponent( obj.schema.type ),_vm._b({tag:"component",attrs:{"type":_vm.checkInternType(obj),"value":_vm.setValue(obj)},on:{"input":function($event){return _vm.onInput($event, obj)},"click:hour":function($event){return _vm.onEvent({type:'click'}, obj, _vm.hour)},"click:minute":function($event){return _vm.onEvent({type:'click'}, obj, _vm.minute)},"click:second":function($event){return _vm.onEvent({type:'click'}, obj, _vm.second)}}},'component',_vm.bindSchema(obj),false))],1):(obj.schema.type === 'array')?_vm._l((_vm.setValue(obj)),function(item,idx){return _c('div',_vm._b({key:_vm.getKeyForArray(_vm.id, obj, item, idx),attrs:{"value":_vm.setValue(obj)}},'div',_vm.bindSchema(obj),false),[_vm._t(_vm.getArrayTopSlot(obj),null,null,{ obj: obj, id: _vm.id, index: index, idx: idx, item: item}),_vm._t(_vm.getArrayItemSlot(obj),[_c('v-form-base',_vm._g({class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key) + "-" + idx),"model":item,"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)},scopedSlots:_vm._u([_vm._l((_vm.$scopedSlots),function(_,name){return {key:name,fn:function(slotData){return [_vm._t(name,null,null,Object.assign({}, {id: _vm.id, obj: obj, index: index, idx: idx, item: item}, slotData))]}}})],null,true)},_vm.$listeners))],null,{ obj: obj, id: _vm.id, index: index, idx: idx, item: item}),_vm._t(_vm.getArrayBottomSlot(obj),null,null,{ obj: obj, id: _vm.id, index: index, idx: idx, item: item})],2)}):(/(wrap|group)/.test(obj.schema.type))?[_c(_vm.checkInternGroupType(obj),_vm._b({tag:"component",on:{"click":function($event){return _vm.onEvent($event, obj)}}},'component',_vm.bindSchema(obj),false),[(obj.schema.title)?_c('v-card-title',[_vm._v(_vm._s(obj.schema.title))]):_vm._e(),(obj.schema.subtitle)?_c('v-card-subtitle',[_vm._v(_vm._s(obj.schema.subtitle))]):_vm._e(),_c('v-form-base',_vm._g({class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key)),"model":_vm.setValue(obj),"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)},scopedSlots:_vm._u([_vm._l((_vm.$scopedSlots),function(_,name){return {key:name,fn:function(slotData){return [_vm._t(name,null,null,Object.assign({}, {id: _vm.id, obj: obj, index: index},  slotData))]}}})],null,true)},_vm.$listeners))],1)]:(obj.schema.type === _vm.treeview)?_c('v-treeview',_vm._b({attrs:{"items":_vm.setValue(obj),"active":obj.schema.model,"open":obj.schema.open},on:{"update:active":[function($event){return _vm.$set(obj.schema, "model", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'selected' )}],"update:open":[function($event){return _vm.$set(obj.schema, "open", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'open' )}]},scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(slotData){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,Object.assign({}, {id: _vm.id, obj: obj, index: index},  slotData))]}}})],null,true),model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-treeview',_vm.bindSchema(obj),false)):(obj.schema.type === _vm.list)?[_c('v-list',[_vm._t(_vm.getKeyInjectSlot(obj, 'label'),[(obj.schema.label)?_c('v-toolbar',_vm._b({attrs:{"dark":""}},'v-toolbar',_vm.bindSchema(obj),false),[_c('v-toolbar-title',[_vm._v(_vm._s(obj.schema.label))])],1):_vm._e()],null,{ id: _vm.id, obj: obj, index: index }),_c('v-list-item-group',_vm._b({attrs:{"light":""},model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-list-item-group',_vm.bindSchema(obj),false),[_vm._l((_vm.setValue(obj)),function(item,idx){return [_c('v-list-item',{key:idx,on:{"click":function($event){return _vm.onEvent($event, obj, _vm.list )}}},[_vm._t(_vm.getArrayItemSlot(obj),[_c('v-list-item-icon',[_c('v-icon',{domProps:{"textContent":_vm._s(obj.schema.icon)}})],1),_c('v-list-item-content',[_c('v-list-item-title',{domProps:{"textContent":_vm._s(obj.schema.item ? item[obj.schema.item] : item)}})],1)],null,{ obj: obj, id: _vm.id, index: index, idx: idx, item: item})],2)]})],2)],2)]:(/(switch|checkbox)/.test(obj.schema.type))?_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b({tag:"component",attrs:{"input-value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}},scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index })]},proxy:true}})],null,true)},'component',_vm.bindSchema(obj),false)):(obj.schema.type === 'file' )?_c('v-file-input',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"change":function($event){return _vm.onInput($event, obj)}},scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(scopeData){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,Object.assign({}, {id: _vm.id, obj: obj, index: index}, scopeData))]}}})],null,true)},'v-file-input',_vm.bindSchema(obj),false)):(obj.schema.type === 'icon')?_c('v-icon',_vm._b({domProps:{"textContent":_vm._s(_vm.getIconValue(obj))},on:{"click":function($event){return _vm.onEvent($event, obj)}}},'v-icon',_vm.bindSchema(obj),false)):(obj.schema.type === 'slider')?_c('v-slider',_vm._b({on:{"input":function($event){return _vm.onInput($event, obj)}},scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index })]},proxy:true}})],null,true)},'v-slider',_vm.bindSchema(obj),false)):(obj.schema.type === 'img')?_c('v-img',_vm._b({attrs:{"src":_vm.getImageSource(obj)},on:{"click":function($event){return _vm.onEvent($event, obj)}},scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index })]},proxy:true}})],null,true)},'v-img',_vm.bindSchema(obj),false)):(obj.schema.type === 'btn-toggle')?_c('v-btn-toggle',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'v-btn-toggle',_vm.bindSchema(obj),false),_vm._l((obj.schema.options),function(option,idx){return _c('v-btn',_vm._b({key:idx,attrs:{"icon":option.icon ? true :false}},'v-btn',_vm.bindOptions(option),false),[_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(_vm.bindOptions(option).icon)+" ")]),_vm._v(" "+_vm._s(_vm.bindOptions(option).label)+" ")],1)}),1):(obj.schema.type === 'btn')?_c('v-btn',_vm._b({on:{"click":function($event){return _vm.onEvent($event, obj, _vm.button)}}},'v-btn',_vm.bindSchema(obj),false),[(obj.schema.iconLeft)?_c('v-icon',{attrs:{"left":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconLeft)+" ")]):_vm._e(),_vm._v(" "+_vm._s(_vm.setValue(obj))+" "),(obj.schema.iconCenter)?_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconCenter)+" ")]):_vm._e(),_vm._v(" "+_vm._s(obj.schema.label)+" "),(obj.schema.iconRight)?_c('v-icon',{attrs:{"right":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconRight)+" ")]):_vm._e()],1):(obj.schema.mask)?_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b(_vm._b({directives:[{name:"mask",rawName:"v-mask",value:(obj.schema.mask),expression:"obj.schema.mask"}],tag:"component",attrs:{"type":_vm.checkExtensionType(obj),"value":_vm.setValue(obj),"obj":obj},on:_vm._d({"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"click:hour":function($event){return _vm.onEvent({type:'click'}, obj, _vm.hour)},"click:minute":function($event){return _vm.onEvent({type:'click'}, obj, _vm.minute)},"click:second":function($event){return _vm.onEvent({type:'click'}, obj, _vm.second)},"input":function($event){return _vm.onInput($event, obj)}},["update:"+(_vm.searchInputSync(obj)),function($event){return _vm.$set(obj.schema, "searchInput", $event)},_vm.suspendClickAppend(obj),function($event){return _vm.onEvent($event, obj, _vm.append)}]),scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index })]},proxy:true}})],null,true)},"component",_vm._d({},[_vm.searchInputSync(obj),obj.schema.searchInput])),'component',_vm.bindSchema(obj),false)):_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b(_vm._b({tag:"component",attrs:{"type":_vm.checkExtensionType(obj),"value":_vm.setValue(obj),"obj":obj},on:_vm._d({"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"click:hour":function($event){return _vm.onEvent({type:'click'}, obj, _vm.hour)},"click:minute":function($event){return _vm.onEvent({type:'click'}, obj, _vm.minute)},"click:second":function($event){return _vm.onEvent({type:'click'}, obj, _vm.second)},"input":function($event){return _vm.onInput($event, obj)}},["update:"+(_vm.searchInputSync(obj)),function($event){return _vm.$set(obj.schema, "searchInput", $event)},_vm.suspendClickAppend(obj),function($event){return _vm.onEvent($event, obj, _vm.append)}]),scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index })]},proxy:true}})],null,true)},"component",_vm._d({},[_vm.searchInputSync(obj),obj.schema.searchInput])),'component',_vm.bindSchema(obj),false))],null,{ obj: obj, index: index, id: _vm.id })],null,{ obj: obj, index: index, id: _vm.id }),_vm._t(_vm.getTypeBottomSlot(obj),null,null,{ obj: obj, index: index, id: _vm.id }),_vm._t(_vm.getKeyBottomSlot(obj),null,null,{ obj: obj, index: index, id: _vm.id })],2),(obj.schema.spacer)?_c('v-spacer',{key:("s-" + index)}):_vm._e()]}}],null,true)},'v-tooltip',_vm.getShorthandTooltip(obj.schema.tooltip),false),[_vm._t(_vm.getTooltipSlot(obj),[_c('span',[_vm._v(_vm._s(_vm.getShorthandTooltipLabel(obj.schema.tooltip)))])],null,{ obj: obj, index: index, id: _vm.id }),_vm._t(_vm.getKeyTooltipSlot(obj),null,null,{ obj: obj, index: index, id: _vm.id })],2)]}),_vm._t(_vm.getFormBottomSlot(),null,{"id":_vm.id})],2)}
+return [_c('v-text-field',_vm._g(_vm._b({attrs:{"value":_vm.setValue(obj)},on:_vm._d({"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend)},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear)},"input":function($event){return _vm.onInput($event, obj)}},[_vm.suspendClickAppend(obj),function($event){return _vm.onEvent($event, obj, _vm.append)}])},'v-text-field',_vm.bindSchemaText(obj),false),on))]}}],null,true)},'v-menu',_vm.bindSchemaMenu(obj),false),[_c(_vm.mapTypeToComponent( obj.schema.type ),_vm._b({tag:"component",attrs:{"type":_vm.checkInternType(obj),"value":_vm.setValue(obj)},on:{"input":function($event){return _vm.onInput($event, obj)},"click:hour":function($event){return _vm.onEvent({type:'click'}, obj, _vm.hour)},"click:minute":function($event){return _vm.onEvent({type:'click'}, obj, _vm.minute)},"click:second":function($event){return _vm.onEvent({type:'click'}, obj, _vm.second)}}},'component',_vm.bindSchema(obj),false))],1):(obj.schema.type === 'array')?_vm._l((_vm.setValue(obj)),function(item,idx){return _c('div',_vm._b({key:_vm.getKeyForArray(_vm.id, obj, item, idx),attrs:{"value":_vm.setValue(obj)}},'div',_vm.bindSchema(obj),false),[_vm._t(_vm.getArrayTopSlot(obj),null,null,{ obj: obj, id: _vm.id, index: index, idx: idx, item: item}),_vm._t(_vm.getArrayItemSlot(obj),[_c('v-form-base',_vm._g({class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key) + "-" + idx),"model":item,"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)},scopedSlots:_vm._u([_vm._l((_vm.$scopedSlots),function(_,name){return {key:name,fn:function(slotData){return [_vm._t(name,null,null,Object.assign({}, {id: _vm.id, obj: obj, index: index, idx: idx, item: item}, slotData))]}}})],null,true)},_vm.$listeners))],null,{ obj: obj, id: _vm.id, index: index, idx: idx, item: item}),_vm._t(_vm.getArrayBottomSlot(obj),null,null,{ obj: obj, id: _vm.id, index: index, idx: idx, item: item})],2)}):(/(wrap|group)/.test(obj.schema.type))?[_c(_vm.checkInternGroupType(obj),_vm._b({tag:"component",on:{"click":function($event){return _vm.onEvent($event, obj)}}},'component',_vm.bindSchema(obj),false),[(obj.schema.title)?_c('v-card-title',[_vm._v(_vm._s(obj.schema.title))]):_vm._e(),(obj.schema.subtitle)?_c('v-card-subtitle',[_vm._v(_vm._s(obj.schema.subtitle))]):_vm._e(),_c('v-form-base',_vm._g({class:(_vm.id + "-" + (obj.key)),attrs:{"id":(_vm.id + "-" + (obj.key)),"model":_vm.setValue(obj),"schema":obj.schema.schema,"row":_vm.getRowGroupOrArray(obj),"col":_vm.getColGroupOrArray(obj)},scopedSlots:_vm._u([_vm._l((_vm.$scopedSlots),function(_,name){return {key:name,fn:function(slotData){return [_vm._t(name,null,null,Object.assign({}, {id: _vm.id, obj: obj, index: index},  slotData))]}}})],null,true)},_vm.$listeners))],1)]:(obj.schema.type === _vm.treeview)?_c('v-treeview',_vm._b({attrs:{"items":_vm.setValue(obj),"active":obj.schema.model,"open":obj.schema.open},on:{"update:active":[function($event){return _vm.$set(obj.schema, "model", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'selected' )}],"update:open":[function($event){return _vm.$set(obj.schema, "open", $event)},function($event){return _vm.onEvent({type:'click'}, obj, 'open' )}]},scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(slotData){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,Object.assign({}, {id: _vm.id, obj: obj, index: index},  slotData))]}}})],null,true),model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-treeview',_vm.bindSchema(obj),false)):(obj.schema.type === _vm.list)?[_c('v-list',[_vm._t(_vm.getKeyInjectSlot(obj, 'label'),[(obj.schema.label)?_c('v-toolbar',_vm._b({attrs:{"dark":""}},'v-toolbar',_vm.bindSchema(obj),false),[_c('v-toolbar-title',[_vm._v(_vm._s(obj.schema.label))])],1):_vm._e()],null,{ id: _vm.id, obj: obj, index: index }),_c('v-list-item-group',_vm._b({attrs:{"light":""},model:{value:(obj.schema.model),callback:function ($$v) {_vm.$set(obj.schema, "model", $$v)},expression:"obj.schema.model"}},'v-list-item-group',_vm.bindSchema(obj),false),[_vm._l((_vm.setValue(obj)),function(item,idx){return [_c('v-list-item',{key:idx,on:{"click":function($event){return _vm.onEvent($event, obj, _vm.list )}}},[_vm._t(_vm.getArrayItemSlot(obj),[_c('v-list-item-icon',[_c('v-icon',{domProps:{"textContent":_vm._s(obj.schema.icon)}})],1),_c('v-list-item-content',[_c('v-list-item-title',{domProps:{"textContent":_vm._s(obj.schema.item ? item[obj.schema.item] : item)}})],1)],null,{ obj: obj, id: _vm.id, index: index, idx: idx, item: item})],2)]})],2)],2)]:(/(switch|checkbox)/.test(obj.schema.type))?_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b({tag:"component",attrs:{"input-value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}},scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index })]},proxy:true}})],null,true)},'component',_vm.bindSchema(obj),false)):(obj.schema.type === 'file' )?_c('v-file-input',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"change":function($event){return _vm.onInput($event, obj)}},scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(scopeData){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,Object.assign({}, {id: _vm.id, obj: obj, index: index}, scopeData))]}}})],null,true)},'v-file-input',_vm.bindSchema(obj),false)):(obj.schema.type === 'icon')?_c('v-icon',_vm._b({domProps:{"textContent":_vm._s(_vm.getIconValue(obj))},on:{"click":function($event){return _vm.onEvent($event, obj)}}},'v-icon',_vm.bindSchema(obj),false)):(obj.schema.type === 'slider')?_c('v-slider',_vm._b({on:{"input":function($event){return _vm.onInput($event, obj)}},scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index })]},proxy:true}})],null,true)},'v-slider',_vm.bindSchema(obj),false)):(obj.schema.type === 'img')?_c('v-img',_vm._b({attrs:{"src":_vm.getImageSource(obj)},on:{"click":function($event){return _vm.onEvent($event, obj)}},scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index })]},proxy:true}})],null,true)},'v-img',_vm.bindSchema(obj),false)):(obj.schema.type === 'btn-toggle')?_c('v-btn-toggle',_vm._b({attrs:{"value":_vm.setValue(obj)},on:{"change":function($event){return _vm.onInput($event, obj)}}},'v-btn-toggle',_vm.bindSchema(obj),false),_vm._l((obj.schema.options),function(option,idx){return _c('v-btn',_vm._b({key:idx,attrs:{"icon":option.icon ? true :false}},'v-btn',_vm.bindOptions(option),false),[_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(_vm.bindOptions(option).icon)+" ")]),_vm._v(" "+_vm._s(_vm.bindOptions(option).label)+" ")],1)}),1):(obj.schema.type === 'btn')?_c('v-btn',_vm._b({on:{"click":function($event){return _vm.onEvent($event, obj, _vm.button)}}},'v-btn',_vm.bindSchema(obj),false),[(obj.schema.iconLeft)?_c('v-icon',{attrs:{"left":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconLeft)+" ")]):_vm._e(),_vm._v(" "+_vm._s(_vm.setValue(obj))+" "),(obj.schema.iconCenter)?_c('v-icon',{attrs:{"dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconCenter)+" ")]):_vm._e(),_vm._v(" "+_vm._s(obj.schema.label)+" "),(obj.schema.iconRight)?_c('v-icon',{attrs:{"right":"","dark":obj.schema.dark}},[_vm._v(" "+_vm._s(obj.schema.iconRight)+" ")]):_vm._e()],1):(obj.schema.mask)?_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b(_vm._b({directives:[{name:"mask",rawName:"v-mask",value:(obj.schema.mask),expression:"obj.schema.mask"}],tag:"component",attrs:{"type":_vm.checkExtensionType(obj),"value":_vm.setValue(obj),"obj":obj},on:_vm._d({"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"click:hour":function($event){return _vm.onEvent({type:'click'}, obj, _vm.hour)},"click:minute":function($event){return _vm.onEvent({type:'click'}, obj, _vm.minute)},"click:second":function($event){return _vm.onEvent({type:'click'}, obj, _vm.second)},"input":function($event){return _vm.onInput($event, obj)}},["update:"+(_vm.searchInputSync(obj)),function($event){return _vm.$set(obj.schema, "searchInput", $event)},_vm.suspendClickAppend(obj),function($event){return _vm.onEvent($event, obj, _vm.append)}]),scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index })]},proxy:true}})],null,true)},"component",_vm._d({},[_vm.searchInputSync(obj),obj.schema.searchInput])),'component',_vm.bindSchema(obj),false)):_c(_vm.mapTypeToComponent(obj.schema.type),_vm._b(_vm._b({tag:"component",attrs:{"type":_vm.checkExtensionType(obj),"value":_vm.setValue(obj),"obj":obj},on:_vm._d({"focus":function($event){return _vm.onEvent($event, obj)},"blur":function($event){return _vm.onEvent($event, obj)},"click:append-outer":function($event){return _vm.onEvent($event, obj, _vm.appendOuter)},"click:prepend":function($event){return _vm.onEvent($event, obj, _vm.prepend )},"click:prepend-inner":function($event){return _vm.onEvent($event, obj, _vm.prependInner)},"click:clear":function($event){return _vm.onEvent($event, obj, _vm.clear )},"click:hour":function($event){return _vm.onEvent({type:'click'}, obj, _vm.hour)},"click:minute":function($event){return _vm.onEvent({type:'click'}, obj, _vm.minute)},"click:second":function($event){return _vm.onEvent({type:'click'}, obj, _vm.second)},"input":function($event){return _vm.onInput($event, obj)}},["update:"+(_vm.searchInputSync(obj)),function($event){return _vm.$set(obj.schema, "searchInput", $event)},_vm.suspendClickAppend(obj),function($event){return _vm.onEvent($event, obj, _vm.append)}]),scopedSlots:_vm._u([_vm._l((_vm.getInjectedScopedSlots(_vm.id, obj)),function(s){return {key:s,fn:function(){return [_vm._t(_vm.getKeyInjectSlot(obj, s),null,null,{ id: _vm.id, obj: obj, index: index })]},proxy:true}})],null,true)},"component",_vm._d({},[_vm.searchInputSync(obj),obj.schema.searchInput])),'component',_vm.bindSchema(obj),false))],null,{ obj: obj, index: index, id: _vm.id })],null,{ obj: obj, index: index, id: _vm.id }),_vm._t(_vm.getTypeBottomSlot(obj),null,null,{ obj: obj, index: index, id: _vm.id }),_vm._t(_vm.getKeyBottomSlot(obj),null,null,{ obj: obj, index: index, id: _vm.id })],2),(obj.schema.spacer)?_c('v-spacer',{key:("s-" + index)}):_vm._e()]}}],null,true)},'v-tooltip',_vm.getShorthandTooltip(obj.schema.tooltip),false),[_vm._t(_vm.getTooltipSlot(obj),[_c('span',[_vm._v(_vm._s(_vm.getShorthandTooltipLabel(obj.schema.tooltip)))])],null,{ obj: obj, index: index, id: _vm.id }),_vm._t(_vm.getKeyTooltipSlot(obj),null,null,{ obj: obj, index: index, id: _vm.id })],2)]}),_vm._t(_vm.getFormBottomSlot(),null,{"id":_vm.id})],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/vFormBase.vue?vue&type=template&id=93b4ca02&
+// CONCATENATED MODULE: ./src/components/vFormBase.vue?vue&type=template&id=ed3ebbd0&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
 var es_array_concat = __webpack_require__("99af");
@@ -21740,12 +21740,14 @@ var v_mask_esm_plugin = (function (Vue) {
 //
 //
 //
+//
+//
 // Import
 
 
 
 external_commonjs_vue_commonjs2_vue_root_Vue_default.a.use(v_mask_esm, {
-  placeholders: {// Info Mask https://github.com/probil/v-mask  
+  placeholders: {// Info Mask https://github.com/probil/v-mask
     // '#': null,       // passing `null` removes default placeholder, so `#` is treated as character
     // D: /\d/,         // define new placeholder
   }
@@ -21763,14 +21765,14 @@ var typeToComponent = {
   number: 'v-text-field',
 
   /*
-    { type:'text, ext:'typeOfTextField', ...} 
-    For native <INPUT> type use alternative schema prop ext  -> schema:{ type:'text, ext:'date', ...} 
+    { type:'text, ext:'typeOfTextField', ...}
+    For native <INPUT> type use alternative schema prop ext  -> schema:{ type:'text, ext:'date', ...}
     correspond to <input type="number" >
-    number: 'v-text-field',   //  { type:'text, ext:'number', ...}    
-    range: 'v-text-field',   //  { type:'text, ext:'range', ...}    
-    date: 'v-text-field',    //  { type:'text, ext:'date', ...}       
-    time: 'v-text-field',    //  { type:'text, ext:'time', ...}      
-    color: 'v-text-field',   //  { type:'text, ext:'color', ...}      
+    number: 'v-text-field',   //  { type:'text, ext:'number', ...}
+    range: 'v-text-field',   //  { type:'text, ext:'range', ...}
+    date: 'v-text-field',    //  { type:'text, ext:'date', ...}
+    time: 'v-text-field',    //  { type:'text, ext:'time', ...}
+    color: 'v-text-field',   //  { type:'text, ext:'color', ...}
   */
   date: 'v-date-picker',
   time: 'v-time-picker',
@@ -21778,8 +21780,8 @@ var typeToComponent = {
 
   /*
     INFO: 3 Types of PICKER DATE / TIME / COLOR
-    Date-Native Input    - schema:{ type:'text, ext:'date', ...}       
-    Date-Picker          - schema:{ type:'date', ...}         
+    Date-Native Input    - schema:{ type:'text, ext:'date', ...}
+    Date-Picker          - schema:{ type:'date', ...}
     Date-Picker-Textmenu     - schema:{ type:'date', ext:'text'...}
   */
   // map schema.type to vuetify-control (vuetify 2.0)
@@ -21792,31 +21794,29 @@ var typeToComponent = {
   card: 'v-card'
   /*
     HOW TO USE CUSTOM Components
-    1)  
-      Name and Register your Custom-Control Component globally in 'main.js' 
-      but avoid collision with registered names of Vuetify - Controls 
+    1)
+      Name and Register your Custom-Control Component globally in 'main.js'
+      but avoid collision with registered names of Vuetify - Controls
       See: https://vuejs.org/v2/guide/components-registration.html
-  
-      Vue.component('custom-component', () => import('@/components/custom-component.vue') )
-  
-    2)  
-      use it in Schema 
-        mySchema: { myCustom: { type: 'custom-component' }
-      3) // custom-component.vue 
+       Vue.component('custom-component', () => import('@/components/custom-component.vue') )
+     2)
+      use it in Schema
+       mySchema: { myCustom: { type: 'custom-component' }
+     3) // custom-component.vue
       <template>
         <v-text-field v-model="inp"  label="Basic"></v-text-field>
       </template>
       <script>
         export default {
-          props: ['type','value', 'obj'],  
+          props: ['type','value', 'obj'],
           computed:{
             inp:{
               get(){  return this.value},
               set(v){ this.$emit('input', v)}
             }
-          }  
+          }
         }
-      < /script>    
+      < /script>
   */
 
 };
@@ -21864,14 +21864,14 @@ var hour = 'hour';
 var minute = 'minute';
 var second = 'second'; // symbol on drop
 
-var dropEffect = 'move'; // 'copy, link, move      
-// Default row setting if no row-attribute defined  
+var dropEffect = 'move'; // 'copy, link, move
+// Default row setting if no row-attribute defined
 
 var rowDefault = {
   noGutters: true
-}; // { noGutters:true, justify:'center', align:'center' } 
-// Default col setting, overrideable by prop col or by schema.col definition   
-// Default col setting, overrideable by prop flex or by schema.flex definition (flex is DEPRECATED use col instead)  
+}; // { noGutters:true, justify:'center', align:'center' }
+// Default col setting, overrideable by prop col or by schema.col definition
+// Default col setting, overrideable by prop flex or by schema.flex definition (flex is DEPRECATED use col instead)
 
 var colDefault = {
   cols: 'auto'
@@ -21904,7 +21904,7 @@ var defaultSchemaIfValueIsBoolean = function defaultSchemaIfValueIsBoolean(key) 
     type: 'checkbox',
     label: key
   };
-}; // Menu triggered DateTimePicker Default 
+}; // Menu triggered DateTimePicker Default
 
 
 var defaultPickerSchemaText = {
@@ -21917,7 +21917,7 @@ var defaultPickerSchemaMenu = {
   nudgeRight: 32,
   maxWidth: '290px',
   minWidth: '290px'
-}; // type wrap or group - if no typeInt defined take default  
+}; // type wrap or group - if no typeInt defined take default
 
 var defaultInternGroupType = 'v-card'; //
 
@@ -21980,7 +21980,7 @@ var defaultInternGroupType = 'v-card'; //
   },
   computed: {
     valueIntern: function valueIntern() {
-      // use <formbase :model="myData" />  ->  legacy code <formbase :value="myData" />  
+      // use <formbase :model="myData" />  ->  legacy code <formbase :value="myData" />
       var model = this.model || this.value;
       this.updateArrayFromState(model, this.schema);
       return model;
@@ -22025,7 +22025,7 @@ var defaultInternGroupType = 'v-card'; //
     // MAP TYPE
     mapTypeToComponent: function mapTypeToComponent(type) {
       // merge global registered components into typeToComponent Object
-      var allTypeComponents = _objectSpread2(_objectSpread2({}, typeToComponent), external_commonjs_vue_commonjs2_vue_root_Vue_default.a.options.components); // const typeToComponent -> maps type to according v-component 
+      var allTypeComponents = _objectSpread2(_objectSpread2({}, typeToComponent), external_commonjs_vue_commonjs2_vue_root_Vue_default.a.options.components); // const typeToComponent -> maps type to according v-component
       // ie. schema:{ type:'password', ... } to specific vuetify-control or default to v-text-field'
 
 
@@ -22041,7 +22041,7 @@ var defaultInternGroupType = 'v-card'; //
     },
     // BIND SCHEMA TEXT OPTIONS
     bindOptions: function bindOptions(b) {
-      // schema.options in RADIO/BUTTON 
+      // schema.options in RADIO/BUTTON
       return Object(lodash["isString"])(b) ? {
         value: b,
         label: b
@@ -22068,7 +22068,7 @@ var defaultInternGroupType = 'v-card'; //
     checkExtensionType: function checkExtensionType(obj) {
       // For native <INPUT> type use prop 'ext'
       // { type:'text', ext:'range', ... } -> use native Input Type 'range' instead of slider
-      // { type:'text', ext:'number', ...} -> use native Input Type 'number' 
+      // { type:'text', ext:'number', ...} -> use native Input Type 'number'
       return obj.schema.ext || obj.schema.type;
     },
     // V-INTERN TYPE
@@ -22084,11 +22084,11 @@ var defaultInternGroupType = 'v-card'; //
     },
     // GET ITERATION KEY FOR TYPE ARRAY
     getKeyForArray: function getKeyForArray(id, obj, item, index) {
-      // IMPORTANT if you want to add or remove items in type:'array' 
-      // more Info -> 
+      // IMPORTANT if you want to add or remove items in type:'array'
+      // more Info ->
       // https://forum.vuejs.org/t/after-splicing-an-object-wrong-item-disappears-from-view/9247/4
       // https://stackoverflow.com/questions/45655090/vue-array-splice-removing-wrong-item-from-list
-      // create for iteration v-for an uniqe key from each object in array using index and time.hash 
+      // create for iteration v-for an uniqe key from each object in array using index and time.hash
       // or define your key index by defining a key property
       // MODEL
       // arrayTasks: [{ trace:'100', label:'A'}, ...  ]
@@ -22108,14 +22108,14 @@ var defaultInternGroupType = 'v-card'; //
       // if exist get source from src otherwise join schema.base & value & schema.tail
       return obj.schema.src ? obj.schema.src : "".concat(obj.schema.base).concat(obj.value).concat(obj.schema.tail);
     },
-    //    
-    // ICON  
+    //
+    // ICON
     getIconValue: function getIconValue(obj) {
-      // icon: try schema.label or if undefined use value  
+      // icon: try schema.label or if undefined use value
       return obj.schema.label ? obj.schema.label : this.setValue(obj);
     },
-    //  
-    // TOOLTIP 
+    //
+    // TOOLTIP
     getShorthandTooltip: function getShorthandTooltip(schemaTooltip) {
       // check if tooltip is typeof string ->  shorthand { bottom:true, label: obj.schema.tooltip} otherwise take original object
       return Object(lodash["isString"])(schemaTooltip) ? {
@@ -22124,7 +22124,7 @@ var defaultInternGroupType = 'v-card'; //
       } : schemaTooltip;
     },
     getShorthandTooltipLabel: function getShorthandTooltipLabel(schemaTooltip) {
-      // check if tooltip is typeof string ->  return Label 
+      // check if tooltip is typeof string ->  return Label
       return Object(lodash["isString"])(schemaTooltip) ? schemaTooltip : schemaTooltip && schemaTooltip.label;
     },
     //
@@ -22137,7 +22137,7 @@ var defaultInternGroupType = 'v-card'; //
       // Slot for Bottom Line in Formbase -> 'slot-formbase-bottom'
       return "".concat(bottomSlotAppendix, "-").concat(this.id);
     },
-    //  
+    //
     // KEY SLOTS
     getKeyInjectSlot: function getKeyInjectSlot(obj, inject) {
       // get slot starting with 'slot-inject' and inject verb 'thumb-label'   -> 'slot-inject-thumb-label-key-formbase-address-city'
@@ -22164,7 +22164,7 @@ var defaultInternGroupType = 'v-card'; //
       return "".concat(tooltipSlotAppendix);
     },
     //
-    // ARRAY SLOTS  
+    // ARRAY SLOTS
     getArrayTopSlot: function getArrayTopSlot(obj) {
       // slot each item from array  -> 'slot-top-array-formbase-address-city'
       return this.getKeyClassNameWithAppendix(obj, "".concat(topSlotAppendix, "-").concat(arrayClassAppendix));
@@ -22242,7 +22242,7 @@ var defaultInternGroupType = 'v-card'; //
     getGridAttributes: function getGridAttributes(obj) {
       // FLEX DEPRECATED use COL instead of FLEX
       // flex:{ xs|sm|md|lg } - value:number|string
-      // col:{ cols|sm|md|lg|xl } - value:number|string      
+      // col:{ cols|sm|md|lg|xl } - value:number|string
       // order:{ order|sm|md|lg|xl|order-sm|order-md|order-lg|order-xl } - value:number|string
       // offset:{ offset|sm|md|lg|xl|offset-sm|offset-md|offset-lg|offset-xl } - value:number|string
       var colSchema = obj.schema.col || obj.schema.flex;
@@ -22320,7 +22320,7 @@ var defaultInternGroupType = 'v-card'; //
       // schema:{ name: { type:'text', drop: ( {value} ) => value && value.toUpperCase, ... }, ... }
       return params.obj.schema && Object(lodash["isFunction"])(params.obj.schema.drop) ? params.obj.schema.drop(params) : params.value;
     },
-    // 
+    //
     // Drag / Drop / DropValue
     dragstart: function dragstart(event, obj) {
       if (!obj.schema.drag) return;
@@ -22355,7 +22355,7 @@ var defaultInternGroupType = 'v-card'; //
     //
     // Set Value
     setValue: function setValue(obj, type) {
-      // Use 'schema.toCtrl' Function for setting a modified Value   
+      // Use 'schema.toCtrl' Function for setting a modified Value
       return obj.schema.type === 'wrap' ? this.toCtrl({
         value: this.storeStateData,
         obj: obj,
@@ -22380,7 +22380,7 @@ var defaultInternGroupType = 'v-card'; //
         schema: this.storeStateSchema
       }); // harmonize undefined or empty strings => null, because 'clearable' in vuetify controls resets to null and not to empty string!
 
-      value = !value || value === '' ? null : value; // if schema type is number convert to number 
+      value = !value || value === '' ? null : value; // if schema type is number convert to number
 
       value = obj.schema.type === 'number' ? Number(value) : value; // update deep nested prop(key) with value
 
@@ -22568,10 +22568,10 @@ var defaultInternGroupType = 'v-card'; //
       var dat = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var sch = arguments.length > 1 ? arguments[1] : undefined;
       var data = {};
-      var schema = {}; // Organize Formular using Schema not Data 
+      var schema = {}; // Organize Formular using Schema not Data
 
       Object.keys(sch).forEach(function (key) {
-        // convert string definition of name:'text' into object name:{type:'text'} 
+        // convert string definition of name:'text' into object name:{type:'text'}
         sch[key] = _this3.sanitizeShorthandType(key, sch[key]);
         var bothArray = Array.isArray(dat[key]) && Array.isArray(sch[key]);
         var datObjectWithoutSchemaType = Object(lodash["isPlainObject"])(dat[key]) && !sch[key].type;
@@ -22624,7 +22624,7 @@ var defaultInternGroupType = 'v-card'; //
     autogenerateSchema: function autogenerateSchema(value) {
       var _this4 = this;
 
-      // generate a minimal default schema from value   
+      // generate a minimal default schema from value
       var schema = JSON.stringify(value, function (key, val) {
         return val === undefined ? null : val;
       });
@@ -22634,7 +22634,7 @@ var defaultInternGroupType = 'v-card'; //
         if (typeof val === 'number') return defaultSchemaIfValueIsNumber(key);
         if (typeof val === 'boolean') return defaultSchemaIfValueIsBoolean(key);
         return val;
-      }); // assign root props to avoid manipulating prop: schema       
+      }); // assign root props to avoid manipulating prop: schema
 
       Object.keys(schema).forEach(function (key) {
         return _this4.schema[key] = schema[key];
@@ -22645,8 +22645,8 @@ var defaultInternGroupType = 'v-card'; //
 
       // generate or complete an empty model based on schema structure
       Object.keys(schema).forEach(function (key) {
-        // model must be at least an empty Object. It doesn't work with 'null', 'undefined' or any 'primitive value' 
-        // Autogeneration from Schema works only if model is an empty Object 
+        // model must be at least an empty Object. It doesn't work with 'null', 'undefined' or any 'primitive value'
+        // Autogeneration from Schema works only if model is an empty Object
         // if model is NOT an empty Object, no action is applied, otherwise data in model could be changed or modified
         if (!Object(lodash["isEmpty"])(model[key])) return;
         var val = schema[key];
@@ -22675,7 +22675,7 @@ var defaultInternGroupType = 'v-card'; //
       });
     },
     rebuildArrays: function rebuildArrays(model, schema) {
-      // undefined, null or primitive value for model can't work because you need reference to object for working on 
+      // undefined, null or primitive value for model can't work because you need reference to object for working on
       if (!model) throw "Property 'model' is null or undefined. Use '<v-form-base :model=\"myModel\" :schema=\"mySchema\" />'. myModel must be at least an empty Object."; // noise if async loading
 
       if (Object(lodash["isEmpty"])(schema) && Object(lodash["isEmpty"])(model)) {
@@ -22688,7 +22688,7 @@ var defaultInternGroupType = 'v-card'; //
       if (Object(lodash["isEmpty"])(schema)) this.autogenerateSchema(model); // create flatted working array from schema and value
 
       this.flatCombinedArray = this.flattenAndCombineToArray(this.storeStateData, this.storeStateSchema);
-    } //   
+    } //
 
   },
   created: function created() {
