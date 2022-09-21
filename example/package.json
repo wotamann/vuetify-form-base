@@ -30,7 +30,7 @@
     "v-mask": "^2.2.3",
     "vue": "^2.6.11",
     "vue-router": "^3.4.7",
-    "vuetify": "^2.3.19"
+    "vuetify": "^2.6.10"
   },
   "devDependencies": {
     "@mdi/font": "^4.9.95",
